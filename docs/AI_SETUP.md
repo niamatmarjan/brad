@@ -1,4 +1,4 @@
-# BRAD: AI-agent installation and verification contract (v0.3.0)
+# BRAD: AI-agent installation and verification contract (v0.4.0)
 
 This is the **canonical, copyable onboarding instruction** for Claude Code, Antigravity, Codex, and GitHub Copilot. It is written for an AI coding agent acting on a user's project. BRAD is an independent community wrapper around native BMAD Method workflows; it does not install BMAD implicitly or replace its agents.
 
@@ -15,8 +15,8 @@ Install BRAD in the **user's intended repository**, with the minimum necessary c
 5. For modified or manually installed BRAD directories, run a dry run and inspect the differences; never use `--force` automatically.
 
 ```shell
-npx --yes "github:niamatmarjan/brad#v0.3.0" doctor --json
-npx --yes "github:niamatmarjan/brad#v0.3.0" setup --dry-run --json
+npx --yes "github:niamatmarjan/brad#v0.4.0" doctor --json
+npx --yes "github:niamatmarjan/brad#v0.4.0" setup --dry-run --json
 ```
 
 ## Phase 2: Install BRAD (authorized reversible change)
@@ -24,7 +24,7 @@ npx --yes "github:niamatmarjan/brad#v0.3.0" setup --dry-run --json
 Use the actual host when known. Otherwise use `--agent auto`. Install only into the agreed project or requested global scope.
 
 ```shell
-npx --yes "github:niamatmarjan/brad#v0.3.0" setup --agent auto --json
+npx --yes "github:niamatmarjan/brad#v0.4.0" setup --agent auto --json
 ```
 
 Host choices: `antigravity`, `claude`, `codex`, `copilot`, `all`. Never use `all` casually; it writes to several host directories. `setup` is safe/idempotent but does **not** install BMAD, configure GitHub, change existing BMAD versions, bypass permissions, or start a background daemon. Existing nonmanaged/modified skill files are preserved; seek approval before `--force`, then report the backup path.
@@ -39,7 +39,7 @@ Host choices: `antigravity`, `claude`, `codex`, `copilot`, `all`. Never use `all
 ## Phase 4: Verify and report
 
 1. Run `doctor --json` again. Confirm **installed BRAD skill paths**, integrity status, native BMAD hints, and any missing prerequisites.
-2. Reload/restart the AI agent session if installed skills are not immediately discoverable; then **actually read** `SKILL.md` and inspect one real native BMAD workflow. State whether skill dispatch is actually supported by this host. Never simulate a successful independent subagent call.
+2. Reload/restart the AI agent session if installed skills are not immediately discoverable; then **actually read** `SKILL.md` and inspect one real native BMAD workflow. State whether skill dispatch is actually supported by this host. For native routing tests, prefer specialist-specific prompts and verify selected skill against `skills/brad/evals/routing-cases.json`, not only a generic help response. Never simulate a successful independent subagent call.
 3. Run a safe, **read-only** sample: “Use BRAD to preview the route for ticket 1.1; do not write or publish.” If ticket 1.1 does not exist, preview current project status instead. A preview is not proof that Build/TEA/PR work.
 4. Give a compact result with installed paths, BMAD version **if verified**, modules, command evidence, any errors, and the next useful prompt. Separate `INSTALLED`, `CONFIGURED`, `DISCOVERED`, and `EXECUTION TESTED` statuses rather than combining them into one generic green check.
 5. Never claim a GitHub PR or CI result without actual remote evidence. PR publication requires explicit authorization, an authenticated GitHub integration/CLI, and a remote.

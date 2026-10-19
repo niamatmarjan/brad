@@ -10,7 +10,7 @@ const fixture = fn => {
   try { return fn(dir); } finally { rmSync(dir, { recursive: true, force: true }); }
 };
 
-test('package and release versions match', () => assert.equal(version(), '0.3.0'));
+test('package and release versions match', () => assert.equal(version(), '0.4.0'));
 test('no-flag install targets shared agent skill and can be repeated safely', () => fixture(root => {
   const a = execute(['init', '--dir', root]);
   assert.equal(a.results[0].action, 'installed');
@@ -100,7 +100,7 @@ test('CLI script provides machine-readable JSON', () => fixture(root => {
   assert.equal(r.status, 0, r.stderr);
   const data = JSON.parse(r.stdout);
   assert.equal(data.ok, true);
-  assert.equal(data.version, '0.3.0');
+  assert.equal(data.version, '0.4.0');
   assert.equal(data.results[0].action, 'installed');
 }));
 test('distribution contains files required by the npm CLI', () => {
@@ -116,8 +116,8 @@ test('distribution contains files required by the npm CLI', () => {
 test('documentation pins npm GitHub dependency using #tag syntax', () => {
   for (const path of ['README.md', 'docs/installation.md', 'cli/core.mjs']) {
     const content = readFileSync(join(packageRoot, path), 'utf8');
-    assert.ok(content.includes('github:niamatmarjan/brad#v0.3.0'), path);
-    assert.ok(!content.includes('github:niamatmarjan/brad@v0.3.0'), path);
+    assert.ok(content.includes('github:niamatmarjan/brad#v0.4.0'), path);
+    assert.ok(!content.includes('github:niamatmarjan/brad@v0.4.0'), path);
   }
 });
 
@@ -126,7 +126,9 @@ test('setup is safe, repeatable, and reports guided next actions', () => fixture
   const first = execute(['setup', '--dir', root, '--agent', 'antigravity']);
   assert.equal(first.command, 'setup');
   assert.equal(first.results[0].action, 'installed');
-  assert.equal(first.aiReady, true);
+  assert.equal(first.readiness.bradFiles, 'VERIFIED');
+  assert.equal(first.readiness.nativeBmad, 'NOT_VERIFIED');
+  assert.equal(first.readiness.hostInvocation, 'NOT_VERIFIED');
   assert.equal(first.executionVerified, false);
   assert.ok(first.nextSteps.some(s => s.includes('official BMAD Method')));
   assert.equal(execute(['setup', '--dir', root, '--agent', 'antigravity']).results[0].action, 'unchanged');
@@ -135,7 +137,7 @@ test('setup is safe, repeatable, and reports guided next actions', () => fixture
 test('agent prompt is read-only, host-specific and never claims remote access', () => fixture(root => {
   const before = readdirSync(root);
   const result = execute(['prompt', '--dir', root, '--agent', 'claude']);
-  assert.match(result.prompt, /github:niamatmarjan\/brad#v0\.3\.0/);
+  assert.match(result.prompt, /github:niamatmarjan\/brad#v0\.4\.0/);
   assert.match(result.prompt, /ask which to use/);
   assert.match(result.prompt, /Claude|claude/);
   assert.deepEqual(readdirSync(root), before);
@@ -197,4 +199,23 @@ test('all means four real supported hosts and never includes portable', () => fi
   const d=execute(['setup','--dir',root,'--agent','all','--dry-run']);
   assert.equal(d.hosts.length,4);
   assert.ok(!d.hosts.includes('portable'));
+}));
+
+
+test('doctor reports independent readiness stages without claiming live native invocation', () => fixture(root => {
+  const init = execute(['setup', '--dir', root, '--agent', 'antigravity']);
+  assert.equal(init.readiness.bradFiles, 'VERIFIED');
+  const d = execute(['doctor', '--dir', root, '--agent', 'antigravity']);
+  assert.equal(d.readiness.bradFiles, 'VERIFIED');
+  assert.equal(d.readiness.hostInvocation, 'NOT_VERIFIED');
+  assert.equal(d.readiness.githubPR, 'NOT_VERIFIED');
+  assert.equal(d.readiness.ci, 'NOT_VERIFIED');
+  assert.ok(d.environment.npmGit);
+}));
+
+test('an uninstalled project is not reported as execution-ready', () => fixture(root => {
+  const d = execute(['doctor', '--dir', root]);
+  assert.equal(d.readiness.bradFiles, 'INCOMPLETE');
+  assert.equal(d.readiness.nativeBmad, 'NOT_VERIFIED');
+  assert.equal(d.readiness.specialistDelegation, 'NOT_VERIFIED');
 }));

@@ -21,6 +21,10 @@ class PreflightTests(unittest.TestCase):
             self.assertIn("windows_cmd_required",r)
             self.assertIn("npm_available",r)
             self.assertIn("npx_available",r)
+            self.assertIn("npm_version", r)
+            self.assertIn("npm_git_policy", r)
+            self.assertIn("remediations", r)
+            self.assertTrue(all("npm config set allow-git all" not in x for x in r["remediations"]))
 
     def test_repo_without_remote(self):
         with tempfile.TemporaryDirectory() as t:
@@ -29,6 +33,7 @@ class PreflightTests(unittest.TestCase):
             self.assertTrue(r["git_repo"])
             self.assertFalse(r["remotes"])
             self.assertIsInstance(r["warnings"], list)
+            self.assertTrue(any("remote" in x.lower() or "handoff" in x.lower() for x in r["warnings"] + r["remediations"]))
 
     def test_dirty_repo(self):
         with tempfile.TemporaryDirectory() as t:

@@ -81,9 +81,9 @@ Options:
   --yes, -y       Non-interactive acknowledgment (no hidden approvals)
 
 Examples:
-  npx --yes "github:niamatmarjan/brad#v0.3.0" setup
-  npx --yes "github:niamatmarjan/brad#v0.3.0" setup --agent claude
-  npx --yes "github:niamatmarjan/brad#v0.3.0" doctor
+  npx --yes "github:niamatmarjan/brad#v0.4.0" setup
+  npx --yes "github:niamatmarjan/brad#v0.4.0" setup --agent claude
+  npx --yes "github:niamatmarjan/brad#v0.4.0" doctor
 
 BRAD installs a thin skill; it does NOT install or modify BMAD Method.
 An AI agent may offer to install official BMAD separately after your consent.
@@ -253,6 +253,40 @@ function binaryPresence(command) {
   }
   catch { return false; }
 }
+function npmGitDiagnostic() {
+  // Read-only, bounded probes. npm policy varies by version/environment.
+  const cmd = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+  const details = { version: null, gitSourcePolicy: 'unknown', recommendation: null };
+  try {
+    // Running .cmd directly without a shell is unreliable on Windows; let the
+    // user's terminal / AI agent inspect npm config there instead.
+    if (process.platform === 'win32') {
+      details.recommendation = 'Use npm.cmd/npx.cmd from PowerShell; if Git source fetch fails, inspect npm config without changing global security settings.';
+      return details;
+    }
+    const v = execFileSync(cmd, ['--version'], { encoding: 'utf8', stdio: 'pipe', timeout: 2500 }).trim();
+    details.version = v;
+    if (Number(v.split('.')[0]) >= 12) {
+      const policy = execFileSync(cmd, ['config', 'get', 'allow-git'], { encoding: 'utf8', stdio: 'pipe', timeout: 2500 }).trim();
+      if (policy && !['undefined', 'null'].includes(policy.toLowerCase())) details.gitSourcePolicy = policy;
+      if (!['all', 'unknown'].includes(details.gitSourcePolicy.toLowerCase()))
+        details.recommendation = 'A Git-source policy may block the pinned GitHub package. Diagnose the failure; consider a temporary per-command override only if supported, never a silent global config change.';
+    }
+  } catch { /* npm unavailable or this option unsupported; preserve unknown */ }
+  return details;
+}
+function readinessSummary(results, bmad) {
+  const current = results.length > 0 && results.every(r => r.status === 'current' || r.action === 'installed' || r.action === 'unchanged' || r.action === 'updated');
+  return {
+    bradFiles: current ? 'VERIFIED' : 'INCOMPLETE',
+    nativeBmad: bmad?.configured && bmad?.nativeSkills.length ? 'LOCAL_CONFIG_AND_SKILLS_FOUND' : 'NOT_VERIFIED',
+    hostInvocation: 'NOT_VERIFIED',
+    specialistDelegation: 'NOT_VERIFIED',
+    githubPR: 'NOT_VERIFIED',
+    ci: 'NOT_VERIFIED',
+    note: 'BRAD installer checks are not proof of runtime agent invocation or remote delivery.'
+  };
+}
 function diagnostics(root) {
   const powershellCmd = process.platform === 'win32';
   const npxName = powershellCmd ? 'npx.cmd' : 'npx';
@@ -260,7 +294,7 @@ function diagnostics(root) {
   const git = binaryPresence('git');
   return {
     platform: process.platform, node: process.version, nodeSupported: Number(process.versions.node.split('.')[0]) >= 20,
-    git, npm: binaryPresence(npmName), npx: binaryPresence(npxName),
+    git, npm: binaryPresence(npmName), npx: binaryPresence(npxName), npmGit: npmGitDiagnostic(),
     python: binaryPresence(powershellCmd ? 'python' : 'python3') || binaryPresence('python'),
     uv: binaryPresence('uv'), gh: binaryPresence('gh'),
     windowsCommandHint: powershellCmd ? 'Use npx.cmd and npm.cmd in PowerShell if npm.ps1 execution is blocked.' : null,
@@ -313,6 +347,7 @@ export function execute(argv) {
     const results = plans.map(x => ({ ...x, ...checkExisting(x) }));
     return { command: 'doctor', version: version(), root: options.global ? homedir() : options.dir,
       hosts: selectedAgents(options), results, bmad, environment: diagnostics(options.dir),
+      readiness: readinessSummary(results, bmad),
       nextSteps: bmad ? nextSteps(options, bmad, plans) : ['Verify your coding host sees BRAD from its user-level skill directory.'] };
   }
   // Preflight all paths before performing any writes, so collisions are detected early.
@@ -326,7 +361,7 @@ export function execute(argv) {
   const bmad = options.global ? null : bmadCheck(options.dir);
   return { command: options.command, version: version(), root: options.global ? homedir() : options.dir, hosts: selectedAgents(options), results,
     ...(options.global ? {} : { bmad }), nextSteps: bmad ? nextSteps(options, bmad, plans) : [],
-    aiReady: true, executionVerified: false };
+    readiness: readinessSummary(results, bmad), executionVerified: false };
 }
 export async function main(argv) {
   let json = argv.includes('--json');

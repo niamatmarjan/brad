@@ -38,11 +38,38 @@ def inspect(root: Path) -> dict:
               "npm_available": bool(npm_bin), "npx_available": bool(npx_bin),
               "gh_available": bool(gh), "git_repo": False,
               "current_branch": None, "dirty": None, "remotes": [],
-              "gh_authenticated": None, "warnings": []}
+              "gh_authenticated": None, "warnings": [], "remediations": [],
+              "npm_version": None, "npm_git_policy": "not_checked"}
     if is_windows:
         result["warnings"].append("Windows PowerShell: prefer npm.cmd/npx.cmd if .ps1 execution is blocked; do not change execution policy.")
+    # Optional best-effort diagnostic only. Never change npm config globally or
+    # claim all npm 12 installations have the same policy.
+    if npm_bin:
+        npm_v = _cmd(root, [npm_bin, "--version"])
+        if npm_v["exit"] == 0:
+            result["npm_version"] = npm_v["stdout"].splitlines()[0] if npm_v["stdout"] else None
+            try:
+                major = int(result["npm_version"].split(".")[0])
+            except (ValueError, AttributeError):
+                major = 0
+            if major >= 12:
+                policy = _cmd(root, [npm_bin, "config", "get", "allow-git"])
+                if policy["exit"] == 0:
+                    value = policy["stdout"].strip().lower()
+                    # npm may report 'undefined' on versions that do not expose
+                    # this setting. Preserve ambiguity, do not invent a block.
+                    if value not in ("", "undefined", "null"):
+                        result["npm_git_policy"] = value
+                if result["npm_git_policy"] not in ("all", "not_checked"):
+                    result["warnings"].append("npm Git-source policy may restrict GitHub-backed npx packages.")
+                    result["remediations"].append(
+                        "If the trusted pinned GitHub package is blocked, inspect the npm error and "
+                        "use an explicit one-command policy override supported by your npm version; "
+                        "do not weaken global npm policy automatically."
+                    )
     if not git:
         result["warnings"].append("Git unavailable: no local commit or branch operations.")
+        result["remediations"].append("Install Git or use read-only/local non-Git workflows.")
         return result
     probe = _cmd(root, [git, "rev-parse", "--is-inside-work-tree"])
     if probe["exit"] != 0 or probe["stdout"] != "true":
@@ -62,12 +89,20 @@ def inspect(root: Path) -> dict:
         result["gh_authenticated"] = (auth["exit"] == 0)
         if not result["gh_authenticated"]:
             result["warnings"].append("gh auth status did not succeed; PR access unverified.")
+            result["remediations"].append("Use a supported authenticated host GitHub connector or log in with gh auth login; never echo tokens.")
     else:
         result["warnings"].append("GitHub CLI unavailable; host may provide another PR tool.")
+        result["remediations"].append("Check host-native GitHub access or use --local; do not claim a PR exists without its remote URL.")
     if not result["remotes"]:
         result["warnings"].append("No git remote: cannot push/create PR from this checkout.")
+        if result["current_branch"]:
+            result["remediations"].append(
+                "Optional local handoff: git bundle create <safe-output-path> " + result["current_branch"] +
+                " (run only with user approval and verified commits)."
+            )
     if result["dirty"]:
         result["warnings"].append("Dirty worktree: preserve existing user changes.")
+        result["remediations"].append("Preserve edits; prefer a clean, isolated worktree after confirming branch and ownership.")
     result["warnings"].append("Read-only preflight, NOT proof of remote write or CI permissions.")
     return result
 
