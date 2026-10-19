@@ -20,7 +20,8 @@ No invented agent personas, manual copy of BMAD workflows, or parallel backlog.
 Read only the reference needed for this intent: [version routing](references/version-routing.md),
 [one-ticket delivery](references/ticket-to-pr.md), [planning/epics](references/epics-and-stories.md),
 [QA/release](references/quality-and-release.md), [decisions](references/clarification-and-risk.md),
-[host delegation](references/hosts-and-handoffs.md). Read exact installed target SKILL.md
+[host delegation](references/hosts-and-handoffs.md), and
+[routing evidence](references/routing-verification.md) when validating specialists. Read exact installed target SKILL.md
 before invoking. These references are guides, never proof of installed behavior.
 
 ## Contract, in priority order
@@ -64,7 +65,9 @@ before invoking. These references are guides, never proof of installed behavior.
 7. **Truthful results.** A proposed route is NOT evidence an agent ran.
    Running an instruction in the same context is NOT independent review.
    Require observed tests/exit codes, commits, remote PR URL and CI result before
-   saying any passed. Failed, unavailable and unrun checks are separate states.
+   saying any passed. A report badge is not proof of correct routing: compare the
+   selected native skill with the exact canonical intent and installed target.
+   Missing TEA is not a reason to substitute an unrelated help/Build workflow. Failed, unavailable and unrun checks are separate states.
 8. **No dangerous defaults.** No force push, history rewrites, auto-merge,
    branch deletion, secret disclosure, scope expansion, production deployment,
    bypassing CI/protection or installing/upgrading BMAD without authorization.

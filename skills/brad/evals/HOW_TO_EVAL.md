@@ -37,3 +37,26 @@ For each case in `routing-cases.json`:
 
 The `delivery_preflight.py` and `inspect_bmad.py` scripts are read-only aids,
 not a runtime agent dispatcher and not proof that GitHub publishing is possible.
+
+## Auditing captured selections (new in v0.4.0)
+
+Store actual observations as JSON array and run:
+
+```bash
+python skills/brad/scripts/audit_routing_results.py --observed my-observations.json --pretty
+```
+
+This reports selected native skill ID matches, separately declared invocation
+evidence, and delivery state. `EVIDENCE_REPORTED` merely means an evaluator
+provided an evidence pointer; review the trace itself before claiming success.
+Free-form/conditional target expectations are `REVIEW_REQUIRED`.
+
+For the misrouting examples published in an external lab dossier, run:
+
+```bash
+python skills/brad/scripts/audit_routing_results.py --observed skills/brad/evals/reported-regressions.json --pretty
+```
+
+**Do not** treat this supplied report as an independent source of log evidence.
+The specimen deliberately contains labels that disagree with canonical routes,
+so the auditor should find failures.

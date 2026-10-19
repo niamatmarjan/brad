@@ -1,7 +1,7 @@
 {
   "name": "@niamatmarjan/brad",
-  "version": "0.3.0",
-  "description": "BRAD \u2014 BMAD Routing & Agent Delegation: project skill installer and diagnostic CLI",
+  "version": "0.4.0",
+  "description": "BRAD — BMAD Routing & Agent Delegation: project skill installer and diagnostic CLI",
   "type": "module",
   "bin": {
     "brad": "cli/brad.mjs"

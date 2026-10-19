@@ -1,3 +1,19 @@
+## [0.4.0] - 2026-10-19
+
+### Added
+- Read-only routing result auditor and regression fixtures for incorrect native BMAD skill selections reported by a third-party validation lab. Distinguishes selection, evidence declaration, and actual delivery.
+- Native specialist routing verification guide, including explicit high-risk misroutes for BMM/PO and TEA.
+- Read-only npm/Git/GitHub delivery preflight diagnostics with actionable, scoped remediation suggestions.
+- Machine-readable installer readiness stages, separating skill-file integrity from native execution, PR access and CI.
+
+### Changed
+- Hardened `doctor` output to avoid the unproven `aiReady: true` claim.
+- Windows `.cmd` guidance and npm Git-source policy checks remain **read-only**; BRAD never changes global npm security settings.
+- Documentation distinguishes lab-reported 85 static tests, 55 selection/invocation outcomes, and 10 full delivery passes, and does not advertise uncertified production readiness.
+
+### Compatibility and boundaries
+- Native BMAD v6/v7 interface changes still require live host testing. The auditor does **not** perform agent calls; evidence pointers are not independently validated.
+
 # Changelog
 
 All notable changes will be documented here. Version numbers follow [Semantic Versioning](https://semver.org/).

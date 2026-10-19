@@ -21,7 +21,7 @@ See the [AI setup guide](docs/AI_SETUP.md) for the full agent protocol, includin
 **Node.js 20+** is required for the installer. From your project root:
 
 ```bash
-npx --yes "github:niamatmarjan/brad#v0.3.0" setup
+npx --yes "github:niamatmarjan/brad#v0.4.0" setup
 ```
 
 That uses the GitHub release tag and **does not require an npm registry publication**. It detects explicit project host conventions and installs the native BRAD skill in the supported location. An ordinary `.github/workflows` folder alone does not imply Copilot; an ambiguous project gets the shared portable `.agents/skills/brad` path. It never installs BMAD Method for you or silently replaces existing user-customized files.
@@ -29,22 +29,22 @@ That uses the GitHub release tag and **does not require an npm registry publicat
 Choose a host explicitly (useful in a fresh project):
 
 ```bash
-npx --yes "github:niamatmarjan/brad#v0.3.0" setup --agent antigravity
-npx --yes "github:niamatmarjan/brad#v0.3.0" setup --agent claude
-npx --yes "github:niamatmarjan/brad#v0.3.0" setup --agent copilot
-npx --yes "github:niamatmarjan/brad#v0.3.0" setup --agent codex
+npx --yes "github:niamatmarjan/brad#v0.4.0" setup --agent antigravity
+npx --yes "github:niamatmarjan/brad#v0.4.0" setup --agent claude
+npx --yes "github:niamatmarjan/brad#v0.4.0" setup --agent copilot
+npx --yes "github:niamatmarjan/brad#v0.4.0" setup --agent codex
 ```
 
 To generate an instruction tailored to this project for your AI assistant:
 
 ```bash
-npx --yes "github:niamatmarjan/brad#v0.3.0" prompt
+npx --yes "github:niamatmarjan/brad#v0.4.0" prompt
 ```
 
 To verify your install:
 
 ```bash
-npx --yes "github:niamatmarjan/brad#v0.3.0" doctor --json
+npx --yes "github:niamatmarjan/brad#v0.4.0" doctor --json
 ```
 
 The `doctor` command checks installed skill integrity, native BMAD **hints versus configured state**, prerequisites, and next actions; it does not prove native agent invocation. On Windows PowerShell, use `npx.cmd` in place of `npx` if the `.ps1` shim is blocked. Install/configure BMAD separately if needed:
@@ -75,13 +75,31 @@ The BRAD CLI includes `setup`, `prompt`, `init`, `doctor`, `update`, `uninstall`
 
 For a development ticket, BRAD aims for **resolve → native Build → review → verify → commit → push → PR → CI evidence**, conditioned on installation capabilities and publishing authorization. Native BMAD execution owns the implementation, and human clarification/approval checkpoints remain in force. BRAD does **not** auto-merge, deploy, bypass CI, invent subagent execution, or claim that unrun tests passed.
 
+## Validate routing with observed evidence
+
+An external Antigravity lab reported 85/85 static target checks, but only 55/85
+native selection/invocation outcomes and 10 full delivery outcomes. Several
+reported selections differed from the expected native workflow (such as
+epic planning routed to `bmad-prd`, or TEA test review routed to `bmad-help`).
+These results are **report claims**, not imported agent execution logs.
+
+BRAD now includes a read-only audit utility for captured observations:
+
+```bash
+python skills/brad/scripts/audit_routing_results.py --observed actual-observations.json --pretty
+```
+
+Read [routing evidence and specialist choice](skills/brad/references/routing-verification.md)
+and [evaluation methodology](skills/brad/evals/HOW_TO_EVAL.md). Keep static,
+selection, native invocation and delivered outcome metrics separate.
+
 ## Compatibility and current maturity
 
 - **BMAD v6:** designed against the v6.11/v6.12 skill and sprint patterns.
 - **BMAD v7:** preview-aware route discovery; compatibility depends on *installed* v7 interfaces and must be retested as they evolve.
 - **TEA and optional modules:** used if installed and relevant, never faked.
 - **Runtime:** skill instructions, references, read-only preflight tools, and evaluation cases; **not** a standalone autonomous daemon.
-- **Maturity:** v0.3.0 is a **public preview / supervised pilot**. The included 85 routing cases are a test specification, not proof of live host behavior.
+- **Maturity:** v0.4.0 is a **public preview / supervised pilot**. The included 85 routing cases are a test specification, not proof of live host behavior.
 
 ## Project layout
 
