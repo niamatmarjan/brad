@@ -1,3 +1,22 @@
+# Changelog
+
+All notable changes will be documented here. Versions follow [Semantic Versioning](https://semver.org/); releases before 1.0 are preview.
+
+## [0.4.1] - 2026-10-19
+
+### Added
+- Full open-source project policies: license/attribution notices, branding guidance, code of conduct, contributor provenance, security disclosure, support, governance and roadmap.
+- Maintainer CODEOWNERS, GitHub action dependency updates, polished issues/PR templates, `.editorconfig`, `.gitattributes`, and repository quality checks.
+- Future demo publication policy, examples index (no fabricated test results), and GPT-6.1 Sol v0.5.0 multi-agent validation master prompt.
+- Release checksums and Windows/PowerShell installer smoke testing.
+
+### Changed
+- Preserve the original MIT LICENSE; package official copyright and third-party notices in distributed artifacts.
+- Normalize changelog ordering, documentation links and release instructions. Remove accidental generated artifacts from packaging.
+
+### Boundaries
+- This patch improves repository quality and onboarding only; it does **not** certify native BMAD routing, true subagent concurrency, or unattended remote GitHub delivery.
+
 ## [0.4.0] - 2026-10-19
 
 ### Added
@@ -13,10 +32,6 @@
 
 ### Compatibility and boundaries
 - Native BMAD v6/v7 interface changes still require live host testing. The auditor does **not** perform agent calls; evidence pointers are not independently validated.
-
-# Changelog
-
-All notable changes will be documented here. Version numbers follow [Semantic Versioning](https://semver.org/).
 
 ## [0.3.0] - 2026-10-19
 
@@ -56,4 +71,3 @@ All notable changes will be documented here. Version numbers follow [Semantic Ve
 ### Known limitations
 - Live agent-routing accuracy, nested delegation, PR delivery, and v7 preview compatibility are **not certified** by the included automated tests.
 - Hosts differ in skill invocation and independent-agent support; use a supervised pilot.
-

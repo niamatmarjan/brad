@@ -1,11 +1,42 @@
 # Contributing to BRAD
 
-Thanks for helping make native BMAD routing easier and more reliable.
+Thank you for helping make native BMAD coordination easier and more trustworthy. BRAD is an independent, MIT-licensed community project.
 
-1. Open an issue describing the BMAD version, host, steps to reproduce, expected behavior and observed output (redact credentials).
-2. Create a branch from `main` and make the smallest change. Keep BRAD a **wrapper**; use installed native workflows for specialist work.
-3. Add or update a scenario in `skills/brad/evals/routing-cases.json` and executable tests for changed scripts/contracts.
-4. Run `python -m unittest discover -s skills/brad/tests -v` and `python tools/build_release.py`.
-5. Submit a pull request with evidence, compatibility impact and any user-facing behavior changes. PRs are reviewed before merging.
+## Before you start
 
-Do not submit test or subagent outcomes as passed without actual execution evidence. Avoid new heavy runtime dependencies and secrets in fixtures. For security reports, see [SECURITY.md](SECURITY.md).
+- For install/use questions, read [SUPPORT.md](SUPPORT.md).
+- For suspected vulnerabilities, **report privately** using [SECURITY.md](SECURITY.md), not an issue.
+- Check open issues/PRs before duplicating work. For sizeable changes, propose the design first.
+- Read [AGENTS.md](AGENTS.md), [architecture](docs/architecture.md), and [validation limits](docs/validation.md).
+
+## Contribution flow
+
+1. Fork the repository, create a topic branch from the current `main`, and keep changes focused. Never rewrite published tags.
+2. Preserve the **thin wrapper** contract: discover and delegate to installed native BMAD workflows. Do not add fake specialists or a parallel BMAD state database.
+3. Add regression tests for success, failure, interrupted, and security-sensitive behavior. If changing routing, update the canonical scenarios and, where available, attach **real native invocation** traces.
+4. Run all applicable checks (Node.js 20+ and Python 3.11+):
+
+   ```sh
+   npm test
+   python -m unittest discover -s skills/brad/tests -v
+   python tools/check_repository.py
+   python tools/build_release.py
+   npm pack --dry-run --json
+   ```
+
+5. Update relevant documentation and `CHANGELOG.md` for user-facing changes. Do **not** bump `VERSION` for every community PR; coordinate release changes with maintainers.
+6. Submit a PR describing what changed, compatibility impact, safety implications, test results, and **limits of what was actually tested**. Do not mark unrun checks as passed.
+
+## Copyright, licensing, and AI contributions
+
+By submitting a contribution, you represent that you have the rights to license it under BRAD's MIT License, including any employer or upstream permissions needed. No Contributor License Agreement is currently required; contributions remain attributed to their authors under the repository license.
+
+Do not paste third-party proprietary or restricted-license code, stolen credentials, or confidential customer material. For copied MIT/Apache/BSD code or assets, disclose origin, copyright notices, license text and relevant conditions before inclusion; compatibility must be reviewed. **AI-assisted code is welcome**, but a human contributor is responsible for provenance, correctness, testing, and the legal right to submit it. Do not claim that AI-generated work has no provenance risks.
+
+## Coding standards and conduct
+
+Prefer standard libraries and narrowly scoped dependencies; keep installation deterministic, idempotent, cross-platform, and safe on Windows. Never add hidden network actions, silent native BMAD upgrades, destructive force flags, or unsanctioned remote pushes. Preserve native v6/v7 separation and verify the exact installed skill before invoking it. Follow [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+
+## Demo submissions
+
+Demos require repeatable **redacted evidence**, permission to publish, and a disclosed validation scope. See [docs/demo-publication.md](docs/demo-publication.md). Do not commit gigabytes of raw telemetry or full private transcripts into the source repository.

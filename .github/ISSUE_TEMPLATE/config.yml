@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Installation and usage guidance
+    url: https://github.com/niamatmarjan/brad/blob/main/SUPPORT.md
+    about: Check self-service guidance before filing an issue.
+  - name: Security reporting procedure
+    url: https://github.com/niamatmarjan/brad/blob/main/SECURITY.md
+    about: Never report private vulnerability details in a public issue.

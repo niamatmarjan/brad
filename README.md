@@ -6,6 +6,10 @@
 [![Release](https://img.shields.io/github/v/release/niamatmarjan/brad)](https://github.com/niamatmarjan/brad/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
+**Open-source status:** MIT-licensed, community-maintained, **supervised preview**. A legitimate fork or commercial reuse is permitted under MIT with its required notices. This is **not** an officially endorsed BMAD Method product and live native-agent/PR delivery depends on your host and permissions. See [Notices](NOTICE.md), [branding](BRANDING.md), and [security policy](SECURITY.md).
+
+---
+
 BRAD is a **thin, user-invoked wrapper** for an existing [BMAD Method](https://github.com/bmad-code-org/BMAD-METHOD) installation. It discovers the native workflows actually installed in your project, routes your request to the smallest appropriate skill or agent, preserves BMAD's lifecycle, and coordinates authorized delivery steps. It **does not replace** BMAD's PM, Architect, Build, QA, or Test Architect.
 
 ## Quick start — ask your AI coding assistant to install it
@@ -21,7 +25,7 @@ See the [AI setup guide](docs/AI_SETUP.md) for the full agent protocol, includin
 **Node.js 20+** is required for the installer. From your project root:
 
 ```bash
-npx --yes "github:niamatmarjan/brad#v0.4.0" setup
+npx --yes "github:niamatmarjan/brad#v0.4.1" setup
 ```
 
 That uses the GitHub release tag and **does not require an npm registry publication**. It detects explicit project host conventions and installs the native BRAD skill in the supported location. An ordinary `.github/workflows` folder alone does not imply Copilot; an ambiguous project gets the shared portable `.agents/skills/brad` path. It never installs BMAD Method for you or silently replaces existing user-customized files.
@@ -29,22 +33,22 @@ That uses the GitHub release tag and **does not require an npm registry publicat
 Choose a host explicitly (useful in a fresh project):
 
 ```bash
-npx --yes "github:niamatmarjan/brad#v0.4.0" setup --agent antigravity
-npx --yes "github:niamatmarjan/brad#v0.4.0" setup --agent claude
-npx --yes "github:niamatmarjan/brad#v0.4.0" setup --agent copilot
-npx --yes "github:niamatmarjan/brad#v0.4.0" setup --agent codex
+npx --yes "github:niamatmarjan/brad#v0.4.1" setup --agent antigravity
+npx --yes "github:niamatmarjan/brad#v0.4.1" setup --agent claude
+npx --yes "github:niamatmarjan/brad#v0.4.1" setup --agent copilot
+npx --yes "github:niamatmarjan/brad#v0.4.1" setup --agent codex
 ```
 
 To generate an instruction tailored to this project for your AI assistant:
 
 ```bash
-npx --yes "github:niamatmarjan/brad#v0.4.0" prompt
+npx --yes "github:niamatmarjan/brad#v0.4.1" prompt
 ```
 
 To verify your install:
 
 ```bash
-npx --yes "github:niamatmarjan/brad#v0.4.0" doctor --json
+npx --yes "github:niamatmarjan/brad#v0.4.1" doctor --json
 ```
 
 The `doctor` command checks installed skill integrity, native BMAD **hints versus configured state**, prerequisites, and next actions; it does not prove native agent invocation. On Windows PowerShell, use `npx.cmd` in place of `npx` if the `.ps1` shim is blocked. Install/configure BMAD separately if needed:
@@ -99,7 +103,7 @@ selection, native invocation and delivered outcome metrics separate.
 - **BMAD v7:** preview-aware route discovery; compatibility depends on *installed* v7 interfaces and must be retested as they evolve.
 - **TEA and optional modules:** used if installed and relevant, never faked.
 - **Runtime:** skill instructions, references, read-only preflight tools, and evaluation cases; **not** a standalone autonomous daemon.
-- **Maturity:** v0.4.0 is a **public preview / supervised pilot**. The included 85 routing cases are a test specification, not proof of live host behavior.
+- **Maturity:** v0.4.1 is a **public preview / supervised pilot**. The included 85 routing cases are a test specification, not proof of live host behavior.
 
 ## Project layout
 
@@ -130,3 +134,15 @@ Read [AI setup](docs/AI_SETUP.md), [validation boundaries](docs/validation-repor
 The initial `v0.1.0` sources were adapted and rebranded from the **BMAD Auto v3** prototype, retaining its core behavior and scenario evaluation suite. Inspired by [BAD](https://github.com/stephenleo/bmad-autonomous-development), [auto-bmad](https://github.com/stefanoginella/auto-bmad), and [official bmad-loop](https://github.com/bmad-code-org/bmad-loop). These projects are references, not bundled dependencies. This is an independent community project and is **not affiliated with or officially endorsed by the BMAD Method maintainers**.
 
 MIT licensed. Copyright © 2026 Niamat Marjan.
+
+## Open-source project and roadmap
+
+- [MIT license](LICENSE) · [Notices and attribution](NOTICE.md) · [Branding / non-endorsement](BRANDING.md)
+- [Contributing](CONTRIBUTING.md) · [Code of conduct](CODE_OF_CONDUCT.md) · [Governance](GOVERNANCE.md)
+- [Security and private disclosure](SECURITY.md) · [Support](SUPPORT.md) · [Roadmap](ROADMAP.md)
+- [Release process](docs/releasing.md) · [Evaluation integrity](docs/validation.md) · [Demo publication policy](docs/demo-publication.md)
+- [GPT-6.1 Sol v0.5.0 validation prompt](docs/testing/GPT61_SOL_MASTER_PROMPT.md) · [Demo/example index](examples/README.md)
+
+**About source reuse:** MIT allows use and redistribution, including for commercial projects, so long as its copyright and license notice obligations are observed. BRAD contributors should disclose third-party source provenance. A separate BRANDING policy discourages confusing claims of official endorsement without altering code-license rights. No previously unregistered name or logo is claimed here to be a registered trademark.
+
+**Future demos are not yet published:** We intend to add a small, redacted example after the next independent validation run. The presence of a planned test prompt or screenshots does not mean it has been executed.

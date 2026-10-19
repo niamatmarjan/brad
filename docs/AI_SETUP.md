@@ -1,4 +1,4 @@
-# BRAD: AI-agent installation and verification contract (v0.4.0)
+# BRAD: AI-agent installation and verification contract (v0.4.1)
 
 This is the **canonical, copyable onboarding instruction** for Claude Code, Antigravity, Codex, and GitHub Copilot. It is written for an AI coding agent acting on a user's project. BRAD is an independent community wrapper around native BMAD Method workflows; it does not install BMAD implicitly or replace its agents.
 
@@ -15,8 +15,8 @@ Install BRAD in the **user's intended repository**, with the minimum necessary c
 5. For modified or manually installed BRAD directories, run a dry run and inspect the differences; never use `--force` automatically.
 
 ```shell
-npx --yes "github:niamatmarjan/brad#v0.4.0" doctor --json
-npx --yes "github:niamatmarjan/brad#v0.4.0" setup --dry-run --json
+npx --yes "github:niamatmarjan/brad#v0.4.1" doctor --json
+npx --yes "github:niamatmarjan/brad#v0.4.1" setup --dry-run --json
 ```
 
 ## Phase 2: Install BRAD (authorized reversible change)
@@ -24,7 +24,7 @@ npx --yes "github:niamatmarjan/brad#v0.4.0" setup --dry-run --json
 Use the actual host when known. Otherwise use `--agent auto`. Install only into the agreed project or requested global scope.
 
 ```shell
-npx --yes "github:niamatmarjan/brad#v0.4.0" setup --agent auto --json
+npx --yes "github:niamatmarjan/brad#v0.4.1" setup --agent auto --json
 ```
 
 Host choices: `antigravity`, `claude`, `codex`, `copilot`, `all`. Never use `all` casually; it writes to several host directories. `setup` is safe/idempotent but does **not** install BMAD, configure GitHub, change existing BMAD versions, bypass permissions, or start a background daemon. Existing nonmanaged/modified skill files are preserved; seek approval before `--force`, then report the backup path.
@@ -55,3 +55,5 @@ Host choices: `antigravity`, `claude`, `codex`, `copilot`, `all`. Never use `all
 ## Suggested user instruction
 
 > Install and configure BRAD in this workspace for the coding agent I am currently using. Follow `https://github.com/niamatmarjan/brad/blob/main/docs/AI_SETUP.md`. Inspect the project first, handle the installation, configure missing native BMAD only after asking about the version, verify that the skill is discovered, and tell me what I can run. Preserve existing files and do not push or deploy anything.
+
+For copying and public reuse see [NOTICE](../NOTICE.md) and [BRANDING](../BRANDING.md); report vulnerabilities privately per [SECURITY](../SECURITY.md).

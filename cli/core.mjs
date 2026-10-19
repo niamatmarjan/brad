@@ -81,9 +81,9 @@ Options:
   --yes, -y       Non-interactive acknowledgment (no hidden approvals)
 
 Examples:
-  npx --yes "github:niamatmarjan/brad#v0.4.0" setup
-  npx --yes "github:niamatmarjan/brad#v0.4.0" setup --agent claude
-  npx --yes "github:niamatmarjan/brad#v0.4.0" doctor
+  npx --yes "github:niamatmarjan/brad#v${version()}" setup
+  npx --yes "github:niamatmarjan/brad#v${version()}" setup --agent claude
+  npx --yes "github:niamatmarjan/brad#v${version()}" doctor
 
 BRAD installs a thin skill; it does NOT install or modify BMAD Method.
 An AI agent may offer to install official BMAD separately after your consent.

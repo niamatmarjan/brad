@@ -11,6 +11,27 @@ permissions:
   contents: read
 
 jobs:
+  quality:
+    name: Open-source repository checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run repository audit and regression tests
+        run: |
+          python tools/check_repository.py
+          python -m unittest discover -s tests -p 'test_repository_quality.py' -v
+      - name: Check for tracked build/cache artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git ls-files | grep -E '(^|/)(__pycache__|node_modules|dist|\.venv|\.next)/|\.(pyc|pyo)$'; then
+            echo 'Unexpected generated or dependency artifacts are committed.'
+            exit 1
+          fi
+
   test:
     name: Tests (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
@@ -53,13 +74,38 @@ jobs:
           npm exec --yes --offline --package "./dist/niamatmarjan-brad-$(cat VERSION).tgz" -- brad init --dir "$project" --agent antigravity
           test -f "$project/.agents/skills/brad/SKILL.md"
 
+  windows-cli:
+    name: CLI Windows PowerShell (Node.js 22)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Node tests
+        run: npm.cmd test
+      - name: PowerShell setup and doctor smoke test
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $project = Join-Path $env:RUNNER_TEMP 'brad-win-project'
+          New-Item -ItemType Directory -Force -Path $project | Out-Null
+          node cli/brad.mjs setup --agent antigravity --dir $project
+          if ($LASTEXITCODE -ne 0) { throw 'BRAD setup failed' }
+          if (-not (Test-Path (Join-Path $project '.agents/skills/brad/SKILL.md'))) { throw 'Skill missing' }
+          node cli/brad.mjs doctor --agent antigravity --dir $project --json
+          if ($LASTEXITCODE -ne 0) { throw 'BRAD doctor failed' }
+
   release:
     name: Publish versioned GitHub Release
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [test, node-cli]
+    needs: [quality, test, node-cli, windows-cli]
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    concurrency:
+      group: brad-release
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -72,6 +118,12 @@ jobs:
           node-version: "22"
       - name: Build CLI tarball
         run: npm pack --pack-destination dist
+      - name: Record SHA-256 checksums
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd dist
+          sha256sum brad-v*.zip niamatmarjan-brad-*.tgz > SHA256SUMS.txt
       - name: Publish once per version
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -84,7 +136,7 @@ jobs:
             echo "Release $tag already exists; no action needed"
             exit 0
           fi
-          gh release create "$tag" "dist/brad-${tag}.zip" "dist/niamatmarjan-brad-${version}.tgz" \
+          gh release create "$tag" "dist/brad-${tag}.zip" "dist/niamatmarjan-brad-${version}.tgz" "dist/SHA256SUMS.txt" \
             --target "$GITHUB_SHA" \
             --title "BRAD ${tag}" \
             --notes-file "docs/releases/${tag}.md"
