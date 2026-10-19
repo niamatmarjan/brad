@@ -104,7 +104,11 @@ test('CLI script provides machine-readable JSON', () => fixture(root => {
   assert.equal(data.results[0].action, 'installed');
 }));
 test('distribution contains files required by the npm CLI', () => {
-  const r = spawnSync('npm', ['pack', '--dry-run', '--json', '--ignore-scripts'], { cwd: packageRoot, encoding: 'utf8' });
+  // npm is a .cmd shim on Windows. Prefer npm_execpath for cross-platform Node invocation.
+  const npmCli = process.env.npm_execpath;
+  const args = npmCli ? [npmCli, 'pack', '--dry-run', '--json', '--ignore-scripts'] : ['pack', '--dry-run', '--json', '--ignore-scripts'];
+  const command = npmCli ? process.execPath : (process.platform === 'win32' ? 'npm.cmd' : 'npm');
+  const r = spawnSync(command, args, { cwd: packageRoot, encoding: 'utf8', shell: !npmCli && process.platform === 'win32' });
   assert.equal(r.status, 0, r.stderr);
   const data = JSON.parse(r.stdout)[0];
   const names = data.files.map(x => x.path);
