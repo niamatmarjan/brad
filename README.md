@@ -8,38 +8,52 @@
 
 BRAD is a **thin, user-invoked wrapper** for an existing [BMAD Method](https://github.com/bmad-code-org/BMAD-METHOD) installation. It discovers the native workflows actually installed in your project, routes your request to the smallest appropriate skill or agent, preserves BMAD's lifecycle, and coordinates authorized delivery steps. It **does not replace** BMAD's PM, Architect, Build, QA, or Test Architect.
 
-## Quick start — install with npx
+## Quick start — ask your AI coding assistant to install it
 
-**Node.js 20+** is required for the installer. From the root of your coding project:
+**Recommended:** Copy the instruction below into Antigravity, Claude Code, GitHub Copilot, or Codex while your project is open. Your agent should inspect the project, run the install, identify any missing official BMAD prerequisites, and verify the skill.
+
+> Install BRAD in this project using the instructions in https://github.com/niamatmarjan/brad/blob/main/docs/AI_SETUP.md. Use the correct host and safe versioned release. Verify with `brad doctor --json`. If native BMAD Method is missing, ask me whether to use v6.12 stable or v7 preview before installing it. Preserve existing files and don't push or deploy.
+
+See the [AI setup guide](docs/AI_SETUP.md) for the full agent protocol, including Windows, permissions, preflight, and smoke tests.
+
+### Terminal alternative
+
+**Node.js 20+** is required for the installer. From your project root:
 
 ```bash
-npx --yes github:niamatmarjan/brad#v0.2.0 init
+npx --yes "github:niamatmarjan/brad#v0.3.0" setup
 ```
 
-That uses the GitHub release tag and **does not require an npm registry publication**. It detects project host conventions and installs the native BRAD skill in the supported location. It never installs BMAD Method for you or silently replaces existing user-customized files.
+That uses the GitHub release tag and **does not require an npm registry publication**. It detects explicit project host conventions and installs the native BRAD skill in the supported location. An ordinary `.github/workflows` folder alone does not imply Copilot; an ambiguous project gets the shared portable `.agents/skills/brad` path. It never installs BMAD Method for you or silently replaces existing user-customized files.
 
 Choose a host explicitly (useful in a fresh project):
 
 ```bash
-npx --yes github:niamatmarjan/brad#v0.2.0 init --agent antigravity
-npx --yes github:niamatmarjan/brad#v0.2.0 init --agent claude
-npx --yes github:niamatmarjan/brad#v0.2.0 init --agent copilot
-npx --yes github:niamatmarjan/brad#v0.2.0 init --agent codex
+npx --yes "github:niamatmarjan/brad#v0.3.0" setup --agent antigravity
+npx --yes "github:niamatmarjan/brad#v0.3.0" setup --agent claude
+npx --yes "github:niamatmarjan/brad#v0.3.0" setup --agent copilot
+npx --yes "github:niamatmarjan/brad#v0.3.0" setup --agent codex
+```
+
+To generate an instruction tailored to this project for your AI assistant:
+
+```bash
+npx --yes "github:niamatmarjan/brad#v0.3.0" prompt
 ```
 
 To verify your install:
 
 ```bash
-npx --yes github:niamatmarjan/brad#v0.2.0 doctor
+npx --yes "github:niamatmarjan/brad#v0.3.0" doctor --json
 ```
 
-The `doctor` command checks installed skill integrity and looks for BMAD project files. Install/configure BMAD separately if needed:
+The `doctor` command checks installed skill integrity, native BMAD **hints versus configured state**, prerequisites, and next actions; it does not prove native agent invocation. On Windows PowerShell, use `npx.cmd` in place of `npx` if the `.ps1` shim is blocked. Install/configure BMAD separately if needed:
 
 ```bash
 npx bmad-method install
 ```
 
-The BRAD CLI includes `init`, `doctor`, `update`, `uninstall`, `--dry-run`, `--global`, and `--json`. Updates are safe: managed files are checked before replacement; modified/unmanaged installs require explicit `--force` and are backed up. See the [CLI installation guide](docs/installation.md).
+The BRAD CLI includes `setup`, `prompt`, `init`, `doctor`, `update`, `uninstall`, `--dry-run`, `--global`, and `--json`. Updates are safe: managed files are checked before replacement; modified/unmanaged installs require explicit `--force` and are backed up. See the [CLI installation guide](docs/installation.md).
 
 **Prerequisites:** BMAD configured for your project before trying BRAD workflows; a coding host supporting Agent Skills; Git. Pushing PRs additionally requires an authorized remote and the host's GitHub integration/credentials.
 
@@ -67,7 +81,7 @@ For a development ticket, BRAD aims for **resolve → native Build → review �
 - **BMAD v7:** preview-aware route discovery; compatibility depends on *installed* v7 interfaces and must be retested as they evolve.
 - **TEA and optional modules:** used if installed and relevant, never faked.
 - **Runtime:** skill instructions, references, read-only preflight tools, and evaluation cases; **not** a standalone autonomous daemon.
-- **Maturity:** v0.2.0 is a **public preview / supervised pilot**. The included 85 routing cases are a test specification, not proof of live host behavior.
+- **Maturity:** v0.3.0 is a **public preview / supervised pilot**. The included 85 routing cases are a test specification, not proof of live host behavior.
 
 ## Project layout
 
@@ -91,7 +105,7 @@ python -m unittest discover -s skills/brad/tests -v
 python tools/build_release.py
 ```
 
-Read [architecture](docs/architecture.md), [testing limitations](docs/validation.md), [contributing](CONTRIBUTING.md), [security](SECURITY.md), and [changelog](CHANGELOG.md). Releases follow [SemVer](https://semver.org/); instructions are in [docs/releasing.md](docs/releasing.md).
+Read [AI setup](docs/AI_SETUP.md), [validation boundaries](docs/validation-report-review.md), [architecture](docs/architecture.md), [testing limitations](docs/validation.md), [contributing](CONTRIBUTING.md), [security](SECURITY.md), and [changelog](CHANGELOG.md). Releases follow [SemVer](https://semver.org/); instructions are in [docs/releasing.md](docs/releasing.md).
 
 ## Attribution
 

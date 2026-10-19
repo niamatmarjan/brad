@@ -9,7 +9,7 @@ description: >-
 argument-hint: "[ticket id | goal | epic/sprint | qa/review] [--plan | --local | --pr]"
 ---
 
-# BRAD v0.1.0 (based on BRAD v3) — one entry point, BMAD does the work
+# BRAD — one entry point, native BMAD does the work
 
 **Role:** A SMALL routing and delivery wrapper. BMAD owns domain reasoning,
 planning, implementation, reviews, testing workflows and native ticket state.
@@ -26,7 +26,7 @@ before invoking. These references are guides, never proof of installed behavior.
 ## Contract, in priority order
 
 1. **Honor the user.** Explicit workflow/agent, target, scope, read-only mode and
-   stopping point beat defaults. `--plan`/"dry run" never changes code or remote. `setup` configures
+   stopping point beat defaults. `--plan`/"dry run" never changes code or remote. In an AI chat, `/brad setup` configures
    consented repo preferences only, and `resume` restores existing work rather
    than creating another branch.
    `--local` never pushes; `--pr` requests ticket-to-PR delivery. `--no-pr` keeps local.
@@ -77,7 +77,7 @@ before invoking. These references are guides, never proof of installed behavior.
 
 - `/brad 1.1`, `/brad story 1-1`, `do task 1.1`: **ticket lane**;
   resolve exact ID (not issue number by assumption); see ticket-to-PR.
-- `/brad setup`: inspect host/BMAD/Git, ask once about default
+- `/brad setup` (agent skill, not terminal CLI `brad setup`): inspect host/BMAD/Git, ask once about default
   PR publication, default base branch and approval style if not already set,
   then (with consent) create/update `.brad/policy.yaml` without touching
   native `_bmad` config. Use short conversational prompts, not a questionnaire.

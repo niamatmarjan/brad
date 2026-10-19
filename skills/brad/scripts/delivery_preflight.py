@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import json
 import shutil
+import sys
 import subprocess
 from pathlib import Path
 
@@ -29,10 +30,17 @@ def inspect(root: Path) -> dict:
         raise ValueError(f"Not a directory: {root}")
     git = shutil.which("git")
     gh = shutil.which("gh")
+    is_windows = sys.platform == "win32"
+    npm_bin = shutil.which("npm.cmd" if is_windows else "npm")
+    npx_bin = shutil.which("npx.cmd" if is_windows else "npx")
     result = {"root": str(root), "git_available": bool(git),
+              "windows_cmd_required": is_windows,
+              "npm_available": bool(npm_bin), "npx_available": bool(npx_bin),
               "gh_available": bool(gh), "git_repo": False,
               "current_branch": None, "dirty": None, "remotes": [],
               "gh_authenticated": None, "warnings": []}
+    if is_windows:
+        result["warnings"].append("Windows PowerShell: prefer npm.cmd/npx.cmd if .ps1 execution is blocked; do not change execution policy.")
     if not git:
         result["warnings"].append("Git unavailable: no local commit or branch operations.")
         return result

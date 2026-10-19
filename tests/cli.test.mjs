@@ -10,7 +10,7 @@ const fixture = fn => {
   try { return fn(dir); } finally { rmSync(dir, { recursive: true, force: true }); }
 };
 
-test('package and release versions match', () => assert.equal(version(), '0.2.0'));
+test('package and release versions match', () => assert.equal(version(), '0.3.0'));
 test('no-flag install targets shared agent skill and can be repeated safely', () => fixture(root => {
   const a = execute(['init', '--dir', root]);
   assert.equal(a.results[0].action, 'installed');
@@ -24,7 +24,7 @@ test('Claude install targets .claude and does not modify shared directory', () =
   assert.ok(!existsSync(join(root, '.agents/skills/brad')));
 }));
 test('Antigravity default installs into .agents; detected Claude plus Copilot installs both', () => fixture(root => {
-  mkdirSync(join(root, '.claude')); mkdirSync(join(root, '.github'));
+  mkdirSync(join(root, '.claude')); mkdirSync(join(root, '.github/agents'), { recursive: true });
   const r = execute(['init', '--dir', root]);
   assert.ok(r.hosts.includes('claude'));
   assert.ok(r.hosts.includes('copilot'));
@@ -100,7 +100,7 @@ test('CLI script provides machine-readable JSON', () => fixture(root => {
   assert.equal(r.status, 0, r.stderr);
   const data = JSON.parse(r.stdout);
   assert.equal(data.ok, true);
-  assert.equal(data.version, '0.2.0');
+  assert.equal(data.version, '0.3.0');
   assert.equal(data.results[0].action, 'installed');
 }));
 test('distribution contains files required by the npm CLI', () => {
@@ -111,11 +111,90 @@ test('distribution contains files required by the npm CLI', () => {
   assert.ok(names.includes('cli/brad.mjs'));
   assert.ok(names.includes('skills/brad/SKILL.md'));
   assert.ok(names.includes('.github/agents/brad.agent.md'), 'Copilot coordinator must be published');
+  assert.ok(names.includes('docs/AI_SETUP.md'), 'AI onboarding instructions must ship in npm package');
 });
 test('documentation pins npm GitHub dependency using #tag syntax', () => {
   for (const path of ['README.md', 'docs/installation.md', 'cli/core.mjs']) {
     const content = readFileSync(join(packageRoot, path), 'utf8');
-    assert.ok(content.includes('github:niamatmarjan/brad#v0.2.0'), path);
-    assert.ok(!content.includes('github:niamatmarjan/brad@v0.2.0'), path);
+    assert.ok(content.includes('github:niamatmarjan/brad#v0.3.0'), path);
+    assert.ok(!content.includes('github:niamatmarjan/brad@v0.3.0'), path);
   }
 });
+
+
+test('setup is safe, repeatable, and reports guided next actions', () => fixture(root => {
+  const first = execute(['setup', '--dir', root, '--agent', 'antigravity']);
+  assert.equal(first.command, 'setup');
+  assert.equal(first.results[0].action, 'installed');
+  assert.equal(first.aiReady, true);
+  assert.equal(first.executionVerified, false);
+  assert.ok(first.nextSteps.some(s => s.includes('official BMAD Method')));
+  assert.equal(execute(['setup', '--dir', root, '--agent', 'antigravity']).results[0].action, 'unchanged');
+}));
+
+test('agent prompt is read-only, host-specific and never claims remote access', () => fixture(root => {
+  const before = readdirSync(root);
+  const result = execute(['prompt', '--dir', root, '--agent', 'claude']);
+  assert.match(result.prompt, /github:niamatmarjan\/brad#v0\.3\.0/);
+  assert.match(result.prompt, /ask which to use/);
+  assert.match(result.prompt, /Claude|claude/);
+  assert.deepEqual(readdirSync(root), before);
+}));
+
+test('doctor separates leftover output artifacts from native BMAD install', () => fixture(root => {
+  mkdirSync(join(root, '_bmad-output'));
+  const d = execute(['doctor', '--dir', root]);
+  assert.equal(d.bmad.detected, false);
+  assert.equal(d.bmad.configured, false);
+  assert.ok(d.environment.nodeSupported);
+  assert.match(d.environment.verificationBoundary, /not proof/);
+}));
+
+test('doctor discovers configured runtime, native skills, and mixed state hints', () => fixture(root => {
+  mkdirSync(join(root, '_bmad'), { recursive: true });
+  writeFileSync(join(root, '_bmad/config.toml'), 'version = "6"\n');
+  mkdirSync(join(root, '.agents/skills/bmad-build'), { recursive: true });
+  writeFileSync(join(root, '.agents/skills/bmad-build/SKILL.md'), '---\nname: bmad-build\n---');
+  mkdirSync(join(root, '_bmad-output/implementation-artifacts'), { recursive: true });
+  writeFileSync(join(root, '_bmad-output/implementation-artifacts/sprint-status.yaml'), 'development_status: {}\n');
+  writeFileSync(join(root, '_bmad-output/tickets.toml'), '[initiatives]\n');
+  const d = execute(['doctor', '--dir', root]);
+  assert.equal(d.bmad.detected, true);
+  assert.equal(d.bmad.configured, true);
+  assert.deepEqual(d.bmad.nativeSkills, ['bmad-build']);
+  assert.equal(d.bmad.stateHints.mixed, true);
+  assert.match(d.bmad.warnings.join(' '), /v6 and v7/);
+}));
+
+test('setup dry-run leaves no files including auxiliary state', () => fixture(root => {
+  const d = execute(['setup', '--dir', root, '--dry-run', '--agent', 'all']);
+  assert.ok(d.results.every(r => r.action === 'would-install'));
+  assert.deepEqual(readdirSync(root), []);
+}));
+
+test('CLI --json prompt works without extra human-only text', () => fixture(root => {
+  const out = spawnSync(process.execPath, [join(packageRoot,'cli/brad.mjs'),'prompt','--dir',root,'--json'], {encoding:'utf8'});
+  assert.equal(out.status,0,out.stderr);
+  assert.match(JSON.parse(out.stdout).prompt,/read/i);
+}));
+
+
+test('ordinary .github workflow directory is not mistaken for Copilot host', () => fixture(root => {
+  mkdirSync(join(root, '.github/workflows'), { recursive: true });
+  const d = execute(['doctor', '--dir', root]);
+  assert.deepEqual(d.hosts, ['portable']);
+  const r = execute(['setup', '--dir', root]);
+  assert.ok(existsSync(join(root, '.agents/skills/brad/SKILL.md')));
+  assert.ok(!existsSync(join(root, '.github/agents/brad.agent.md')));
+}));
+
+test('ambiguous global host must be selected explicitly', () => fixture(root => {
+  assert.throws(() => execute(['setup', '--global', '--agent', 'portable']), /Choose an explicit --agent for global installation/);
+}));
+
+
+test('all means four real supported hosts and never includes portable', () => fixture(root => {
+  const d=execute(['setup','--dir',root,'--agent','all','--dry-run']);
+  assert.equal(d.hosts.length,4);
+  assert.ok(!d.hosts.includes('portable'));
+}));

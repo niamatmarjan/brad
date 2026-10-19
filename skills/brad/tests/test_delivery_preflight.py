@@ -18,6 +18,9 @@ class PreflightTests(unittest.TestCase):
             r = mod.inspect(Path(t))
             self.assertFalse(r["git_repo"])
             self.assertIsNone(r["dirty"])
+            self.assertIn("windows_cmd_required",r)
+            self.assertIn("npm_available",r)
+            self.assertIn("npx_available",r)
 
     def test_repo_without_remote(self):
         with tempfile.TemporaryDirectory() as t:
