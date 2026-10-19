@@ -1,16 +1,36 @@
 {
   "name": "@niamatmarjan/brad",
-  "version": "0.2.0",
-  "description": "BRAD — BMAD Routing & Agent Delegation: project skill installer and diagnostic CLI",
+  "version": "0.3.0",
+  "description": "BRAD \u2014 BMAD Routing & Agent Delegation: project skill installer and diagnostic CLI",
   "type": "module",
-  "bin": { "brad": "cli/brad.mjs" },
-  "files": ["cli/", "skills/brad/", ".github/agents/brad.agent.md", "VERSION", "LICENSE", "README.md"],
+  "bin": {
+    "brad": "cli/brad.mjs"
+  },
+  "files": [
+    "cli/",
+    "skills/brad/SKILL.md",
+    "skills/brad/references/*.md",
+    "skills/brad/evals/*.md",
+    "skills/brad/evals/*.json",
+    "skills/brad/scripts/*.py",
+    "skills/brad/tests/*.py",
+    ".github/agents/brad.agent.md",
+    "docs/AI_SETUP.md",
+    "VERSION",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
     "test": "node --test tests/*.test.mjs",
     "pack:check": "npm pack --dry-run --json"
   },
-  "engines": { "node": ">=20" },
-  "repository": { "type": "git", "url": "git+https://github.com/niamatmarjan/brad.git" },
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/niamatmarjan/brad.git"
+  },
   "homepage": "https://github.com/niamatmarjan/brad",
   "license": "MIT",
   "private": false

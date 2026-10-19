@@ -2,6 +2,17 @@
 
 All notable changes will be documented here. Version numbers follow [Semantic Versioning](https://semver.org/).
 
+## [0.3.0] - 2026-10-19
+
+### Added
+- AI-first setup (`brad setup`), AI handoff generator (`brad prompt`), and canonical installation contract `docs/AI_SETUP.md`.
+- Agent-oriented contributor guide `AGENTS.md` and test-lab limitations summary.
+- Improved read-only `doctor` diagnostics for native BMAD configuration, installed skills, prerequisites, and honest next steps.
+
+### Changed
+- Host-specific onboarding now calls out Windows `npx.cmd`/`npm.cmd` and refuses to equate leftover `_bmad-output` with a working BMAD runtime.
+- Expanded installer verification and doc tests; previous v0.2.0 install and policy conventions remain supported.
+
 ## [0.2.0] - 2026-10-19
 
 ### Added
@@ -29,3 +40,4 @@ All notable changes will be documented here. Version numbers follow [Semantic Ve
 ### Known limitations
 - Live agent-routing accuracy, nested delegation, PR delivery, and v7 preview compatibility are **not certified** by the included automated tests.
 - Hosts differ in skill invocation and independent-agent support; use a supervised pilot.
+
