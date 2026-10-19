@@ -2,6 +2,19 @@
 
 All notable changes will be documented here. Version numbers follow [Semantic Versioning](https://semver.org/).
 
+## [0.2.0] - 2026-10-19
+
+### Added
+- Zero-dependency Node.js CLI (`brad init`, `doctor`, `update`, `uninstall`) runnable with `npx github:niamatmarjan/brad#v0.2.0`.
+- Cross-host project and global skill installation targeting Antigravity, Claude Code, Codex, and Copilot.
+- Install-marker integrity checks, safe replacement backups, dry run, and JSON diagnostics.
+- Node.js 20/22 CLI test matrix and npm tarball smoke test alongside the original Python suite.
+- Installation instructions and release assets for GitHub-backed npm execution.
+
+### Notes
+- npm registry publication is not yet enabled. Use the pinned GitHub npx command.
+- Runtime BMAD v6/v7 agent-delegation validation remains ongoing; CLI tests do not certify the BMAD skill's autonomous behavior.
+
 ## [0.1.0] - 2026-10-19
 
 ### Added
