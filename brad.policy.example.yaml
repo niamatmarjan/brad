@@ -1,0 +1,15 @@
+# Optional delivery preferences for the wrapper; NOT a BMAD runtime config.
+# Copy to .brad/policy.yaml and review before enabling PR automation.
+version: 1
+# local | ask | pr  — "pr" permits routine push/create-or-update-PR after gates.
+delivery: ask
+# Never automatic: this is explicit policy to avoid accidental merge/deploy.
+auto_merge: false
+production_deploy: false
+# Resolve branch convention from repo when possible; otherwise use this prefix.
+branch_prefix: "bmad/"
+# Retry cap for remediation cycles within one coding session.
+max_fix_cycles: 2
+# Actual check list must come from the repository, not invented here.
+# Independent story parallelism requires worktrees, permission and an engine.
+max_parallel_stories: 1

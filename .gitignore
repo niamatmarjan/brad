@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+dist/
+*.egg-info/
+.DS_Store
+.brad/
+_bmad/
+_bmad-output/
+.worktrees/
+.env
+.env.*
+!.env.example
