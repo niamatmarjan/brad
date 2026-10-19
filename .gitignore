@@ -13,3 +13,13 @@ _bmad-output/
 .env
 .env.*
 !.env.example
+node_modules/
+coverage/
+.nyc_output/
+.next/
+.turbo/
+playwright-report/
+test-results/
+*.log
+*.tsbuildinfo
+*.sqlite-journal

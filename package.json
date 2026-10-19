@@ -1,6 +1,6 @@
 {
   "name": "@niamatmarjan/brad",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "BRAD — BMAD Routing & Agent Delegation: project skill installer and diagnostic CLI",
   "type": "module",
   "bin": {
@@ -18,11 +18,17 @@
     "docs/AI_SETUP.md",
     "VERSION",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "NOTICE.md",
+    "BRANDING.md",
+    "SECURITY.md",
+    "SUPPORT.md",
+    "docs/demo-publication.md"
   ],
   "scripts": {
     "test": "node --test tests/*.test.mjs",
-    "pack:check": "npm pack --dry-run --json"
+    "pack:check": "npm pack --dry-run --json",
+    "check:repo": "python tools/check_repository.py"
   },
   "engines": {
     "node": ">=20"

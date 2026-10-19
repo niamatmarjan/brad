@@ -1,11 +1,19 @@
 ---
 name: Feature request
-description: Propose a small improvement to BRAD
-about: Routing, delivery, compatibility, or ergonomics
+about: Suggest a targeted improvement to BRAD coordination or developer experience
+title: "feat: "
 ---
 
-**Use case:**
-**Requested behavior:**
-**Why a thin wrapper (rather than native BMAD) needs this:**
-**Version/host impact:**
-**Evaluation scenarios to add:**
+**Problem / scenario:**
+
+**Expected user outcome:**
+
+**Why native BMAD alone does not already solve this:**
+
+**Installed BMAD version and host:**
+
+**Proposed behavior:**
+
+**Security, compatibility, and maintenance implications:**
+
+**How this could be tested with evidence:**

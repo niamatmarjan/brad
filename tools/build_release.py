@@ -27,6 +27,9 @@ for p, name in [
     (ROOT / ".github/agents/brad.agent.md", "copilot/brad.agent.md"),
     (ROOT / "brad.policy.example.yaml", "brad.policy.example.yaml"),
     (ROOT / "LICENSE", "LICENSE"),
+    (ROOT / "NOTICE.md", "NOTICE.md"),
+    (ROOT / "BRANDING.md", "BRANDING.md"),
+    (ROOT / "SECURITY.md", "SECURITY.md"),
     (ROOT / "docs/AI_SETUP.md", "AI_SETUP.md"),
     (ROOT / "VERSION", "VERSION"),
 ]:

@@ -10,7 +10,7 @@ const fixture = fn => {
   try { return fn(dir); } finally { rmSync(dir, { recursive: true, force: true }); }
 };
 
-test('package and release versions match', () => assert.equal(version(), '0.4.0'));
+test('package and release versions match', () => assert.equal(version(), readFileSync(join(packageRoot, 'VERSION'), 'utf8').trim()));
 test('no-flag install targets shared agent skill and can be repeated safely', () => fixture(root => {
   const a = execute(['init', '--dir', root]);
   assert.equal(a.results[0].action, 'installed');
@@ -100,7 +100,7 @@ test('CLI script provides machine-readable JSON', () => fixture(root => {
   assert.equal(r.status, 0, r.stderr);
   const data = JSON.parse(r.stdout);
   assert.equal(data.ok, true);
-  assert.equal(data.version, '0.4.0');
+  assert.equal(data.version, version());
   assert.equal(data.results[0].action, 'installed');
 }));
 test('distribution contains files required by the npm CLI', () => {
@@ -116,8 +116,8 @@ test('distribution contains files required by the npm CLI', () => {
 test('documentation pins npm GitHub dependency using #tag syntax', () => {
   for (const path of ['README.md', 'docs/installation.md', 'cli/core.mjs']) {
     const content = readFileSync(join(packageRoot, path), 'utf8');
-    assert.ok(content.includes('github:niamatmarjan/brad#v0.4.0'), path);
-    assert.ok(!content.includes('github:niamatmarjan/brad@v0.4.0'), path);
+    assert.ok(content.includes(path === 'cli/core.mjs' ? 'github:niamatmarjan/brad#v${version()}' : `github:niamatmarjan/brad#v${version()}`), path);
+    assert.ok(!content.includes(`github:niamatmarjan/brad@v${version()}`), path);
   }
 });
 
@@ -137,7 +137,7 @@ test('setup is safe, repeatable, and reports guided next actions', () => fixture
 test('agent prompt is read-only, host-specific and never claims remote access', () => fixture(root => {
   const before = readdirSync(root);
   const result = execute(['prompt', '--dir', root, '--agent', 'claude']);
-  assert.match(result.prompt, /github:niamatmarjan\/brad#v0\.4\.0/);
+  assert.ok(result.prompt.includes(`github:niamatmarjan/brad#v${version()}`));
   assert.match(result.prompt, /ask which to use/);
   assert.match(result.prompt, /Claude|claude/);
   assert.deepEqual(readdirSync(root), before);
