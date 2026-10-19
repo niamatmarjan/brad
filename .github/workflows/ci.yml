@@ -28,10 +28,35 @@ jobs:
       - name: Build and inspect distribution
         run: python tools/build_release.py
 
+  node-cli:
+    name: CLI (Node.js ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ["20", "22"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Test installer CLI and packaging
+        run: npm test
+      - name: Smoke-test packed executable
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          npm pack --pack-destination dist
+          npm exec --yes --offline --package "./dist/niamatmarjan-brad-$(cat VERSION).tgz" -- brad --version
+          project="$(mktemp -d)"
+          npm exec --yes --offline --package "./dist/niamatmarjan-brad-$(cat VERSION).tgz" -- brad init --dir "$project" --agent antigravity
+          test -f "$project/.agents/skills/brad/SKILL.md"
+
   release:
     name: Publish versioned GitHub Release
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: test
+    needs: [test, node-cli]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -42,6 +67,11 @@ jobs:
           python-version: "3.11"
       - name: Build distribution
         run: python tools/build_release.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Build CLI tarball
+        run: npm pack --pack-destination dist
       - name: Publish once per version
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -54,7 +84,7 @@ jobs:
             echo "Release $tag already exists; no action needed"
             exit 0
           fi
-          gh release create "$tag" "dist/brad-${tag}.zip" \
+          gh release create "$tag" "dist/brad-${tag}.zip" "dist/niamatmarjan-brad-${version}.tgz" \
             --target "$GITHUB_SHA" \
             --title "BRAD ${tag}" \
             --notes-file "docs/releases/${tag}.md"

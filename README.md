@@ -8,19 +8,42 @@
 
 BRAD is a **thin, user-invoked wrapper** for an existing [BMAD Method](https://github.com/bmad-code-org/BMAD-METHOD) installation. It discovers the native workflows actually installed in your project, routes your request to the smallest appropriate skill or agent, preserves BMAD's lifecycle, and coordinates authorized delivery steps. It **does not replace** BMAD's PM, Architect, Build, QA, or Test Architect.
 
-## Quick start
+## Quick start — install with npx
 
-**Prerequisites:** A configured BMAD project, a coding host that supports skills (such as Claude Code, Codex, or compatible GitHub Copilot), and Git. For push/PR delivery, the host also needs a configured remote and GitHub credentials/capability.
+**Node.js 20+** is required for the installer. From the root of your coding project:
 
-Download [**v0.1.0**](https://github.com/niamatmarjan/brad/releases) and extract the `brad/` folder from its ZIP into your host's skill directory:
+```bash
+npx --yes github:niamatmarjan/brad@v0.2.0 init
+```
 
-| Host | Project skill location | Invocation |
-| --- | --- | --- |
-| Claude Code | `.claude/skills/brad/` | `/brad 1.1` |
-| Codex | `.agents/skills/brad/` | Supported skill syntax, e.g. `$brad 1.1` |
-| VS Code / GitHub Copilot | `.agents/skills/brad/` | Select/mention `brad`, depending on client |
+That uses the GitHub release tag and **does not require an npm registry publication**. It detects project host conventions and installs the native BRAD skill in the supported location. It never installs BMAD Method for you or silently replaces existing user-customized files.
 
-Or clone this repository and copy `skills/brad/` into the target location. For Copilot you can *optionally* copy `.github/agents/brad.agent.md` into the project's `.github/agents/` directory and select that agent. **Skill discovery and slash-command behavior vary by host.** See [installation guide](docs/installation.md).
+Choose a host explicitly (useful in a fresh project):
+
+```bash
+npx --yes github:niamatmarjan/brad@v0.2.0 init --agent antigravity
+npx --yes github:niamatmarjan/brad@v0.2.0 init --agent claude
+npx --yes github:niamatmarjan/brad@v0.2.0 init --agent copilot
+npx --yes github:niamatmarjan/brad@v0.2.0 init --agent codex
+```
+
+To verify your install:
+
+```bash
+npx --yes github:niamatmarjan/brad@v0.2.0 doctor
+```
+
+The `doctor` command checks installed skill integrity and looks for BMAD project files. Install/configure BMAD separately if needed:
+
+```bash
+npx bmad-method install
+```
+
+The BRAD CLI includes `init`, `doctor`, `update`, `uninstall`, `--dry-run`, `--global`, and `--json`. Updates are safe: managed files are checked before replacement; modified/unmanaged installs require explicit `--force` and are backed up. See the [CLI installation guide](docs/installation.md).
+
+**Prerequisites:** BMAD configured for your project before trying BRAD workflows; a coding host supporting Agent Skills; Git. Pushing PRs additionally requires an authorized remote and the host's GitHub integration/credentials.
+
+**Note:** The package is currently **GitHub-backed**, not published to npm. The shorter `npx @niamatmarjan/brad` command is not available until npm publication is configured. The GitHub spec above is the supported installer.
 
 ## What happens when you ask BRAD?
 
@@ -44,11 +67,14 @@ For a development ticket, BRAD aims for **resolve → native Build → review �
 - **BMAD v7:** preview-aware route discovery; compatibility depends on *installed* v7 interfaces and must be retested as they evolve.
 - **TEA and optional modules:** used if installed and relevant, never faked.
 - **Runtime:** skill instructions, references, read-only preflight tools, and evaluation cases; **not** a standalone autonomous daemon.
-- **Maturity:** v0.1.0 is a **public preview / supervised pilot**. The included 85 routing cases are a test specification, not proof of live host behavior.
+- **Maturity:** v0.2.0 is a **public preview / supervised pilot**. The included 85 routing cases are a test specification, not proof of live host behavior.
 
 ## Project layout
 
 ```text
+cli/brad.mjs                # npx entry point (zero dependencies)
+cli/core.mjs                # safe installer and diagnostic logic
+package.json                # GitHub npm package manifest
 skills/brad/SKILL.md         # thin dispatcher and safety contract
 skills/brad/references/      # version, tickets, QA, clarifications, host handoffs
 skills/brad/scripts/         # read-only BMAD and delivery preflight
