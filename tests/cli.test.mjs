@@ -112,3 +112,10 @@ test('distribution contains files required by the npm CLI', () => {
   assert.ok(names.includes('skills/brad/SKILL.md'));
   assert.ok(names.includes('.github/agents/brad.agent.md'), 'Copilot coordinator must be published');
 });
+test('documentation pins npm GitHub dependency using #tag syntax', () => {
+  for (const path of ['README.md', 'docs/installation.md', 'cli/core.mjs']) {
+    const content = readFileSync(join(packageRoot, path), 'utf8');
+    assert.ok(content.includes('github:niamatmarjan/brad#v0.2.0'), path);
+    assert.ok(!content.includes('github:niamatmarjan/brad@v0.2.0'), path);
+  }
+});

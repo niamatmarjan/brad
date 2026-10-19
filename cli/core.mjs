@@ -78,9 +78,9 @@ Options:
   --yes, -y       Non-interactive acknowledgment (no hidden approvals)
 
 Examples:
-  npx --yes github:niamatmarjan/brad@v0.2.0 init
-  npx --yes github:niamatmarjan/brad@v0.2.0 init --agent claude
-  npx --yes github:niamatmarjan/brad@v0.2.0 doctor
+  npx --yes github:niamatmarjan/brad#v0.2.0 init
+  npx --yes github:niamatmarjan/brad#v0.2.0 init --agent claude
+  npx --yes github:niamatmarjan/brad#v0.2.0 doctor
 
 BRAD installs a thin skill; it does NOT install or modify BMAD Method.
 `;

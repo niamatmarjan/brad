@@ -13,7 +13,7 @@ BRAD is a **thin, user-invoked wrapper** for an existing [BMAD Method](https://g
 **Node.js 20+** is required for the installer. From the root of your coding project:
 
 ```bash
-npx --yes github:niamatmarjan/brad@v0.2.0 init
+npx --yes github:niamatmarjan/brad#v0.2.0 init
 ```
 
 That uses the GitHub release tag and **does not require an npm registry publication**. It detects project host conventions and installs the native BRAD skill in the supported location. It never installs BMAD Method for you or silently replaces existing user-customized files.
@@ -21,16 +21,16 @@ That uses the GitHub release tag and **does not require an npm registry publicat
 Choose a host explicitly (useful in a fresh project):
 
 ```bash
-npx --yes github:niamatmarjan/brad@v0.2.0 init --agent antigravity
-npx --yes github:niamatmarjan/brad@v0.2.0 init --agent claude
-npx --yes github:niamatmarjan/brad@v0.2.0 init --agent copilot
-npx --yes github:niamatmarjan/brad@v0.2.0 init --agent codex
+npx --yes github:niamatmarjan/brad#v0.2.0 init --agent antigravity
+npx --yes github:niamatmarjan/brad#v0.2.0 init --agent claude
+npx --yes github:niamatmarjan/brad#v0.2.0 init --agent copilot
+npx --yes github:niamatmarjan/brad#v0.2.0 init --agent codex
 ```
 
 To verify your install:
 
 ```bash
-npx --yes github:niamatmarjan/brad@v0.2.0 doctor
+npx --yes github:niamatmarjan/brad#v0.2.0 doctor
 ```
 
 The `doctor` command checks installed skill integrity and looks for BMAD project files. Install/configure BMAD separately if needed:
