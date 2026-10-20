@@ -1,0 +1,85 @@
+{
+  "runId": "brad-v0.4.1-8ecc17ba",
+  "roles": [
+    {
+      "role": "Product Manager",
+      "actualBradRequests": 0,
+      "independentContext": false,
+      "nativeWorkflowExecutions": 0,
+      "completedTasks": 0,
+      "status": "NOT_RUN"
+    },
+    {
+      "role": "Business Analyst",
+      "actualBradRequests": 0,
+      "independentContext": false,
+      "nativeWorkflowExecutions": 0,
+      "completedTasks": 0,
+      "status": "NOT_RUN"
+    },
+    {
+      "role": "Delivery Manager",
+      "actualBradRequests": 0,
+      "independentContext": false,
+      "nativeWorkflowExecutions": 0,
+      "completedTasks": 0,
+      "status": "NOT_RUN"
+    },
+    {
+      "role": "Solution Architect",
+      "actualBradRequests": 0,
+      "independentContext": false,
+      "nativeWorkflowExecutions": 0,
+      "completedTasks": 0,
+      "status": "NOT_RUN"
+    },
+    {
+      "role": "Technical Lead",
+      "actualBradRequests": 0,
+      "independentContext": false,
+      "nativeWorkflowExecutions": 0,
+      "completedTasks": 0,
+      "status": "NOT_RUN"
+    },
+    {
+      "role": "Backend Developer",
+      "actualBradRequests": 0,
+      "independentContext": false,
+      "nativeWorkflowExecutions": 0,
+      "completedTasks": 0,
+      "status": "NOT_RUN"
+    },
+    {
+      "role": "Frontend Developer",
+      "actualBradRequests": 0,
+      "independentContext": false,
+      "nativeWorkflowExecutions": 0,
+      "completedTasks": 0,
+      "status": "NOT_RUN"
+    },
+    {
+      "role": "Full-Stack Developer",
+      "actualBradRequests": 0,
+      "independentContext": false,
+      "nativeWorkflowExecutions": 0,
+      "completedTasks": 0,
+      "status": "NOT_RUN"
+    },
+    {
+      "role": "Functional QA",
+      "actualBradRequests": 0,
+      "independentContext": false,
+      "nativeWorkflowExecutions": 0,
+      "completedTasks": 0,
+      "status": "NOT_RUN"
+    },
+    {
+      "role": "Automation QA",
+      "actualBradRequests": 0,
+      "independentContext": false,
+      "nativeWorkflowExecutions": 0,
+      "completedTasks": 0,
+      "status": "NOT_RUN"
+    }
+  ]
+}

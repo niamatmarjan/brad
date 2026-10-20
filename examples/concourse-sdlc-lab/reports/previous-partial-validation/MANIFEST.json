@@ -1,0 +1,59 @@
+{
+  "name": "Concourse SDLC lab",
+  "schemaVersion": 1,
+  "status": "PARTIAL",
+  "baseline": {
+    "bradVersion": "0.4.1",
+    "bradTag": "v0.4.1",
+    "bradTagCommit": "dcad5e7d9d463c562f6cd94ea0ac5f6231ce23c8",
+    "baselineModified": false
+  },
+  "host": {
+    "host": "GitHub Copilot CLI",
+    "modelMode": "Auto",
+    "concreteModel": null,
+    "antigravityAvailable": false,
+    "nativeBmadInstalled": true,
+    "nativeBmad": {
+      "method": "official npm installer in isolated temporary fixture",
+      "stableRelease": "6.12.4",
+      "modules": {
+        "bmm": "6.12.4",
+        "tea": "1.27.2"
+      },
+      "copilotSkillsOnDisk": 39,
+      "activeSessionInvocation": false
+    },
+    "independentStakeholderContextsExecuted": 0
+  },
+  "app": {
+    "path": "app/",
+    "stack": "Node.js built-in static server, browser ES modules and localStorage",
+    "externalDependencies": 0,
+    "productionReady": false,
+    "dataScope": "fictional seed data in one browser"
+  },
+  "evaluation": {
+    "canonicalCases": 85,
+    "metadataCasesPassed": 85,
+    "behavioralRoutesExecuted": 0,
+    "nativeInvocationsVerified": 0,
+    "remotePullRequests": 0,
+    "ciRunsVerified": 0,
+    "fullTenRoleStudy": "NOT_RUN"
+  },
+  "evidence": {
+    "eventLog": "telemetry/events.jsonl",
+    "evidenceIndex": "telemetry/evidence-index.json",
+    "routingAudit": "evaluation/audit-summary.json",
+    "masterReport": "report/MASTER_REPORT.html"
+  },
+  "validation": {
+    "concourseTests": "PASS: 5/5 Node built-in domain tests",
+    "bradNodeTests": "PARTIAL: 27/29 on initial and repeated runs; Windows EPERM and nested npm pack parse failure",
+    "bradPythonTests": "PASS: 21 tests",
+    "repositoryCheck": "PASS",
+    "releaseArchive": "PASS",
+    "npmPackDryRun": "PASS"
+  }
+}

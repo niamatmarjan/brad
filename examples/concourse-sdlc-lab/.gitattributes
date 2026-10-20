@@ -1,0 +1,2 @@
+# Keep captured artifact bytes and SHA-256 evidence identical across checkouts.
+* -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

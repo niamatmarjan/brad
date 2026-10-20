@@ -1,0 +1,43 @@
+:root {
+  font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+  color: #24392f;
+  background: #f7f8f4;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  color-scheme: light;
+  --ink: #24392f;
+  --muted: #5c6d62;
+  --accent: #255c40;
+  --line: #dce3d9;
+  --surface: #ffffff;
+  --radius: 12px;
+}
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; min-height: 40px; border: 1px solid var(--line); border-radius: 7px; padding: 9px 14px; background: white; color: var(--ink); display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; font-size: 13px; }
+button:hover:not(:disabled) { background: #edf2e9; border-color: #a9bca6; }
+button:disabled { opacity: .55; cursor: not-allowed; }
+input, select, textarea { width: 100%; border: 1px solid #bac6b8; border-radius: 6px; padding: 10px 12px; min-height: 42px; background: white; color: var(--ink); caret-color: var(--accent); }
+textarea { resize: vertical; }
+input::placeholder, textarea::placeholder { color: #697769; opacity: 1; }
+label { display: flex; flex-direction: column; gap: 7px; font-size: 13px; font-weight: 600; }
+:focus-visible { outline: 3px solid #b87321; outline-offset: 3px; }
+::selection { background: #dcecc3; color: #173a27; }
+* { scrollbar-color: #a7b6a0 #eff2e9; scrollbar-width: thin; }
+h1,h2,h3,h4,p { margin-top: 0; }
+h1 { font-size: clamp(25px, 2.5vw, 35px); line-height: 1.18; letter-spacing: -.035em; font-weight: 600; text-wrap: balance; }
+h2 { font-size: 18px; letter-spacing: -.025em; font-weight: 650; }
+h3 { font-size: 15px; }
+h4 { font-size: 14px; margin-bottom: 12px; margin-top: 26px; }
+p { font-size: 14px; line-height: 1.65; max-width: 75ch; }
+small { font-size: 12px; }
+a { color: var(--accent); text-underline-offset: 4px; }
+svg { flex-shrink: 0; }
+.muted { color: var(--muted); }
+.primary { background: var(--accent); color: white; border-color: var(--accent); }
+.primary:hover:not(:disabled) { background: #194a31; color: white; border-color: #194a31; }
+.text-button { border: 0; background: transparent; color: var(--accent); padding-inline: 0; }
+.icon-button { padding: 8px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }

@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "runId": "brad-v0.4.1-8ecc17ba",
+  "routing": {
+    "caseCount": 85,
+    "levels": {
+      "L1": {
+        "total": 85,
+        "counts": {
+          "PASS": 85,
+          "FAIL": 0,
+          "PARTIAL": 0,
+          "BLOCKED": 0,
+          "UNSUPPORTED": 0,
+          "NOT_RUN": 0
+        },
+        "executed": 85,
+        "passRate": 1
+      },
+      "L2": {
+        "total": 85,
+        "counts": {
+          "PASS": 0,
+          "FAIL": 0,
+          "PARTIAL": 0,
+          "BLOCKED": 0,
+          "UNSUPPORTED": 0,
+          "NOT_RUN": 85
+        },
+        "executed": 0,
+        "passRate": null
+      },
+      "L3": {
+        "total": 85,
+        "counts": {
+          "PASS": 0,
+          "FAIL": 0,
+          "PARTIAL": 0,
+          "BLOCKED": 0,
+          "UNSUPPORTED": 0,
+          "NOT_RUN": 85
+        },
+        "executed": 0,
+        "passRate": null
+      },
+      "L4": {
+        "total": 85,
+        "counts": {
+          "PASS": 0,
+          "FAIL": 0,
+          "PARTIAL": 0,
+          "BLOCKED": 0,
+          "UNSUPPORTED": 0,
+          "NOT_RUN": 85
+        },
+        "executed": 0,
+        "passRate": null
+      },
+      "L5": {
+        "total": 85,
+        "counts": {
+          "PASS": 0,
+          "FAIL": 0,
+          "PARTIAL": 0,
+          "BLOCKED": 0,
+          "UNSUPPORTED": 0,
+          "NOT_RUN": 85
+        },
+        "executed": 0,
+        "passRate": null
+      }
+    }
+  },
+  "applicationSuites": [
+    {
+      "id": "APP-SERVER",
+      "status": "PASS",
+      "passed": 27,
+      "failed": 0,
+      "total": 27
+    },
+    {
+      "id": "APP-WEB",
+      "status": "PASS",
+      "passed": 55,
+      "failed": 0,
+      "testGroups": {
+        "unit": 15,
+        "quality": 40
+      }
+    },
+    {
+      "id": "APP-DELIVERY",
+      "status": "PASS",
+      "passed": 3,
+      "failed": 0,
+      "total": 3
+    },
+    {
+      "id": "APP-PLAYWRIGHT",
+      "status": "PASS",
+      "passed": 27,
+      "failed": 0,
+      "total": 27
+    },
+    {
+      "id": "LEGACY-APP",
+      "status": "PASS",
+      "passed": 5,
+      "failed": 0,
+      "total": 5
+    }
+  ],
+  "bradBaselineNode": {
+    "passed": 27,
+    "failed": 2,
+    "total": 29,
+    "passRate": 0.9310344827586207,
+    "status": "FAIL"
+  },
+  "acceptance": {
+    "PASS": 8,
+    "FAIL": 0,
+    "PARTIAL": 6,
+    "BLOCKED": 2,
+    "UNSUPPORTED": 0,
+    "NOT_RUN": 0
+  },
+  "stakeholderContexts": 0,
+  "directBmadMatchedTasks": 0,
+  "nativeWorkflowExecutions": 0,
+  "tokenUsage": null,
+  "cost": null
+}

@@ -1,0 +1,11 @@
+suite,status,passed,failed,total,command
+"BRAD-NODE-BASELINE","FAIL","27","2","29","npm test"
+"BRAD-PYTHON","PASS","21","0","21","python -m unittest discover -s skills\brad\tests -v"
+"BRAD-PACK-CHECK","PASS","1","0","1","npm run pack:check"
+"BRAD-REPO-CHECK","PASS","1","0","1","npm run check:repo"
+"BRAD-RELEASE","PASS","1","0","1","python tools\build_release.py"
+"APP-SERVER","PASS","27","0","27","npm ci; npm run typecheck; npm test"
+"APP-WEB","PASS","55","0","","npm ci; npm run lint; npm run build; npm test; npm run test:quality"
+"APP-DELIVERY","PASS","3","0","3","$env:CONCOURSE_SERVER_ROOT=(Resolve-Path '..\server').Path; npm run test:delivery"
+"APP-PLAYWRIGHT","PASS","27","0","27","npm run test:browser"
+"LEGACY-APP","PASS","5","0","5","npm test"

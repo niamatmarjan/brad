@@ -1,0 +1,190 @@
+{
+  "schemaVersion": 1,
+  "runId": "brad-v0.4.1-8ecc17ba",
+  "records": [
+    {
+      "id": "E-BASELINE",
+      "status": "PASS",
+      "summary": "v0.4.1 tag and commit verified; local npm tarball SHA-256 recorded; packaged inputs match the tag.",
+      "repoPaths": [
+        "examples/concourse-sdlc-lab/reports/current/EXECUTION.md"
+      ]
+    },
+    {
+      "id": "E-SNAPSHOT",
+      "status": "PASS",
+      "summary": "Pre-edit snapshot of 180 files was copied to private session storage and SHA-256-verified; intentionally not published.",
+      "repoPaths": []
+    },
+    {
+      "id": "E-BRAD-NODE",
+      "status": "FAIL",
+      "summary": "v0.4.1 Node suite reproduced 27/29 on Windows Node 24.19.0/npm 12.0.2.",
+      "repoPaths": [
+        "tests/cli.test.mjs",
+        "examples/concourse-sdlc-lab/reports/current/EXECUTION.md"
+      ]
+    },
+    {
+      "id": "E-BRAD-PYTHON",
+      "status": "PASS",
+      "summary": "BRAD Python suite: 21/21.",
+      "repoPaths": [
+        "examples/concourse-sdlc-lab/reports/current/EXECUTION.md"
+      ]
+    },
+    {
+      "id": "E-BRAD-PACK",
+      "status": "PASS",
+      "summary": "npm pack dry-run succeeded with 33 entries; observed npm 12.0.2 name-keyed JSON output.",
+      "repoPaths": [
+        "package.json",
+        "examples/concourse-sdlc-lab/reports/current/EXECUTION.md"
+      ]
+    },
+    {
+      "id": "E-BRAD-REPO",
+      "status": "PASS",
+      "summary": "Repository consistency audit passed.",
+      "repoPaths": [
+        "tools/check_repository.py",
+        "examples/concourse-sdlc-lab/reports/current/EXECUTION.md"
+      ]
+    },
+    {
+      "id": "E-BRAD-RELEASE",
+      "status": "PASS",
+      "summary": "Local deterministic release ZIP generation passed; no publication.",
+      "repoPaths": [
+        "tools/build_release.py",
+        "examples/concourse-sdlc-lab/reports/current/EXECUTION.md"
+      ]
+    },
+    {
+      "id": "E-APP-SERVER",
+      "status": "PASS",
+      "summary": "Server typecheck and 27 tests passed.",
+      "repoPaths": [
+        "examples/concourse-sdlc-lab/server-backed/server/spec/api.spec.ts",
+        "examples/concourse-sdlc-lab/server-backed/server/spec/domain.spec.ts",
+        "examples/concourse-sdlc-lab/reports/current/EXECUTION.md"
+      ]
+    },
+    {
+      "id": "E-APP-WEB",
+      "status": "PASS",
+      "summary": "Web lint/build, 15 unit tests, and 40 quality tests passed.",
+      "repoPaths": [
+        "examples/concourse-sdlc-lab/server-backed/web/package.json",
+        "examples/concourse-sdlc-lab/reports/current/EXECUTION.md"
+      ]
+    },
+    {
+      "id": "E-APP-DELIVERY",
+      "status": "PASS",
+      "summary": "Three real HTTP/SQLite integration tests passed.",
+      "repoPaths": [
+        "examples/concourse-sdlc-lab/server-backed/web/tests/delivery.integration.test.mjs",
+        "examples/concourse-sdlc-lab/reports/current/EXECUTION.md"
+      ]
+    },
+    {
+      "id": "E-APP-PLAYWRIGHT",
+      "status": "PASS",
+      "summary": "Twenty-seven Playwright tests passed across desktop, tablet and mobile.",
+      "repoPaths": [
+        "examples/concourse-sdlc-lab/server-backed/web/tests/browser/workspace.spec.ts",
+        "examples/concourse-sdlc-lab/reports/current/EXECUTION.md"
+      ]
+    },
+    {
+      "id": "E-LEGACY-APP",
+      "status": "PASS",
+      "summary": "The retained browser-local prototype domain tests passed 5/5; separate from the current server-backed app.",
+      "repoPaths": [
+        "examples/concourse-sdlc-lab/app/tests/domain.test.mjs",
+        "examples/concourse-sdlc-lab/reports/current/EXECUTION.md"
+      ]
+    },
+    {
+      "id": "E-ACCEPTANCE-GAPS",
+      "status": "BLOCKED",
+      "summary": "AC-02 has no approved role/action matrix; AC-04 has no owner-approved missing-criteria oracle and conflicting contract wording.",
+      "repoPaths": [
+        "examples/concourse-sdlc-lab/server-backed/docs/qa/ACCEPTANCE.md",
+        "examples/concourse-sdlc-lab/server-backed/docs/api/CONTRACT.md",
+        "examples/concourse-sdlc-lab/reports/current/CLOSURE_MATRIX.md"
+      ]
+    },
+    {
+      "id": "E-AC04-PROBE",
+      "status": "PASS",
+      "summary": "Ephemeral in-memory HTTP probe observed both empty and omitted acceptance criteria returning 201 and persisting [] in Draft; observation is not acceptance.",
+      "repoPaths": [
+        "examples/concourse-sdlc-lab/server-backed/server/src/delivery.ts",
+        "examples/concourse-sdlc-lab/reports/current/EXECUTION.md"
+      ]
+    },
+    {
+      "id": "E-INDEPENDENT-REVIEW",
+      "status": "PARTIAL",
+      "summary": "Separate read-only review found the AC-04 API-contract/matrix wording conflict; reviewer did not execute the endpoint or edit files.",
+      "contextAlias": "independent-acceptance-review",
+      "repoPaths": [
+        "examples/concourse-sdlc-lab/reports/current/CLOSURE_MATRIX.md"
+      ]
+    },
+    {
+      "id": "E-NATIVE-TEA",
+      "status": "BLOCKED",
+      "summary": "Native TEA loader reported workflow not found; cached instructions were not host-discovered; no artifact was produced.",
+      "repoPaths": [
+        "examples/concourse-sdlc-lab/reports/current/EXECUTION.md"
+      ]
+    },
+    {
+      "id": "E-BRAD-CANDIDATE",
+      "status": "PARTIAL",
+      "summary": "Separate candidate worktree on its own branch reports two test-harness fixes and passing candidate suites; no changes are merged or published.",
+      "contextAlias": "installer-test-candidate",
+      "branch": "niamatm-brad-installer-candidates",
+      "repoPaths": []
+    },
+    {
+      "id": "E-ROUTING-CATALOG",
+      "status": "PASS",
+      "summary": "The 85-case snapshot exactly matches the canonical BRAD routing catalog by SHA-256 and unique ID set; static catalog validation only.",
+      "repoPaths": [
+        "examples/concourse-sdlc-lab/evaluation/canonical-cases.json",
+        "skills/brad/evals/routing-cases.json"
+      ]
+    },
+    {
+      "id": "E-APP-SCREENSHOTS",
+      "status": "PASS",
+      "summary": "Existing live-journey screenshots and recorded SHA-256 values were re-verified; no new screenshot was captured in this session.",
+      "repoPaths": [
+        "examples/concourse-sdlc-lab/reports/current/evidence/delivery-ready.png",
+        "examples/concourse-sdlc-lab/reports/current/evidence/audit-history.png",
+        "examples/concourse-sdlc-lab/reports/current/evidence/delivery-ready-full.png"
+      ],
+      "hashes": {
+        "examples/concourse-sdlc-lab/reports/current/evidence/delivery-ready.png": "60D1F7E844E15EB5D9D851B971A8AE736EC37FA143D7F65B4CAEE9A430E8BAA6",
+        "examples/concourse-sdlc-lab/reports/current/evidence/audit-history.png": "11F163024A739046DB83F6DAE67148FE73675A9E5C03A6E3B01761F2259E3B3E",
+        "examples/concourse-sdlc-lab/reports/current/evidence/delivery-ready-full.png": "858B63A0CCFE6AA3E89CC708932DDE3B51C7DF06F0D26252334DCCDC62A03664"
+      }
+    },
+    {
+      "id": "E-REPORT-VALIDATION",
+      "status": "PASS",
+      "summary": "Generated and browser-inspected the offline reports; final validator confirms report links, anchors, source evidence, and run records.",
+      "repoPaths": [
+        "examples/concourse-sdlc-lab/evaluation-tools/build-run.mjs",
+        "examples/concourse-sdlc-lab/evaluation-tools/validate-run.mjs",
+        "examples/concourse-sdlc-lab/report/MASTER_REPORT.html",
+        "examples/concourse-sdlc-lab/evaluations/brad-v0.4.1/brad-v0.4.1-8ecc17ba/MASTER_REPORT.html",
+        "examples/concourse-sdlc-lab/reports/current/EXECUTION.md"
+      ]
+    }
+  ]
+}

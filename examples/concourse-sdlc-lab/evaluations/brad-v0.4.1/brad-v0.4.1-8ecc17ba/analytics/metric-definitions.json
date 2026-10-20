@@ -1,0 +1,20 @@
+{
+  "runId": "brad-v0.4.1-8ecc17ba",
+  "definitions": [
+    {
+      "id": "routing.Ln",
+      "formula": "Count of scenarios at level Ln by status; denominator is 85 only for coverage counts. Pass rate uses PASS+FAIL+PARTIAL executed cases; BLOCKED, UNSUPPORTED, and NOT_RUN are excluded and displayed separately.",
+      "evidence": "evaluation/scenario-results.json"
+    },
+    {
+      "id": "suite.passRate",
+      "formula": "passed / (passed + failed) for that named suite only; never pooled across unlike suites.",
+      "evidence": "run-input.json validation[]"
+    },
+    {
+      "id": "stakeholder.requests",
+      "formula": "Count of observed role-specific BRAD requests; not seeded app logins or fictional personas.",
+      "evidence": "analytics/stakeholder-analytics.json"
+    }
+  ]
+}
