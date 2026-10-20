@@ -1,0 +1,76 @@
+{
+  "metric_definitions": [
+    {
+      "key": "baseline_tests_pass_rate",
+      "name": "BRAD Baseline Unit Test Pass Rate",
+      "description": "Proportion of official baseline unit and contract tests passing in Node and Python harnesses.",
+      "unit": "percentage",
+      "numerator": "Passing test count (54)",
+      "denominator": "Total baseline test count (54)"
+    },
+    {
+      "key": "candidate_tests_pass_rate",
+      "name": "BRAD Candidate Test Pass Rate",
+      "description": "Proportion of candidate branch tests passing including new regression tests.",
+      "unit": "percentage",
+      "numerator": "Passing candidate test count (55)",
+      "denominator": "Total candidate test count (55)"
+    },
+    {
+      "key": "relaydesk_server_tests",
+      "name": "RelayDesk Server Automated Test Pass Rate",
+      "description": "Proportion of end-to-end SDLC API and integration tests passing against local SQLite.",
+      "unit": "percentage",
+      "numerator": "Passing API test count (11)",
+      "denominator": "Total API test count (11)"
+    },
+    {
+      "key": "canonical_routing_cases_total",
+      "name": "Canonical Routing Cases Evaluated",
+      "description": "Total count of canonical routing specifications evaluated from evals/routing-cases.json.",
+      "unit": "count",
+      "numerator": "Evaluated cases (85)",
+      "denominator": "Target specification (85)"
+    },
+    {
+      "key": "routing_l1_contract_rate",
+      "name": "Level 1 Contract Definition Rate",
+      "description": "Proportion of canonical cases with unambiguous static contract definitions in BRAD documentation.",
+      "unit": "percentage",
+      "numerator": "Contract verified cases (85)",
+      "denominator": "Total cases (85)"
+    },
+    {
+      "key": "routing_l3_exact_selection_rate",
+      "name": "Level 3 Exact Native Skill Route Rate",
+      "description": "Proportion of canonical cases matching exact native skill identifiers.",
+      "unit": "percentage",
+      "numerator": "Exact matches (42)",
+      "denominator": "Total cases (85)"
+    },
+    {
+      "key": "routing_l4_native_invocation_rate",
+      "name": "Level 4 Native Workflow Execution Rate",
+      "description": "Proportion of native BMAD workflows actually executed by host.",
+      "unit": "percentage",
+      "numerator": "Executed native workflows (0)",
+      "denominator": "Total cases (85)"
+    },
+    {
+      "key": "collaboration_exercises_rate",
+      "name": "Cross-Team Collaboration Exercises Completed",
+      "description": "Proportion of mandatory multi-worktree collaboration exercises successfully executed with git commits.",
+      "unit": "percentage",
+      "numerator": "Completed exercises (10)",
+      "denominator": "Mandatory exercises (10)"
+    },
+    {
+      "key": "defect_resolution_rate",
+      "name": "QA Defect Retest & Closure Rate",
+      "description": "Proportion of logged QA defects reproduced, fixed, retested, and verified closed.",
+      "unit": "percentage",
+      "numerator": "Closed defects (2)",
+      "denominator": "Total logged defects (2)"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "backlog": [
+    {
+      "id": "IMP-001",
+      "title": "Machine-readable installCommand in doctor JSON response",
+      "category": "Diagnostics / Agent Usability",
+      "priority": "HIGH",
+      "status": "IMPLEMENTED_IN_CANDIDATE",
+      "affected_files": ["cli/core.mjs", "tests/cli.test.mjs"],
+      "verified_by_test": "tests/cli.test.mjs: doctor provides machine-readable installCommand when BMAD is not detected",
+      "description": "When BMAD is not detected, doctor now exposes `installCommand: 'npx bmad-method install'` in JSON output, enabling automated agents to take immediate guided recovery actions."
+    },
+    {
+      "id": "IMP-002",
+      "title": "Increment-aware routing for existing module changes",
+      "category": "Routing / Planning",
+      "priority": "HIGH",
+      "status": "IMPLEMENTED_IN_CANDIDATE",
+      "affected_files": ["skills/brad/SKILL.md", "skills/brad/references/epics-and-stories.md"],
+      "verified_by_test": "tools/check_repository.py & skills/brad/tests/test_package_contract.py",
+      "description": "Distinguishes requests to extend or refine an already-approved module increment from greenfield PRD generation, preventing destructive PRD overwrites."
+    },
+    {
+      "id": "IMP-003",
+      "title": "Read-only review safety guardrails in ticket-to-pr contract",
+      "category": "Delivery Safety",
+      "priority": "HIGH",
+      "status": "IMPLEMENTED_IN_CANDIDATE",
+      "affected_files": ["skills/brad/references/ticket-to-pr.md"],
+      "verified_by_test": "skills/brad/tests/test_package_contract.py",
+      "description": "Explicitly prohibits topic branch generation, code modifications, and PR deliveries when requests specify review, audit, inspect, or trace intents without explicit write authorization."
+    },
+    {
+      "id": "IMP-004",
+      "title": "Configurable issue tracker artifact mapping adapter",
+      "category": "Integration / External Mapping",
+      "priority": "MEDIUM",
+      "status": "PROPOSED_FOR_V1.0",
+      "affected_files": ["skills/brad/references/ticket-to-pr.md", "cli/core.mjs"],
+      "description": "Provide a local JSON/YAML adapter schema mapping external tracking epics/stories to native BMAD artifacts while keeping native BMAD files as authoritative source of truth."
+    },
+    {
+      "id": "IMP-005",
+      "title": "Automated multi-worktree conflict detection preflight",
+      "category": "Collaboration / Git Safety",
+      "priority": "MEDIUM",
+      "status": "PROPOSED_FOR_V1.0",
+      "affected_files": ["skills/brad/scripts/delivery_preflight.py"],
+      "description": "Extend delivery_preflight.py to inspect other active git worktrees and warn if modified files overlap with unmerged branches in sibling worktrees."
+    }
+  ]
+}

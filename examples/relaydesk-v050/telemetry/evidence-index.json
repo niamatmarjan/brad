@@ -1,0 +1,75 @@
+{
+  "run_id": "relaydesk-v050-exp-01",
+  "generated_at": "2026-10-20T13:30:00+05:30",
+  "evidence_entries": [
+    {
+      "id": "EVD-001",
+      "type": "test_output",
+      "description": "Baseline official test execution in BRAD v0.5.0",
+      "path": "coordination/SESSION_STATE.md",
+      "status": "PASS"
+    },
+    {
+      "id": "EVD-002",
+      "type": "git_commit",
+      "description": "Initial RelayDesk application baseline commit",
+      "sha": "4258069",
+      "branch": "main"
+    },
+    {
+      "id": "EVD-003",
+      "type": "git_commit",
+      "description": "Dev C shared SLA schema and API commit",
+      "sha": "0caefa2",
+      "branch": "dev-shared"
+    },
+    {
+      "id": "EVD-004",
+      "type": "git_commit",
+      "description": "Dev A expedited priority commit",
+      "sha": "4e1747c",
+      "branch": "dev-intake"
+    },
+    {
+      "id": "EVD-005",
+      "type": "git_commit",
+      "description": "Dev B fulfillment stages commit",
+      "sha": "919ecdd",
+      "branch": "dev-fulfillment"
+    },
+    {
+      "id": "EVD-006",
+      "type": "conflict_resolution",
+      "description": "Controlled merge conflict and resolution in integration manifest",
+      "sha": "a8a757d",
+      "path": "coordination/handoffs/CONFLICT-RESOLUTION-001.md"
+    },
+    {
+      "id": "EVD-007",
+      "type": "code_review",
+      "description": "Technical Lead rejection and revision for HMAC webhook signature",
+      "path": "coordination/handoffs/CODE-REVIEW-001.md"
+    },
+    {
+      "id": "EVD-008",
+      "type": "defect_lifecycle",
+      "description": "DEF-101 SLA whitespace defect reproduction and regression test",
+      "sha": "21ef734",
+      "path": "qa/defects/DEF-101.md"
+    },
+    {
+      "id": "EVD-009",
+      "type": "resumption",
+      "description": "Resumption from INTAKE-PAUSE.json and export completion",
+      "sha": "39f0d39",
+      "path": "coordination/checkpoints/INTAKE-PAUSE.json"
+    },
+    {
+      "id": "EVD-010",
+      "type": "candidate_commit",
+      "description": "Candidate improvements commit in isolated worktree",
+      "sha": "0b61d38",
+      "branch": "candidate/v0.5.1-improvements"
+    }
+  ]
+}

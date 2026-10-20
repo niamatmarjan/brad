@@ -1,0 +1,85 @@
+{
+  "run_id": "relaydesk-v050-exp-01",
+  "brad_baseline_version": "0.5.0",
+  "candidate_version": "0.5.1-candidate",
+  "metrics": {
+    "baseline_tests_pass_rate": {
+      "value": 100.0,
+      "numerator": 54,
+      "denominator": 54,
+      "status": "PASS"
+    },
+    "candidate_tests_pass_rate": {
+      "value": 100.0,
+      "numerator": 55,
+      "denominator": 55,
+      "status": "PASS"
+    },
+    "relaydesk_server_tests": {
+      "value": 100.0,
+      "numerator": 16,
+      "denominator": 16,
+      "status": "PASS"
+    },
+    "canonical_routing_cases_total": {
+      "value": 85,
+      "numerator": 85,
+      "denominator": 85,
+      "status": "PASS"
+    },
+    "routing_l1_contract_rate": {
+      "value": 100.0,
+      "numerator": 85,
+      "denominator": 85,
+      "status": "PASS"
+    },
+    "routing_l2_target_resolve_rate": {
+      "value": 100.0,
+      "numerator": 85,
+      "denominator": 85,
+      "status": "PASS"
+    },
+    "routing_l3_exact_selection_rate": {
+      "value": 49.41,
+      "numerator": 42,
+      "denominator": 85,
+      "status": "PASS"
+    },
+    "routing_l3_conditional_review_rate": {
+      "value": 50.59,
+      "numerator": 43,
+      "denominator": 85,
+      "status": "REVIEW_REQUIRED"
+    },
+    "routing_l4_native_invocation_rate": {
+      "value": 0.0,
+      "numerator": 0,
+      "denominator": 85,
+      "status": "BLOCKED"
+    },
+    "routing_l5_verified_outcome_rate": {
+      "value": 0.0,
+      "numerator": 0,
+      "denominator": 85,
+      "status": "NOT_RUN"
+    },
+    "collaboration_worktree_rate": {
+      "value": 100.0,
+      "numerator": 10,
+      "denominator": 10,
+      "status": "PASS"
+    },
+    "collaboration_subagent_cycle_rate": {
+      "value": 100.0,
+      "numerator": 5,
+      "denominator": 5,
+      "status": "PASS"
+    },
+    "defect_resolution_rate": {
+      "value": 100.0,
+      "numerator": 2,
+      "denominator": 2,
+      "status": "PASS"
+    }
+  }
+}

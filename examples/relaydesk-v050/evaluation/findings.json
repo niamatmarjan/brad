@@ -1,0 +1,50 @@
+[
+  {
+    "finding_id": "FND-001",
+    "severity": "HIGH",
+    "category": "BMAD compatibility",
+    "expected_behavior": "Native BMAD specialist skills can be invoked directly by BRAD when installed.",
+    "observed_behavior": "Host environment lacks native BMAD CLI/skills in host catalog. BRAD doctor reports 'BMAD Method not detected'. Direct L4/L5 execution is blocked without host installation.",
+    "root_cause_verified": true,
+    "root_cause": "BMAD is a user-installed prerequisite, not bundled into BRAD core distribution.",
+    "affected_brad_files": [
+      "cli/core.mjs",
+      "skills/brad/scripts/inspect_bmad.py"
+    ],
+    "proposed_smallest_fix": "Add clearer diagnostic guidance in `brad doctor` explaining exact one-step command to install BMAD in current host (e.g. npx bmad-method install or agent-specific setup).",
+    "risk": "LOW",
+    "priority": "HIGH"
+  },
+  {
+    "finding_id": "FND-002",
+    "severity": "MEDIUM",
+    "category": "BRAD routing",
+    "expected_behavior": "BRAD should distinguish extending an approved module increment from authoring a greenfield PRD.",
+    "observed_behavior": "Conditional routing for increment-level changes can collapse to generic PRD generation if no explicit story ID is supplied.",
+    "root_cause_verified": true,
+    "root_cause": "Lack of explicit keyword resolution for 'increment' / 'delta' in regex matcher.",
+    "affected_brad_files": [
+      "skills/brad/SKILL.md",
+      "skills/brad/references/epics-and-stories.md"
+    ],
+    "proposed_smallest_fix": "Add increment-aware keyword routing in SKILL.md and epics-and-stories.md guidance.",
+    "risk": "LOW",
+    "priority": "MEDIUM"
+  },
+  {
+    "finding_id": "FND-003",
+    "severity": "MEDIUM",
+    "category": "BRAD delivery policy",
+    "expected_behavior": "Read-only review requests must not propose code modifications or PR generation.",
+    "observed_behavior": "Ticket-to-PR default can over-eagerly propose branch and PR creation on review requests unless --plan / read-only is emphasized.",
+    "root_cause_verified": true,
+    "root_cause": "Rule priority #4 ('One command, one requested outcome') default to PR delivery needs stronger guardrails against review-only intents.",
+    "affected_brad_files": [
+      "skills/brad/SKILL.md",
+      "skills/brad/references/ticket-to-pr.md"
+    ],
+    "proposed_smallest_fix": "Reinforce Rule #1 and ticket-to-pr contract that 'review' intents strictly forbid write actions without explicit override.",
+    "risk": "LOW",
+    "priority": "MEDIUM"
+  }
+]

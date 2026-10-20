@@ -1,0 +1,16 @@
+{
+  "name": "relaydesk-server",
+  "version": "0.5.0",
+  "description": "RelayDesk Service Request Platform Backend API",
+  "type": "module",
+  "main": "src/server.mjs",
+  "scripts": {
+    "start": "node src/server.mjs",
+    "seed": "node src/seed.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "cors": "^2.8.5"
+  }
+}
