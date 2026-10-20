@@ -23,7 +23,10 @@
     "BRANDING.md",
     "SECURITY.md",
     "SUPPORT.md",
-    "docs/demo-publication.md"
+    "docs/demo-publication.md",
+    "docs/getting-started/ai-setup.md",
+    "docs/getting-started/installation.md",
+    "docs/evaluation/demo-publication.md"
   ],
   "scripts": {
     "test": "node --test tests/*.test.mjs",

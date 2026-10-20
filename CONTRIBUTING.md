@@ -7,7 +7,7 @@ Thank you for helping make native BMAD coordination easier and more trustworthy.
 - For install/use questions, read [SUPPORT.md](SUPPORT.md).
 - For suspected vulnerabilities, **report privately** using [SECURITY.md](SECURITY.md), not an issue.
 - Check open issues/PRs before duplicating work. For sizeable changes, propose the design first.
-- Read [AGENTS.md](AGENTS.md), [architecture](docs/architecture.md), and [validation limits](docs/validation.md).
+- Read [AGENTS.md](AGENTS.md), [architecture](docs/reference/architecture.md), and [validation limits](docs/evaluation/validation.md).
 
 ## Contribution flow
 
@@ -37,9 +37,13 @@ Do not paste third-party proprietary or restricted-license code, stolen credenti
 
 Prefer standard libraries and narrowly scoped dependencies; keep installation deterministic, idempotent, cross-platform, and safe on Windows. Never add hidden network actions, silent native BMAD upgrades, destructive force flags, or unsanctioned remote pushes. Preserve native v6/v7 separation and verify the exact installed skill before invoking it. Follow [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
+## Documentation organization
+
+New guides belong under `docs/getting-started/`, `docs/sdlc/`, `docs/roles/`, `docs/reference/`, `docs/evaluation/`, or `docs/maintainers/`. Use lowercase kebab-case filenames, update the relevant index, and verify relative links. `docs/releases/` is immutable per published release. Existing `docs/*.md` compatibility paths must stay small and direct readers to the maintained canonical pages.
+
 ## Demo submissions
 
-Demos require repeatable **redacted evidence**, permission to publish, and a disclosed validation scope. See [docs/demo-publication.md](docs/demo-publication.md). Do not commit gigabytes of raw telemetry or full private transcripts into the source repository.
+Demos require repeatable **redacted evidence**, permission to publish, and a disclosed validation scope. See [docs/evaluation/demo-publication.md](docs/evaluation/demo-publication.md). Do not commit gigabytes of raw telemetry or full private transcripts into the source repository.
 
 ## npm pack and Windows regression matrix
 

@@ -45,6 +45,8 @@ npm run test:browser
 
 The live integration, acceptance statuses, test outputs and screenshot hashes are in [`reports/current/EXECUTION.md`](reports/current/EXECUTION.md). The earlier localStorage version remains under `app/` and is also preserved in [`reports/previous-partial-validation/app`](reports/previous-partial-validation/app); neither is the current server-backed app.
 
+See [ARTIFACTS.md](ARTIFACTS.md) for a concise map of the current application, legacy prototype, immutable v0.4.1 run, reports, and telemetry.
+
 ## Included
 
 - `server-backed\server`: Node 24 API, SQLite persistence, sessions, role authorization, lifecycle/version gates, append-only audit, QA/defect/retest routes, and derived readiness.
