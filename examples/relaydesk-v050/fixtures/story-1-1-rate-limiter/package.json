@@ -1,0 +1,9 @@
+{
+  "name": "fixture-rate-limiter",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Reproducible fixture snapshot for Story 1.1 In-Memory Rate Limiter",
+  "scripts": {
+    "test": "node --test"
+  }
+}

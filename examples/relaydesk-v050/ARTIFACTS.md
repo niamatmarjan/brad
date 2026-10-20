@@ -10,10 +10,11 @@ This directory contains the complete, sanitized evaluation artifacts for the **B
 |---|---|---|
 | [`report/MASTER_REPORT.html`](report/MASTER_REPORT.html) | Interactive offline master evaluation dashboard | Self-contained HTML (110 KB) |
 | [`reports/CHATGPT_BRAD_ENGINEERING_REVIEW.md`](reports/CHATGPT_BRAD_ENGINEERING_REVIEW.md) | Comprehensive engineering review and decision package for ChatGPT | Markdown |
+| [`reports/STORY_1_1_BRAD_HANDOFF.md`](reports/STORY_1_1_BRAD_HANDOFF.md) | Final implementation and engineering handoff for Story 1.1 | Markdown |
 | [`reports/COLLABORATION_AUDIT.md`](reports/COLLABORATION_AUDIT.md) | Empirical audit of 3-subagent independent collaboration cycle | Markdown |
-| [`reports/FINDINGS.md`](reports/FINDINGS.md) | Confirmed BRAD defects (F-001 to F-003) and root cause analysis | Markdown |
+| [`reports/FINDINGS.md`](reports/FINDINGS.md) | Confirmed BRAD defects (F-001 to F-007) and root cause analysis | Markdown |
 | [`reports/NATIVE_BMAD_HOST_HANDOFF.md`](reports/NATIVE_BMAD_HOST_HANDOFF.md) | Executable dispatch protocol for 8 native BMAD workflows | Markdown |
-| [`reports/NATIVE_BMAD_EXECUTION_AUDIT.md`](reports/NATIVE_BMAD_EXECUTION_AUDIT.md) | Audit of native BMAD execution, host skill catalog discovery, and Tests A/B/C | Markdown |
+| [`reports/NATIVE_BMAD_EXECUTION_AUDIT.md`](reports/NATIVE_BMAD_EXECUTION_AUDIT.md) | Audit of native BMAD execution, host skill catalog discovery, Tests A/B/C, and Story 1.1 | Markdown |
 | [`reports/EXECUTION.md`](reports/EXECUTION.md) | Step-by-step experiment execution log and environment manifest | Markdown |
 | [`reports/BRAD_IMPROVEMENT_HANDOFF.md`](reports/BRAD_IMPROVEMENT_HANDOFF.md) | Handoff note for proposed candidate improvements | Markdown |
 | [`reports/NEXT_DEMO_PLAN.md`](reports/NEXT_DEMO_PLAN.md) | Test protocol for next release validation | Markdown |
@@ -21,7 +22,22 @@ This directory contains the complete, sanitized evaluation artifacts for the **B
 
 ---
 
-## 2. RelayDesk Application Source Code & Tests
+## 2. Story 1.1 Fixture Snapshot & Independent Review Evidence
+
+| Component | Path | Description |
+|---|---|---|
+| **Rate Limiter Source** | [`fixtures/story-1-1-rate-limiter/src/rate_limiter.mjs`](fixtures/story-1-1-rate-limiter/src/rate_limiter.mjs) | In-memory RateLimiter class (fixed window with per-client expiration reset) |
+| **Rate Limiter Tests** | [`fixtures/story-1-1-rate-limiter/test/rate_limiter.test.mjs`](fixtures/story-1-1-rate-limiter/test/rate_limiter.test.mjs) | 6 unit tests with virtual clock dependency injection |
+| **Fixture Package** | [`fixtures/story-1-1-rate-limiter/package.json`](fixtures/story-1-1-rate-limiter/package.json) | Minimal ESM package (`node:test`) |
+| **Fixture Documentation** | [`fixtures/story-1-1-rate-limiter/README.md`](fixtures/story-1-1-rate-limiter/README.md) | Reproduction commands and window semantics guide |
+| **BMAD Spec Artifact** | [`fixtures/story-1-1-rate-limiter/specs/spec-1-1-in-memory-rate-limiter.md`](fixtures/story-1-1-rate-limiter/specs/spec-1-1-in-memory-rate-limiter.md) | BMAD oneshot build specification |
+| **Reviewer Evidence (JSON)** | [`evidence/independent-review-6fbd15da.json`](evidence/independent-review-6fbd15da.json) | Sanitized review subagent trace, inputs, tool calls, and findings |
+| **Reviewer Evidence (Markdown)** | [`evidence/independent-review-6fbd15da.md`](evidence/independent-review-6fbd15da.md) | Review subagent summary and defect DEF-REV-01 remediation record |
+| **TEA Review Report** | [`fixtures/story-1-1-rate-limiter/qa/test-review-rate-limiter.md`](fixtures/story-1-1-rate-limiter/qa/test-review-rate-limiter.md) | TEA Test Quality Review (Authoritative score 100/100) |
+
+---
+
+## 3. RelayDesk Application Source Code & Tests
 
 | Component | Path | Description |
 |---|---|---|

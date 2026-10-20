@@ -61,6 +61,18 @@
     "gate_g_final_package": {
       "overall": "PASS",
       "details": "Sanitized demo example, offline self-contained MASTER_REPORT.html, telemetry events, and honest decision package prepared."
+    },
+    "story_1_1_smoke_test": {
+      "overall": "PASS",
+      "workflow_routed": "bmad-build",
+      "execution_mode": "NATIVE_WORKFLOW_INLINE",
+      "step_files_executed": ["step-01-clarify-and-route.md", "compile-epic-context.md", "step-02-plan.md", "step-oneshot.md"],
+      "tests_passed": "6/6 (100%)",
+      "code_review_mode": "SEPARATE_SPECIALIST_INVOKED",
+      "reviewer_subagent": "6fbd15da-1163-4221-a9d7-23640f61c569",
+      "defects_found_and_closed": ["DEF-REV-01 (Whitespace client key handling)"],
+      "tea_test_review_score": "100.00 / 100.00 (EXCELLENT)",
+      "fixture_path": "examples/relaydesk-v050/fixtures/story-1-1-rate-limiter"
     }
   },
   "overall_verdict": "PARTIAL_VALIDATION",

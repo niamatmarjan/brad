@@ -1,0 +1,90 @@
+# Story 1.1 Fixture Snapshot — In-Memory Rate Limiter
+
+This directory contains a reproducible, sanitized fixture snapshot of the Story 1.1 implementation and artifacts produced during the BRAD v0.5.0 smoke test.
+
+> **Provenance Notice:**
+> This snapshot was generated and verified inside an isolated BMAD workspace (`C:\Projects\Personal\brad-labs\relaydesk-v050\bmad-workspace`), which is a separate local Git repository. The original commits in that repository are:
+> - `860a9e8` — `feat(rate-limiter): implement in-memory RateLimiter with client isolation and window reset`
+> - `0ae7eeb` — `fix(rate-limiter): reject whitespace-only client keys per code review feedback`
+> - `30c7c64` — `test(qa): add TEA test quality review signoff for story 1.1`
+
+---
+
+## 1. Story 1.1 Acceptance Criteria
+
+1. **Configurable request limit and time window:** `limit` (positive integer) and `windowMs` (positive number) configurable via options.
+2. **Requests tracked by client key:** Each client key maintains independent rate tracking without state leakage across clients.
+3. **Requests over threshold rejected:** Requests exceeding `limit` within the window return `allowed: false` with `retryAfterMs` metadata.
+4. **Expired windows reset correctly:** Once `windowMs` has elapsed, the window resets and subsequent requests are permitted.
+5. **Tests cover accepted requests, rejected requests, expiration, and isolated clients:** Comprehensive unit tests covering all paths and edge cases.
+6. **No unrelated application changes:** Pure in-memory module; zero external runtime dependencies.
+
+---
+
+## 2. Window Semantics Clarification
+
+- **Implementation Type:** **Fixed Window with Per-Client Reset** (not a sliding log or sliding window counter).
+- **Behavior:** Each client record stores `{ count, windowStart }`. When `(currentTime - windowStart) >= windowMs`, the record resets to `{ count: 0, windowStart: currentTime }`.
+- **Clock:** Uses `Date.now` by default, with virtual clock dependency injection supported via `options.now` for deterministic, zero-sleep unit testing.
+
+---
+
+## 3. How to Reproduce and Run Tests
+
+### Prerequisites
+- Node.js v20+ or v24+ (uses native `node:test` and `node:assert/strict`).
+- Zero external `npm install` packages required.
+
+### Run Tests
+```powershell
+# From this fixture directory:
+node --test
+
+# Or using npm:
+npm test
+```
+
+### Expected Output
+```text
+▶ Story 1.1 — In-Memory Rate Limiter
+  ✔ AC1: Configurable request limit and time window validation (1.65ms)
+  ✔ AC2 & AC5: Requests are tracked independently by client key (1.18ms)
+  ✔ AC3: Requests over the threshold are rejected (0.30ms)
+  ✔ AC4: Expired windows reset correctly (0.20ms)
+  ✔ AC5: Invalid client keys fail fast (0.28ms)
+  ✔ AC5: State reset and memory pruning (0.46ms)
+✔ Story 1.1 — In-Memory Rate Limiter (6.0ms)
+ℹ tests 6
+ℹ suites 1
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+```
+
+---
+
+## 4. Directory Structure
+
+```text
+fixtures/story-1-1-rate-limiter/
+├── package.json               # Minimal package declaration (type: module, test: node --test)
+├── README.md                  # This file
+├── src/
+│   └── rate_limiter.mjs       # RateLimiter class implementation
+├── test/
+│   └── rate_limiter.test.mjs  # 6 automated unit tests
+├── specs/
+│   ├── epic-1-context.md      # Compiled epic planning context
+│   ├── spec-1-1-in-memory-rate-limiter.md # BMAD oneshot build specification
+│   ├── epics.md               # Epic breakdown
+│   ├── story-1.1.md           # Discrete story specification
+│   └── sprint-status.yaml     # Sprint tracking file (status: done)
+├── review/
+│   ├── diff-1.1.patch         # Unified diff reviewed by independent subagent
+│   ├── code-review-report.md  # Multi-lens review findings
+│   └── defect-def-rev-01.md   # Defect DEF-REV-01 reproduction and remediation
+└── qa/
+    └── test-review-rate-limiter.md # TEA Test Quality Review (100/100 score)
+```
