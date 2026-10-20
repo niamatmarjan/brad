@@ -1,0 +1,71 @@
+{
+  "runId": "brad-v0.4.1-8ecc17ba",
+  "caseCount": 85,
+  "levels": {
+    "L1": {
+      "total": 85,
+      "counts": {
+        "PASS": 85,
+        "FAIL": 0,
+        "PARTIAL": 0,
+        "BLOCKED": 0,
+        "UNSUPPORTED": 0,
+        "NOT_RUN": 0
+      },
+      "executed": 85,
+      "passRate": 1
+    },
+    "L2": {
+      "total": 85,
+      "counts": {
+        "PASS": 0,
+        "FAIL": 0,
+        "PARTIAL": 0,
+        "BLOCKED": 0,
+        "UNSUPPORTED": 0,
+        "NOT_RUN": 85
+      },
+      "executed": 0,
+      "passRate": null
+    },
+    "L3": {
+      "total": 85,
+      "counts": {
+        "PASS": 0,
+        "FAIL": 0,
+        "PARTIAL": 0,
+        "BLOCKED": 0,
+        "UNSUPPORTED": 0,
+        "NOT_RUN": 85
+      },
+      "executed": 0,
+      "passRate": null
+    },
+    "L4": {
+      "total": 85,
+      "counts": {
+        "PASS": 0,
+        "FAIL": 0,
+        "PARTIAL": 0,
+        "BLOCKED": 0,
+        "UNSUPPORTED": 0,
+        "NOT_RUN": 85
+      },
+      "executed": 0,
+      "passRate": null
+    },
+    "L5": {
+      "total": 85,
+      "counts": {
+        "PASS": 0,
+        "FAIL": 0,
+        "PARTIAL": 0,
+        "BLOCKED": 0,
+        "UNSUPPORTED": 0,
+        "NOT_RUN": 85
+      },
+      "executed": 0,
+      "passRate": null
+    }
+  }
+}

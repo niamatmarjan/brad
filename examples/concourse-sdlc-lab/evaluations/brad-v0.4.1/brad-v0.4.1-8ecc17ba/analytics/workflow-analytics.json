@@ -1,0 +1,12 @@
+{
+  "runId": "brad-v0.4.1-8ecc17ba",
+  "verifiedNativeWorkflows": [],
+  "blockedAttempts": [
+    {
+      "workflow": "bmad-testarch-test-review",
+      "status": "BLOCKED",
+      "reason": "No host-discovered native skill; report-only workflow mode writes a file and conflicts with the read-only probe.",
+      "evidenceId": "E-NATIVE-TEA"
+    }
+  ]
+}

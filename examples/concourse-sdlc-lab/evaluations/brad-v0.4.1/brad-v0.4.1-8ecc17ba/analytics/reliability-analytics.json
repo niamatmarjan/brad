@@ -1,0 +1,17 @@
+{
+  "runId": "brad-v0.4.1-8ecc17ba",
+  "rootBradNode": {
+    "status": "FAIL",
+    "passed": 27,
+    "failed": 2,
+    "total": 29
+  },
+  "candidateBradNode": {
+    "passed": 32,
+    "failed": 0
+  },
+  "candidateIntegration": "NOT_MERGED",
+  "nativeWorkflowRecovery": "NOT_RUN",
+  "interruptedTaskResumption": "NOT_RUN",
+  "remotePrRecovery": "NOT_RUN"
+}

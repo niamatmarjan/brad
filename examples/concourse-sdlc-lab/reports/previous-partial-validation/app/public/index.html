@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#14242c">
+    <title>Concourse — Team Delivery Workspace</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script type="module" src="/app.mjs"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Main navigation">
+        <a class="brand" href="/" aria-label="Concourse home">
+          <span class="brand-mark" aria-hidden="true">C</span>
+          <span>concourse<small>TEAM DELIVERY</small></span>
+        </a>
+        <div class="workspace-switch">
+          <span class="workspace-icon" aria-hidden="true">N</span>
+          <span><small>WORKSPACE</small><strong>Northstar Studio</strong></span>
+          <span class="chevron" aria-hidden="true">⌄</span>
+        </div>
+        <nav class="primary-nav">
+          <a class="nav-item active" href="#board"><span aria-hidden="true">▦</span> Delivery board</a>
+          <a class="nav-item" href="#pulse"><span aria-hidden="true">◷</span> Team pulse</a>
+          <a class="nav-item" href="#projects"><span aria-hidden="true">◇</span> Projects</a>
+        </nav>
+        <div class="side-section">
+          <div class="side-heading">ACTIVE PROJECTS <button type="button" class="icon-button" aria-label="Add project">+</button></div>
+          <button class="project-link selected" type="button" data-project="concourse" aria-pressed="true"><span class="project-dot blue"></span> Concourse launch <small>09</small></button>
+          <button class="project-link" type="button" data-project="platform" aria-pressed="false"><span class="project-dot coral"></span> Platform reliability <small>01</small></button>
+          <button class="project-link" type="button" data-project="design" aria-pressed="false"><span class="project-dot mint"></span> Design system <small>01</small></button>
+        </div>
+        <div class="side-spacer"></div>
+        <div class="sidebar-note"><span class="live-dot"></span><span><strong>Local demo mode</strong><small>Changes stay in this browser</small></span></div>
+        <button type="button" class="user-profile" id="profileButton">
+          <span class="avatar avatar-lilac" id="profileAvatar">AM</span>
+          <span><strong id="profileName">Avery Morgan</strong><small id="profileRole">Product Manager</small></span>
+          <span class="chevron" aria-hidden="true">⌄</span>
+        </button>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div class="breadcrumbs"><span>Workspace</span><span aria-hidden="true">/</span><strong>Concourse launch</strong></div>
+          <div class="top-actions">
+            <label class="role-picker">Acting as
+              <select id="currentUser" aria-label="Choose a demo role"></select>
+            </label>
+            <button type="button" id="notificationsButton" class="notification-button" aria-label="Show notifications">
+              <span aria-hidden="true">♧</span><i id="notificationCount" hidden>0</i>
+            </button>
+            <button type="button" class="help-button" aria-label="Help">?</button>
+          </div>
+        </header>
+
+        <section class="page-heading" id="board">
+          <div>
+            <p class="eyebrow"><span class="eyebrow-line"></span> DELIVERY CONTROL ROOM <span class="eyebrow-date">SAMPLE SPRINT 02</span></p>
+            <h1>Work in <em>motion.</em></h1>
+            <p class="subtitle">One view of what the team is moving, reviewing, and shipping.</p>
+          </div>
+          <button type="button" class="primary-button" id="newTaskButton"><span aria-hidden="true">＋</span> New work item</button>
+        </section>
+
+        <section class="metric-row" aria-label="Project progress">
+          <article class="metric-card progress-card">
+            <div class="metric-label">SPRINT MOMENTUM <span class="metric-arrow">↗</span></div>
+            <div class="metric-value"><span id="progressValue">0</span><small>%</small></div>
+            <progress class="progress-track" id="progressBar" value="0" max="100" aria-label="Sprint completion">0%</progress>
+            <div class="metric-foot"><span id="doneCount">0</span> of <span id="totalCount">0</span> work items complete</div>
+          </article>
+          <article class="metric-card">
+            <div class="metric-label">IN FLIGHT</div>
+            <div class="metric-value" id="activeCount">0</div>
+            <div class="metric-foot"><span class="metric-mark">●</span> Being built or reviewed</div>
+          </article>
+          <article class="metric-card">
+            <div class="metric-label">NEEDS A HAND</div>
+            <div class="metric-value" id="urgentCount">0</div>
+            <div class="metric-foot"><span class="metric-mark coral-mark">●</span> Urgent or blocked items</div>
+          </article>
+          <article class="metric-card">
+            <div class="metric-label">TEAM CAPACITY</div>
+            <div class="metric-value"><span id="teamCount">0</span><small class="metric-unit">roles</small></div>
+            <div class="avatar-stack" id="teamAvatars" aria-label="Seven team members"></div>
+          </article>
+        </section>
+
+        <section class="board-toolbar" aria-label="Board controls">
+          <div class="view-tabs"><button class="view-tab active" type="button">Board <span id="boardCount">0</span></button><button class="view-tab" type="button" id="listToggle">List</button></div>
+          <div class="filters">
+            <label class="search-box"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Search work…" aria-label="Search work items"><kbd>⌘ K</kbd></label>
+            <label class="filter-select"><span class="sr-only">Filter by priority</span><select id="priorityFilter"><option value="all">All priorities</option><option value="urgent">Urgent</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select></label>
+            <label class="filter-select"><span class="sr-only">Filter by assignee</span><select id="assigneeFilter"><option value="all">Everyone</option></select></label>
+            <label class="filter-select"><span class="sr-only">Filter by project</span><select id="projectFilter"><option value="all">All projects</option></select></label>
+            <button type="button" class="reset-button" id="resetButton" title="Restore the sample board">Reset</button>
+          </div>
+        </section>
+
+        <section class="board" id="boardColumns" aria-label="Kanban board"></section>
+
+        <section class="team-pulse" id="pulse">
+          <div><p class="eyebrow">IN THE LOOP</p><h2>A pulse from the team</h2></div>
+          <div class="pulse-feed" id="activityFeed"></div>
+        </section>
+
+        <footer class="page-footer">CONCOURSE DEMO · LOCAL DATA ONLY <span>Role controls are illustrative, not an authentication boundary.</span></footer>
+      </main>
+    </div>
+
+    <dialog id="taskDialog" class="task-dialog">
+      <form id="taskForm" method="dialog">
+        <div class="dialog-heading"><div><p class="eyebrow">WORK ITEM</p><h2 id="dialogTitle">New work item</h2></div><button class="icon-button close-dialog" type="button" aria-label="Close">×</button></div>
+        <input type="hidden" id="taskId">
+        <label>Title <input id="taskTitle" required maxlength="100" placeholder="What needs to move forward?"></label>
+        <label>Context <textarea id="taskDescription" rows="3" maxlength="500" placeholder="Add the outcome or acceptance notes"></textarea></label>
+        <div class="form-grid">
+          <label>Owner <select id="taskAssignee"></select></label>
+          <label>Priority <select id="taskPriority"><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option><option value="urgent">Urgent</option></select></label>
+          <label>Status <select id="taskStatus"><option value="backlog">Ready</option><option value="in-progress">In progress</option><option value="review">In review</option><option value="done">Done</option></select></label>
+          <label>Project <select id="taskProject"></select></label>
+        </div>
+        <div class="dialog-footer"><button type="button" id="deleteTaskButton" class="text-button danger-button" hidden>Delete item</button><span></span><button type="button" class="secondary-button close-dialog">Cancel</button><button type="submit" class="primary-button">Save work item</button></div>
+      </form>
+    </dialog>
+
+    <dialog id="detailDialog" class="task-dialog detail-dialog">
+      <div class="dialog-heading"><div><p class="eyebrow">WORK ITEM DETAILS</p><h2 id="detailTitle"></h2></div><button class="icon-button close-detail" type="button" aria-label="Close">×</button></div>
+      <p class="detail-description" id="detailDescription"></p>
+      <div class="detail-meta" id="detailMeta"></div>
+      <section class="comments-section"><h3>Discussion <span id="commentCount"></span></h3><div id="commentList" class="comment-list"></div>
+        <form id="commentForm" class="comment-form"><label for="commentInput">Add a note</label><textarea id="commentInput" rows="2" maxlength="300" placeholder="Share a useful update…"></textarea><button class="primary-button" type="submit">Add note</button></form>
+      </section>
+    </dialog>
+
+    <section class="toast" id="toast" role="status" aria-live="polite" hidden></section>
+  </body>
+</html>

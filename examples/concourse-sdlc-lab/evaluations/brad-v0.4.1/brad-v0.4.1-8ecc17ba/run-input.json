@@ -1,0 +1,313 @@
+{
+  "runId": "brad-v0.4.1-8ecc17ba",
+  "startedAt": "2026-10-20T08:53:43.734+05:30",
+  "bradBaseline": {
+    "version": "0.4.1",
+    "tag": "v0.4.1",
+    "commit": "dcad5e7d9d463c562f6cd94ea0ac5f6231ce23c8",
+    "packageSha256": "28A5871DB43E11B00BD1E9B784AC217A1801536BF66EC00D127EF0C25C4912AB",
+    "packageArtifact": "local npm pack --ignore-scripts; no publish"
+  },
+  "environment": {
+    "host": "GitHub Copilot CLI",
+    "modelSelection": "Auto",
+    "concreteModelId": null,
+    "concreteModelStatus": "UNAVAILABLE",
+    "operatingSystem": "Microsoft Windows 11 Enterprise",
+    "node": "v24.19.0",
+    "npm": "12.0.2",
+    "python": "3.13.14",
+    "git": "available",
+    "githubCli": "available; remote authentication not checked",
+    "bmAdInCurrentWorkspace": "not detected or invoked",
+    "priorFixtureVersions": {
+      "method": "6.12.4",
+      "bmm": "6.12.4",
+      "tea": "1.27.2",
+      "scope": "prior isolated setup evidence only; not current workspace discovery"
+    }
+  },
+  "application": {
+    "name": "Concourse",
+    "type": "server-backed React/SQLite local validation demo",
+    "branch": "demo/concourse-v050-evaluation",
+    "revision": "uncommitted workspace; no commit",
+    "sourceFileCount": 69,
+    "sourceTreeSha256": "4B59AEF4AA2EEBC875AB9733B12865F69A7CA70FCA967D7E08A42D36D5AC0A52",
+    "publicationSourceTreeSha256": "DCD7BBA72049EC81FFFD849617A52B6B637A58C37C4C704EA103134C5A289B53",
+    "publicationChanges": "Only the three server-backed README files changed: machine-specific paths were redacted and portable commands/test scope clarified. Runtime, tests, migrations, seed, manifests, lockfiles and assets are unchanged. The original tested sourceTreeSha256 is preserved.",
+    "fingerprintAlgorithm": "SHA-256 over files sorted by ordinal POSIX relative path, excluding node_modules, dist, .test-data, test-results, playwright-report, and coverage; append UTF-8 relative path + NUL, little-endian int32 byte length, then file bytes"
+  },
+  "validation": [
+    {
+      "id": "BRAD-NODE-BASELINE",
+      "status": "FAIL",
+      "cwd": "repository root",
+      "command": "npm test",
+      "passed": 27,
+      "failed": 2,
+      "total": 29,
+      "durationMs": 8453,
+      "summary": "Windows symlink setup failed with EPERM before BRAD ran; npm pack output shape assumption caused the second test failure.",
+      "evidenceIds": ["E-BRAD-NODE"]
+    },
+    {
+      "id": "BRAD-PYTHON",
+      "status": "PASS",
+      "cwd": "repository root",
+      "command": "python -m unittest discover -s skills\\brad\\tests -v",
+      "passed": 21,
+      "failed": 0,
+      "total": 21,
+      "durationMs": 6955,
+      "evidenceIds": ["E-BRAD-PYTHON"]
+    },
+    {
+      "id": "BRAD-PACK-CHECK",
+      "status": "PASS",
+      "cwd": "repository root",
+      "command": "npm run pack:check",
+      "passed": 1,
+      "failed": 0,
+      "total": 1,
+      "summary": "npm 12.0.2 returned a name-keyed JSON object with 33 package entries.",
+      "evidenceIds": ["E-BRAD-PACK"]
+    },
+    {
+      "id": "BRAD-REPO-CHECK",
+      "status": "PASS",
+      "cwd": "repository root",
+      "command": "npm run check:repo",
+      "passed": 1,
+      "failed": 0,
+      "total": 1,
+      "evidenceIds": ["E-BRAD-REPO"]
+    },
+    {
+      "id": "BRAD-RELEASE",
+      "status": "PASS",
+      "cwd": "repository root",
+      "command": "python tools\\build_release.py",
+      "passed": 1,
+      "failed": 0,
+      "total": 1,
+      "summary": "Local ZIP generation reported 45,376 bytes and 28 files; not published.",
+      "evidenceIds": ["E-BRAD-RELEASE"]
+    },
+    {
+      "id": "APP-SERVER",
+      "status": "PASS",
+      "cwd": "examples/concourse-sdlc-lab/server-backed/server",
+      "commands": ["npm ci", "npm run typecheck", "npm test"],
+      "passed": 27,
+      "failed": 0,
+      "total": 27,
+      "durationMs": 1539,
+      "evidenceIds": ["E-APP-SERVER"]
+    },
+    {
+      "id": "APP-WEB",
+      "status": "PASS",
+      "cwd": "examples/concourse-sdlc-lab/server-backed/web",
+      "commands": ["npm ci", "npm run lint", "npm run build", "npm test", "npm run test:quality"],
+      "passed": 55,
+      "failed": 0,
+      "testGroups": { "unit": 15, "quality": 40 },
+      "observedDurationsMs": { "unitTests": 599, "qualityTests": 16150 },
+      "evidenceIds": ["E-APP-WEB"]
+    },
+    {
+      "id": "APP-DELIVERY",
+      "status": "PASS",
+      "cwd": "examples/concourse-sdlc-lab/server-backed/web",
+      "command": "$env:CONCOURSE_SERVER_ROOT=(Resolve-Path '..\\server').Path; npm run test:delivery",
+      "passed": 3,
+      "failed": 0,
+      "total": 3,
+      "durationMs": 1287,
+      "evidenceIds": ["E-APP-DELIVERY"]
+    },
+    {
+      "id": "APP-PLAYWRIGHT",
+      "status": "PASS",
+      "cwd": "examples/concourse-sdlc-lab/server-backed/web",
+      "command": "npm run test:browser",
+      "passed": 27,
+      "failed": 0,
+      "total": 27,
+      "durationMs": null,
+      "durationText": "1.1m as rounded by the Playwright reporter",
+      "viewports": ["desktop", "tablet", "mobile"],
+      "evidenceIds": ["E-APP-PLAYWRIGHT"]
+    },
+    {
+      "id": "LEGACY-APP",
+      "status": "PASS",
+      "cwd": "examples/concourse-sdlc-lab/app",
+      "command": "npm test",
+      "passed": 5,
+      "failed": 0,
+      "total": 5,
+      "evidenceIds": ["E-LEGACY-APP"]
+    }
+  ],
+  "acceptance": [
+    { "id": "AC-01", "status": "PASS", "source": "docs/qa/ACCEPTANCE.md", "evidenceIds": ["E-APP-PLAYWRIGHT", "E-APP-SCREENSHOTS"] },
+    { "id": "AC-02", "status": "BLOCKED", "source": "docs/qa/ACCEPTANCE.md", "evidenceIds": ["E-ACCEPTANCE-GAPS"] },
+    { "id": "AC-03", "status": "PARTIAL", "source": "docs/qa/ACCEPTANCE.md", "evidenceIds": ["E-APP-DELIVERY", "E-ACCEPTANCE-GAPS"] },
+    { "id": "AC-04", "status": "BLOCKED", "source": "docs/qa/ACCEPTANCE.md", "evidenceIds": ["E-AC04-PROBE", "E-ACCEPTANCE-GAPS", "E-INDEPENDENT-REVIEW"] },
+    { "id": "AC-05", "status": "PASS", "source": "docs/qa/ACCEPTANCE.md", "evidenceIds": ["E-APP-SERVER", "E-APP-PLAYWRIGHT"] },
+    { "id": "AC-06", "status": "PASS", "source": "docs/qa/ACCEPTANCE.md", "evidenceIds": ["E-APP-SERVER", "E-APP-SCREENSHOTS"] },
+    { "id": "AC-07", "status": "PARTIAL", "source": "docs/qa/ACCEPTANCE.md", "evidenceIds": ["E-APP-SERVER", "E-ACCEPTANCE-GAPS"] },
+    { "id": "AC-08", "status": "PASS", "source": "docs/qa/ACCEPTANCE.md", "evidenceIds": ["E-APP-SERVER", "E-APP-SCREENSHOTS"] },
+    { "id": "AC-09", "status": "PASS", "source": "docs/qa/ACCEPTANCE.md", "evidenceIds": ["E-APP-SERVER", "E-APP-SCREENSHOTS"] },
+    { "id": "AC-10", "status": "PASS", "source": "docs/qa/ACCEPTANCE.md", "evidenceIds": ["E-APP-SERVER", "E-APP-SCREENSHOTS"] },
+    { "id": "AC-11", "status": "PASS", "source": "docs/qa/ACCEPTANCE.md", "evidenceIds": ["E-APP-SERVER", "E-APP-SCREENSHOTS"] },
+    { "id": "AC-12", "status": "PASS", "source": "docs/qa/ACCEPTANCE.md", "evidenceIds": ["E-APP-PLAYWRIGHT", "E-APP-SCREENSHOTS"] },
+    { "id": "A01", "status": "PARTIAL", "source": "server-backed/docs/qa/AUTOMATION.md", "evidenceIds": ["E-APP-SERVER", "E-APP-WEB"] },
+    { "id": "A04", "status": "PARTIAL", "source": "server-backed/docs/qa/AUTOMATION.md", "evidenceIds": ["E-APP-SERVER", "E-ACCEPTANCE-GAPS"] },
+    { "id": "A12", "status": "PARTIAL", "source": "server-backed/docs/qa/AUTOMATION.md", "evidenceIds": ["E-APP-PLAYWRIGHT"] },
+    { "id": "A13", "status": "PARTIAL", "source": "server-backed/docs/qa/AUTOMATION.md", "evidenceIds": ["E-APP-PLAYWRIGHT"] }
+  ],
+  "nativeProbe": {
+    "status": "BLOCKED",
+    "workflow": "bmad-testarch-test-review",
+    "host": "GitHub Copilot CLI",
+    "workspaceBmad": "not installed",
+    "externalCache": "workflow instructions exist outside the Concourse workspace",
+    "nativeSkillInventory": "workflow unavailable",
+    "invocation": "native loader reported skill not found",
+    "artifactProduced": false,
+    "reason": "No host-discovered native skill; report-only workflow mode writes a file and conflicts with the read-only probe."
+  },
+  "independentReview": {
+    "status": "PASS",
+    "scope": "read-only review of server-backed app acceptance and requirements",
+    "result": "Reviewer found an AC-04 contract/matrix ambiguity; did not execute the endpoint or change files.",
+    "contextAlias": "independent-acceptance-review"
+  },
+  "candidate": {
+    "branch": "niamatm-brad-installer-candidates",
+    "contextAlias": "installer-test-candidate",
+    "status": "verified-reported-passing-uncommitted",
+    "changedFiles": ["tests/cli.test.mjs", "CONTRIBUTING.md"],
+    "nodeTests": { "passed": 32, "failed": 0 },
+    "pythonTests": { "passed": 21, "failed": 0 },
+    "publishOrPush": false,
+    "worktreeStatus": "M CONTRIBUTING.md; M tests/cli.test.mjs",
+    "diffStat": "2 files changed, 56 insertions(+), 8 deletions(-)",
+    "note": "Separate worktree status and diff were confirmed by the candidate session. No candidate code is integrated in this demo branch."
+  },
+  "routing": {
+    "catalogCount": 85,
+    "catalogMetadataValidated": true,
+    "modelInLoopExecutions": 0,
+    "nativeInvocationsVerified": 0,
+    "deliveryOutcomesVerified": 0,
+    "scenarioL4Status": "NOT_RUN",
+    "hostBlockerEvidence": "E-NATIVE-TEA"
+  },
+  "collaboration": {
+    "rolesSpecified": 10,
+    "independentStakeholderContexts": 0,
+    "independentImplementationWorktrees": 0,
+    "independentQaReviewContexts": 1,
+    "developerWorktreesRequested": 3,
+    "qaStakeholdersRequested": 2,
+    "realHandoffs": 0,
+    "directBmadMatchedTasks": 0,
+    "remotePullRequests": 0,
+    "ciRuns": 0
+  },
+  "screenshots": [
+    { "path": "examples/concourse-sdlc-lab/reports/current/evidence/delivery-ready.png", "sha256": "60D1F7E844E15EB5D9D851B971A8AE736EC37FA143D7F65B4CAEE9A430E8BAA6" },
+    { "path": "examples/concourse-sdlc-lab/reports/current/evidence/audit-history.png", "sha256": "11F163024A739046DB83F6DAE67148FE73675A9E5C03A6E3B01761F2259E3B3E" },
+    { "path": "examples/concourse-sdlc-lab/reports/current/evidence/delivery-ready-full.png", "sha256": "858B63A0CCFE6AA3E89CC708932DDE3B51C7DF06F0D26252334DCCDC62A03664" }
+  ],
+  "findings": [
+    {
+      "id": "F-TEST-WIN-SYMLINK",
+      "severity": "P2",
+      "category": "TEST_HARNESS",
+      "component": "BRAD Windows Node test suite",
+      "status": "CONFIRMED",
+      "expected": "The linked-target protection test reaches BRAD logic on Windows.",
+      "actual": "Directory symlink creation fails with EPERM before BRAD is invoked.",
+      "rootCause": "The test requires Windows symlink privilege instead of a privilege-free junction.",
+      "confidence": 0.96,
+      "impact": "Windows CI cannot run the safety regression in the current privilege environment.",
+      "workaround": "Use an allowed link type or run with explicitly provisioned symlink privileges.",
+      "evidenceIds": ["E-BRAD-NODE", "E-BRAD-CANDIDATE"]
+    },
+    {
+      "id": "F-TEST-NPM-PACK-SHAPE",
+      "severity": "P2",
+      "category": "TEST_HARNESS",
+      "component": "BRAD distribution content test",
+      "status": "CONFIRMED",
+      "expected": "The test parses supported npm pack JSON and asserts required package files.",
+      "actual": "The test indexes the result as an array; npm 12.0.2 returned an object keyed by package name.",
+      "rootCause": "Test harness assumes one npm output shape.",
+      "confidence": 0.99,
+      "impact": "A valid package is reported as a failed test on the observed npm version.",
+      "workaround": "Run direct pack check; it succeeds and lists 33 entries.",
+      "evidenceIds": ["E-BRAD-NODE", "E-BRAD-PACK", "E-BRAD-CANDIDATE"]
+    },
+    {
+      "id": "F-ACCEPTANCE-PERMISSION-MATRIX",
+      "severity": "P1",
+      "category": "ACCEPTANCE_SPECIFICATION",
+      "component": "Concourse role authorization acceptance",
+      "status": "CONFIRMED_GAP",
+      "expected": "An approved role/action matrix defines every forbidden role/action pair.",
+      "actual": "Selected role denials are implemented/tested but the approved matrix does not exist.",
+      "rootCause": "Missing product/QA acceptance decision; not evidence of an authorization implementation defect.",
+      "confidence": 1,
+      "impact": "AC-02 and exhaustive A04 conformance cannot be judged.",
+      "workaround": "Retain selected tests and keep criteria BLOCKED until approval.",
+      "evidenceIds": ["E-ACCEPTANCE-GAPS", "E-APP-SERVER"]
+    },
+    {
+      "id": "F-ACCEPTANCE-MISSING-CRITERIA",
+      "severity": "P1",
+      "category": "ACCEPTANCE_SPECIFICATION",
+      "component": "Concourse acceptance-criteria creation contract",
+      "status": "SPECIFICATION_CONFLICT",
+      "expected": "An owner-approved oracle defines omitted and empty acceptance criteria at create time.",
+      "actual": "Both forms returned 201 and persisted an empty list in Draft; API contract suggests the field is required, while AC-04 says required-vs-optional is unspecified.",
+      "rootCause": "Conflicting contract language; owner interpretation is absent.",
+      "confidence": 1,
+      "impact": "AC-04 cannot be marked pass/fail; downstream requirement review is blocked.",
+      "workaround": "Observed Draft behavior and incomplete-requirement transition gate remain unchanged pending decision.",
+      "evidenceIds": ["E-AC04-PROBE", "E-ACCEPTANCE-GAPS", "E-INDEPENDENT-REVIEW"]
+    },
+    {
+      "id": "F-NATIVE-TEA-DISCOVERY",
+      "severity": "P1",
+      "category": "HOST_CAPABILITY",
+      "component": "Copilot native TEA workflow discovery",
+      "status": "BLOCKED",
+      "expected": "A host-discovered installed TEA skill is invoked and leaves verifiable evidence.",
+      "actual": "TEA instructions were only in an external cache; workspace `_bmad` and host skill registration were absent; the native loader reported not found.",
+      "rootCause": "Current workspace/host capability boundary; BRAD runtime defect is not established.",
+      "confidence": 0.98,
+      "impact": "Native TEA execution and L4 routing evaluation remain unverified.",
+      "workaround": "Initialize a project with the installed native module and restart/use a host that registers the workflow; obtain consent before writing report artifacts.",
+      "evidenceIds": ["E-NATIVE-TEA"]
+    },
+    {
+      "id": "F-INDEPENDENT-COLLAB",
+      "severity": "P1",
+      "category": "HOST_CAPABILITY",
+      "component": "Multi-stakeholder execution evidence",
+      "status": "NOT_RUN",
+      "expected": "Three independent developer worktrees and two independent QA stakeholder contexts collaborate through real handoffs.",
+      "actual": "No such stakeholder collaboration was executed; one separate read-only review context and one separate installer-candidate worktree were used.",
+      "rootCause": "Evaluation scope not completed; no defect attribution to BRAD.",
+      "confidence": 1,
+      "impact": "Role usability, coordination, and three-developer dependency claims remain unmeasured.",
+      "workaround": "Run a dedicated multi-worktree experiment with independent host contexts.",
+      "evidenceIds": ["E-INDEPENDENT-REVIEW", "E-BRAD-CANDIDATE"]
+    }
+  ]
+}

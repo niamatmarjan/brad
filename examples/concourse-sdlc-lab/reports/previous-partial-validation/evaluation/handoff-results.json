@@ -1,0 +1,18 @@
+{
+  "status": "NOT_RUN",
+  "requiredTransfers": [
+    "PM→BA",
+    "BA→Architect",
+    "Architect→Tech Lead",
+    "Tech Lead→Developers",
+    "Developer→QA",
+    "QA→Developer",
+    "QA→PM",
+    "PM→Delivery Manager",
+    "Tech Lead→Release"
+  ],
+  "observedTransfers": [],
+  "notes": [
+    "No real stakeholder sessions or native backlog state were available."
+  ]
+}

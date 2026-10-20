@@ -1,0 +1,80 @@
+{
+  "name": "BRAD v0.4.1 — Concourse SDLC Implementation & Evaluation",
+  "schemaVersion": 2,
+  "status": "PARTIAL",
+  "baseline": {
+    "bradVersion": "0.4.1",
+    "bradTag": "v0.4.1",
+    "bradTagCommit": "dcad5e7d9d463c562f6cd94ea0ac5f6231ce23c8",
+    "baselineModified": false
+  },
+  "host": {
+    "host": "GitHub Copilot CLI",
+    "modelMode": "Auto",
+    "concreteModel": null,
+    "antigravityAvailable": false,
+    "nativeBmadInstalled": true,
+    "nativeBmad": {
+      "method": "official npm installer in isolated Concourse project",
+      "stableRelease": "6.12.4",
+      "modules": {
+        "bmm": "6.12.4",
+        "tea": "1.27.2"
+      },
+      "copilotSkillsOnDisk": 39,
+      "activeSessionInvocation": true,
+      "nativeSkillInvocation": "Verified in a separate project session: BRAD and bmad-help loaded successfully",
+      "nativeWorkflowExecuted": false,
+      "nativeWorkflowResult": "bmad-help recommended bmad-product-brief; no workflow was started by design",
+      "probeContext": "native-help-probe (private session identifier redacted)",
+      "nativeSkillProbesVerified": 1
+    },
+    "independentStakeholderContextsExecuted": 0
+  },
+  "app": {
+    "path": "server-backed/",
+    "stack": "Node 24 API, SQLite, React and Vite",
+    "externalDependencies": "React, Vite, TypeScript, Playwright and Vitest development dependencies",
+    "productionReady": false,
+    "dataScope": "fictional demo data in a local SQLite database; development-only sessions"
+  },
+  "legacyPrototype": {
+    "path": "app/ (also preserved in reports/previous-partial-validation/app/)",
+    "stack": "Node.js static server, browser ES modules and localStorage",
+    "status": "ARCHIVED"
+  },
+  "evaluation": {
+    "canonicalCases": 85,
+    "metadataCasesPassed": 85,
+    "behavioralRoutesExecuted": 0,
+    "nativeInvocationsVerified": 0,
+    "nativeInvocationScope": "85-case routing evaluation only; the separate bmad-help skill probe is recorded independently",
+    "nativeSkillProbeVerified": true,
+    "nativeBmmWorkflowsExecuted": 0,
+    "remotePullRequests": 0,
+    "ciRunsVerified": 0,
+    "fullTenRoleStudy": "NOT_RUN"
+  },
+  "evidence": {
+    "eventLog": "telemetry/events.jsonl",
+    "evidenceIndex": "telemetry/evidence-index.json",
+    "routingAudit": "evaluation/audit-summary.json",
+    "masterReport": "report/MASTER_REPORT.html",
+    "historicalMasterReport": "reports/previous-partial-validation/report/MASTER_REPORT.html",
+    "currentExecution": "reports/current/EXECUTION.md",
+    "currentScreenshots": [
+      "reports/current/evidence/delivery-ready.png",
+      "reports/current/evidence/audit-history.png",
+      "reports/current/evidence/delivery-ready-full.png"
+    ]
+  },
+  "validation": {
+    "concourseTests": "PASS: 5/5 tests for archived localStorage prototype",
+    "serverBackedApp": "PARTIAL overall: 27 server tests, 15 web tests, 40 quality tests, 3 real HTTP/SQLite delivery integration tests, 27 Playwright desktop/tablet/mobile tests, and one live multi-role QA/release journey passed; acceptance gaps remain",
+    "bradNodeTests": "PARTIAL: 27/29 on initial and repeated runs; Windows EPERM and nested npm pack parse failure",
+    "bradPythonTests": "PASS: 21 tests",
+    "repositoryCheck": "PASS",
+    "releaseArchive": "PASS",
+    "npmPackDryRun": "PASS"
+  }
+}
