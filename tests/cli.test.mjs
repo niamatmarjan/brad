@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, existsSync, readdirSync, rmSync, symlinkSync, lstatSync, realpathSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, existsSync, readdirSync, rmSync, symlinkSync, lstatSync, realpathSync, chmodSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, delimiter } from 'node:path';
 import { parsePackMetadata } from './pack-metadata.mjs';
 import { spawnSync } from 'node:child_process';
 import { execute, version, packageRoot } from '../cli/core.mjs';
@@ -313,4 +313,88 @@ test('an uninstalled project is not reported as execution-ready', () => fixture(
   assert.equal(d.readiness.bradFiles, 'INCOMPLETE');
   assert.equal(d.readiness.nativeBmad, 'NOT_VERIFIED');
   assert.equal(d.readiness.specialistDelegation, 'NOT_VERIFIED');
+}));
+
+test('upstream BMAD setup requires explicit authorization and supports read-only preview', () => fixture(root => {
+  const before = readdirSync(root);
+  const normal = execute(['setup', '--dir', root, '--agent', 'antigravity', '--dry-run']);
+  assert.equal(normal.bmadSetup, undefined);
+  const stable = execute(['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad', '--dry-run']);
+  assert.equal(stable.bmadSetup.status, 'WOULD_INSTALL');
+  assert.deepEqual(stable.bmadSetup.args, ['--yes', 'bmad-method@latest', 'install']);
+  assert.equal(stable.bmadSetup.upstreamInstaller, 'official-npm-stable');
+  const preview = execute(['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad', '--bmad-channel=preview', '--dry-run']);
+  assert.equal(preview.bmadSetup.status, 'WOULD_INSTALL');
+  assert.deepEqual(preview.bmadSetup.args, ['--yes', 'skills', 'add', 'bmad-code-org/BMAD-METHOD']);
+  assert.match(preview.bmadSetup.nextStep, /bmad setup/);
+  assert.deepEqual(readdirSync(root), before, 'dry-run must not write to disk');
+}));
+
+test('BMAD setup blocks accidental installation through other commands and unknown channels', () => fixture(root => {
+  assert.throws(() => execute(['setup', '--dir', root, '--bmad-channel', 'preview']), /requires --with-bmad/);
+  assert.throws(() => execute(['setup', '--dir', root, '--with-bmad', '--bmad-channel', 'unknown']), /stable or preview/);
+  assert.throws(() => execute(['doctor', '--dir', root, '--with-bmad']), /only supported with brad setup/);
+  assert.throws(() => execute(['setup', '--global', '--with-bmad']), /project-local/);
+  assert.throws(() => execute(['setup', '--dir', root, '--with-bmad', '--json']), /cannot use --json/);
+}));
+
+test('BMAD setup preserves an existing runtime and never upgrades it', () => fixture(root => {
+  mkdirSync(join(root, '_bmad'), { recursive: true });
+  const r = execute(['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad']);
+  assert.equal(r.bmadSetup.status, 'SKIPPED_EXISTING');
+  assert.equal(r.bmadSetup.command, null);
+  assert.equal(r.bmad.runtime, true);
+}));
+
+test('opt-in setup invokes a fake official installer exactly once and reports only verified local state', () => fixture(root => {
+  const bin = join(root, 'mock-bin');
+  mkdirSync(bin, { recursive: true });
+  const script = join(bin, process.platform === 'win32' ? 'npx.cmd' : 'npx');
+  if (process.platform === 'win32') {
+    writeFileSync(script, [
+      '@echo off',
+      'echo %* >> "%CD%\\upstream-calls.txt"',
+      'if not exist "%CD%\\_bmad" mkdir "%CD%\\_bmad"',
+      'echo [core] > "%CD%\\_bmad\\config.toml"',
+      'exit /b 0',
+      ''
+    ].join('\r\n'));
+  } else {
+    writeFileSync(script, [
+      '#!/bin/sh',
+      'printf "%s\\n" "$*" >> "$PWD/upstream-calls.txt"',
+      'mkdir -p "$PWD/_bmad"',
+      'printf "%s\\n" "[core]" > "$PWD/_bmad/config.toml"',
+      'exit 0',
+      ''
+    ].join('\n'));
+    chmodSync(script, 0o755);
+  }
+  const env = { ...process.env };
+  for (const k of Object.keys(env)) if (k.toLowerCase() === 'path') delete env[k];
+  env.PATH = bin + delimiter + (process.env.PATH || process.env.Path || '');
+  const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad'];
+  const first = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
+    { env, cwd: root, encoding: 'utf8', timeout: 20000 });
+  assert.equal(first.status, 0, first.stderr || first.stdout);
+  assert.match(first.stdout, /UPSTREAM_INSTALLER_EXITED_SUCCESS/);
+  assert.match(first.stdout, /host|skill catalog/i);
+  const log = join(root, 'upstream-calls.txt');
+  assert.ok(existsSync(log), 'the official installer command must actually be invoked');
+  assert.match(readFileSync(log, 'utf8'), /bmad-method@latest install/);
+  const second = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
+    { env, cwd: root, encoding: 'utf8', timeout: 20000 });
+  assert.equal(second.status, 0, second.stderr || second.stdout);
+  assert.match(second.stdout, /SKIPPED_EXISTING/);
+  assert.equal(readFileSync(log, 'utf8').trim().split(/\r?\n/).length, 1, 'must never reinstall');
+}));
+
+test('setup detects native BMAD in the Antigravity singular .agent skill folder', () => fixture(root => {
+  const native = join(root, '.agent', 'skills', 'bmad-build');
+  mkdirSync(native, { recursive: true });
+  writeFileSync(join(native, 'SKILL.md'), '---\nname: bmad-build\n---\n');
+  const r = execute(['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad']);
+  assert.equal(r.bmadSetup.status, 'SKIPPED_EXISTING');
+  assert.ok(r.bmad.nativeSkills.includes('bmad-build'));
+  assert.equal(r.bmad.discovery.hostSkillCatalog, 'NOT_VERIFIED');
 }));
