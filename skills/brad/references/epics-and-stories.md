@@ -14,6 +14,18 @@
 - "Finish sprint" -> explicit bounded scope and authorization; use an
   installed actual orchestrator if available, don't write your own loop.
 
+## Incremental requirements and existing approvals
+
+Before routing a request to **create**, **extend**, or **review** a PRD or module specification:
+
+1. Locate the current authoritative document, its approved sections, module/initiative scope, and relevant native BMAD state.
+2. Distinguish a new PRD from a bounded change to an existing approved increment. For a change, delegate only the affected scope to the installed native PM/PRD or refinement workflow; do not regenerate the whole PRD or silently discard approved text.
+3. Present material contradictions, cross-team interface changes, or reopened decisions to the appropriate human owner. An AI-drafted edit is not an approval.
+4. Preserve stable artifact identifiers and explicitly link any tracking-system ID using the project's documented mapping. Never infer that BMAD epic IDs equal external issue/epic IDs or create a second authoritative backlog.
+5. A read-only PRD, architecture, or backlog review produces findings only. No rewrite, branch creation, commit, or PR publication unless the user separately authorizes changes.
+
+These are routing and safety rules, not a replacement PRD generator or a new mandatory approval bureaucracy. Inspect and honor the native workflow's actual modification contract.
+
 ## v6 and v7 state owners
 
 v6: locate the correct `sprint-status.yaml`, story artifacts, approved epics and

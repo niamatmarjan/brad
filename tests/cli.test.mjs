@@ -189,6 +189,39 @@ test('agent prompt is read-only, host-specific and never claims remote access', 
   assert.deepEqual(readdirSync(root), before);
 }));
 
+test('doctor gives consent-gated official BMAD recovery without executing it', () => fixture(root => {
+  const d = execute(['doctor', '--dir', root, '--json']);
+  assert.equal(d.bmad.recovery.status, 'OFFICIAL_BMAD_INSTALL_REQUIRED');
+  assert.equal(d.bmad.recovery.requiresApproval, true);
+  assert.equal(d.bmad.recovery.installCommand, process.platform === 'win32' ? 'npx.cmd bmad-method install' : 'npx bmad-method install');
+  assert.equal(d.bmad.discovery.hostSkillCatalog, 'NOT_VERIFIED');
+  assert.equal(d.readiness.hostInvocation, 'NOT_VERIFIED');
+  assert.deepEqual(readdirSync(root), [], 'doctor must never install BMAD or mutate the project');
+}));
+
+test('doctor does not propose reinstall when BMAD is configured', () => fixture(root => {
+  mkdirSync(join(root, '_bmad'), { recursive: true });
+  writeFileSync(join(root, '_bmad/config.yaml'), 'project: demo\\n');
+  const missingSkill = execute(['doctor', '--dir', root, '--json']);
+  assert.equal(missingSkill.bmad.recovery.status, 'VERIFY_NATIVE_SKILL_INSTALLATION');
+  assert.equal(missingSkill.bmad.recovery.installCommand, null);
+  mkdirSync(join(root, '.agents/skills/bmad-build'), { recursive: true });
+  writeFileSync(join(root, '.agents/skills/bmad-build/SKILL.md'), '---\\nname: bmad-build\\n---\\n');
+  const installed = execute(['doctor', '--dir', root, '--json']);
+  assert.equal(installed.bmad.recovery.status, 'VERIFY_HOST_SKILL_DISCOVERY');
+  assert.equal(installed.bmad.recovery.installCommand, null);
+  assert.equal(installed.bmad.discovery.hostSkillCatalog, 'NOT_VERIFIED');
+  assert.equal(installed.readiness.specialistDelegation, 'NOT_VERIFIED');
+}));
+
+test('doctor advises configuration verification for partial BMAD setup', () => fixture(root => {
+  mkdirSync(join(root, '_bmad'), { recursive: true });
+  const d = execute(['doctor', '--dir', root]);
+  assert.equal(d.bmad.recovery.status, 'VERIFY_BMAD_CONFIGURATION');
+  assert.equal(d.bmad.recovery.installCommand, null);
+  assert.equal(d.bmad.recovery.requiresApproval, false);
+}));
+
 test('doctor separates leftover output artifacts from native BMAD install', () => fixture(root => {
   mkdirSync(join(root, '_bmad-output'));
   const d = execute(['doctor', '--dir', root]);

@@ -235,6 +235,29 @@ function bmadCheck(root) {
   if (!detected) warnings.push('Official BMAD Method not detected; ask your agent to offer an official BMAD setup.');
   else if (!configured) warnings.push('BMAD-like files/skills present, but shared runtime configuration was not verified.');
   if (!installedSkillNames.size) warnings.push('No native bmad-* SKILL.md discovered in common project locations; check the coding host skill catalog.');
+  // Doctor is read-only: provide a recovery *suggestion*, never run the BMAD installer.
+  // Workspace-local files cannot tell us whether the active coding host loaded a skill.
+  const recovery = !detected ? {
+    status: 'OFFICIAL_BMAD_INSTALL_REQUIRED',
+    installCommand: `${process.platform === 'win32' ? 'npx.cmd' : 'npx'} bmad-method install`,
+    requiresApproval: true,
+    guidance: 'Choose a supported BMAD version with the user before installing official BMAD into the intended project.'
+  } : !configured ? {
+    status: 'VERIFY_BMAD_CONFIGURATION',
+    installCommand: null,
+    requiresApproval: false,
+    guidance: 'Inspect the current BMAD runtime configuration; do not reinstall or migrate automatically.'
+  } : !installedSkillNames.size ? {
+    status: 'VERIFY_NATIVE_SKILL_INSTALLATION',
+    installCommand: null,
+    requiresApproval: false,
+    guidance: 'Runtime configuration exists but no project-local native BMAD skills were found. Inspect the installed version and host-specific skill paths.'
+  } : {
+    status: 'VERIFY_HOST_SKILL_DISCOVERY',
+    installCommand: null,
+    requiresApproval: false,
+    guidance: 'Project-local BMAD files are present. Check this session\'s actual host skill catalog and restart the session if it was loaded before installation.'
+  };
   const v6 = existsSync(join(root, '_bmad-output/implementation-artifacts/sprint-status.yaml'));
   const v7 = existsSync(join(root, '_bmad-output/tickets.toml')) || existsSync(join(root, '_bmad/tickets.toml'));
   if (v6 && v7) warnings.push('Both v6 and v7 state hints exist; ask user which native state system owns this task before writing.');
@@ -246,6 +269,7 @@ function bmadCheck(root) {
       nativeWorkflowInvocation: 'NOT_VERIFIED',
       note: 'External caches and files on disk are not proof the active host registered or invoked skills. Verify in the host.'
     },
+    recovery,
     stateHints: { v6, v7, mixed: v6 && v7 }, warnings,
     note: detected ? 'BMAD installation hints found. Native routing and subagent execution must still be checked in the coding host.' : 'BMAD Method not detected. Install it separately using the official npx bmad-method install or v7 skills setup.' };
 }

@@ -65,7 +65,7 @@ before invoking. These references are guides, never proof of installed behavior.
    tradeoffs, destructive operations, unresolved acceptance criteria, or blocked
    dependencies. Explain options and recommendation. Continue unaffected work.
    Delegate retains its native mandatory human checkpoints; never bypass them.
-7. **Truthful results.** A proposed route is NOT evidence an agent ran.
+7. **Truthful results.** Explicitly distinguish host-native invocation,\n   same-session native workflow execution, separate specialist dispatch,\n   and helper-scripts-only activity (see hosts-and-handoffs).\n   A proposed route is NOT evidence an agent ran.
    Running an instruction in the same context is NOT independent review.
    Require observed tests/exit codes, commits, remote PR URL and CI result before
    saying any passed. A report badge is not proof of correct routing: compare the
@@ -94,6 +94,10 @@ before invoking. These references are guides, never proof of installed behavior.
   Never choose an arbitrary backlog item without configured policy.
 - `/brad epic 2` / `finish sprint`: resolve scope/dependencies, choose
   native planning or installed orchestrator; see epics-and-stories.
+- `/brad increment <module>`, `refine increment`, `extend existing PRD`:
+  **incremental planning**; inspect the existing approved PRD and architecture,
+  then delegate only the requested delta to the installed native workflow.
+  Do not create a replacement PRD or imply approval. See epics-and-stories.
 - `/brad qa login`, `review PR #12`, `test-design epic 2`, `release R1`:
   route to *specific* installed QA, review, or gate; see quality-and-release.
 - `/brad architect ...`, `analyst ...`, `UX ...`, `GDS ...`, `PM ...`:

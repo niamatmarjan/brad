@@ -6,6 +6,10 @@ review. Other installed QA workflows own their own tests/audits. Wrapper handles
 preflight, external delivery and evidence. A bare ticket identifier selects this
 lane unless the user explicitly asks for status, planning, QA or review only.
 
+## Strict review-only boundary
+
+A request to **review**, **audit**, or **explain** a PR, architecture, or existing code is not a delivery request even when repository policy normally enables ticket-to-PR publication. Run the installed read-only specialist review workflow and report its findings. Do **not** change code, create a branch, commit, push, open a PR, or merge based solely on review intent. If a user then requests fixes, obtain that distinct authorization and verify the target before entering this delivery lane.
+
 ## Intake and discovery
 
 1. Resolve task ID in the **current actual** backlog. v6: story source / sprint
