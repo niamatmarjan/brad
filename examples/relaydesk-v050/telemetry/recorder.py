@@ -92,15 +92,15 @@ if __name__ == "__main__":
             role="COORDINATOR",
             task_id="TSK-002",
             phase="environment-setup",
-            requested_action="Prepare isolated laboratory workspace at C:\\Projects\\Personal\\brad-labs\\relaydesk-v050",
+            requested_action="Prepare isolated laboratory workspace at <workspace-root>\\relaydesk-v050",
             status="PASS",
             artifact_paths=[
-                "C:\\Projects\\Personal\\brad-labs\\relaydesk-v050\\integration",
-                "C:\\Projects\\Personal\\brad-labs\\relaydesk-v050\\worktrees",
-                "C:\\Projects\\Personal\\brad-labs\\relaydesk-v050\\qa",
-                "C:\\Projects\\Personal\\brad-labs\\relaydesk-v050\\coordination",
-                "C:\\Projects\\Personal\\brad-labs\\relaydesk-v050\\evidence",
-                "C:\\Projects\\Personal\\brad-labs\\relaydesk-v050\\telemetry"
+                "<workspace-root>\\relaydesk-v050\\integration",
+                "<workspace-root>\\relaydesk-v050\\worktrees",
+                "<workspace-root>\\relaydesk-v050\\qa",
+                "<workspace-root>\\relaydesk-v050\\coordination",
+                "<workspace-root>\\relaydesk-v050\\evidence",
+                "<workspace-root>\\relaydesk-v050\\telemetry"
             ],
             notes="Isolated directory structure created per protocol Section 6."
         )

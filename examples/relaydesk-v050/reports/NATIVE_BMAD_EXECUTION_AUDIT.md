@@ -1,11 +1,11 @@
 # Native BMAD Execution Audit, Host Skill Discovery & Ticket-to-Review Verification
 
-**Evaluation Run:** `relaydesk-v050-exp-01`  
-**Date:** 2026-10-20  
-**Target:** ChatGPT (BRAD Core Architect & Engineering Lead)  
-**Evaluator:** Antigravity (Operating as Disciplined Validation Engineer)  
-**Workspace:** `C:\Projects\Personal\brad-labs\relaydesk-v050\bmad-workspace`  
-**Installed Runtime:** Official BMAD Method v6.12.4, BMM Module v6.12.4, TEA Module v1.27.2, BRAD v0.5.0  
+**Evaluation Run:** `relaydesk-v050-exp-01`
+**Date:** 2026-10-20
+**Target:** ChatGPT (BRAD Core Architect & Engineering Lead)
+**Evaluator:** Antigravity (Operating as Disciplined Validation Engineer)
+**Workspace:** `<workspace-root>/bmad-workspace`
+**Installed Runtime:** Official BMAD Method v6.12.4, BMM Module v6.12.4, TEA Module v1.27.2, BRAD v0.5.0
 
 ---
 
@@ -64,7 +64,7 @@ A forensic audit of the previous session transcript (`891e7f78-d7c6-4d5b-b456-8a
 
 ## 3. Phase 2 — Bounded Implementation Experiment: Story 1.1
 
-To definitively test BRAD's coordination of a real implementation, a disposable project fixture was configured in `C:\Projects\Personal\brad-labs\relaydesk-v050\bmad-workspace`.
+To definitively test BRAD's coordination of a real implementation, a disposable project fixture was configured in `<workspace-root>/bmad-workspace`.
 
 ### Story Specification: Story 1.1 — In-Memory Rate Limiter
 - **Epic:** Epic 1 (Rate Limiter Core)
@@ -104,7 +104,7 @@ To definitively test BRAD's coordination of a real implementation, a disposable 
   - `test/rate_limiter.test.mjs`: 6 unit tests with virtual clock dependency injection (`() => mockTime`).
 - **Real Test Execution:**
   ```powershell
-  npm.cmd --prefix "C:\Projects\Personal\brad-labs\relaydesk-v050\bmad-workspace" test
+  npm.cmd --prefix "<workspace-root>/bmad-workspace" test
   ```
   *Result:* **6 passed, 0 failed, 7.1ms duration**.
 - **Sprint Status & Git Commit:**

@@ -65,6 +65,10 @@ Modern AI coding hosts (Google Antigravity, Claude Code, GitHub Copilot) expose 
 - **Authoritative Score:** **100.00 / 100.00 (EXCELLENT)**.
 - **Assessment Nature:** This score reflects TEA's internal rubric across Determinism, Isolation, Fault Coverage, and Maintainability. It is a structured quality audit, not third-party certification.
 
+### E. Local Git Commit Provenance Notice
+- **Uninspectable Local Commits:** The historical Git commits referenced in this evaluation (`db701c0`, `860a9e8`, `0ae7eeb`, `30c7c64`) exist only in the private local Git repository inside the BMAD workspace (`<workspace-root>/bmad-workspace`). They cannot be resolved or inspected via `git fetch` or `git show` against the remote GitHub repository (`niamatmarjan/brad`).
+- **Reproducible Snapshot:** The fixture snapshot published under `examples/relaydesk-v050/fixtures/story-1-1-rate-limiter/` contains the complete, self-contained implementation, tests, specification, reviewer artifacts, and QA verification files corresponding to those commits.
+
 ---
 
 ## 4. Confirmed BRAD Defects & Recommended Changes for ChatGPT
@@ -89,13 +93,14 @@ Modern AI coding hosts (Google Antigravity, Claude Code, GitHub Copilot) expose 
 - **Problem:** Executing `npm test` on Windows defaults to `npm.ps1`, which triggers `PSSecurityException` under default execution policies.
 - **Recommended Minimal Fix:** Ensure all subprocess runners in BRAD CLI explicitly resolve `.cmd` on Windows (`npm.cmd`, `npx.cmd`, `bmad.cmd`).
 
-### Status of Candidate PR #12
-- Candidate branch `candidate/v0.5.1-improvements` already addresses:
+### Status of Candidate Improvements (`candidate/v0.5.1-improvements`) & Distinction from PR #12
+- **Important Distinction:** The local candidate branch `candidate/v0.5.1-improvements` (commit `0b61d38`) must not be confused with ChatGPT's actual PR #12. They are separate and distinct branches.
+- The candidate branch `candidate/v0.5.1-improvements` isolated in the test lab addresses:
   - `FND-001`: Machine-readable `installCommand` in `doctor` output.
   - `FND-002`: Module increment lane vs greenfield PRD routing.
   - `FND-003`: Read-only review safety guardrail.
-- Candidate tests: **56/56 passing (100%)**.
-- **Recommendation:** PR #12 is sound and ready for merge by ChatGPT. Findings FND-006 and FND-007 should be addressed as targeted follow-up documentation/wrapper improvements in v0.5.2.
+- Candidate tests: **55/55 passing (100%)** (34 Node, 21 Python).
+- **Recommendation:** Keep ChatGPT's PR #12 clearly distinguished from this local candidate branch. Findings FND-006 and FND-007 should be addressed as targeted follow-up documentation/wrapper improvements in v0.5.2.
 
 ---
 

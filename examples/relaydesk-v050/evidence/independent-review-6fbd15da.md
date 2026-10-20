@@ -27,7 +27,7 @@ The subagent was invoked with strict read-only permissions:
 2. `read_file`: `src/rate_limiter.mjs`
 3. `read_file`: `test/rate_limiter.test.mjs`
 4. `read_file`: `_bmad-output/implementation-artifacts/spec-1-1-in-memory-rate-limiter.md`
-5. `run_command`: `npm.cmd --prefix "C:\Projects\Personal\brad-labs\relaydesk-v050\bmad-workspace" test` (Result: 6 passed in 6.47ms)
+5. `run_command`: `npm.cmd --prefix "<workspace-root>/bmad-workspace" test` (Result: 6 passed in 6.47ms)
 6. `run_command`: `git -C ... show 860a9e8 --stat`
 7. `read_file`: `_bmad-output/planning-artifacts/stories/story-1.1.md`
 

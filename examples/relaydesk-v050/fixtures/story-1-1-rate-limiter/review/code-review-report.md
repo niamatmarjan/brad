@@ -2,7 +2,7 @@
 
 **Reviewer Persona:** Independent Senior Code Reviewer (BMAD `bmad-code-review`)
 **Target:** `bmad/1.1-rate-limiter` (Commit `860a9e8`)
-**Workspace:** `C:\Projects\Personal\brad-labs\relaydesk-v050\bmad-workspace`
+**Workspace:** `<workspace-root>/bmad-workspace`
 **Subagent Conversation ID:** `6fbd15da-1163-4221-a9d7-23640f61c569`
 **Timestamp:** `2026-10-20T12:16:56Z`
 **Verdict:** **APPROVED_WITH_COMMENTS**
@@ -15,7 +15,7 @@ The implementation of the configurable in-memory `RateLimiter` (`src/rate_limite
 ---
 
 ### Verification Results
-- **Command:** `npm.cmd --prefix "C:\Projects\Personal\brad-labs\relaydesk-v050\bmad-workspace" test`
+- **Command:** `npm.cmd --prefix "<workspace-root>/bmad-workspace" test`
 - **Output:**
   ```text
   ▶ Story 1.1 — In-Memory Rate Limiter

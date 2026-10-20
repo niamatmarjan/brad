@@ -1,12 +1,12 @@
 # BRAD v0.5.0 — RelayDesk Enterprise SDLC Execution Record
 
-**Run ID:** `relaydesk-v050-exp-01`  
-**Execution Date:** 2026-10-20  
-**Host Environment:** Antigravity (Windows 11)  
-**Evaluator Agent / Model:** Gemini 3.8 Flash (High)  
-**BRAD Baseline Version:** 0.5.0 (Commit `dd1cddc`, Tag `v0.5.0` — Immutable)  
-**Isolated Demonstration Repository:** `C:\Projects\Personal\brad-labs\relaydesk-v050\integration`  
-**Candidate Improvement Worktree:** `C:\Projects\Personal\brad-labs\brad-candidate` (Branch `candidate/v0.5.1-improvements`)  
+**Run ID:** `relaydesk-v050-exp-01`
+**Execution Date:** 2026-10-20
+**Host Environment:** Antigravity (Windows 11)
+**Evaluator Agent / Model:** Gemini 3.8 Flash (High)
+**BRAD Baseline Version:** 0.5.0 (Commit `dd1cddc`, Tag `v0.5.0` — Immutable)
+**Isolated Demonstration Repository:** `<workspace-root>/relaydesk-v050/integration`
+**Candidate Improvement Worktree:** `<workspace-root>/brad-candidate` (Branch `candidate/v0.5.1-improvements`)
 
 ---
 
@@ -35,7 +35,7 @@ Ten real cross-team collaboration exercises were executed across three dedicated
 - Executed `python -m unittest discover -s skills/brad/tests -v` (21 pass, 0 fail).
 - Executed `python tools/check_repository.py` (PASS).
 - Executed `npm pack --dry-run --json` (PASS).
-- Prepared isolated directory layout under `C:\Projects\Personal\brad-labs\relaydesk-v050`.
+- Prepared isolated directory layout under `<workspace-root>/relaydesk-v050`.
 - Initialized telemetry logging in `telemetry/events.jsonl` with events `evt-000001` through `evt-000003`.
 
 ### Gate B: Runnable Application
@@ -75,12 +75,12 @@ Ten real cross-team collaboration exercises were executed across three dedicated
 
 ### Gate F: Improvement Verification
 - Identified 3 confirmed findings from baseline evaluation.
-- Created candidate branch `candidate/v0.5.1-improvements` in isolated worktree `C:\Projects\Personal\brad-labs\brad-candidate`.
+- Created candidate branch `candidate/v0.5.1-improvements` in isolated worktree `<workspace-root>/brad-candidate`.
 - Added failing regression test for machine-readable `installCommand` in `tests/cli.test.mjs`.
 - Implemented targeted fix in `cli/core.mjs` and updated routing guidance in `skills/brad/SKILL.md` and `ticket-to-pr.md`.
 - Verified candidate changes: 34/34 Node tests pass, 21/21 Python unittests pass, repo audit PASS, npm pack check PASS (Commit `0b61d38`).
-- Verified baseline `C:\Projects\Personal\brad` remains on `main` and completely unmodified.
+- Verified baseline `<repo-root>` remains on `main` and completely unmodified.
 
 ### Gate G: Final Package
-- Packaged sanitized, reproducible example in `C:\Projects\Personal\brad\examples\relaydesk-v050`.
+- Packaged sanitized, reproducible example in `examples/relaydesk-v050`.
 - Generated offline `report/MASTER_REPORT.html`, analytics, telemetry, and handoff documentation.

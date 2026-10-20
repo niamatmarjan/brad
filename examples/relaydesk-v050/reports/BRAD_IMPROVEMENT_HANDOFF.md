@@ -12,7 +12,7 @@
 
 This document provides complete instructions for maintainers or incoming coding agents to inspect, verify, and incorporate candidate improvements developed during the RelayDesk enterprise SDLC evaluation.
 
-All candidate changes have been isolated in branch `candidate/v0.5.1-improvements` in worktree `C:\Projects\Personal\brad-labs\brad-candidate`. The baseline repository at `C:\Projects\Personal\brad` remains completely unmodified on `main`.
+All candidate changes have been isolated in branch `candidate/v0.5.1-improvements` in worktree `<workspace-root>/brad-candidate`. The baseline repository at `<repo-root>` remains completely unmodified on `main`.
 
 ---
 
@@ -40,7 +40,7 @@ node cli/brad.mjs doctor --dir (New-Item -ItemType Directory -Path "$env:TEMP\br
 
 ### Verification Suite Commands
 ```powershell
-cd C:\Projects\Personal\brad-labs\brad-candidate
+cd <workspace-root>/brad-candidate
 
 # 1. Run Node.js test suite (34 tests including new regression test)
 node --test tests/*.test.mjs

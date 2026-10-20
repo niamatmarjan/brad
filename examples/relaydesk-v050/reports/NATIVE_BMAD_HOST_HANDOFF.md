@@ -1,10 +1,10 @@
 # Native BMAD Host Dispatch & Execution Handoff
 
-**Author:** BRAD Evaluation & Validation Engineer  
-**Date:** 2026-10-20  
-**Target Environments:** GitHub Copilot (VS Code), Claude Code, Antigravity CLI / IDE (Post-Restart)  
-**Workspace Path:** `C:\Projects\Personal\brad-labs\relaydesk-v050\bmad-workspace`  
-**Installed Runtime:** Official BMAD Method v6.12.4, BMM Module v6.12.4, TEA Module v1.27.2, BRAD v0.5.0  
+**Author:** BRAD Evaluation & Validation Engineer
+**Date:** 2026-10-20
+**Target Environments:** GitHub Copilot (VS Code), Claude Code, Antigravity CLI / IDE (Post-Restart)
+**Workspace Path:** `<workspace-root>/bmad-workspace`
+**Installed Runtime:** Official BMAD Method v6.12.4, BMM Module v6.12.4, TEA Module v1.27.2, BRAD v0.5.0
 
 ---
 
@@ -28,13 +28,13 @@ BMAD skills execute underlying helper scripts via Python `uv`. In `bmad-workspac
 
 - **Config Resolution Check:**
   ```powershell
-  uv run C:\Projects\Personal\brad-labs\relaydesk-v050\bmad-workspace\_bmad\scripts\resolve_config.py --project-root C:\Projects\Personal\brad-labs\relaydesk-v050\bmad-workspace
+  uv run _bmad/scripts/resolve_config.py --project-root .
   ```
   *Observed Output:* Successfully returns merged JSON configuration for `core`, `modules.bmm`, `modules.tea`, and registered agents (Mary, John, Sally, Winston, Amelia, Murat).
 
 - **BRAD Doctor Readiness:**
   ```powershell
-  node cli/brad.mjs doctor --dir C:\Projects\Personal\brad-labs\relaydesk-v050\bmad-workspace --json
+  node cli/brad.mjs doctor --dir <workspace-root>/bmad-workspace --json
   ```
   *Observed Output:* `ok: true`, `bradFiles: VERIFIED`, `nativeBmad: LOCAL_CONFIG_AND_SKILLS_FOUND`, 39 native skills discovered.
 
@@ -42,7 +42,7 @@ BMAD skills execute underlying helper scripts via Python `uv`. In `bmad-workspac
 
 ## 3. Protocol for 8 Core Native BMAD Workflows
 
-When launching an AI session inside `C:\Projects\Personal\brad-labs\relaydesk-v050\bmad-workspace`, follow this executable dispatch sequence:
+When launching an AI session inside `<workspace-root>/bmad-workspace`, follow this executable dispatch sequence:
 
 ### Workflow 1: Product Requirements Refinement
 - **Target Native Skill:** `bmad-prd` (or `bmad-product-brief`)
@@ -123,12 +123,12 @@ When launching an AI session inside `C:\Projects\Personal\brad-labs\relaydesk-v0
 ## 4. Host Setup Verification Checklist
 
 1. **GitHub Copilot in VS Code:**
-   - Open folder `C:\Projects\Personal\brad-labs\relaydesk-v050\bmad-workspace` in VS Code.
+   - Open folder `<workspace-root>/bmad-workspace` in VS Code.
    - Verify `.github/agents/brad.agent.md` appears under Agents menu (`@brad`).
    - Run `@brad /brad doctor` in Copilot chat to verify agent discovery.
 2. **Claude Code:**
-   - Run `claude` from `C:\Projects\Personal\brad-labs\relaydesk-v050\bmad-workspace`.
+   - Run `claude` from `<workspace-root>/bmad-workspace`.
    - Verify `/brad` and `/bmad-help` appear in autocomplete slash-commands.
 3. **Antigravity CLI (AGY):**
-   - Run `agy` in `C:\Projects\Personal\brad-labs\relaydesk-v050\bmad-workspace`.
+   - Run `agy` in `<workspace-root>/bmad-workspace`.
    - AGY loads `.agents/skills` at startup, mounting all 39 BMAD skills and BRAD.

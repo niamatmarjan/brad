@@ -13,11 +13,11 @@
 
 | Artifact | Location | Commit / Hash | Status |
 |---|---|---|---|
-| **BRAD v0.5.0 Tag** | `C:\Projects\Personal\brad` (refs/tags/v0.5.0) | `7fdab1e7f294c7f1bb4d96f0ed12f5b2be5ef8fe` | **IMMUTABLE BASELINE** |
-| **BRAD main Branch** | `C:\Projects\Personal\brad` (origin/main) | `dd1cddcff406a11b1b33dd822ee6781c3e99b646` | Clean (1 ahead of tag: PR #11 docs organize) |
-| **Candidate Branch** | `C:\Projects\Personal\brad-labs\brad-candidate` | `0b61d38adc452d1c80f37efef64f49b1b3b442e4` | **FROZEN CANDIDATE** (3 surgical fixes, 55/55 tests pass) |
-| **RelayDesk Integration** | `C:\Projects\Personal\brad-labs\relaydesk-v050\integration` | `0804ac9d700a5407c0b0a64da27026e708935c23` | Clean (Merged feat/sla-analytics, 16/16 tests pass) |
-| **Packaged Example** | `C:\Projects\Personal\brad\examples\relaydesk-v050` | Untracked directory in main repo | Permitted example export only |
+| **BRAD v0.5.0 Tag** | `<repo-root>` (refs/tags/v0.5.0) | `7fdab1e7f294c7f1bb4d96f0ed12f5b2be5ef8fe` | **IMMUTABLE BASELINE** |
+| **BRAD main Branch** | `<repo-root>` (origin/main) | `dd1cddcff406a11b1b33dd822ee6781c3e99b646` | Clean (1 ahead of tag: PR #11 docs organize) |
+| **Candidate Branch** | `<workspace-root>/brad-candidate` | `0b61d38adc452d1c80f37efef64f49b1b3b442e4` | **FROZEN CANDIDATE** (3 surgical fixes, 55/55 tests pass) |
+| **RelayDesk Integration** | `<workspace-root>/relaydesk-v050/integration` | `0804ac9d700a5407c0b0a64da27026e708935c23` | Clean (Merged feat/sla-analytics, 16/16 tests pass) |
+| **Packaged Example** | `examples/relaydesk-v050` | Untracked directory in main repo | Permitted example export only |
 
 ---
 
@@ -152,8 +152,8 @@ A critical discovery during this evaluation is how AI coding hosts (such as Anti
 
 ### 2. Subagent Workspace Isolation Parameters
 Antigravity's `invoke_subagent` tool accepts a `Workspace` parameter with values `inherit`, `branch`, or `share`.
-- It does **not** accept an arbitrary absolute filesystem path (e.g. `C:\Projects\Personal\brad-labs\relaydesk-v050\bmad-workspace`).
-- Subagents automatically inherit the parent session's workspace root (`C:\Projects\Personal\brad`).
+- It does **not** accept an arbitrary absolute filesystem path (e.g. `<workspace-root>/bmad-workspace`).
+- Subagents automatically inherit the parent session's workspace root (`<repo-root>`).
 - Because BRAD's core repo must remain strictly frozen and cannot have BMAD installed into its root, subagents cannot be redirected to the isolated BMAD workspace at the host tool level.
 
 ### 3. Python `uv` Scripting Compatibility
@@ -215,7 +215,7 @@ To definitively prove Gate C without simulation, an authentic multi-agent cycle 
 
 The candidate branch was inspected using read-only git operations:
 - **Branch:** `candidate/v0.5.1-improvements`
-- **Location:** `C:\Projects\Personal\brad-labs\brad-candidate`
+- **Location:** `<workspace-root>/brad-candidate`
 - **Commit SHA:** `0b61d38adc452d1c80f37efef64f49b1b3b442e4`
 - **Commit Message:** `feat(candidate): machine-readable doctor installCommand, increment-aware routing, and review-only safety`
 
@@ -414,7 +414,7 @@ To empirically answer whether BRAD can coordinate a real implementation without 
 ## Verification Signoff
 
 - **Evaluator:** Antigravity (Validation & QA Engineering Agent)
-- **Baseline Git Status in `C:\Projects\Personal\brad`:** 100% Frozen (Main at `dd1cddc`, only `examples/relaydesk-v050` untracked).
-- **Candidate Git Status in `C:\Projects\Personal\brad-labs\brad-candidate`:** 100% Frozen (Commit `0b61d38`).
-- **RelayDesk Integration Status in `C:\Projects\Personal\brad-labs\relaydesk-v050\integration`:** 16/16 tests pass (Commit `0804ac9`).
+- **Baseline Git Status in `<repo-root>`:** 100% Frozen (Main at `dd1cddc`, only `examples/relaydesk-v050` untracked).
+- **Candidate Git Status in `<workspace-root>/brad-candidate`:** 100% Frozen (Commit `0b61d38`).
+- **RelayDesk Integration Status in `<workspace-root>/relaydesk-v050/integration`:** 16/16 tests pass (Commit `0804ac9`).
 - **Decision Authority:** **ChatGPT** (Ready for independent review and implementation).
