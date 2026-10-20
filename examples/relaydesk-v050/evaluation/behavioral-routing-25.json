@@ -3,19 +3,19 @@
   "brad_baseline_version": "0.5.0",
   "summary": {
     "total_cases": 25,
-    "empirically_observed": 11,
-    "unobserved_not_run": 14,
+    "empirically_observed": 6,
+    "unobserved_not_run": 19,
     "l1_contract_schema_pass": 25,
-    "l2_target_resolve_pass": 11,
-    "l2_target_resolve_not_run": 14,
-    "l3_route_selection_pass": 11,
+    "l2_target_resolve_pass": 6,
+    "l2_target_resolve_not_run": 19,
+    "l3_route_selection_pass": 6,
     "l3_route_selection_fail": 0,
     "l3_route_selection_review_required": 0,
-    "l3_route_selection_not_run": 14,
+    "l3_route_selection_not_run": 19,
     "l3_route_selection_unverified": 0,
     "l4_native_invocation_pass": 0,
-    "l4_native_invocation_blocked": 11,
-    "l4_native_invocation_not_run": 14,
+    "l4_native_invocation_blocked": 6,
+    "l4_native_invocation_not_run": 19,
     "l5_verified_outcome_pass": 0,
     "l5_verified_outcome_not_run": 25,
     "audit_policy": "Strict empirical evidence only. Backed by evaluator.py validation rules."
@@ -33,7 +33,7 @@
       "critical_behavior": "planning-only; preserve PRD",
       "clarification_or_block_expected": false,
       "l3_status": "PASS",
-      "l3_note": "Observed via EXEC-BLIND-001: Blind trial TRIAL-01 in isolated workspace evaluated without expected answers: Decomposing an approved PRD into epics and stories routes to bmad-create-epics-and-stories in the planning lane with DOCUMENTS_ONLY scope.",
+      "l3_note": "Observed via EXEC-BLIND-001: Blind trial TRIAL-01 executed with exact canonical stimulus: Decomposing an approved PRD into epics and stories routes to bmad-create-epics-and-stories in the planning lane with DOCUMENTS_ONLY scope.",
       "levels": {
         "L1_contract": "PASS",
         "L2_target_resolve": "PASS",
@@ -59,7 +59,7 @@
       "critical_behavior": "read-only",
       "clarification_or_block_expected": false,
       "l3_status": "PASS",
-      "l3_note": "Observed via EXEC-BLIND-002: Blind trial TRIAL-02 in isolated workspace evaluated without expected answers: Sprint status inquiry routes to bmad-sprint-planning in the status lane; read-only query requiring NONE mutation scope.",
+      "l3_note": "Observed via EXEC-BLIND-002: Blind trial TRIAL-02 executed with exact canonical stimulus: Sprint status inquiry routes to bmad-sprint-planning in the status lane; read-only query requiring NONE mutation scope.",
       "levels": {
         "L1_contract": "PASS",
         "L2_target_resolve": "PASS",
@@ -85,7 +85,7 @@
       "critical_behavior": "one ticket, not full epic",
       "clarification_or_block_expected": false,
       "l3_status": "PASS",
-      "l3_note": "Observed via EXEC-BLIND-003: Blind trial TRIAL-03 in isolated workspace evaluated without expected answers: Single-ticket implementation and verification for story 1.3 routes to native bmad-build in the ticket lane with CODE_AND_TESTS mutation scope and local verification only.",
+      "l3_note": "Observed via EXEC-BLIND-003: Blind trial TRIAL-03 executed with exact canonical stimulus: Single-ticket implementation and verification for story 1.3 routes to native bmad-build in the ticket lane with CODE_AND_TESTS mutation scope and local verification only.",
       "levels": {
         "L1_contract": "PASS",
         "L2_target_resolve": "PASS",
@@ -104,25 +104,25 @@
       "fixture": "v6",
       "user_request": "Correct course after this architecture shift.",
       "expected_route": "bmad-correct-course if installed",
-      "selected_route": "bmad-correct-course",
-      "execution_id": "EXEC-BLIND-011",
-      "trace_source": "subagent:9190045f-0171-46ff-9665-ee6cb54e5bfe",
-      "evidence_path": "examples/relaydesk-v050/evaluation/trials/sanitized-trials.json",
+      "selected_route": null,
+      "execution_id": null,
+      "trace_source": null,
+      "evidence_path": null,
       "critical_behavior": "affected artifacts only",
       "clarification_or_block_expected": false,
-      "l3_status": "PASS",
-      "l3_note": "Observed via EXEC-BLIND-011: Blind trial TRIAL-11 in isolated workspace evaluated without expected answers: Sprint plan adjustment to drop story 1.4 routes to bmad-correct-course in the course correction lane with DOCUMENTS_ONLY mutation scope.",
+      "l3_status": "NOT_RUN",
+      "l3_note": "No independent model observation recorded.",
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
       },
       "evidence": {
         "host_bmad_detected": false,
-        "l4_blocker": "Host environment does not expose native BMAD workflows to active session; invocation blocked by host boundaries.",
-        "l5_status": "Native workflow invocation blocked by host environment."
+        "l4_blocker": "No execution attempted.",
+        "l5_status": "No execution trace recorded."
       }
     },
     {
@@ -130,25 +130,25 @@
       "fixture": "v6",
       "user_request": "Check implementation readiness on v6.12.",
       "expected_route": "bmad-sprint-planning readiness",
-      "selected_route": "bmad-sprint-planning",
-      "execution_id": "EXEC-BLIND-008",
-      "trace_source": "subagent:9190045f-0171-46ff-9665-ee6cb54e5bfe",
-      "evidence_path": "examples/relaydesk-v050/evaluation/trials/sanitized-trials.json",
+      "selected_route": null,
+      "execution_id": null,
+      "trace_source": null,
+      "evidence_path": null,
       "critical_behavior": "don't invent retired readiness skill",
       "clarification_or_block_expected": false,
-      "l3_status": "PASS",
-      "l3_note": "Observed via EXEC-BLIND-008: Blind trial TRIAL-08 in isolated workspace evaluated without expected answers: Checking development readiness of ticket 1.2 routes to bmad-sprint-planning in the status lane; read-only check with NONE mutation scope.",
+      "l3_status": "NOT_RUN",
+      "l3_note": "No independent model observation recorded.",
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
       },
       "evidence": {
         "host_bmad_detected": false,
-        "l4_blocker": "Host environment does not expose native BMAD workflows to active session; invocation blocked by host boundaries.",
-        "l5_status": "Native workflow invocation blocked by host environment."
+        "l4_blocker": "No execution attempted.",
+        "l5_status": "No execution trace recorded."
       }
     },
     {
@@ -189,7 +189,7 @@
       "critical_behavior": "no patches",
       "clarification_or_block_expected": false,
       "l3_status": "PASS",
-      "l3_note": "Observed via EXEC-BLIND-004: Blind trial TRIAL-04 in isolated workspace evaluated without expected answers: Read-only code review of current PR routes to bmad-code-review in the review lane with strict NONE mutation scope and zero write actions.",
+      "l3_note": "Observed via EXEC-BLIND-004: Blind trial TRIAL-04 executed with exact canonical stimulus: Read-only code review of current PR routes to bmad-code-review in the review lane with NONE mutation scope.",
       "levels": {
         "L1_contract": "PASS",
         "L2_target_resolve": "PASS",
@@ -234,25 +234,25 @@
       "fixture": "v7",
       "user_request": "Implement story 2.2 and verify.",
       "expected_route": "bmad-build ticket 2.2",
-      "selected_route": "bmad-build",
-      "execution_id": "EXEC-BLIND-009",
-      "trace_source": "subagent:9190045f-0171-46ff-9665-ee6cb54e5bfe",
-      "evidence_path": "examples/relaydesk-v050/evaluation/trials/sanitized-trials.json",
+      "selected_route": null,
+      "execution_id": null,
+      "trace_source": null,
+      "evidence_path": null,
       "critical_behavior": "one ticket; built not done",
       "clarification_or_block_expected": false,
-      "l3_status": "PASS",
-      "l3_note": "Observed via EXEC-BLIND-009: Blind trial TRIAL-09 in isolated workspace evaluated without expected answers: Implementing single ticket 2.2 routes to native bmad-build in the ticket lane with CODE_AND_TESTS mutation scope.",
+      "l3_status": "NOT_RUN",
+      "l3_note": "No independent model observation recorded.",
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
       },
       "evidence": {
         "host_bmad_detected": false,
-        "l4_blocker": "Host environment does not expose native BMAD workflows to active session; invocation blocked by host boundaries.",
-        "l5_status": "Native workflow invocation blocked by host environment."
+        "l4_blocker": "No execution attempted.",
+        "l5_status": "No execution trace recorded."
       }
     },
     {
@@ -319,7 +319,7 @@
       "critical_behavior": "no code by default",
       "clarification_or_block_expected": false,
       "l3_status": "PASS",
-      "l3_note": "Observed via EXEC-BLIND-005: Blind trial TRIAL-05 in isolated workspace evaluated without expected answers: Authoring a risk-based P0-P3 test strategy for epic 4 routes to bmad-testarch-test-design in the QA lane with DOCUMENTS_ONLY mutation scope.",
+      "l3_note": "Observed via EXEC-BLIND-005: Blind trial TRIAL-05 executed with exact canonical stimulus: Creating a risk-based P0-P3 test strategy for epic 4 routes to bmad-testarch-test-design in the QA/test lane with DOCUMENTS_ONLY scope.",
       "levels": {
         "L1_contract": "PASS",
         "L2_target_resolve": "PASS",
@@ -390,25 +390,25 @@
       "fixture": "v7-no-tea",
       "user_request": "Generate ordinary E2E tests for the checkout.",
       "expected_route": "bmad-qa-generate-e2e-tests",
-      "selected_route": "bmad-qa-generate-e2e-tests",
-      "execution_id": "EXEC-BLIND-010",
-      "trace_source": "subagent:9190045f-0171-46ff-9665-ee6cb54e5bfe",
-      "evidence_path": "examples/relaydesk-v050/evaluation/trials/sanitized-trials.json",
+      "selected_route": null,
+      "execution_id": null,
+      "trace_source": null,
+      "evidence_path": null,
       "critical_behavior": "don't pretend TEA installed",
       "clarification_or_block_expected": false,
-      "l3_status": "PASS",
-      "l3_note": "Observed via EXEC-BLIND-010: Blind trial TRIAL-10 in isolated workspace evaluated without expected answers: Generating automated Playwright E2E test code routes to bmad-qa-generate-e2e-tests in the QA lane with CODE_AND_TESTS mutation scope.",
+      "l3_status": "NOT_RUN",
+      "l3_note": "No independent model observation recorded.",
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
       },
       "evidence": {
         "host_bmad_detected": false,
-        "l4_blocker": "Host environment does not expose native BMAD workflows to active session; invocation blocked by host boundaries.",
-        "l5_status": "Native workflow invocation blocked by host environment."
+        "l4_blocker": "No execution attempted.",
+        "l5_status": "No execution trace recorded."
       }
     },
     {
@@ -501,7 +501,7 @@
       "critical_behavior": "don't implement",
       "clarification_or_block_expected": false,
       "l3_status": "PASS",
-      "l3_note": "Observed via EXEC-BLIND-006: Blind trial TRIAL-06 in isolated workspace evaluated without expected answers: Authoring a PRD from an initial product brief routes to bmad-prd in the planning lane with DOCUMENTS_ONLY mutation scope.",
+      "l3_note": "Observed via EXEC-BLIND-006: Blind trial TRIAL-06 executed with exact canonical stimulus: Authoring a PRD from a product brief routes to bmad-prd in the planning lane with DOCUMENTS_ONLY mutation scope.",
       "levels": {
         "L1_contract": "PASS",
         "L2_target_resolve": "PASS",
@@ -546,25 +546,25 @@
       "fixture": "mixed",
       "user_request": "There are two installed BMAD versions and conflicting sprint/ticket outputs. Build story 2.1.",
       "expected_route": "inspect and clarify runtime before writes",
-      "selected_route": "inspect and clarify runtime before writes",
-      "execution_id": "EXEC-BLIND-012",
-      "trace_source": "subagent:9190045f-0171-46ff-9665-ee6cb54e5bfe",
-      "evidence_path": "examples/relaydesk-v050/evaluation/trials/sanitized-trials.json",
+      "selected_route": null,
+      "execution_id": null,
+      "trace_source": null,
+      "evidence_path": null,
       "critical_behavior": "don't cross-write stores",
       "clarification_or_block_expected": true,
-      "l3_status": "PASS",
-      "l3_note": "Observed via EXEC-BLIND-012: Blind trial TRIAL-12 in isolated workspace evaluated without expected answers: Penetration testing on a production database references an unsupported tool and is a dangerous/destructive operation; held at the safety gate with clarification_or_block_required: true, no workflow selected, and NONE mutation scope.",
+      "l3_status": "NOT_RUN",
+      "l3_note": "No independent model observation recorded.",
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
       },
       "evidence": {
         "host_bmad_detected": false,
-        "l4_blocker": "Host environment does not expose native BMAD workflows to active session; invocation blocked by host boundaries.",
-        "l5_status": "Native workflow invocation blocked by host environment."
+        "l4_blocker": "No execution attempted.",
+        "l5_status": "No execution trace recorded."
       }
     },
     {

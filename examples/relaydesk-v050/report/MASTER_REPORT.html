@@ -164,8 +164,8 @@
                     <span class="stat-lbl">SDLC Exercises</span>
                 </div>
                 <div class="stat-box">
-                    <span class="stat-val text-amber-600">12 / 85</span>
-                    <span class="stat-lbl">Observed Routes (73 NOT_RUN)</span>
+                    <span class="stat-val text-amber-600">7 / 85</span>
+                    <span class="stat-lbl">Observed Routes (78 NOT_RUN)</span>
                 </div>
             </div>
         </div>
@@ -410,16 +410,16 @@
                 <input type="text" id="routeSearch" class="search-box" placeholder="Filter by ID, prompt, or skill..." onkeyup="filterCases()">
                 <div>
                     <button class="filter-btn active" onclick="setFilter('ALL')">All (85)</button>
-                    <button class="filter-btn" onclick="setFilter('PASS')">Observed PASS (12)</button>
+                    <button class="filter-btn" onclick="setFilter('PASS')">Observed PASS (7)</button>
                     <button class="filter-btn" onclick="setFilter('REVIEW_REQUIRED')">Review Required (0)</button>
-                    <button class="filter-btn" onclick="setFilter('NOT_RUN')">NOT_RUN (73)</button>
+                    <button class="filter-btn" onclick="setFilter('NOT_RUN')">NOT_RUN (78)</button>
                 </div>
             </div>
         </div>
         <p class="text-xs text-slate-500 mb-3">
             Audited using official <code>skills/brad/scripts/audit_routing_results.py</code> against <code>skills/brad/evals/routing-cases.json</code>.
             L1 = Contract Schema | L2 = Resolve | L3 = Route Selection | L4 = Native Invocation | L5 = Verified Outcome.
-            <strong>Notice:</strong> 73 unobserved scenarios are truthfully marked <code>NOT_RUN</code> without synthetic pass assignment.
+            <strong>Notice:</strong> 78 unobserved scenarios are truthfully marked <code>NOT_RUN</code> without synthetic pass assignment.
         </p>
         <div style="max-height:550px; overflow-y:auto; border:1px solid var(--border); border-radius:6px;">
             <table id="casesTable">
@@ -503,15 +503,15 @@
         </tr>
 
 
-        <tr class='case-row' data-id='V6-06' data-l3='PASS' data-l4='BLOCKED'>
+        <tr class='case-row' data-id='V6-06' data-l3='NOT_RUN' data-l4='NOT_RUN'>
             <td class='font-mono font-bold'>V6-06</td>
             <td>Correct course after this architecture shift.</td>
             <td class='font-mono text-sm text-slate-700'>bmad-correct-course if installed</td>
-            <td><span class='font-mono text-sm text-slate-700'>bmad-correct-course</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-BLIND-011]</span></td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
             <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
         </tr>
 
@@ -529,15 +529,15 @@
         </tr>
 
 
-        <tr class='case-row' data-id='V6-08' data-l3='PASS' data-l4='BLOCKED'>
+        <tr class='case-row' data-id='V6-08' data-l3='NOT_RUN' data-l4='NOT_RUN'>
             <td class='font-mono font-bold'>V6-08</td>
             <td>Check implementation readiness on v6.12.</td>
             <td class='font-mono text-sm text-slate-700'>bmad-sprint-planning readiness</td>
-            <td><span class='font-mono text-sm text-slate-700'>bmad-sprint-planning</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-BLIND-008]</span></td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
             <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
         </tr>
 
@@ -594,15 +594,15 @@
         </tr>
 
 
-        <tr class='case-row' data-id='V7-03' data-l3='PASS' data-l4='BLOCKED'>
+        <tr class='case-row' data-id='V7-03' data-l3='NOT_RUN' data-l4='NOT_RUN'>
             <td class='font-mono font-bold'>V7-03</td>
             <td>Implement story 2.2 and verify.</td>
             <td class='font-mono text-sm text-slate-700'>bmad-build ticket 2.2</td>
-            <td><span class='font-mono text-sm text-slate-700'>bmad-build</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-BLIND-009]</span></td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
             <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
         </tr>
 
@@ -789,15 +789,15 @@
         </tr>
 
 
-        <tr class='case-row' data-id='QA-08' data-l3='PASS' data-l4='BLOCKED'>
+        <tr class='case-row' data-id='QA-08' data-l3='NOT_RUN' data-l4='NOT_RUN'>
             <td class='font-mono font-bold'>QA-08</td>
             <td>Generate ordinary E2E tests for the checkout.</td>
             <td class='font-mono text-sm text-slate-700'>bmad-qa-generate-e2e-tests</td>
-            <td><span class='font-mono text-sm text-slate-700'>bmad-qa-generate-e2e-tests</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-BLIND-010]</span></td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
             <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
         </tr>
 
@@ -971,15 +971,15 @@
         </tr>
 
 
-        <tr class='case-row' data-id='EDGE-01' data-l3='PASS' data-l4='BLOCKED'>
+        <tr class='case-row' data-id='EDGE-01' data-l3='NOT_RUN' data-l4='NOT_RUN'>
             <td class='font-mono font-bold'>EDGE-01</td>
             <td>There are two installed BMAD versions and conflicting sprint/ticket outputs. Build story 2.1.</td>
             <td class='font-mono text-sm text-slate-700'>inspect and clarify runtime before writes</td>
-            <td><span class='font-mono text-sm text-slate-700'>inspect and clarify runtime before writes</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-BLIND-012]</span></td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
             <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
         </tr>
 

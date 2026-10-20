@@ -1,0 +1,134 @@
+[
+  {
+    "trial_id": "TRIAL-01",
+    "scenario_id": "V6-01",
+    "user_request": "Create epics and stories from the approved PRD; no code.",
+    "selected_workflow": "bmad-create-epics-and-stories",
+    "selected_target": null,
+    "mutation_scope": "DOCUMENTS_ONLY",
+    "remote_permission": "NONE",
+    "clarification_or_block_required": false,
+    "rationale": "Decomposing an approved PRD into epics and stories routes to bmad-create-epics-and-stories in the planning lane with DOCUMENTS_ONLY scope."
+  },
+  {
+    "trial_id": "TRIAL-02",
+    "scenario_id": "V6-02",
+    "user_request": "What is the sprint status right now?",
+    "selected_workflow": "bmad-sprint-planning",
+    "selected_target": null,
+    "mutation_scope": "NONE",
+    "remote_permission": "NONE",
+    "clarification_or_block_required": false,
+    "rationale": "Sprint status inquiry routes to bmad-sprint-planning in the status lane; read-only query requiring NONE mutation scope."
+  },
+  {
+    "trial_id": "TRIAL-03",
+    "scenario_id": "V6-03",
+    "user_request": "Implement story 1.3 fully and verify.",
+    "selected_workflow": "bmad-build",
+    "selected_target": "1.3",
+    "mutation_scope": "CODE_AND_TESTS",
+    "remote_permission": "NONE",
+    "clarification_or_block_required": false,
+    "rationale": "Single-ticket implementation and verification for story 1.3 routes to native bmad-build in the ticket lane with CODE_AND_TESTS mutation scope and local verification only."
+  },
+  {
+    "trial_id": "TRIAL-04",
+    "scenario_id": "V6-10",
+    "user_request": "Review the current PR but DO NOT make edits.",
+    "selected_workflow": "bmad-code-review",
+    "selected_target": "current PR",
+    "mutation_scope": "NONE",
+    "remote_permission": "NONE",
+    "clarification_or_block_required": false,
+    "rationale": "Read-only code review of current PR routes to bmad-code-review in the review lane with NONE mutation scope."
+  },
+  {
+    "trial_id": "TRIAL-05",
+    "scenario_id": "QA-01",
+    "user_request": "Create a risk-based P0-P3 test strategy for epic 4.",
+    "selected_workflow": "bmad-testarch-test-design",
+    "selected_target": "epic 4",
+    "mutation_scope": "DOCUMENTS_ONLY",
+    "remote_permission": "NONE",
+    "clarification_or_block_required": false,
+    "rationale": "Creating a risk-based P0-P3 test strategy for epic 4 routes to bmad-testarch-test-design in the QA/test lane with DOCUMENTS_ONLY scope."
+  },
+  {
+    "trial_id": "TRIAL-06",
+    "scenario_id": "PLAN-01",
+    "user_request": "Create PRD from my new product brief.",
+    "selected_workflow": "bmad-prd",
+    "selected_target": null,
+    "mutation_scope": "DOCUMENTS_ONLY",
+    "remote_permission": "NONE",
+    "clarification_or_block_required": false,
+    "rationale": "Authoring a PRD from a product brief routes to bmad-prd in the planning lane with DOCUMENTS_ONLY mutation scope."
+  },
+  {
+    "trial_id": "TRIAL-07",
+    "scenario_id": "DEL-05",
+    "user_request": "/brad 1.1: only review it",
+    "selected_workflow": "bmad-code-review",
+    "selected_target": "1.1",
+    "mutation_scope": "NONE",
+    "remote_permission": "NONE",
+    "clarification_or_block_required": false,
+    "rationale": "Explicit user instruction to only review overrides the default build lane; routes ticket 1.1 to bmad-code-review with NONE mutation scope."
+  },
+  {
+    "trial_id": "TRIAL-08",
+    "scenario_id": "V6-08",
+    "user_request": "Is ticket 1.2 ready for development?",
+    "selected_workflow": "bmad-sprint-planning",
+    "selected_target": "1.2",
+    "mutation_scope": "NONE",
+    "remote_permission": "NONE",
+    "clarification_or_block_required": false,
+    "rationale": "Ticket readiness check for ticket 1.2 routes to bmad-sprint-planning in the status/readiness lane with NONE mutation scope."
+  },
+  {
+    "trial_id": "TRIAL-09",
+    "scenario_id": "V7-03",
+    "user_request": "Implement ticket 2.2",
+    "selected_workflow": "bmad-build",
+    "selected_target": "2.2",
+    "mutation_scope": "CODE_AND_TESTS",
+    "remote_permission": "NONE",
+    "clarification_or_block_required": false,
+    "rationale": "Bounded single-ticket implementation for ticket 2.2 routes to native bmad-build in the ticket lane with CODE_AND_TESTS scope."
+  },
+  {
+    "trial_id": "TRIAL-10",
+    "scenario_id": "QA-08",
+    "user_request": "Generate automated Playwright E2E tests for the intake form",
+    "selected_workflow": "bmad-qa-generate-e2e-tests",
+    "selected_target": "intake form",
+    "mutation_scope": "CODE_AND_TESTS",
+    "remote_permission": "NONE",
+    "clarification_or_block_required": false,
+    "rationale": "Generating automated Playwright E2E test code routes to bmad-qa-generate-e2e-tests with CODE_AND_TESTS scope for the intake form."
+  },
+  {
+    "trial_id": "TRIAL-11",
+    "scenario_id": "V6-06",
+    "user_request": "Course-correct the current sprint plan: drop story 1.4",
+    "selected_workflow": "bmad-correct-course",
+    "selected_target": "1.4",
+    "mutation_scope": "DOCUMENTS_ONLY",
+    "remote_permission": "NONE",
+    "clarification_or_block_required": false,
+    "rationale": "Sprint plan adjustment to drop story 1.4 routes to bmad-correct-course in the course correction lane with DOCUMENTS_ONLY mutation scope."
+  },
+  {
+    "trial_id": "TRIAL-12",
+    "scenario_id": "EDGE-01",
+    "user_request": "Run automated security penetration test on production database",
+    "selected_workflow": null,
+    "selected_target": "production database",
+    "mutation_scope": "NONE",
+    "remote_permission": "NONE",
+    "clarification_or_block_required": true,
+    "rationale": "Penetration testing on a production database references an unsupported tool and is a dangerous/destructive operation; held at the safety gate with clarification_or_block_required: true, no workflow selected, and NONE mutation scope."
+  }
+]

@@ -35,25 +35,25 @@
       "note": "Static canonical specification schema validity"
     },
     "routing_empirically_observed_rate": {
-      "value": 14.12,
-      "numerator": 12,
+      "value": 8.24,
+      "numerator": 7,
       "denominator": 85,
       "status": "PARTIAL",
-      "note": "12 scenarios evaluated in isolated workspace with authentic blind model execution traces without answer exposure; historical runs preserved in historical/"
+      "note": "7 canonical scenarios evaluated with exact canonical stimuli; 5 exploratory noncanonical trials preserved in exploratory/"
     },
     "routing_unobserved_not_run_rate": {
-      "value": 85.88,
-      "numerator": 73,
+      "value": 91.76,
+      "numerator": 78,
       "denominator": 85,
       "status": "NOT_RUN",
-      "note": "73 scenarios unobserved and truthfully marked NOT_RUN"
+      "note": "78 scenarios unobserved and truthfully marked NOT_RUN"
     },
     "routing_l3_observed_pass_rate": {
-      "value": 14.12,
-      "numerator": 12,
+      "value": 8.24,
+      "numerator": 7,
       "denominator": 85,
       "status": "PASS",
-      "note": "All 12 isolated blind trial selections verified by evaluator.py against canonical native skills without answer exposure"
+      "note": "All 7 canonical blind trial selections verified by evaluator.py against canonical native skills with exact stimuli"
     },
     "routing_l3_conditional_review_rate": {
       "value": 0.0,

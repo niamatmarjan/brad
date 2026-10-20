@@ -41,17 +41,17 @@
 
 To ensure complete scientific integrity, this evaluation enforced strict evidence classification using BRAD's 5-level ladder and independent `evaluator.py` audit gates:
 - **Level 1 (Contract & Schema):** PASS (85/85 canonical routing scenarios match specification schema).
-- **Level 2 (Target Resolution):** PARTIAL (12/85 scenarios empirically observed with execution traces; 73/85 NOT_RUN).
-- **Level 3 (Model Route Selection):** PARTIAL (12 PASS, 73 NOT_RUN).
-  - **Run 0 (Historical Retrospective):** All 10 retrospective records were audited: confirmed `V6-03` was a ticket mismatch (story 1.3 requested, implementation performed story 1.7), and the remaining 9 lacked blind routing transcripts. These retrospective records were archived to `evaluation/historical/observed-routing-evidence-retrospective.json`.
+- **Level 2 (Target Resolution):** PARTIAL (7/85 scenarios empirically observed with execution traces; 78/85 NOT_RUN).
+- **Level 3 (Model Route Selection):** PARTIAL (7 PASS, 78 NOT_RUN).
+  - **Run 0 (Historical Retrospective):** All 10 retrospective records were audited: confirmed `V6-03` was a ticket mismatch (story 1.3 requested, implementation performed story 1.7), and the remaining 9 lacked blind routing transcripts. Archived to `evaluation/historical/observed-routing-evidence-retrospective.json`.
   - **Run 1 (Answer-Exposed Disqualification):** A 7-trial run conducted by subagent `38837d19` was audited and found to have accessed `skills/brad/evals/routing-cases.json` (containing canonical `expected_route` answers) before outputting decisions. It was immediately disqualified and classified `ANSWER_EXPOSED — INVALID_FOR_BLIND_ACCURACY` and archived to `evaluation/historical/observed-routing-evidence-run1-exposed.json`.
-  - **Run 2 (Physically Isolated Blind Validation):** Established an isolated workspace (`isolated-selector-env`) containing only `SKILL.md` and permitted references, with zero test cases or answer files. Invoked subagent `9190045f-0171-46ff-9665-ee6cb54e5bfe` (pure reasoning selector with read-only tools, no write tools, no MCP, no answer access) across 12 pre-registered scenarios (`V6-01`, `V6-02`, `V6-03`, `V6-06`, `V6-08`, `V6-10`, `V7-03`, `QA-01`, `QA-08`, `PLAN-01`, `DEL-05`, `EDGE-01`).
-  - **Hardened Evaluator Verification:** Evaluated via hardened `evaluator.py`: detects and rejects answer exposure, verifies exact ticket matching (`selected_ticket: "1.3"`, `"2.2"`), validates explicit mutation scope (`NONE`, `DOCUMENTS_ONLY`, `CODE_AND_TESTS`) and remote permissions, and checks safety gates (`EDGE-01` held at gate with `clarification_or_block_required: true`).
-  - All 12 fresh trials passed L3 native skill verification. The remaining 73 unobserved scenarios are truthfully marked `NOT_RUN`. Synthetic pass assignments where `selected = expected` are strictly prohibited.
-  - Sanitized trial records with SHA-256 hashes and observable tool calls (with internal thoughts and private machine paths omitted) are published at `evaluation/trials/sanitized-trials.json`.
-- **Level 4 (Native Host Invocation):** **BLOCKED (0/85)**. The active AI host session did not discover BMAD skills at session startup because BMAD is an unbundled workspace dependency (12 blocked, 73 NOT_RUN). No simulated native dispatches were manufactured.
+  - **Run 2 (Physically Isolated Blind Validation):** Established an isolated workspace (`isolated-selector-env`) containing only `SKILL.md` and permitted references, with zero test cases or answer files. Invoked subagent `9190045f-0171-46ff-9665-ee6cb54e5bfe` (pure reasoning selector with read-only tools, no write tools, no MCP, no answer access). Raw model output frozen in `evaluation/trials/raw-subagent-decisions.json`.
+  - **Stimulus Canonicality Audit:** Strict auditing against `skills/brad/evals/routing-cases.json` confirmed that exactly 7 trials (`V6-01`, `V6-02`, `V6-03`, `V6-10`, `QA-01`, `PLAN-01`, `DEL-05`) evaluated the exact canonical stimuli. The 5 trials evaluated with exploratory variant stimuli (`V6-06`, `V6-08`, `V7-03`, `QA-08`, `EDGE-01`) were reclassified as `NONCANONICAL_EXPLORATORY_EVALUATION` and preserved separately in `evaluation/exploratory/exploratory-trials.json` outside the benchmark numerator.
+  - **Hardened Evaluator Verification:** The 7 canonical trials were evaluated via hardened `evaluator.py`: verified exact ticket resolution (`selected_ticket: "1.3"`, `"1.1"`), explicit mutation scopes (`NONE`, `DOCUMENTS_ONLY`, `CODE_AND_TESTS`), and remote permissions. All 7 trials passed L3 verification. The remaining 78 unobserved scenarios are truthfully marked `NOT_RUN`.
+  - Sanitized trial records with SHA-256 hashes of imported raw model decisions are published at `evaluation/trials/sanitized-trials.json`.
+- **Level 4 (Native Host Invocation):** **BLOCKED (0/85)**. The active AI host session did not discover BMAD skills at session startup because BMAD is an unbundled workspace dependency (7 blocked, 78 NOT_RUN). No simulated native dispatches were manufactured.
 - **Level 5 (Verified Host Outcomes):** **NOT RUN (0/85)** pending Level 4 resolution.
-- **Auditor Verification:** Validated with official `python skills/brad/scripts/audit_routing_results.py --observed evaluation/observed-for-audit.json`, confirming 12 observed (11 PASS, 1 REVIEW_REQUIRED for EDGE-01 conditional block, 73 NOT_RUN), 85 NOT_RUN invocations, and 12 BLOCKED delivery records.
+- **Auditor Verification:** Validated with official `python skills/brad/scripts/audit_routing_results.py --observed evaluation/observed-for-audit.json`, confirming 7 observed PASS, 78 NOT_RUN selections, 85 NOT_RUN invocations, and 7 BLOCKED delivery records.
 
 ### 2. Stage Gate Audit Matrix
 
@@ -61,11 +61,11 @@ To ensure complete scientific integrity, this evaluation enforced strict evidenc
 | **Gate B** | Runnable Application | **PASS** | Complete RelayDesk application built on Node 24 (`node:sqlite`) + React 19 / Vite 6. 16/16 automated server integration tests pass in 1.7s. 22 functional user journeys verified. |
 | **Gate C** | Multi-Agent Collaboration | **PASS** | 10 Git worktree exercises executed. Conflict resolution commit `a8a757d` verified. Genuine independent 3-subagent cycle (Developer `0e1296d6` → Reviewer `735f91db` → QA `4c6f5dda` → Dev fix → QA signoff) executed on REQ-B7 with commits `ae6d892`, `542e522`, and merge `0804ac9`. |
 | **Gate D** | QA Defect Lifecycle | **PASS** | Two critical defects reproduced, mitigated, and verified with regression tests: `DEF-101` (SLA negative duration clamp) and `DEF-102` (Missing RBAC & NaN date sort poisoning). |
-| **Gate E** | BRAD Routing Validation | **BLOCKED** | Audited canonical 85 routing suite without synthetic pass assignments or answer exposure: L1 Schema=85/85 PASS, L2 Resolve=12/85 PASS (73 NOT_RUN), L3 Exact Selection=12/85 PASS (73 NOT_RUN), L4 Native Invocation=0/85 BLOCKED (12 blocked, 73 NOT_RUN). |
+| **Gate E** | BRAD Routing Validation | **BLOCKED** | Audited canonical 85 routing suite without synthetic pass assignments or answer exposure: L1 Schema=85/85 PASS, L2 Resolve=7/85 PASS (78 NOT_RUN), L3 Exact Selection=7/85 PASS (78 NOT_RUN), L4 Native Invocation=0/85 BLOCKED (7 blocked, 78 NOT_RUN). |
 | **Gate F** | Improvement Verification | **PASS** | 3 candidate improvements implemented in isolated worktree `candidate/v0.5.1-improvements` (commit `0b61d38`). Full test suite: 55/55 tests pass (100%). Zero regressions. |
-| **Gate G** | Final Delivery Package | **PASS** | Self-contained, offline `MASTER_REPORT.html` (110 KB), telemetry events, audit trails, and this engineering review package packaged into `examples/relaydesk-v050`. |
+| **Gate G** | Final Delivery Package | **PASS** | Self-contained, offline `MASTER_REPORT.html` (109 KB), telemetry events, audit trails, and this engineering review package packaged into `examples/relaydesk-v050`. |
 
-**Overall Verdict:** `PARTIAL_VALIDATION` (Application, multi-agent collaboration, QA lifecycle, and candidate fixes verified; Native BMAD invocation truthfully blocked at host boundary; 73/85 routing scenarios marked NOT_RUN).
+**Overall Verdict:** `PARTIAL_VALIDATION` (Application, multi-agent collaboration, QA lifecycle, and candidate fixes verified; Native BMAD invocation truthfully blocked at host boundary; 78/85 routing scenarios marked NOT_RUN).
 
 ---
 

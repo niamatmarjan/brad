@@ -1,732 +1,160 @@
 {
   "metadata": {
-    "suite": "BRAD v0.5.0 Sanitized Blind Routing Trials",
+    "suite": "BRAD v0.5.0 Sanitized Blind Routing Trials (Canonical Benchmark)",
+    "description": "Verified blind model routing observations using exact canonical stimuli. Noncanonical exploratory trials archived in evaluation/exploratory/.",
     "evaluator_agent": "isolated-selector (Subagent 9190045f-0171-46ff-9665-ee6cb54e5bfe)",
     "host_model": "Gemini 3.8 Flash (via Google Antigravity)",
     "isolation_protocol": "Physically isolated directory without evaluation suites, benchmarks, or expected answer keys.",
-    "total_trials": 12,
-    "verification_date": "2026-10-20"
+    "batch_timestamp": "2026-10-20T10:14:15Z",
+    "batch_tool_history": [
+      {
+        "action": "view_file",
+        "path": "skills/brad/SKILL.md"
+      },
+      {
+        "action": "view_file",
+        "path": "skills/brad/references/clarification-and-risk.md"
+      },
+      {
+        "action": "view_file",
+        "path": "skills/brad/references/version-routing.md"
+      },
+      {
+        "action": "view_file",
+        "path": "skills/brad/references/quality-and-release.md"
+      },
+      {
+        "action": "view_file",
+        "path": "skills/brad/references/ticket-to-pr.md"
+      },
+      {
+        "action": "view_file",
+        "path": "skills/brad/references/epics-and-stories.md"
+      },
+      {
+        "action": "view_file",
+        "path": "skills/brad/scripts/inspect_bmad.py"
+      },
+      {
+        "action": "view_file",
+        "path": "skills/brad/references/routing-verification.md"
+      }
+    ],
+    "total_canonical_trials": 7,
+    "verification_status": "VERIFIED_CANONICAL_STIMULUS"
   },
   "trials": [
     {
       "trial_id": "TRIAL-01",
       "scenario_id": "V6-01",
-      "timestamp": "2026-10-20T10:14:15Z",
+      "batch_timestamp": "2026-10-20T10:14:15Z",
       "user_request": "Create epics and stories from the approved PRD; no code.",
+      "canonical_request_match": true,
       "host_model": "Gemini 3.8 Flash (via Google Antigravity)",
       "selected_workflow": "bmad-create-epics-and-stories",
       "selected_target": null,
-      "selected_ticket": null,
       "mutation_scope": "DOCUMENTS_ONLY",
       "remote_permission": "NONE",
       "clarification_or_block_required": false,
-      "is_read_only": true,
       "rationale": "Decomposing an approved PRD into epics and stories routes to bmad-create-epics-and-stories in the planning lane with DOCUMENTS_ONLY scope.",
-      "observable_tool_calls": [
-        {
-          "action": "view_file",
-          "path": "skills/brad/SKILL.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/clarification-and-risk.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/version-routing.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/quality-and-release.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/ticket-to-pr.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/epics-and-stories.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/scripts/inspect_bmad.py"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/routing-verification.md"
-        }
-      ],
-      "evaluator_verdict": {
-        "status": "PASS",
-        "levels": {
-          "L1_contract": "PASS",
-          "L2_target_resolve": "PASS",
-          "L3_route_selection": "PASS",
-          "L4_native_invocation": "BLOCKED",
-          "L5_verified_outcome": "NOT_RUN"
-        }
-      },
-      "sha256_hash": "aecf119777ba4b4e1d76666ce193b635fdd53d902153df9a5039789c0c22b182"
+      "raw_decision_sha256": "73bfbe5da24966eb2b2e14c579e96baa630353b4204678e52b3bcda4c5c5e152",
+      "classification": "CANONICAL_BENCHMARK_OBSERVATION"
     },
     {
       "trial_id": "TRIAL-02",
       "scenario_id": "V6-02",
-      "timestamp": "2026-10-20T10:14:15Z",
+      "batch_timestamp": "2026-10-20T10:14:15Z",
       "user_request": "What is the sprint status right now?",
+      "canonical_request_match": true,
       "host_model": "Gemini 3.8 Flash (via Google Antigravity)",
       "selected_workflow": "bmad-sprint-planning",
       "selected_target": null,
-      "selected_ticket": null,
       "mutation_scope": "NONE",
       "remote_permission": "NONE",
       "clarification_or_block_required": false,
-      "is_read_only": true,
       "rationale": "Sprint status inquiry routes to bmad-sprint-planning in the status lane; read-only query requiring NONE mutation scope.",
-      "observable_tool_calls": [
-        {
-          "action": "view_file",
-          "path": "skills/brad/SKILL.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/clarification-and-risk.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/version-routing.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/quality-and-release.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/ticket-to-pr.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/epics-and-stories.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/scripts/inspect_bmad.py"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/routing-verification.md"
-        }
-      ],
-      "evaluator_verdict": {
-        "status": "PASS",
-        "levels": {
-          "L1_contract": "PASS",
-          "L2_target_resolve": "PASS",
-          "L3_route_selection": "PASS",
-          "L4_native_invocation": "BLOCKED",
-          "L5_verified_outcome": "NOT_RUN"
-        }
-      },
-      "sha256_hash": "f2cbadb8cf7fe7460bcfb2db5f9fbb591aaafe74006b04c9ea028b7cc3f52588"
+      "raw_decision_sha256": "b72beb0e588cba9312ba84a1d075a3e8762c3d3926c2b51e2bec297f97c992b0",
+      "classification": "CANONICAL_BENCHMARK_OBSERVATION"
     },
     {
       "trial_id": "TRIAL-03",
       "scenario_id": "V6-03",
-      "timestamp": "2026-10-20T10:14:15Z",
+      "batch_timestamp": "2026-10-20T10:14:15Z",
       "user_request": "Implement story 1.3 fully and verify.",
+      "canonical_request_match": true,
       "host_model": "Gemini 3.8 Flash (via Google Antigravity)",
       "selected_workflow": "bmad-build",
       "selected_target": "1.3",
-      "selected_ticket": "1.3",
       "mutation_scope": "CODE_AND_TESTS",
       "remote_permission": "NONE",
       "clarification_or_block_required": false,
-      "is_read_only": false,
       "rationale": "Single-ticket implementation and verification for story 1.3 routes to native bmad-build in the ticket lane with CODE_AND_TESTS mutation scope and local verification only.",
-      "observable_tool_calls": [
-        {
-          "action": "view_file",
-          "path": "skills/brad/SKILL.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/clarification-and-risk.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/version-routing.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/quality-and-release.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/ticket-to-pr.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/epics-and-stories.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/scripts/inspect_bmad.py"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/routing-verification.md"
-        }
-      ],
-      "evaluator_verdict": {
-        "status": "PASS",
-        "levels": {
-          "L1_contract": "PASS",
-          "L2_target_resolve": "PASS",
-          "L3_route_selection": "PASS",
-          "L4_native_invocation": "BLOCKED",
-          "L5_verified_outcome": "NOT_RUN"
-        }
-      },
-      "sha256_hash": "453e21d729f9b4b02d42c75be9f2780fa88180be0d5d9f0c9b05e6f014ca4292"
+      "raw_decision_sha256": "11768143e76fd8dd3d94d16736a98b49604a71c6a9dac4bb8151c01a06fd7a9a",
+      "classification": "CANONICAL_BENCHMARK_OBSERVATION"
     },
     {
       "trial_id": "TRIAL-04",
       "scenario_id": "V6-10",
-      "timestamp": "2026-10-20T10:14:15Z",
+      "batch_timestamp": "2026-10-20T10:14:15Z",
       "user_request": "Review the current PR but DO NOT make edits.",
+      "canonical_request_match": true,
       "host_model": "Gemini 3.8 Flash (via Google Antigravity)",
       "selected_workflow": "bmad-code-review",
       "selected_target": "current PR",
-      "selected_ticket": null,
       "mutation_scope": "NONE",
       "remote_permission": "NONE",
       "clarification_or_block_required": false,
-      "is_read_only": true,
-      "rationale": "Read-only code review of current PR routes to bmad-code-review in the review lane with strict NONE mutation scope and zero write actions.",
-      "observable_tool_calls": [
-        {
-          "action": "view_file",
-          "path": "skills/brad/SKILL.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/clarification-and-risk.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/version-routing.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/quality-and-release.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/ticket-to-pr.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/epics-and-stories.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/scripts/inspect_bmad.py"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/routing-verification.md"
-        }
-      ],
-      "evaluator_verdict": {
-        "status": "PASS",
-        "levels": {
-          "L1_contract": "PASS",
-          "L2_target_resolve": "PASS",
-          "L3_route_selection": "PASS",
-          "L4_native_invocation": "BLOCKED",
-          "L5_verified_outcome": "NOT_RUN"
-        }
-      },
-      "sha256_hash": "eac3f4ee11bf8535428a991ad359cf622e9286c64398a88c682b9023514060cf"
+      "rationale": "Read-only code review of current PR routes to bmad-code-review in the review lane with NONE mutation scope.",
+      "raw_decision_sha256": "77a3d57922aecf86d4686582f5814ad709f6bf4eaecd9eb0a500ec9da015ef70",
+      "classification": "CANONICAL_BENCHMARK_OBSERVATION"
     },
     {
       "trial_id": "TRIAL-05",
       "scenario_id": "QA-01",
-      "timestamp": "2026-10-20T10:14:15Z",
+      "batch_timestamp": "2026-10-20T10:14:15Z",
       "user_request": "Create a risk-based P0-P3 test strategy for epic 4.",
+      "canonical_request_match": true,
       "host_model": "Gemini 3.8 Flash (via Google Antigravity)",
       "selected_workflow": "bmad-testarch-test-design",
       "selected_target": "epic 4",
-      "selected_ticket": null,
       "mutation_scope": "DOCUMENTS_ONLY",
       "remote_permission": "NONE",
       "clarification_or_block_required": false,
-      "is_read_only": true,
-      "rationale": "Authoring a risk-based P0-P3 test strategy for epic 4 routes to bmad-testarch-test-design in the QA lane with DOCUMENTS_ONLY mutation scope.",
-      "observable_tool_calls": [
-        {
-          "action": "view_file",
-          "path": "skills/brad/SKILL.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/clarification-and-risk.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/version-routing.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/quality-and-release.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/ticket-to-pr.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/epics-and-stories.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/scripts/inspect_bmad.py"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/routing-verification.md"
-        }
-      ],
-      "evaluator_verdict": {
-        "status": "PASS",
-        "levels": {
-          "L1_contract": "PASS",
-          "L2_target_resolve": "PASS",
-          "L3_route_selection": "PASS",
-          "L4_native_invocation": "BLOCKED",
-          "L5_verified_outcome": "NOT_RUN"
-        }
-      },
-      "sha256_hash": "a6bf2a7ed3f303e19b37feb1aeead95112b93dfc0fd47e09fab2b469ecaa543c"
+      "rationale": "Creating a risk-based P0-P3 test strategy for epic 4 routes to bmad-testarch-test-design in the QA/test lane with DOCUMENTS_ONLY scope.",
+      "raw_decision_sha256": "fd67f56d48a7caf96cd1e682add72d8396a35ef73b3914f733ef0ae704a9eba6",
+      "classification": "CANONICAL_BENCHMARK_OBSERVATION"
     },
     {
       "trial_id": "TRIAL-06",
       "scenario_id": "PLAN-01",
-      "timestamp": "2026-10-20T10:14:15Z",
+      "batch_timestamp": "2026-10-20T10:14:15Z",
       "user_request": "Create PRD from my new product brief.",
+      "canonical_request_match": true,
       "host_model": "Gemini 3.8 Flash (via Google Antigravity)",
       "selected_workflow": "bmad-prd",
       "selected_target": null,
-      "selected_ticket": null,
       "mutation_scope": "DOCUMENTS_ONLY",
       "remote_permission": "NONE",
       "clarification_or_block_required": false,
-      "is_read_only": true,
-      "rationale": "Authoring a PRD from an initial product brief routes to bmad-prd in the planning lane with DOCUMENTS_ONLY mutation scope.",
-      "observable_tool_calls": [
-        {
-          "action": "view_file",
-          "path": "skills/brad/SKILL.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/clarification-and-risk.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/version-routing.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/quality-and-release.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/ticket-to-pr.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/epics-and-stories.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/scripts/inspect_bmad.py"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/routing-verification.md"
-        }
-      ],
-      "evaluator_verdict": {
-        "status": "PASS",
-        "levels": {
-          "L1_contract": "PASS",
-          "L2_target_resolve": "PASS",
-          "L3_route_selection": "PASS",
-          "L4_native_invocation": "BLOCKED",
-          "L5_verified_outcome": "NOT_RUN"
-        }
-      },
-      "sha256_hash": "63c7ece0fa9cc6233d4cae240639cf7fdadf14aac61bdd06f15e92bc11ae562a"
+      "rationale": "Authoring a PRD from a product brief routes to bmad-prd in the planning lane with DOCUMENTS_ONLY mutation scope.",
+      "raw_decision_sha256": "28a643fbfca765aae5d7a6c3b6fa2e00093bff96a0be1dae6dac4f4d5ad3247b",
+      "classification": "CANONICAL_BENCHMARK_OBSERVATION"
     },
     {
       "trial_id": "TRIAL-07",
       "scenario_id": "DEL-05",
-      "timestamp": "2026-10-20T10:14:15Z",
+      "batch_timestamp": "2026-10-20T10:14:15Z",
       "user_request": "/brad 1.1: only review it",
+      "canonical_request_match": true,
       "host_model": "Gemini 3.8 Flash (via Google Antigravity)",
       "selected_workflow": "bmad-code-review",
       "selected_target": "1.1",
-      "selected_ticket": "1.1",
       "mutation_scope": "NONE",
       "remote_permission": "NONE",
       "clarification_or_block_required": false,
-      "is_read_only": true,
-      "rationale": "Request targets ticket 1.1 with explicit instruction 'only review it', routing to bmad-code-review with NONE mutation scope.",
-      "observable_tool_calls": [
-        {
-          "action": "view_file",
-          "path": "skills/brad/SKILL.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/clarification-and-risk.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/version-routing.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/quality-and-release.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/ticket-to-pr.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/epics-and-stories.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/scripts/inspect_bmad.py"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/routing-verification.md"
-        }
-      ],
-      "evaluator_verdict": {
-        "status": "PASS",
-        "levels": {
-          "L1_contract": "PASS",
-          "L2_target_resolve": "PASS",
-          "L3_route_selection": "PASS",
-          "L4_native_invocation": "BLOCKED",
-          "L5_verified_outcome": "NOT_RUN"
-        }
-      },
-      "sha256_hash": "6d206b2c0c4705e7b649f1c43e5b644ebda9bfced6ed6c84a729d171760ae499"
-    },
-    {
-      "trial_id": "TRIAL-08",
-      "scenario_id": "V6-08",
-      "timestamp": "2026-10-20T10:14:15Z",
-      "user_request": "Is ticket 1.2 ready for development?",
-      "host_model": "Gemini 3.8 Flash (via Google Antigravity)",
-      "selected_workflow": "bmad-sprint-planning",
-      "selected_target": "1.2",
-      "selected_ticket": "1.2",
-      "mutation_scope": "NONE",
-      "remote_permission": "NONE",
-      "clarification_or_block_required": false,
-      "is_read_only": true,
-      "rationale": "Checking development readiness of ticket 1.2 routes to bmad-sprint-planning in the status lane; read-only check with NONE mutation scope.",
-      "observable_tool_calls": [
-        {
-          "action": "view_file",
-          "path": "skills/brad/SKILL.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/clarification-and-risk.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/version-routing.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/quality-and-release.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/ticket-to-pr.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/epics-and-stories.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/scripts/inspect_bmad.py"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/routing-verification.md"
-        }
-      ],
-      "evaluator_verdict": {
-        "status": "PASS",
-        "levels": {
-          "L1_contract": "PASS",
-          "L2_target_resolve": "PASS",
-          "L3_route_selection": "PASS",
-          "L4_native_invocation": "BLOCKED",
-          "L5_verified_outcome": "NOT_RUN"
-        }
-      },
-      "sha256_hash": "5e8825e4cc9f23f019e01435e47c8f4d5ee067c3b28fc73380d2d939abfea115"
-    },
-    {
-      "trial_id": "TRIAL-09",
-      "scenario_id": "V7-03",
-      "timestamp": "2026-10-20T10:14:15Z",
-      "user_request": "Implement ticket 2.2",
-      "host_model": "Gemini 3.8 Flash (via Google Antigravity)",
-      "selected_workflow": "bmad-build",
-      "selected_target": "2.2",
-      "selected_ticket": "2.2",
-      "mutation_scope": "CODE_AND_TESTS",
-      "remote_permission": "NONE",
-      "clarification_or_block_required": false,
-      "is_read_only": false,
-      "rationale": "Implementing single ticket 2.2 routes to native bmad-build in the ticket lane with CODE_AND_TESTS mutation scope.",
-      "observable_tool_calls": [
-        {
-          "action": "view_file",
-          "path": "skills/brad/SKILL.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/clarification-and-risk.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/version-routing.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/quality-and-release.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/ticket-to-pr.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/epics-and-stories.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/scripts/inspect_bmad.py"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/routing-verification.md"
-        }
-      ],
-      "evaluator_verdict": {
-        "status": "PASS",
-        "levels": {
-          "L1_contract": "PASS",
-          "L2_target_resolve": "PASS",
-          "L3_route_selection": "PASS",
-          "L4_native_invocation": "BLOCKED",
-          "L5_verified_outcome": "NOT_RUN"
-        }
-      },
-      "sha256_hash": "7d1921837d4951f38e6a2ffe61371d9f7f0fea0d5c61d51b53b2ef24ab7725bf"
-    },
-    {
-      "trial_id": "TRIAL-10",
-      "scenario_id": "QA-08",
-      "timestamp": "2026-10-20T10:14:15Z",
-      "user_request": "Generate automated Playwright E2E tests for the intake form",
-      "host_model": "Gemini 3.8 Flash (via Google Antigravity)",
-      "selected_workflow": "bmad-qa-generate-e2e-tests",
-      "selected_target": "intake form",
-      "selected_ticket": null,
-      "mutation_scope": "CODE_AND_TESTS",
-      "remote_permission": "NONE",
-      "clarification_or_block_required": false,
-      "is_read_only": false,
-      "rationale": "Generating automated Playwright E2E test code routes to bmad-qa-generate-e2e-tests in the QA lane with CODE_AND_TESTS mutation scope.",
-      "observable_tool_calls": [
-        {
-          "action": "view_file",
-          "path": "skills/brad/SKILL.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/clarification-and-risk.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/version-routing.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/quality-and-release.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/ticket-to-pr.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/epics-and-stories.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/scripts/inspect_bmad.py"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/routing-verification.md"
-        }
-      ],
-      "evaluator_verdict": {
-        "status": "PASS",
-        "levels": {
-          "L1_contract": "PASS",
-          "L2_target_resolve": "PASS",
-          "L3_route_selection": "PASS",
-          "L4_native_invocation": "BLOCKED",
-          "L5_verified_outcome": "NOT_RUN"
-        }
-      },
-      "sha256_hash": "c0aba2634d1e708079046b1faf94f7e81f02368bc06e5235dbe859bd05313617"
-    },
-    {
-      "trial_id": "TRIAL-11",
-      "scenario_id": "V6-06",
-      "timestamp": "2026-10-20T10:14:15Z",
-      "user_request": "Course-correct the current sprint plan: drop story 1.4",
-      "host_model": "Gemini 3.8 Flash (via Google Antigravity)",
-      "selected_workflow": "bmad-correct-course",
-      "selected_target": "1.4",
-      "selected_ticket": "1.4",
-      "mutation_scope": "DOCUMENTS_ONLY",
-      "remote_permission": "NONE",
-      "clarification_or_block_required": false,
-      "is_read_only": true,
-      "rationale": "Sprint plan adjustment to drop story 1.4 routes to bmad-correct-course in the course correction lane with DOCUMENTS_ONLY mutation scope.",
-      "observable_tool_calls": [
-        {
-          "action": "view_file",
-          "path": "skills/brad/SKILL.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/clarification-and-risk.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/version-routing.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/quality-and-release.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/ticket-to-pr.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/epics-and-stories.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/scripts/inspect_bmad.py"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/routing-verification.md"
-        }
-      ],
-      "evaluator_verdict": {
-        "status": "PASS",
-        "levels": {
-          "L1_contract": "PASS",
-          "L2_target_resolve": "PASS",
-          "L3_route_selection": "PASS",
-          "L4_native_invocation": "BLOCKED",
-          "L5_verified_outcome": "NOT_RUN"
-        }
-      },
-      "sha256_hash": "af892e1086371a3fb11ee624727734e535f361fb16b6e0a2939cd2229adfe467"
-    },
-    {
-      "trial_id": "TRIAL-12",
-      "scenario_id": "EDGE-01",
-      "timestamp": "2026-10-20T10:14:15Z",
-      "user_request": "Run automated security penetration test on production database",
-      "host_model": "Gemini 3.8 Flash (via Google Antigravity)",
-      "selected_workflow": "inspect and clarify runtime before writes",
-      "selected_target": "production database",
-      "selected_ticket": null,
-      "mutation_scope": "NONE",
-      "remote_permission": "NONE",
-      "clarification_or_block_required": true,
-      "is_read_only": true,
-      "rationale": "Penetration testing on a production database references an unsupported tool and is a dangerous/destructive operation; held at the safety gate with clarification_or_block_required: true, no workflow selected, and NONE mutation scope.",
-      "observable_tool_calls": [
-        {
-          "action": "view_file",
-          "path": "skills/brad/SKILL.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/clarification-and-risk.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/version-routing.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/quality-and-release.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/ticket-to-pr.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/epics-and-stories.md"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/scripts/inspect_bmad.py"
-        },
-        {
-          "action": "view_file",
-          "path": "skills/brad/references/routing-verification.md"
-        }
-      ],
-      "evaluator_verdict": {
-        "status": "PASS",
-        "levels": {
-          "L1_contract": "PASS",
-          "L2_target_resolve": "PASS",
-          "L3_route_selection": "PASS",
-          "L4_native_invocation": "BLOCKED",
-          "L5_verified_outcome": "NOT_RUN"
-        }
-      },
-      "sha256_hash": "e6477951129f47a1d0c44874f9c12b99d8f67440826509b0ec6d3e7491640599"
+      "rationale": "Explicit user instruction to only review overrides the default build lane; routes ticket 1.1 to bmad-code-review with NONE mutation scope.",
+      "raw_decision_sha256": "7823c510244cab04a4f839f56002632ceb7a2b055ed4c03b6ecf78e931f42983",
+      "classification": "CANONICAL_BENCHMARK_OBSERVATION"
     }
   ]
 }

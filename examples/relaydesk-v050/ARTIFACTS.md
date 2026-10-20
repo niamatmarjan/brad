@@ -13,6 +13,7 @@ This directory contains the complete, sanitized evaluation artifacts for the **B
 | [`reports/COLLABORATION_AUDIT.md`](reports/COLLABORATION_AUDIT.md) | Empirical audit of 3-subagent independent collaboration cycle | Markdown |
 | [`reports/FINDINGS.md`](reports/FINDINGS.md) | Confirmed BRAD defects (F-001 to F-003) and root cause analysis | Markdown |
 | [`reports/NATIVE_BMAD_HOST_HANDOFF.md`](reports/NATIVE_BMAD_HOST_HANDOFF.md) | Executable dispatch protocol for 8 native BMAD workflows | Markdown |
+| [`reports/NATIVE_BMAD_EXECUTION_AUDIT.md`](reports/NATIVE_BMAD_EXECUTION_AUDIT.md) | Audit of native BMAD execution, host skill catalog discovery, and Tests A/B/C | Markdown |
 | [`reports/EXECUTION.md`](reports/EXECUTION.md) | Step-by-step experiment execution log and environment manifest | Markdown |
 | [`reports/BRAD_IMPROVEMENT_HANDOFF.md`](reports/BRAD_IMPROVEMENT_HANDOFF.md) | Handoff note for proposed candidate improvements | Markdown |
 | [`reports/NEXT_DEMO_PLAN.md`](reports/NEXT_DEMO_PLAN.md) | Test protocol for next release validation | Markdown |
@@ -40,10 +41,12 @@ This directory contains the complete, sanitized evaluation artifacts for the **B
 
 | Dataset | Path | Description |
 |---|---|---|
-| **Canonical 85 Scenarios** | [`evaluation/routing-results.json`](evaluation/routing-results.json) | Audited results across canonical 85 routing suite (12 observed PASS, 73 NOT_RUN) |
-| **Observed Routing Evidence** | [`evaluation/observed-routing-evidence.json`](evaluation/observed-routing-evidence.json) | Empirical blind trial model observations with execution IDs, SHA-256 hashes, and sanitized evidence paths |
-| **25 Behavioral Cases** | [`evaluation/behavioral-routing-25.json`](evaluation/behavioral-routing-25.json) | High-priority behavioral intent tests (11 observed PASS, 14 NOT_RUN) |
-| **Sanitized Blind Trials** | [`evaluation/trials/sanitized-trials.json`](evaluation/trials/sanitized-trials.json) | 12 sanitized blind routing trials with SHA-256 hashes and tool calls (raw thinking/paths omitted) |
+| **Canonical 85 Scenarios** | [`evaluation/routing-results.json`](evaluation/routing-results.json) | Audited results across canonical 85 routing suite (7 observed PASS, 78 NOT_RUN) |
+| **Observed Routing Evidence** | [`evaluation/observed-routing-evidence.json`](evaluation/observed-routing-evidence.json) | Empirical blind trial model observations with execution IDs, SHA-256 hashes, and sanitized evidence paths (7 canonical cases) |
+| **25 Behavioral Cases** | [`evaluation/behavioral-routing-25.json`](evaluation/behavioral-routing-25.json) | High-priority behavioral intent tests (6 observed PASS, 19 NOT_RUN) |
+| **Sanitized Canonical Trials** | [`evaluation/trials/sanitized-trials.json`](evaluation/trials/sanitized-trials.json) | 7 sanitized blind routing trials matching exact canonical stimuli |
+| **Frozen Raw Decisions** | [`evaluation/trials/raw-subagent-decisions.json`](evaluation/trials/raw-subagent-decisions.json) | Frozen source artifact of raw subagent output imported by generator |
+| **Exploratory Trials Suite** | [`evaluation/exploratory/exploratory-trials.json`](evaluation/exploratory/exploratory-trials.json) | 5 noncanonical exploratory trials preserved with variant stimuli |
 | **Historical Pre-Audit Records** | [`evaluation/historical/`](evaluation/historical/) | Preserved retrospective records (Run 0) and answer-exposed trials (Run 1) prior to isolated blind run |
 | **Findings Register** | [`evaluation/findings.json`](evaluation/findings.json) | Machine-readable defects register |
 | **Improvement Backlog** | [`evaluation/improvement-backlog.json`](evaluation/improvement-backlog.json) | Prioritized candidate fixes |
