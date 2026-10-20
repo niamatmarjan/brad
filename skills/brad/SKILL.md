@@ -39,6 +39,9 @@ before invoking. These references are guides, never proof of installed behavior.
    Optional read-only Git preflight: `python <skill-dir>/scripts/delivery_preflight.py --root .`.
    Skill names, agent menu commands and lifecycle paths vary by version. Verify
    relevant files and host invocation capabilities; never shell-execute `/bmad-*`.
+   Distinguish cached instructions, project-installed native skills, host-discovered
+   skills, actual invocation and verified outputs. Loading `bmad-help` or receiving
+   a suggested command is not the execution of that workflow.
    If mixed v6/v7 runtime, resolve which state owns this task before writes.
 3. **Zero unnecessary agents.** When one installed native skill can satisfy the
    job, call it directly. Do not force Analyst→PM→Architect→Dev→QA. A named

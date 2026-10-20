@@ -40,3 +40,9 @@ Prefer standard libraries and narrowly scoped dependencies; keep installation de
 ## Demo submissions
 
 Demos require repeatable **redacted evidence**, permission to publish, and a disclosed validation scope. See [docs/demo-publication.md](docs/demo-publication.md). Do not commit gigabytes of raw telemetry or full private transcripts into the source repository.
+
+## npm pack and Windows regression matrix
+
+The pack contract accepts both legacy array JSON and npm 12 package-name-keyed output, while rejecting malformed/wrong-package responses. Windows linked-path regression tests use directory junctions so they can exercise safety checks without elevated symlink privileges. Fixture setup errors must never be reported as passing safety tests.
+
+Before a new release, run `npm test` and `npm run pack:check` across supported Node/npm versions, including Windows Node 24. `brad doctor` does not prove a BMAD skill was registered by the host or actually executed.

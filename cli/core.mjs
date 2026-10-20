@@ -239,6 +239,13 @@ function bmadCheck(root) {
   const v7 = existsSync(join(root, '_bmad-output/tickets.toml')) || existsSync(join(root, '_bmad/tickets.toml'));
   if (v6 && v7) warnings.push('Both v6 and v7 state hints exist; ask user which native state system owns this task before writing.');
   return { detected, configured, runtime: hasRuntime, paths, nativeSkills: [...installedSkillNames].sort(),
+    discovery: {
+      workspaceSkillInventory: installedSkillNames.size ? 'FOUND' : 'NOT_FOUND',
+      externalCaches: 'NOT_INSPECTED',
+      hostSkillCatalog: 'NOT_VERIFIED',
+      nativeWorkflowInvocation: 'NOT_VERIFIED',
+      note: 'External caches and files on disk are not proof the active host registered or invoked skills. Verify in the host.'
+    },
     stateHints: { v6, v7, mixed: v6 && v7 }, warnings,
     note: detected ? 'BMAD installation hints found. Native routing and subagent execution must still be checked in the coding host.' : 'BMAD Method not detected. Install it separately using the official npx bmad-method install or v7 skills setup.' };
 }
