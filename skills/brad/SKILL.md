@@ -27,8 +27,9 @@ before invoking. These references are guides, never proof of installed behavior.
 ## Contract, in priority order
 
 1. **Honor the user.** Explicit workflow/agent, target, scope, read-only mode and
-   stopping point beat defaults. `--plan`/"dry run" never changes code or remote. In an AI chat, `/brad setup` configures
-   consented repo preferences only, and `resume` restores existing work rather
+   stopping point beat defaults. `--plan`/"dry run" never changes code or remote. In an AI chat, `/brad setup` first inspects
+   BMAD prerequisites, offers official native setup only with explicit approval,
+   and configures consented repo preferences; it never silently installs/upgrades BMAD. and `resume` restores existing work rather
    than creating another branch.
    `--local` never pushes; `--pr` requests ticket-to-PR delivery. `--no-pr` keeps local.
    Never interpret "review" as "fix" without permission. An exact `1.1` is a
@@ -65,7 +66,10 @@ before invoking. These references are guides, never proof of installed behavior.
    tradeoffs, destructive operations, unresolved acceptance criteria, or blocked
    dependencies. Explain options and recommendation. Continue unaffected work.
    Delegate retains its native mandatory human checkpoints; never bypass them.
-7. **Truthful results.** Explicitly distinguish host-native invocation,\n   same-session native workflow execution, separate specialist dispatch,\n   and helper-scripts-only activity (see hosts-and-handoffs).\n   A proposed route is NOT evidence an agent ran.
+7. **Truthful results.** Explicitly distinguish host-native invocation,
+   same-session native workflow execution, separate specialist dispatch,
+   and helper-scripts-only activity (see hosts-and-handoffs).
+   A proposed route is NOT evidence an agent ran.
    Running an instruction in the same context is NOT independent review.
    Require observed tests/exit codes, commits, remote PR URL and CI result before
    saying any passed. A report badge is not proof of correct routing: compare the
@@ -83,7 +87,7 @@ before invoking. These references are guides, never proof of installed behavior.
 
 - `/brad 1.1`, `/brad story 1-1`, `do task 1.1`: **ticket lane**;
   resolve exact ID (not issue number by assumption); see ticket-to-PR.
-- `/brad setup` (agent skill, not terminal CLI `brad setup`): inspect host/BMAD/Git, ask once about default
+- `/brad setup` (agent skill, not terminal CLI `brad setup`): inspect host/BMAD/Git; if BMAD is absent, offer a one-step official installer only after version choice and user approval (`brad setup --with-bmad [--bmad-channel stable|preview]`). For preview finish native `bmad setup` in the coding host. Never upgrade an existing native setup automatically. Ask once about default
   PR publication, default base branch and approval style if not already set,
   then (with consent) create/update `.brad/policy.yaml` without touching
   native `_bmad` config. Use short conversational prompts, not a questionnaire.

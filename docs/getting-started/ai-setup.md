@@ -1,6 +1,6 @@
 # BRAD: AI-agent installation and verification contract (v0.5.1)
 
-This is the **canonical, copyable onboarding instruction** for Claude Code, Antigravity, Codex, and GitHub Copilot. It is written for an AI coding agent acting on a user's project. BRAD is an independent community wrapper around native BMAD Method workflows; it does not install BMAD implicitly or replace its agents.
+This is the **canonical, copyable onboarding instruction** for Claude Code, Antigravity, Codex, and GitHub Copilot. It is written for an AI coding agent acting on a user's project. BRAD is an independent community wrapper around native BMAD Method workflows; it does not install BMAD implicitly or replace its agents. Future opt-in CLI setup can use the official BMAD installer only with explicit approval.
 
 ## Agent objective
 
@@ -27,12 +27,12 @@ Use the actual host when known. Otherwise use `--agent auto`. Install only into 
 npx --yes "github:niamatmarjan/brad#v0.5.1" setup --agent auto --json
 ```
 
-Host choices: `antigravity`, `claude`, `codex`, `copilot`, `all`. Never use `all` casually; it writes to several host directories. `setup` is safe/idempotent but does **not** install BMAD, configure GitHub, change existing BMAD versions, bypass permissions, or start a background daemon. Existing nonmanaged/modified skill files are preserved; seek approval before `--force`, then report the backup path.
+Host choices: `antigravity`, `claude`, `codex`, `copilot`, `all`. Never use `all` casually; it writes to several host directories. `setup` is safe/idempotent but does **not** install BMAD, configure GitHub, change existing BMAD versions, bypass permissions, or start a background daemon. Existing nonmanaged/modified skill files are preserved; seek approval before `--force`, then report the backup path. The forthcoming `--with-bmad` flag permits official upstream installation **only after explicit user approval**; ordinary setup remains BRAD-only.
 
 ## Phase 3: Native BMAD (only if required)
 
 1. If native BMAD isn't installed or its setup is incomplete, explain the version choice in one concise question: **v6.12 stable** for established projects, or **v7 preview** for teams accepting breaking changes. If the existing project clearly uses a version, keep it; do **not** migrate by default.
-2. After approval, use the **current official BMAD installation guidance**, rather than BRAD's own imitation of installer scripts: https://docs.bmad-method.org/start/install-bmad/ . The documented v6 stable command is `npx bmad-method install`; v7 uses `npx skills add bmad-code-org/BMAD-METHOD` followed by the native `bmad setup`. Do not guess unsupported noninteractive flags.
+2. When the opt-in feature is released, `brad setup --with-bmad` will use the latest stable upstream installer and `--bmad-channel preview` will select the newer preview. These flags are NOT in v0.5.1. After approval, use the **current official BMAD installation guidance**, rather than BRAD's own imitation of installer scripts: https://docs.bmad-method.org/start/install-bmad/ . The documented v6 stable command is `npx bmad-method install`; v7 uses `npx skills add bmad-code-org/BMAD-METHOD` followed by the native `bmad setup`. Do not guess unsupported noninteractive flags.
 3. Install the native modules needed for the user's use case (e.g. BMM, TEA, GDS), subject to actual available package versions. No need to install every module for a simple ticket.
 4. When both `sprint-status.yaml` and `tickets.toml` are present, do not write backlog state until the owner chooses the authoritative version. Keep existing data intact.
 

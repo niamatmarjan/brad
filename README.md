@@ -20,6 +20,8 @@ BRAD is a **thin, user-invoked wrapper** for an existing [BMAD Method](https://g
 
 See the [AI setup guide](docs/getting-started/ai-setup.md) for the full agent protocol, including Windows, permissions, preflight, and smoke tests.
 
+**Upcoming setup enhancement (not in released v0.5.1):** The opt-in `brad setup --with-bmad` flag will let users initialize official BMAD Method when it is missing, using the latest stable installer by default or the newer preview by explicit choice. See the [installation guide](docs/getting-started/installation.md).
+
 ### Terminal alternative
 
 **Node.js 20+** is required for the installer. From your project root:

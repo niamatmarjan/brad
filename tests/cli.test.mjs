@@ -314,3 +314,34 @@ test('an uninstalled project is not reported as execution-ready', () => fixture(
   assert.equal(d.readiness.nativeBmad, 'NOT_VERIFIED');
   assert.equal(d.readiness.specialistDelegation, 'NOT_VERIFIED');
 }));
+
+test('upstream BMAD setup requires explicit authorization and supports read-only preview', () => fixture(root => {
+  const before = readdirSync(root);
+  const normal = execute(['setup', '--dir', root, '--agent', 'antigravity', '--dry-run']);
+  assert.equal(normal.bmadSetup, undefined);
+  const stable = execute(['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad', '--dry-run']);
+  assert.equal(stable.bmadSetup.status, 'WOULD_INSTALL');
+  assert.deepEqual(stable.bmadSetup.args, ['--yes', 'bmad-method@latest', 'install']);
+  assert.equal(stable.bmadSetup.upstreamInstaller, 'official-npm-stable');
+  const preview = execute(['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad', '--bmad-channel=preview', '--dry-run']);
+  assert.equal(preview.bmadSetup.status, 'WOULD_INSTALL');
+  assert.deepEqual(preview.bmadSetup.args, ['--yes', 'skills', 'add', 'bmad-code-org/BMAD-METHOD']);
+  assert.match(preview.bmadSetup.nextStep, /bmad setup/);
+  assert.deepEqual(readdirSync(root), before, 'dry-run must not write to disk');
+}));
+
+test('BMAD setup blocks accidental installation through other commands and unknown channels', () => fixture(root => {
+  assert.throws(() => execute(['setup', '--dir', root, '--bmad-channel', 'preview']), /requires --with-bmad/);
+  assert.throws(() => execute(['setup', '--dir', root, '--with-bmad', '--bmad-channel', 'unknown']), /stable or preview/);
+  assert.throws(() => execute(['doctor', '--dir', root, '--with-bmad']), /only supported with brad setup/);
+  assert.throws(() => execute(['setup', '--global', '--with-bmad']), /project-local/);
+  assert.throws(() => execute(['setup', '--dir', root, '--with-bmad', '--json']), /cannot use --json/);
+}));
+
+test('BMAD setup preserves an existing runtime and never upgrades it', () => fixture(root => {
+  mkdirSync(join(root, '_bmad'), { recursive: true });
+  const r = execute(['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad']);
+  assert.equal(r.bmadSetup.status, 'SKIPPED_EXISTING');
+  assert.equal(r.bmadSetup.command, null);
+  assert.equal(r.bmad.runtime, true);
+}));

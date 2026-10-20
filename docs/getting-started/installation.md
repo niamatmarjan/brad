@@ -12,6 +12,35 @@ npx --yes "github:niamatmarjan/brad#v0.5.1" setup
 
 This command installs BRAD's **native agent skill**, not BMAD Method itself. You can run `npx bmad-method install` to install/configure BMAD separately. The CLI requires `git` and network access on first npx invocation because npm retrieves the GitHub package. It has no third-party runtime dependencies.
 
+## Optional native BMAD initialization (upcoming CLI feature)
+
+Once this enhancement ships, users can explicitly authorize the **official**
+BMAD installer as part of one BRAD command:
+
+```sh
+# Latest official stable BMAD, only if not already installed
+brad setup --agent antigravity --with-bmad
+
+# Newer breaking-change-prone v7 alpha preview
+brad setup --agent antigravity --with-bmad --bmad-channel preview
+
+# Dry-run: preview both BRAD and BMAD plan without writes
+brad setup --agent antigravity --with-bmad --dry-run --json
+```
+
+**These flags are NOT available in the published v0.5.1 binary yet.** Until
+a new release ships, use the official native installers directly: stable
+`npx bmad-method install`, or preview
+`npx skills add bmad-code-org/BMAD-METHOD` followed by the installed
+`bmad` skill's `bmad setup` workflow.
+
+The new opt-in mode never automatically upgrades or replaces an existing
+BMAD installation. The upstream installer prompts for its configuration,
+and its successful process exit does not prove host skill registration.
+For preview, refresh the coding host and complete native `bmad setup`
+to install/configure the runtime. See the
+[official BMAD guide](https://docs.bmad-method.org/start/install-bmad/).
+
 ## Pick a host
 
 ```bash
