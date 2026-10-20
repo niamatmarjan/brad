@@ -117,6 +117,11 @@ test('doctor reports missing BMAD rather than claiming installation', () => fixt
   assert.equal(r.bmad.detected, false);
   assert.match(r.bmad.note, /not detected/);
 }));
+test('doctor provides machine-readable installCommand when BMAD is not detected', () => fixture(root => {
+  const r = execute(['doctor', '--dir', root]);
+  assert.equal(r.bmad.detected, false);
+  assert.equal(r.bmad.installCommand, 'npx bmad-method install');
+}));
 test('CLI script provides machine-readable JSON', () => fixture(root => {
   const r = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), 'init', '--dir', root, '--json'], { encoding: 'utf8' });
   assert.equal(r.status, 0, r.stderr);

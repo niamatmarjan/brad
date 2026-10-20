@@ -5,6 +5,9 @@ This is a DELIVERY CONTRACT, not an implementation workflow. The installed
 review. Other installed QA workflows own their own tests/audits. Wrapper handles
 preflight, external delivery and evidence. A bare ticket identifier selects this
 lane unless the user explicitly asks for status, planning, QA or review only.
+Read-only review safety: When a request specifies 'review', 'audit', 'inspect',
+or 'assess', ticket-to-pr delivery is strictly forbidden from creating topic branches,
+writing code, or publishing PRs without explicit write authorization.
 
 ## Intake and discovery
 

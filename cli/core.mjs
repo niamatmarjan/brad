@@ -247,6 +247,7 @@ function bmadCheck(root) {
       note: 'External caches and files on disk are not proof the active host registered or invoked skills. Verify in the host.'
     },
     stateHints: { v6, v7, mixed: v6 && v7 }, warnings,
+    installCommand: detected ? null : 'npx bmad-method install',
     note: detected ? 'BMAD installation hints found. Native routing and subagent execution must still be checked in the coding host.' : 'BMAD Method not detected. Install it separately using the official npx bmad-method install or v7 skills setup.' };
 }
 function binaryPresence(command) {
