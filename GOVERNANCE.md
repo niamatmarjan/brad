@@ -12,4 +12,4 @@ BRAD is presently maintained by the repository owner, **[@niamatmarjan](https://
 
 ## Releases and stewardship
 
-Release process: [docs/releasing.md](docs/releasing.md). Security handling: [SECURITY.md](SECURITY.md). Ownership or maintainership may evolve transparently in future changes; current GitHub collaboration permissions remain authoritative.
+Release process: [docs/maintainers/releasing.md](docs/maintainers/releasing.md). Security handling: [SECURITY.md](SECURITY.md). Ownership or maintainership may evolve transparently in future changes; current GitHub collaboration permissions remain authoritative.

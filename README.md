@@ -16,9 +16,9 @@ BRAD is a **thin, user-invoked wrapper** for an existing [BMAD Method](https://g
 
 **Recommended:** Copy the instruction below into Antigravity, Claude Code, GitHub Copilot, or Codex while your project is open. Your agent should inspect the project, run the install, identify any missing official BMAD prerequisites, and verify the skill.
 
-> Install BRAD in this project using the instructions in https://github.com/niamatmarjan/brad/blob/main/docs/AI_SETUP.md. Use the correct host and safe versioned release. Verify with `brad doctor --json`. If native BMAD Method is missing, ask me whether to use v6.12 stable or v7 preview before installing it. Preserve existing files and don't push or deploy.
+> Install BRAD in this project using the instructions in https://github.com/niamatmarjan/brad/blob/main/docs/getting-started/ai-setup.md. Use the correct host and safe versioned release. Verify with `brad doctor --json`. If native BMAD Method is missing, ask me whether to use v6.12 stable or v7 preview before installing it. Preserve existing files and don't push or deploy.
 
-See the [AI setup guide](docs/AI_SETUP.md) for the full agent protocol, including Windows, permissions, preflight, and smoke tests.
+See the [AI setup guide](docs/getting-started/ai-setup.md) for the full agent protocol, including Windows, permissions, preflight, and smoke tests.
 
 ### Terminal alternative
 
@@ -57,7 +57,7 @@ The `doctor` command checks installed skill integrity, native BMAD **hints versu
 npx bmad-method install
 ```
 
-The BRAD CLI includes `setup`, `prompt`, `init`, `doctor`, `update`, `uninstall`, `--dry-run`, `--global`, and `--json`. Updates are safe: managed files are checked before replacement; modified/unmanaged installs require explicit `--force` and are backed up. See the [CLI installation guide](docs/installation.md).
+The BRAD CLI includes `setup`, `prompt`, `init`, `doctor`, `update`, `uninstall`, `--dry-run`, `--global`, and `--json`. Updates are safe: managed files are checked before replacement; modified/unmanaged installs require explicit `--force` and are backed up. See the [CLI installation guide](docs/getting-started/installation.md).
 
 **Prerequisites:** BMAD configured for your project before trying BRAD workflows; a coding host supporting Agent Skills; Git. Pushing PRs additionally requires an authorized remote and the host's GitHub integration/credentials.
 
@@ -105,6 +105,10 @@ selection, native invocation and delivered outcome metrics separate.
 - **Runtime:** skill instructions, references, read-only preflight tools, and evaluation cases; **not** a standalone autonomous daemon.
 - **Maturity:** v0.5.0 is a **public preview / supervised pilot**. The included 85 routing cases are a test specification, not proof of live host behavior. Concourse v0.4.1 remains a PARTIAL baseline evaluation.
 
+## Documentation
+
+Start from the [organized documentation index](docs/README.md) for setup, SDLC/role guides, architecture, evaluation, and release processes. Legacy documentation URLs are retained as compatibility pages.
+
 ## Project layout
 
 ```text
@@ -127,7 +131,7 @@ python -m unittest discover -s skills/brad/tests -v
 python tools/build_release.py
 ```
 
-Read [AI setup](docs/AI_SETUP.md), [validation boundaries](docs/validation-report-review.md), [architecture](docs/architecture.md), [testing limitations](docs/validation.md), [contributing](CONTRIBUTING.md), [security](SECURITY.md), and [changelog](CHANGELOG.md). Releases follow [SemVer](https://semver.org/); instructions are in [docs/releasing.md](docs/releasing.md).
+Read [AI setup](docs/getting-started/ai-setup.md), [validation boundaries](docs/evaluation/validation-report-review.md), [architecture](docs/reference/architecture.md), [testing limitations](docs/evaluation/validation.md), [contributing](CONTRIBUTING.md), [security](SECURITY.md), and [changelog](CHANGELOG.md). Releases follow [SemVer](https://semver.org/); instructions are in [docs/maintainers/releasing.md](docs/maintainers/releasing.md).
 
 ## Attribution
 
@@ -140,8 +144,8 @@ MIT licensed. Copyright © 2026 Niamat Marjan.
 - [MIT license](LICENSE) · [Notices and attribution](NOTICE.md) · [Branding / non-endorsement](BRANDING.md)
 - [Contributing](CONTRIBUTING.md) · [Code of conduct](CODE_OF_CONDUCT.md) · [Governance](GOVERNANCE.md)
 - [Security and private disclosure](SECURITY.md) · [Support](SUPPORT.md) · [Roadmap](ROADMAP.md)
-- [Release process](docs/releasing.md) · [Evaluation integrity](docs/validation.md) · [Demo publication policy](docs/demo-publication.md)
-- [GPT-6.1 Sol v0.5.0 validation prompt](docs/testing/GPT61_SOL_MASTER_PROMPT.md) · [Demo/example index](examples/README.md)
+- [Release process](docs/maintainers/releasing.md) · [Evaluation integrity](docs/evaluation/validation.md) · [Demo publication policy](docs/evaluation/demo-publication.md)
+- [GPT-6.1 Sol v0.5.0 validation prompt](docs/evaluation/prompts/gpt-6-1-sol-master-validation.md) · [Demo/example index](examples/README.md)
 
 **About source reuse:** MIT allows use and redistribution, including for commercial projects, so long as its copyright and license notice obligations are observed. BRAD contributors should disclose third-party source provenance. A separate BRANDING policy discourages confusing claims of official endorsement without altering code-license rights. No previously unregistered name or logo is claimed here to be a registered trademark.
 

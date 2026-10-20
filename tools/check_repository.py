@@ -16,6 +16,13 @@ REQUIRED = [
     'docs/AI_SETUP.md', 'docs/installation.md', 'docs/releasing.md',
     'docs/validation.md', 'docs/demo-publication.md',
     'docs/testing/GPT61_SOL_MASTER_PROMPT.md', 'examples/README.md',
+    # Canonical topic directories in addition to legacy compatibility pages.
+    'docs/README.md', 'docs/getting-started/ai-setup.md',
+    'docs/getting-started/installation.md', 'docs/sdlc/README.md',
+    'docs/sdlc/sdlc-playbook.md', 'docs/sdlc/raci-matrix.md',
+    'docs/roles/README.md', 'docs/reference/architecture.md',
+    'docs/evaluation/README.md', 'docs/evaluation/validation.md',
+    'docs/evaluation/demo-publication.md', 'docs/maintainers/releasing.md',
     '.github/PULL_REQUEST_TEMPLATE.md', '.github/CODEOWNERS',
     '.github/ISSUE_TEMPLATE/bug_report.md',
     '.github/ISSUE_TEMPLATE/feature_request.md',
@@ -28,6 +35,9 @@ CHECK_DOCS = [
     'ROADMAP.md', 'docs/AI_SETUP.md', 'docs/installation.md',
     'docs/releasing.md', 'docs/validation.md',
     'docs/demo-publication.md', 'examples/README.md',
+    # Validate all maintained and compatibility guides, excluding immutable release notes.
+    *[str(p.relative_to(ROOT)) for p in (ROOT / 'docs').rglob('*.md')
+      if 'releases' not in p.parts],
 ]
 BAD_SEGMENTS = {'__pycache__', 'node_modules', 'dist', '.venv', '.git', '.next'}
 
@@ -69,7 +79,8 @@ def audit(root: Path = ROOT) -> list[str]:
     if not (root / f'docs/releases/v{version}.md').exists():
         errors.append(f'missing release note for v{version}')
 
-    for filename in ['README.md', 'docs/AI_SETUP.md', 'docs/installation.md']:
+    for filename in ['README.md', 'docs/AI_SETUP.md', 'docs/installation.md',
+                     'docs/getting-started/ai-setup.md', 'docs/getting-started/installation.md']:
         t = (root / filename).read_text(encoding='utf-8')
         if f'github:niamatmarjan/brad#v{version}' not in t:
             errors.append(f'{filename} missing pinned v{version} install command')

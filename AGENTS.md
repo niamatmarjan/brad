@@ -2,7 +2,7 @@
 
 BRAD is an open-source thin coordinator for **installed native** BMAD workflows. Do not implement fake Analyst/PM/Architect/TEA personas or a competing sprint-state database. Respect BMAD versions and host limits.
 
-For agent-led onboarding, read `docs/AI_SETUP.md`. For architecture, see `docs/architecture.md`. For runtime contracts, read `skills/brad/SKILL.md` and only relevant references. Do not claim a slash command exists in every host: naming and discovery vary.
+Start from `docs/README.md` for the documentation map. For agent-led onboarding, read `docs/getting-started/ai-setup.md`. For architecture, see `docs/reference/architecture.md`. For runtime contracts, read `skills/brad/SKILL.md` and only relevant references. Do not claim a slash command exists in every host: naming and discovery vary.
 
 Safe contributor workflow:
 1. Inspect `VERSION`, `package.json`, CLI and tests, existing git changes.
