@@ -121,6 +121,24 @@ During the RelayDesk SDLC experiment, five distinct BRAD weaknesses were identif
 - **Component:** `cli/brad.mjs` / `cli/core.mjs`
 - **Observed Behavior:** BRAD is currently architected as a conversational coordinator (relying on host chat slash-commands and interactive user prompts). In automated, multi-agent CI/CD environments or autonomous agent pipelines, there is no headless CLI execution runner (e.g. `brad exec --lane build --ticket 1.1 --headless`) that can execute the preflight, dispatch the underlying native script, and emit machine-readable telemetry without human-in-the-loop chat prompts.
 
+### 6. Defect FND-006 (F-006): Host Invocation Mode Ambiguity & Slash Command Conflation
+- **Severity:** HIGH (Conceptual & Protocol Ambiguity)
+- **Component:** `skills/brad/SKILL.md` & `skills/brad/references/hosts-and-handoffs.md`
+- **Observed Behavior:** BRAD references suggest invoking native skills via `/bmad-*` commands or host slash commands. In modern AI coding hosts (Antigravity, Claude Code, Copilot), slash commands are conversational UI prompts, not programmatic shell commands. In automated sessions, instructing an agent to "invoke native BMAD" causes either hallucinated shell calls or manual file generation that gets falsely claimed as native dispatch.
+- **Root Cause:** Lack of an explicit taxonomy in BRAD contracts distinguishing:
+  - `HOST_NATIVE_INVOKED`: Verified invocation through host-level tool/slash-command dispatch.
+  - `NATIVE_WORKFLOW_INLINE`: Executing installed native workflow scripts (`uv run _bmad/scripts/render_skill.py`) and step files directly in session.
+  - `SEPARATE_SPECIALIST_INVOKED`: Dispatching into a distinct subagent conversation context.
+  - `HELPER_SCRIPTS_ONLY`: Running config/memlog scripts with manual template synthesis.
+- **Suggested Fix:** Add explicit execution mode taxonomy and canonical render commands to `hosts-and-handoffs.md`.
+
+### 7. Defect FND-007 (F-007): Windows PowerShell Wrapper Execution Policy Failure
+- **Severity:** MEDIUM
+- **Component:** CLI command execution / `delivery_preflight.py`
+- **Observed Behavior:** Running `npm test` on Windows with default restricted execution policy triggers `PSSecurityException` because PowerShell attempts to execute `npm.ps1`.
+- **Root Cause:** Windows PATH resolution defaults to `.ps1` over `.cmd` in PowerShell sessions.
+- **Suggested Fix:** Explicitly default to `.cmd` wrappers (`npm.cmd`, `npx.cmd`, `bmad.cmd`) across all subprocess runners on `win32`.
+
 ---
 
 ## Section C: Host & BMAD Environment Limitations
@@ -358,6 +376,38 @@ For the subsequent evaluation run (targeting BRAD v0.5.1 / v1.0-alpha), the foll
    - Validate genuine remote branch publishing, PR opening, CI checks, and review approvals.
 4. **Multi-Model Evaluator Comparison:**
    - Benchmark the routing engine across Claude 3.7 Sonnet, GPT-4o / o3-mini, and Gemini 2.5 Pro to ensure host-agnostic robustness.
+
+---
+
+## Section J: Story 1.1 Bounded Implementation & Ticket-to-Review Verification
+
+To empirically answer whether BRAD can coordinate a real implementation without misrepresentation, a complete bounded implementation test was executed in `bmad-workspace`:
+
+### 1. Step A: BRAD → Native Build (`/brad 1.1 --local`)
+- **Story:** Story 1.1 — Implement a configurable in-memory rate limiter.
+- **Resolution:** Resolved `1.1` in `sprint-status.yaml` and `epics.md` to `1-1-implement-a-configurable-in-memory-rate-limiter` (`status: ready-for-dev`).
+- **Prerequisites:** Clean Git tree (`db701c0`), `--local` delivery mode.
+- **Workflow Executed:** `bmad-build` compiled via `uv run _bmad/scripts/render_skill.py`.
+- **Steps Followed:** `step-01-clarify-and-route.md`, `compile-epic-context.md`, `step-02-plan.md` (route: `oneshot`), `step-oneshot.md`.
+- **Implementation:** `src/rate_limiter.mjs` and `test/rate_limiter.test.mjs` (6 unit tests, 100% pass in 7.1ms).
+- **Execution Mode:** `NATIVE_WORKFLOW_INLINE` (Commit `860a9e8`).
+
+### 2. Step B: Independent Code Review (`bmad-code-review`)
+- **Isolation:** Genuinely separate subagent conversation (`6fbd15da-1163-4221-a9d7-23640f61c569`).
+- **Safety Contract:** Read-only review lens; strictly zero code changes.
+- **Lenses:** Blind Hunter, Edge Case Hunter, Verification Gap on `diff-1.1.patch`.
+- **Finding (DEF-REV-01):** Whitespace-only keys accepted by `consume()`.
+- **Verdict:** `APPROVED_WITH_COMMENTS`.
+- **Remediation:** Developer added `clientKey.trim().length === 0` guard and regression test (Commit `0ae7eeb`).
+- **Execution Mode:** `SEPARATE_SPECIALIST_INVOKED`.
+
+### 3. Step C: QA / TEA Test Quality Review (`bmad-testarch-test-review`)
+- **Workflow:** Native TEA Test Review (Murat persona).
+- **Score:** Authoritative Score **100.00 / 100.00 (EXCELLENT)**.
+- **Traceability:** All 6 acceptance criteria verified with passing unit tests.
+- **Artifact:** `_bmad-output/test-artifacts/test-reviews/test-review-rate-limiter.md` (Commit `30c7c64`).
+- **Sprint Status:** Updated to `done`.
+- **Execution Mode:** `NATIVE_WORKFLOW_INLINE`.
 
 ---
 
