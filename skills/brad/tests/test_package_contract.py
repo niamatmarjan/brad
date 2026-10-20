@@ -39,6 +39,18 @@ class PackageContractTests(unittest.TestCase):
         self.assertIn("even when repository policy normally enables", delivery)
         self.assertIn("Do **not** change code, create a branch", delivery)
 
+    def test_native_execution_modes_are_not_conflated(self):
+        hosts = (ROOT / "references" / "hosts-and-handoffs.md").read_text()
+        skill = (ROOT / "SKILL.md").read_text()
+        for label in ("HOST_NATIVE_INVOKED", "NATIVE_WORKFLOW_INLINE",
+                      "SEPARATE_SPECIALIST_INVOKED", "HELPER_SCRIPTS_ONLY",
+                      "NOT_VERIFIED"):
+            self.assertIn(label, hosts)
+        self.assertIn("not operating-system shell commands", hosts)
+        self.assertIn("never assume the script exists in all", hosts)
+        self.assertIn("A proposed route is NOT evidence an agent ran", skill)
+        self.assertIn("same-session native workflow execution", skill)
+
     def test_pr_is_gated_and_merge_not_default(self):
         md = (ROOT / "SKILL.md").read_text()
         delivery = (ROOT / "references" / "ticket-to-pr.md").read_text()

@@ -65,7 +65,7 @@ before invoking. These references are guides, never proof of installed behavior.
    tradeoffs, destructive operations, unresolved acceptance criteria, or blocked
    dependencies. Explain options and recommendation. Continue unaffected work.
    Delegate retains its native mandatory human checkpoints; never bypass them.
-7. **Truthful results.** A proposed route is NOT evidence an agent ran.
+7. **Truthful results.** Explicitly distinguish host-native invocation,\n   same-session native workflow execution, separate specialist dispatch,\n   and helper-scripts-only activity (see hosts-and-handoffs).\n   A proposed route is NOT evidence an agent ran.
    Running an instruction in the same context is NOT independent review.
    Require observed tests/exit codes, commits, remote PR URL and CI result before
    saying any passed. A report badge is not proof of correct routing: compare the
