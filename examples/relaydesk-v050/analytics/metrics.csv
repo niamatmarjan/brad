@@ -1,14 +1,15 @@
-metric_key,value,numerator,denominator,unit,status
-baseline_tests_pass_rate,100.0,54,54,percentage,PASS
-candidate_tests_pass_rate,100.0,55,55,percentage,PASS
-relaydesk_server_tests,100.0,16,16,percentage,PASS
-canonical_routing_cases_total,85,85,85,count,PASS
-routing_l1_contract_rate,100.0,85,85,percentage,PASS
-routing_l2_target_resolve_rate,100.0,85,85,percentage,PASS
-routing_l3_exact_selection_rate,49.41,42,85,percentage,PASS
-routing_l3_conditional_review_rate,50.59,43,85,percentage,REVIEW_REQUIRED
-routing_l4_native_invocation_rate,0.0,0,85,percentage,BLOCKED
-routing_l5_verified_outcome_rate,0.0,0,85,percentage,NOT_RUN
-collaboration_worktree_rate,100.0,10,10,percentage,PASS
-collaboration_subagent_cycle_rate,100.0,5,5,percentage,PASS
-defect_resolution_rate,100.0,2,2,percentage,PASS
+metric_id,numerator,denominator,value_pct,status,notes
+baseline_tests_pass_rate,54,54,100.0,PASS,All baseline tests passing
+candidate_tests_pass_rate,55,55,100.0,PASS,Candidate tests passing
+relaydesk_server_tests,16,16,100.0,PASS,Server integration suite
+canonical_routing_cases_total,85,85,100.0,PASS,Total canonical cases in specification
+routing_l1_contract_schema_rate,85,85,100.0,PASS,Static specification schema validation
+routing_empirically_observed_rate,10,85,11.76,PARTIAL,10 scenarios evaluated with real execution traces
+routing_unobserved_not_run_rate,75,85,88.24,NOT_RUN,75 scenarios unobserved and marked NOT_RUN
+routing_l3_observed_pass_rate,9,85,10.59,PASS,Exact native skill matches
+routing_l3_conditional_review_rate,1,85,1.18,REVIEW_REQUIRED,Conditional routes requiring review
+routing_l4_native_invocation_rate,0,85,0.0,BLOCKED,Blocked by missing host skill discovery
+routing_l5_verified_outcome_rate,0,85,0.0,NOT_RUN,No native delivery traces
+collaboration_worktree_rate,10,10,100.0,PASS,Worktree collaboration exercises
+collaboration_subagent_cycle_rate,5,5,100.0,PASS,Independent subagent stages
+defect_resolution_rate,2,2,100.0,PASS,DEF-101 and DEF-102 closed

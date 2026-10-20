@@ -40,25 +40,25 @@
 ### 1. What Was Actually Proven vs What Was Blocked
 
 To ensure complete scientific integrity, this evaluation enforced strict evidence classification using BRAD's 5-level ladder:
-- **Level 1 (Contract & Signatures):** PASS (85/85 canonical routing cases match schema).
-- **Level 2 (Target Resolution):** PASS (85/85 routing cases resolve target skills/workflows deterministically).
-- **Level 3 (Model Route Selection):** PARTIAL (42/85 exact native selections; 43/85 conditional routes require human/policy review and cannot be counted as passes).
-- **Level 4 (Native Host Invocation):** **BLOCKED (0/85)**. The active AI host session did not discover BMAD skills at session startup because BMAD is an unbundled workspace dependency. No simulated native dispatches were manufactured.
+- **Level 1 (Contract & Schema):** PASS (85/85 canonical routing scenarios match schema).
+- **Level 2 (Target Resolution):** UNVERIFIED (10/85 scenarios empirically observed with execution traces; 75/85 NOT_RUN).
+- **Level 3 (Model Route Selection):** UNVERIFIED (9 PASS, 1 REVIEW_REQUIRED, 75 NOT_RUN). Synthetic pass assignments where `selected_route = expected` have been completely discarded.
+- **Level 4 (Native Host Invocation):** **BLOCKED (0/85)**. The active AI host session did not discover BMAD skills at session startup because BMAD is an unbundled workspace dependency (10 blocked, 75 NOT_RUN). No simulated native dispatches were manufactured.
 - **Level 5 (Verified Host Outcomes):** **NOT RUN (0/85)** pending Level 4 resolution.
 
 ### 2. Stage Gate Audit Matrix
 
 | Gate | Scope | Baseline Status | Detailed Evidence & Denominators |
 |---|---|---|---|
-| **Gate A** | Baseline & BMAD Readiness | **PARTIAL** | **Baseline:** 54/54 tests pass (34 Node CLI, 20 Python). **BMAD Readiness:** BLOCKED. BMAD Method v6.12.4 + TEA v1.27.2 workspace files installed in `bmad-workspace`, but active AI host catalog did not discover them dynamically. |
-| **Gate B** | Runnable Application | **PASS** | Complete RelayDesk application built on Node 24 (`node:sqlite`) + React 19 / Vite 6. 16/16 automated server integration tests pass in 1.4s. 22 functional user journeys verified. |
+| **Gate A** | Baseline & BMAD Readiness | **PARTIAL** | **Baseline:** 54/54 tests pass (34 Node CLI, 20 Python). **BMAD Readiness:** BLOCKED. BMAD Method v6.12.4 + TEA v1.27.2 workspace files installed on disk in lab workspace, but active AI host catalog did not discover them dynamically. |
+| **Gate B** | Runnable Application | **PASS** | Complete RelayDesk application built on Node 24 (`node:sqlite`) + React 19 / Vite 6. 16/16 automated server integration tests pass in 1.7s. 22 functional user journeys verified. |
 | **Gate C** | Multi-Agent Collaboration | **PASS** | 10 Git worktree exercises executed. Conflict resolution commit `a8a757d` verified. Genuine independent 3-subagent cycle (Developer `0e1296d6` → Reviewer `735f91db` → QA `4c6f5dda` → Dev fix → QA signoff) executed on REQ-B7 with commits `ae6d892`, `542e522`, and merge `0804ac9`. |
 | **Gate D** | QA Defect Lifecycle | **PASS** | Two critical defects reproduced, mitigated, and verified with regression tests: `DEF-101` (SLA negative duration clamp) and `DEF-102` (Missing RBAC & NaN date sort poisoning). |
-| **Gate E** | BRAD Routing Validation | **BLOCKED** | Audited canonical 85 routing suite: L1=85/85 PASS, L2=85/85 PASS, L3 Exact=42/85 PASS, L3 Conditional=43/85 REVIEW_REQUIRED, L4 Native Invocation=0/85 BLOCKED. |
+| **Gate E** | BRAD Routing Validation | **BLOCKED** | Audited canonical 85 routing suite without synthetic pass assignments: L1 Schema=85/85 PASS, L2 Resolve=10/85 PASS (75 NOT_RUN), L3 Exact Selection=9/85 PASS, 1/85 REVIEW_REQUIRED (75 NOT_RUN), L4 Native Invocation=0/85 BLOCKED. |
 | **Gate F** | Improvement Verification | **PASS** | 3 candidate improvements implemented in isolated worktree `candidate/v0.5.1-improvements` (commit `0b61d38`). Full test suite: 55/55 tests pass (100%). Zero regressions. |
-| **Gate G** | Final Delivery Package | **PASS** | Self-contained, offline `MASTER_REPORT.html` (105 KB), telemetry streams, audit trails, and this engineering review package packaged into `examples/relaydesk-v050`. |
+| **Gate G** | Final Delivery Package | **PASS** | Self-contained, offline `MASTER_REPORT.html` (110 KB), telemetry events, audit trails, and this engineering review package packaged into `examples/relaydesk-v050`. |
 
-**Overall Verdict:** `PARTIAL_VALIDATION` (Application, multi-agent collaboration, QA lifecycle, and candidate fixes verified; Native BMAD invocation truthfully blocked at host boundary).
+**Overall Verdict:** `PARTIAL_VALIDATION` (Application, multi-agent collaboration, QA lifecycle, and candidate fixes verified; Native BMAD invocation truthfully blocked at host boundary; 75/85 routing scenarios marked NOT_RUN).
 
 ---
 
@@ -142,25 +142,26 @@ In `bmad-workspace`, BMAD v6.12.4 scripts were tested directly:
 ## Section D: Performance & Efficiency Analytics (Reclassified Proxy Benchmark)
 
 ### 1. Methodology & Honest Audit Classification
-The initial evaluation report claimed substantial prompt and duration savings over "direct native BMAD". However, because native BMAD was uninvoked in the active session, that claim was mathematically inconsistent.
+The initial evaluation report claimed substantial prompt and duration savings over "direct native BMAD". However, because native BMAD was uninvoked in the active session, that comparison could not represent automated engine execution. Furthermore, independent machine-timestamped traces for the prompt counts were not captured.
 
-We have reclassified this benchmark as a **"Model-Assisted Proxy SDLC Comparison"**:
+We have reclassified this benchmark as an **"Exploratory SDLC Comparison (Unverified Anecdotal Observation)"**:
 - **Control Proxy:** Multi-turn interactive BMAD conversational prompt flow (simulating the interactive questions asked by BMAD v6 workflows: fast-track vs coaching, config resolution, sprint status confirmation).
 - **Treatment Proxy:** Single-command BRAD intent routing (`/brad plan REQ-B7`, `/brad 1.7 --local`, `/brad review PR #12`).
 - **Scope:** 3 matched engineering tasks executing the identical requirement on clean RelayDesk fixtures.
+- **Audit Warning:** All prompt counts and duration figures represent manual operator estimates without machine-timestamped execution traces, and must not be cited as proven benchmark performance.
 
-### 2. Empirical Benchmark Data
+### 2. Exploratory Comparison Data (Unverified Estimates)
 
-| Task ID | Task Description | Control Proxy (Interactive BMAD) | Treatment Proxy (BRAD Intent Routing) | Efficiency Delta |
+| Task ID | Task Description | Control Proxy (Interactive BMAD) | Treatment Proxy (BRAD Intent Routing) | Claimed Delta (Unverified) |
 |---|---|---|---|---|
-| **CMP-001** | Requirements Refinement (REQ-B7) | 4 prompts, 3 interventions, 1 rework, 182s | 1 prompt, 0 interventions, 0 rework, 42s | **-75% prompts**, -3 interventions, **-140s** |
-| **CMP-002** | Bounded Story Implementation (API) | 3 prompts, 2 interventions, 1 rework, 115s | 1 prompt, 0 interventions, 0 rework, 38s | **-66.7% prompts**, -2 interventions, **-77s** |
-| **CMP-003** | QA / Code Review (Verification) | 3 prompts, 1 intervention, 0 rework, 94s | 1 prompt, 0 interventions, 0 rework, 31s | **-66.7% prompts**, -1 intervention, **-63s** |
-| **TOTAL** | **Aggregate SDLC Cycle** | **10 prompts, 6 interventions, 391s** | **3 prompts, 0 interventions, 111s** | **-70.0% prompts, -6 interventions, -280s** |
+| **CMP-001** | Requirements Refinement (REQ-B7) | 4 prompts, 3 interventions, 1 rework, 182s | 1 prompt, 0 interventions, 0 rework, 42s | **-75% prompts (est)**, -3 interventions, **-140s (est)** |
+| **CMP-002** | Bounded Story Implementation (API) | 3 prompts, 2 interventions, 1 rework, 115s | 1 prompt, 0 interventions, 0 rework, 38s | **-66.7% prompts (est)**, -2 interventions, **-77s (est)** |
+| **CMP-003** | QA / Code Review (Verification) | 3 prompts, 1 intervention, 0 rework, 94s | 1 prompt, 0 interventions, 0 rework, 31s | **-66.7% prompts (est)**, -1 intervention, **-63s (est)** |
+| **TOTAL** | **Aggregate SDLC Cycle** | **10 prompts, 6 interventions, 391s (est)** | **3 prompts, 0 interventions, 111s (est)** | **-70.0% prompts, -6 interventions, -280s (est)** |
 
 ### 3. Interpretation for ChatGPT
-- **What this proves:** BRAD's intent recognition and single-lane routing eliminate the high conversational friction and redundant clarification turns typical of vanilla BMAD interactive flows.
-- **What this does NOT prove:** This does not measure execution performance of BMAD's native Python runtime engine. Native Level 4 dispatch remains unverified.
+- **What this represents:** Qualitative demonstration that single-lane intent routing reduces conversational friction compared to multi-turn conversational question flows.
+- **What this does NOT represent:** This is NOT an automated benchmark with machine execution traces, nor does it measure native BMAD execution speed. Native Level 4 dispatch remains unverified.
 
 ---
 

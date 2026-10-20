@@ -1,20 +1,22 @@
 {
-  "run_id": "relaydesk-v050-exp-01",
-  "brad_version": "0.5.0",
-  "total_cases": 85,
-  "high_risk_cases_count": 9,
-  "host_environment": {
-    "host": "Antigravity",
-    "model": "Gemini 3.8 Flash (High)",
-    "native_bmad_installed": false
-  },
+  "suite": "Canonical BRAD Routing Evaluation (Audited)",
+  "brad_baseline_version": "0.5.0",
   "summary": {
-    "L1_contract_pass": 85,
-    "L2_resolve_pass": 85,
-    "L3_route_pass": 42,
-    "L3_review_required": 43,
-    "L4_invocation_blocked": 85,
-    "L5_verified_not_run": 85
+    "total_cases": 85,
+    "empirically_observed": 10,
+    "unobserved_not_run": 75,
+    "l1_contract_schema_pass": 85,
+    "l2_target_resolve_pass": 10,
+    "l2_target_resolve_not_run": 75,
+    "l3_route_selection_pass": 9,
+    "l3_route_selection_review_required": 1,
+    "l3_route_selection_not_run": 75,
+    "l4_native_invocation_pass": 0,
+    "l4_native_invocation_blocked": 10,
+    "l4_native_invocation_not_run": 75,
+    "l5_verified_outcome_pass": 0,
+    "l5_verified_outcome_not_run": 85,
+    "audit_policy": "Strict empirical evidence only. No synthetic pass assignments."
   },
   "cases": [
     {
@@ -23,7 +25,9 @@
       "user_request": "Create epics and stories from the approved PRD; no code.",
       "expected_route": "bmad-create-epics-and-stories",
       "selected_route": "bmad-create-epics-and-stories",
-      "is_high_risk_sample": true,
+      "execution_id": "EXEC-PO-001",
+      "evidence_path": "docs/requirements/MODULE_A_INTAKE.md",
+      "trace": "Initiative intake refinement executed by Product Owner agent; output written to docs/requirements/MODULE_A_INTAKE.md",
       "critical_behavior": "planning-only; preserve PRD",
       "clarification_or_block_expected": false,
       "levels": {
@@ -32,11 +36,6 @@
         "L3_route_selection": "PASS",
         "L4_native_invocation": "BLOCKED",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -44,21 +43,18 @@
       "fixture": "v6",
       "user_request": "What is the sprint status right now?",
       "expected_route": "bmad-sprint-planning status",
-      "selected_route": "bmad-sprint-planning status",
-      "is_high_risk_sample": true,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "read-only",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -67,7 +63,9 @@
       "user_request": "Implement story 1.3 fully and verify.",
       "expected_route": "bmad-build story 1.3",
       "selected_route": "bmad-build story 1.3",
-      "is_high_risk_sample": true,
+      "execution_id": "EXEC-DEV-001",
+      "evidence_path": "app/server/src/api.mjs",
+      "trace": "Developer agent implemented GET /api/analytics/sla-summary; commits ae6d892 and 542e522",
       "critical_behavior": "one ticket, not full epic",
       "clarification_or_block_expected": false,
       "levels": {
@@ -76,11 +74,6 @@
         "L3_route_selection": "PASS",
         "L4_native_invocation": "BLOCKED",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -88,21 +81,18 @@
       "fixture": "v6",
       "user_request": "Use the Scrum Master agent to refine 2.2.",
       "expected_route": "named SM if installed; native sprint/story workflow otherwise",
-      "selected_route": "named SM if installed; native sprint/story workflow otherwise",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "state exact substitution",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -110,21 +100,18 @@
       "fixture": "v6",
       "user_request": "Make this sprint plan from accepted epics.",
       "expected_route": "bmad-sprint-planning",
-      "selected_route": "bmad-sprint-planning",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "readiness gate first",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -132,21 +119,18 @@
       "fixture": "v6",
       "user_request": "Correct course after this architecture shift.",
       "expected_route": "bmad-correct-course if installed",
-      "selected_route": "bmad-correct-course if installed",
-      "is_high_risk_sample": true,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "affected artifacts only",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -154,21 +138,18 @@
       "fixture": "v6",
       "user_request": "Create next story; use deprecated create-story flow specifically.",
       "expected_route": "bmad-create-story if installed",
-      "selected_route": "bmad-create-story if installed",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "warn deprecated, respect explicit selection",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -176,21 +157,18 @@
       "fixture": "v6",
       "user_request": "Check implementation readiness on v6.12.",
       "expected_route": "bmad-sprint-planning readiness",
-      "selected_route": "bmad-sprint-planning readiness",
-      "is_high_risk_sample": true,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "don't invent retired readiness skill",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -198,21 +176,18 @@
       "fixture": "v6",
       "user_request": "QA an existing login flow: generate basic end to end tests.",
       "expected_route": "bmad-qa-generate-e2e-tests",
-      "selected_route": "bmad-qa-generate-e2e-tests",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "don't conflate review",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -221,7 +196,9 @@
       "user_request": "Review the current PR but DO NOT make edits.",
       "expected_route": "bmad-code-review read-only",
       "selected_route": "bmad-code-review read-only",
-      "is_high_risk_sample": false,
+      "execution_id": "EXEC-REV-001",
+      "evidence_path": "evidence/collaboration/CODE_REVIEW_002.md",
+      "trace": "Reviewer subagent (735f91db) reviewed diff main..feat/sla-analytics; caught SEC-01 and BUG-01; verdict CHANGES_REQUESTED",
       "critical_behavior": "no patches",
       "clarification_or_block_expected": false,
       "levels": {
@@ -230,11 +207,6 @@
         "L3_route_selection": "PASS",
         "L4_native_invocation": "BLOCKED",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -242,21 +214,18 @@
       "fixture": "v7",
       "user_request": "Split accepted initiative into 3 epics with stories.",
       "expected_route": "bmad-agent-po TICKETS",
-      "selected_route": "bmad-agent-po TICKETS",
-      "is_high_risk_sample": true,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "native ticket tree",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -264,21 +233,18 @@
       "fixture": "v7",
       "user_request": "Refine 2.2 to be buildable but do not implement.",
       "expected_route": "bmad-agent-po REFINE",
-      "selected_route": "bmad-agent-po REFINE",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "no code",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -286,21 +252,18 @@
       "fixture": "v7",
       "user_request": "Implement story 2.2 and verify.",
       "expected_route": "bmad-build ticket 2.2",
-      "selected_route": "bmad-build ticket 2.2",
-      "is_high_risk_sample": true,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "one ticket; built not done",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -308,21 +271,18 @@
       "fixture": "v7",
       "user_request": "Find the next ready ticket and build it.",
       "expected_route": "PO/board next + bmad-build",
-      "selected_route": "PO/board next + bmad-build",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "resolve dependencies",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -330,21 +290,18 @@
       "fixture": "v7",
       "user_request": "Report all pending stories in current epic.",
       "expected_route": "bmad-agent-po BOARD",
-      "selected_route": "bmad-agent-po BOARD",
-      "is_high_risk_sample": true,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "no state writes",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -352,21 +309,18 @@
       "fixture": "v7",
       "user_request": "Requirements changed after we built story 1.2. Update only downstream tickets.",
       "expected_route": "bmad-agent-po REPLAN",
-      "selected_route": "bmad-agent-po REPLAN",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "retain IDs/evidence",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -374,21 +328,18 @@
       "fixture": "v7",
       "user_request": "Review epic 3 as a whole and determine if it should be accepted.",
       "expected_route": "bmad-retrospective",
-      "selected_route": "bmad-retrospective",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "evidence-based verdict, no force close",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -396,21 +347,18 @@
       "fixture": "v7",
       "user_request": "Complete the active epic without stopping after one story.",
       "expected_route": "PO status + repeated one-ticket Build + integration + retrospective",
-      "selected_route": "PO status + repeated one-ticket Build + integration + retrospective",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "respect checkpoints",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -418,21 +366,18 @@
       "fixture": "v7",
       "user_request": "Run Build Auto on all stories on dirty branch without subagents.",
       "expected_route": "block Build Auto; suggest attended Build",
-      "selected_route": "block Build Auto; suggest attended Build",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "no false unattended workers",
       "clarification_or_block_expected": true,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -440,21 +385,18 @@
       "fixture": "v7",
       "user_request": "Mark all built tickets done immediately even if gates fail.",
       "expected_route": "block state promotion",
-      "selected_route": "block state promotion",
-      "is_high_risk_sample": true,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "explain failed criteria",
       "clarification_or_block_expected": true,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -463,7 +405,9 @@
       "user_request": "Create a risk-based P0-P3 test strategy for epic 4.",
       "expected_route": "bmad-testarch-test-design",
       "selected_route": "bmad-testarch-test-design",
-      "is_high_risk_sample": false,
+      "execution_id": "EXEC-QA-001",
+      "evidence_path": "docs/qa/ACCEPTANCE_MATRIX.md",
+      "trace": "Test Architect designed Given/When/Then acceptance matrix across 22 scenarios in docs/qa/ACCEPTANCE_MATRIX.md",
       "critical_behavior": "no code by default",
       "clarification_or_block_expected": false,
       "levels": {
@@ -472,11 +416,6 @@
         "L3_route_selection": "PASS",
         "L4_native_invocation": "BLOCKED",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -484,21 +423,18 @@
       "fixture": "v7+tea",
       "user_request": "Generate acceptance tests before the payments feature exists.",
       "expected_route": "bmad-testarch-atdd",
-      "selected_route": "bmad-testarch-atdd",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "red tests are expected",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -506,21 +442,18 @@
       "fixture": "v7+tea",
       "user_request": "Generate thorough automated regression tests with reusable fixtures.",
       "expected_route": "bmad-testarch-automate",
-      "selected_route": "bmad-testarch-automate",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "implemented feature",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -529,7 +462,9 @@
       "user_request": "Review the quality of our test suite, no application changes.",
       "expected_route": "bmad-testarch-test-review",
       "selected_route": "bmad-testarch-test-review",
-      "is_high_risk_sample": false,
+      "execution_id": "EXEC-QA-002",
+      "evidence_path": "evidence/collaboration/DEF-102.md",
+      "trace": "QA subagent (4c6f5dda) wrote server/tests/analytics_qa.test.mjs, reproduced DEF-102 (CRITICAL), retested, and signed off",
       "critical_behavior": "audit only",
       "clarification_or_block_expected": false,
       "levels": {
@@ -538,11 +473,6 @@
         "L3_route_selection": "PASS",
         "L4_native_invocation": "BLOCKED",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -550,21 +480,18 @@
       "fixture": "v7+tea",
       "user_request": "Audit response time, accessibility, security and reliability before R1.",
       "expected_route": "bmad-testarch-nfr",
-      "selected_route": "bmad-testarch-nfr",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "report evidence gaps",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -572,21 +499,18 @@
       "fixture": "v7+tea",
       "user_request": "Trace every R1 requirement to tests and decide gate readiness.",
       "expected_route": "bmad-testarch-trace",
-      "selected_route": "bmad-testarch-trace",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "release gate needs actual evidence",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -594,21 +518,18 @@
       "fixture": "v7+tea",
       "user_request": "Configure the testing framework and CI pipeline.",
       "expected_route": "bmad-testarch-framework + bmad-testarch-ci",
-      "selected_route": "bmad-testarch-framework + bmad-testarch-ci",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "environment changes require appropriate approval",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -616,21 +537,18 @@
       "fixture": "v7-no-tea",
       "user_request": "Generate ordinary E2E tests for the checkout.",
       "expected_route": "bmad-qa-generate-e2e-tests",
-      "selected_route": "bmad-qa-generate-e2e-tests",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "don't pretend TEA installed",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -638,21 +556,18 @@
       "fixture": "v7-no-tea",
       "user_request": "Use TEA Murat's test trace skill for R1, but TEA isn't installed.",
       "expected_route": "report missing TEA; propose installed/manual evidence alternative",
-      "selected_route": "report missing TEA; propose installed/manual evidence alternative",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "ask before installing TEA",
       "clarification_or_block_expected": true,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -660,21 +575,18 @@
       "fixture": "mixed",
       "user_request": "QA this.",
       "expected_route": "resolve only active diff/story if unambiguous; otherwise clarify target/objective",
-      "selected_route": "resolve only active diff/story if unambiguous; otherwise clarify target/objective",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "don't assume all QA types",
       "clarification_or_block_expected": true,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -682,21 +594,18 @@
       "fixture": "v7",
       "user_request": "Find every branching edge case and verification gap in current code changes.",
       "expected_route": "bmad-review edge-case + verification-gap lenses",
-      "selected_route": "bmad-review edge-case + verification-gap lenses",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "evidence-linked findings",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -704,21 +613,18 @@
       "fixture": "v7",
       "user_request": "Do a code review on this PR and patch all high-priority bugs.",
       "expected_route": "bmad-code-review fix-and-verify",
-      "selected_route": "bmad-code-review fix-and-verify",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "not basic E2E",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -727,7 +633,9 @@
       "user_request": "Create PRD from my new product brief.",
       "expected_route": "bmad-prd create",
       "selected_route": "bmad-prd create",
-      "is_high_risk_sample": false,
+      "execution_id": "EXEC-PLAN-001",
+      "evidence_path": "docs/product/PRODUCT_BRIEF.md",
+      "trace": "Product brief refined into PRD intake specification; docs/product/PRODUCT_BRIEF.md",
       "critical_behavior": "don't implement",
       "clarification_or_block_expected": false,
       "levels": {
@@ -736,11 +644,6 @@
         "L3_route_selection": "PASS",
         "L4_native_invocation": "BLOCKED",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -748,21 +651,18 @@
       "fixture": "v7",
       "user_request": "Validate our existing PRD; don't rewrite it.",
       "expected_route": "bmad-prd validate",
-      "selected_route": "bmad-prd validate",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "report only",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -770,21 +670,18 @@
       "fixture": "v7",
       "user_request": "Ask Mary the Analyst to research competitors.",
       "expected_route": "bmad-agent-analyst research",
-      "selected_route": "bmad-agent-analyst research",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "honor named agent",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -793,7 +690,9 @@
       "user_request": "Ask Winston to design auth architecture.",
       "expected_route": "bmad-agent-architect + architecture workflow",
       "selected_route": "bmad-agent-architect + architecture workflow",
-      "is_high_risk_sample": false,
+      "execution_id": "EXEC-ARCH-001",
+      "evidence_path": "docs/architecture/ARCHITECTURE.md",
+      "trace": "Architect agent designed SQLite schema and HMAC webhook dispatching in docs/architecture/ARCHITECTURE.md",
       "critical_behavior": "don't rewrite UX",
       "clarification_or_block_expected": false,
       "levels": {
@@ -802,11 +701,6 @@
         "L3_route_selection": "PASS",
         "L4_native_invocation": "BLOCKED",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -814,21 +708,18 @@
       "fixture": "v7",
       "user_request": "Ask Sally to redesign mobile navigation.",
       "expected_route": "bmad-agent-ux-designer + bmad-ux",
-      "selected_route": "bmad-agent-ux-designer + bmad-ux",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "design only if requested",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -836,21 +727,18 @@
       "fixture": "v7",
       "user_request": "Brainstorm 20 puzzle game ideas with the creativity team.",
       "expected_route": "brainstorming / CIS if installed",
-      "selected_route": "brainstorming / CIS if installed",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "no PRD",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -858,21 +746,18 @@
       "fixture": "v6+gds",
       "user_request": "Design District 1 levels and mechanics in my Unity game using GDS.",
       "expected_route": "installed GDS level/game-design skill",
-      "selected_route": "installed GDS level/game-design skill",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "honor engine and art constraints",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -880,21 +765,18 @@
       "fixture": "v6+gds",
       "user_request": "Implement the Unity lobby and test it in editor.",
       "expected_route": "installed GDS implementation or bmad-build",
-      "selected_route": "installed GDS implementation or bmad-build",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "can't claim Unity ran without editor access",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -902,21 +784,18 @@
       "fixture": "v7+gds",
       "user_request": "Write dialogue for the Librarian NPC without touching mechanics.",
       "expected_route": "installed GDS narrative designer",
-      "selected_route": "installed GDS narrative designer",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "no code",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -924,21 +803,18 @@
       "fixture": "mixed",
       "user_request": "There are two installed BMAD versions and conflicting sprint/ticket outputs. Build story 2.1.",
       "expected_route": "inspect and clarify runtime before writes",
-      "selected_route": "inspect and clarify runtime before writes",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "don't cross-write stores",
       "clarification_or_block_expected": true,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -946,21 +822,18 @@
       "fixture": "v7",
       "user_request": "Story 2.1.",
       "expected_route": "infer from recent context if possible; otherwise ask action",
-      "selected_route": "infer from recent context if possible; otherwise ask action",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "never assume implement",
       "clarification_or_block_expected": true,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -968,21 +841,18 @@
       "fixture": "v7",
       "user_request": "Implement account deletion but retention rules aren't specified.",
       "expected_route": "investigate existing policy then ask blocking retention decision",
-      "selected_route": "investigate existing policy then ask blocking retention decision",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "security/privacy sensitive",
       "clarification_or_block_expected": true,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -990,21 +860,18 @@
       "fixture": "v7",
       "user_request": "Fix a typo on the button label.",
       "expected_route": "direct small edit or one light Build",
-      "selected_route": "direct small edit or one light Build",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "no five-agent council",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1012,21 +879,18 @@
       "fixture": "v7",
       "user_request": "Audit R1 and deploy production if good.",
       "expected_route": "release evidence audit then ask deployment approval",
-      "selected_route": "release evidence audit then ask deployment approval",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "no autonomous deployment",
       "clarification_or_block_expected": true,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1034,21 +898,18 @@
       "fixture": "v7",
       "user_request": "Continue from the unfinished plan after session limit.",
       "expected_route": "resume native plan at recorded status",
-      "selected_route": "resume native plan at recorded status",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "no new PRD/story",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1056,21 +917,18 @@
       "fixture": "v7",
       "user_request": "Run test suite; tests can't run because missing service credentials.",
       "expected_route": "run what can run, label blocked tests NOT RUN",
-      "selected_route": "run what can run, label blocked tests NOT RUN",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "don't fake pass",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1078,21 +936,18 @@
       "fixture": "v7",
       "user_request": "Review the branch with a separate independent model, but host has no subagents.",
       "expected_route": "report inability and offer transparent same-session review",
-      "selected_route": "report inability and offer transparent same-session review",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "do not simulate independence",
       "clarification_or_block_expected": true,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1100,21 +955,18 @@
       "fixture": "v7",
       "user_request": "Delete every old ticket and regenerate them from scratch.",
       "expected_route": "ask explicit destructive authorization and preserve traceability",
-      "selected_route": "ask explicit destructive authorization and preserve traceability",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "no unapproved deletes",
       "clarification_or_block_expected": true,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1122,21 +974,18 @@
       "fixture": "v7",
       "user_request": "Use the PM to update accepted PRD and PO to replan the epic.",
       "expected_route": "bmad-prd update -> bmad-agent-po REPLAN",
-      "selected_route": "bmad-prd update -> bmad-agent-po REPLAN",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "preserve coherent contract",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1144,21 +993,18 @@
       "fixture": "v7",
       "user_request": "The release build is green. Can we sign off now?",
       "expected_route": "audit all required release evidence",
-      "selected_route": "audit all required release evidence",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "build alone insufficient",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1166,21 +1012,18 @@
       "fixture": "v6",
       "user_request": "Rerun QA without any changes until everything says PASS.",
       "expected_route": "diagnose gate/failure, bounded repair loop",
-      "selected_route": "diagnose gate/failure, bounded repair loop",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "no artificial green",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1188,21 +1031,18 @@
       "fixture": "v7",
       "user_request": "Perform a security-only review of checkout, don't fix.",
       "expected_route": "read-only security review lens/workflow",
-      "selected_route": "read-only security review lens/workflow",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "do not alter code",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1210,21 +1050,18 @@
       "fixture": "v7",
       "user_request": "Our epics are already approved. Implement the first story.",
       "expected_route": "native ready ticket -> bmad-build",
-      "selected_route": "native ready ticket -> bmad-build",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "no re-epic",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1232,21 +1069,18 @@
       "fixture": "v6",
       "user_request": "There's one reviewed story and no test suite; generate tests.",
       "expected_route": "bmad-qa-generate-e2e-tests; propose test framework approval",
-      "selected_route": "bmad-qa-generate-e2e-tests; propose test framework approval",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "do not install framework silently",
       "clarification_or_block_expected": true,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1254,21 +1088,18 @@
       "fixture": "v7",
       "user_request": "Explain which agent to use for an epic retrospective.",
       "expected_route": "answer directly: bmad-retrospective",
-      "selected_route": "answer directly: bmad-retrospective",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "don't execute it",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1276,21 +1107,18 @@
       "fixture": "v7",
       "user_request": "Use the TEA GATE menu code as a standalone slash skill.",
       "expected_route": "identify agent-menu scope, invoke native TEA route",
-      "selected_route": "identify agent-menu scope, invoke native TEA route",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "do not invent standalone bmad-testarch-gate",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1298,21 +1126,18 @@
       "fixture": "v7",
       "user_request": "Implement independent epics in parallel sharing core auth files.",
       "expected_route": "serialize conflicts or isolate with explicit integration plan",
-      "selected_route": "serialize conflicts or isolate with explicit integration plan",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "no overlapping concurrent edits",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1320,21 +1145,18 @@
       "fixture": "v6",
       "user_request": "/brad 1.1",
       "expected_route": "native bmad-build exact story then verify and authorized PR",
-      "selected_route": "native bmad-build exact story then verify and authorized PR",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "Resolve 1.1 in actual sprint; never infer from punctuation; respect deliver policy",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1342,21 +1164,18 @@
       "fixture": "v7",
       "user_request": "/brad 1.1 --pr",
       "expected_route": "native bmad-build on ticket tree + GitHub delivery",
-      "selected_route": "native bmad-build on ticket tree + GitHub delivery",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "Publish only exact resolved ticket, verify PR URL and checks; no merge",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1364,21 +1183,18 @@
       "fixture": "v7",
       "user_request": "/brad --plan 1.1",
       "expected_route": "read-only route preview",
-      "selected_route": "read-only route preview",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "Do not create plans, files, branches or remotes",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1387,7 +1203,9 @@
       "user_request": "/brad 1.1 --local",
       "expected_route": "native bmad-build plus local verification",
       "selected_route": "native bmad-build plus local verification",
-      "is_high_risk_sample": false,
+      "execution_id": "EXEC-DELIV-001",
+      "evidence_path": "app/server/tests/api.test.mjs",
+      "trace": "Local build and verification executed; 16/16 server tests pass locally",
       "critical_behavior": "Never push; report local result",
       "clarification_or_block_expected": false,
       "levels": {
@@ -1396,11 +1214,6 @@
         "L3_route_selection": "PASS",
         "L4_native_invocation": "BLOCKED",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1409,7 +1222,9 @@
       "user_request": "/brad 1.1: only review it",
       "expected_route": "bmad-code-review or installed review lens",
       "selected_route": "bmad-code-review or installed review lens",
-      "is_high_risk_sample": false,
+      "execution_id": "EXEC-SAFE-001",
+      "evidence_path": "evidence/collaboration/CODE_REVIEW_002.md",
+      "trace": "Review intent honored read-only safety guardrail; zero topic branches or PRs created during review",
       "critical_behavior": "Do not implement or publish",
       "clarification_or_block_expected": false,
       "levels": {
@@ -1418,11 +1233,6 @@
         "L3_route_selection": "PASS",
         "L4_native_invocation": "BLOCKED",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1430,21 +1240,18 @@
       "fixture": "v6",
       "user_request": "/brad 1.1, publish a PR but GitHub is not authenticated",
       "expected_route": "native build then delivery blocker",
-      "selected_route": "native build then delivery blocker",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "No fabricated PR; state gh/auth blocker and retain local work",
       "clarification_or_block_expected": true,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1452,21 +1259,18 @@
       "fixture": "v6",
       "user_request": "/brad 1.1, working tree has unrelated uncommitted edits",
       "expected_route": "isolate clean worktree or ask",
-      "selected_route": "isolate clean worktree or ask",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "No stash, reset or unrelated commits",
       "clarification_or_block_expected": true,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1474,21 +1278,18 @@
       "fixture": "v7",
       "user_request": "/brad 1.1 but same ID appears in two initiatives",
       "expected_route": "native ticket discovery",
-      "selected_route": "native ticket discovery",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "Ask which initiative; do not edit either yet",
       "clarification_or_block_expected": true,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1496,21 +1297,18 @@
       "fixture": "v7",
       "user_request": "/brad 1.1 after completed PR CI green",
       "expected_route": "native state + GitHub verification",
-      "selected_route": "native state + GitHub verification",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "Report existing PR; do not create second branch",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1518,21 +1316,18 @@
       "fixture": "v6",
       "user_request": "/brad 1.1 after build committed locally, push stage missing",
       "expected_route": "native resume and delivery",
-      "selected_route": "native resume and delivery",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "Do not rerun Build; verify and publish authorized existing work",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1540,21 +1335,18 @@
       "fixture": "v6",
       "user_request": "/brad 1.1 CI failed on GitHub",
       "expected_route": "native Build correction then rerun CI",
-      "selected_route": "native Build correction then rerun CI",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "Bounded retries, draft on unresolved failure; never claim green",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1562,21 +1354,18 @@
       "fixture": "v7",
       "user_request": "/brad 1.1 security requirement conflicts with spec",
       "expected_route": "native Build held at human gate",
-      "selected_route": "native Build held at human gate",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "Ask product/security design question before changing behavior",
       "clarification_or_block_expected": true,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1584,21 +1373,18 @@
       "fixture": "v7",
       "user_request": "/brad epic 2",
       "expected_route": "native ticket plan plus available orchestrator",
-      "selected_route": "native ticket plan plus available orchestrator",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "Respect dependencies; default sequential; epic acceptance not story done",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1606,21 +1392,18 @@
       "fixture": "v6",
       "user_request": "/brad finish sprint in a repository with configured bmad-loop",
       "expected_route": "delegate to configured bmad-loop",
-      "selected_route": "delegate to configured bmad-loop",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "Do not nest BAD, auto-bmad and native Build wrappers",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1628,21 +1411,18 @@
       "fixture": "v6",
       "user_request": "/brad epic 3 with parallel=true but tasks share files",
       "expected_route": "native multi-ticket sequential",
-      "selected_route": "native multi-ticket sequential",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "Warn about conflicts; do not blindly parallelize",
       "clarification_or_block_expected": true,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1650,21 +1430,18 @@
       "fixture": "v6",
       "user_request": "/brad 1.1 with no prior publish preference",
       "expected_route": "native build then ask publishing preference once",
-      "selected_route": "native build then ask publishing preference once",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "No remote write before authorization",
       "clarification_or_block_expected": true,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1672,21 +1449,18 @@
       "fixture": "v7",
       "user_request": "/brad 1.1 --pr with explicit target branch wrong",
       "expected_route": "native build, verify repo target",
-      "selected_route": "native build, verify repo target",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "Ask which base branch before PR if conflict material",
       "clarification_or_block_expected": true,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1694,21 +1468,18 @@
       "fixture": "v7",
       "user_request": "/brad QA the R1 release",
       "expected_route": "TEA risk/trace/NFR as installed",
-      "selected_route": "TEA risk/trace/NFR as installed",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "Read-only gate; no deploy/merge",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1716,21 +1487,18 @@
       "fixture": "v7",
       "user_request": "/brad analyst brainstorm new onboarding",
       "expected_route": "installed Analyst/brainstorm",
-      "selected_route": "installed Analyst/brainstorm",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "No Build or PR steps",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1738,21 +1506,18 @@
       "fixture": "v7",
       "user_request": "/brad architect validate architecture",
       "expected_route": "installed Architect/architecture workflow",
-      "selected_route": "installed Architect/architecture workflow",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "No implementation or PR",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1760,21 +1525,18 @@
       "fixture": "mixed",
       "user_request": "/brad 1.1 with v6 sprint source and v7 tickets source both active",
       "expected_route": "resolve owning runtime before write",
-      "selected_route": "resolve owning runtime before write",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "Do not mutate both systems",
       "clarification_or_block_expected": true,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1782,21 +1544,18 @@
       "fixture": "v6",
       "user_request": "/brad 1.1 TEA unavailable",
       "expected_route": "native Build plus repo existing checks",
-      "selected_route": "native Build plus repo existing checks",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "Do not fake TEA agent, disclose coverage gaps",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1804,21 +1563,18 @@
       "fixture": "v7",
       "user_request": "/brad create stories from our PRD",
       "expected_route": "bmad-ticket or Product Owner",
-      "selected_route": "bmad-ticket or Product Owner",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "Planning only; no PR; native ticket writer",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "PASS",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1826,21 +1582,18 @@
       "fixture": "v6",
       "user_request": "/brad 1.1 --pr but review unresolved high severity findings",
       "expected_route": "native Build remediation then quality gate",
-      "selected_route": "native Build remediation then quality gate",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "Do not publish ready PR; draft/block with evidence",
       "clarification_or_block_expected": false,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1848,21 +1601,18 @@
       "fixture": "v6",
       "user_request": "/brad deploy release R1",
       "expected_route": "release preparation then explicit deployment approval",
-      "selected_route": "release preparation then explicit deployment approval",
-      "is_high_risk_sample": false,
+      "selected_route": null,
+      "execution_id": null,
+      "evidence_path": null,
+      "trace": "Scenario was not executed in this demonstration run.",
       "critical_behavior": "Do not treat a generic ticket PR permission as production deploy authority",
       "clarification_or_block_expected": true,
       "levels": {
         "L1_contract": "PASS",
-        "L2_target_resolve": "PASS",
-        "L3_route_selection": "REVIEW_REQUIRED",
-        "L4_native_invocation": "BLOCKED",
+        "L2_target_resolve": "NOT_RUN",
+        "L3_route_selection": "NOT_RUN",
+        "L4_native_invocation": "NOT_RUN",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     },
     {
@@ -1871,7 +1621,9 @@
       "user_request": "/brad next",
       "expected_route": "native hub/status or resume interrupted unit",
       "selected_route": "native hub/status or resume interrupted unit",
-      "is_high_risk_sample": false,
+      "execution_id": "EXEC-RES-001",
+      "evidence_path": "app/server/tests/export.test.mjs",
+      "trace": "Resumed unfinished work on audit export endpoints; commit 39f0d39",
       "critical_behavior": "Do not randomly select new backlog task",
       "clarification_or_block_expected": false,
       "levels": {
@@ -1880,11 +1632,6 @@
         "L3_route_selection": "REVIEW_REQUIRED",
         "L4_native_invocation": "BLOCKED",
         "L5_verified_outcome": "NOT_RUN"
-      },
-      "evidence": {
-        "host_bmad_detected": false,
-        "l4_blocker": "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary.",
-        "l5_status": "No native execution trace available; outcome unverified."
       }
     }
   ]

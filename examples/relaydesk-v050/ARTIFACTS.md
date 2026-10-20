@@ -8,7 +8,7 @@ This directory contains the complete, sanitized evaluation artifacts for the **B
 
 | Document | Purpose | Format |
 |---|---|---|
-| [`report/MASTER_REPORT.html`](report/MASTER_REPORT.html) | Interactive offline master evaluation dashboard | Self-contained HTML (105 KB) |
+| [`report/MASTER_REPORT.html`](report/MASTER_REPORT.html) | Interactive offline master evaluation dashboard | Self-contained HTML (110 KB) |
 | [`reports/CHATGPT_BRAD_ENGINEERING_REVIEW.md`](reports/CHATGPT_BRAD_ENGINEERING_REVIEW.md) | Comprehensive engineering review and decision package for ChatGPT | Markdown |
 | [`reports/COLLABORATION_AUDIT.md`](reports/COLLABORATION_AUDIT.md) | Empirical audit of 3-subagent independent collaboration cycle | Markdown |
 | [`reports/FINDINGS.md`](reports/FINDINGS.md) | Confirmed BRAD defects (F-001 to F-003) and root cause analysis | Markdown |
@@ -40,9 +40,11 @@ This directory contains the complete, sanitized evaluation artifacts for the **B
 
 | Dataset | Path | Description |
 |---|---|---|
-| **Canonical 85 Scenarios** | [`evaluation/routing-results.json`](evaluation/routing-results.json) | Audit results across canonical 85 routing suite |
-| **25 Behavioral Cases** | [`evaluation/behavioral-routing-25.json`](evaluation/behavioral-routing-25.json) | High-priority behavioral intent tests |
-| **Matched Proxy Benchmark** | [`evaluation/matched-comparison.json`](evaluation/matched-comparison.json) | Reclassified model-assisted proxy SDLC benchmark |
+| **Canonical 85 Scenarios** | [`evaluation/routing-results.json`](evaluation/routing-results.json) | Audited results across canonical 85 routing suite (10 observed, 75 NOT_RUN) |
+| **Observed Routing Evidence** | [`evaluation/observed-routing-evidence.json`](evaluation/observed-routing-evidence.json) | Empirical model observations with execution IDs and evidence paths |
+| **25 Behavioral Cases** | [`evaluation/behavioral-routing-25.json`](evaluation/behavioral-routing-25.json) | High-priority behavioral intent tests (6 observed, 19 NOT_RUN) |
+| **Exploratory SDLC Comparison** | [`evaluation/matched-comparison.json`](evaluation/matched-comparison.json) | Anecdotal comparison labeled UNVERIFIED_ANECDOTAL_ESTIMATE |
+| **Historical Pre-Audit Records** | [`evaluation/historical/`](evaluation/historical/) | Preserved synthetic baseline records prior to audit |
 | **Findings Register** | [`evaluation/findings.json`](evaluation/findings.json) | Machine-readable defects register |
 | **Improvement Backlog** | [`evaluation/improvement-backlog.json`](evaluation/improvement-backlog.json) | Prioritized candidate fixes |
 | **Stakeholder Outcomes** | [`evaluation/stakeholder-results.json`](evaluation/stakeholder-results.json) | Stakeholder persona delivery outcomes |

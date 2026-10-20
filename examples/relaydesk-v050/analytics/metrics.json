@@ -27,27 +27,36 @@
       "denominator": 85,
       "status": "PASS"
     },
-    "routing_l1_contract_rate": {
+    "routing_l1_contract_schema_rate": {
       "value": 100.0,
       "numerator": 85,
       "denominator": 85,
-      "status": "PASS"
+      "status": "PASS",
+      "note": "Static canonical specification schema validity"
     },
-    "routing_l2_target_resolve_rate": {
-      "value": 100.0,
-      "numerator": 85,
+    "routing_empirically_observed_rate": {
+      "value": 11.76,
+      "numerator": 10,
       "denominator": 85,
-      "status": "PASS"
+      "status": "PARTIAL",
+      "note": "10 scenarios evaluated with real execution traces"
     },
-    "routing_l3_exact_selection_rate": {
-      "value": 49.41,
-      "numerator": 42,
+    "routing_unobserved_not_run_rate": {
+      "value": 88.24,
+      "numerator": 75,
+      "denominator": 85,
+      "status": "NOT_RUN",
+      "note": "75 scenarios unobserved and truthfully marked NOT_RUN"
+    },
+    "routing_l3_observed_pass_rate": {
+      "value": 10.59,
+      "numerator": 9,
       "denominator": 85,
       "status": "PASS"
     },
     "routing_l3_conditional_review_rate": {
-      "value": 50.59,
-      "numerator": 43,
+      "value": 1.18,
+      "numerator": 1,
       "denominator": 85,
       "status": "REVIEW_REQUIRED"
     },

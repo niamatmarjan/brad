@@ -2,38 +2,40 @@
   "comparison_run_id": "relaydesk-v050-cmp-01",
   "brad_baseline_version": "0.5.0",
   "candidate_version": "0.5.1-candidate",
-  "status": "COMPLETED",
-  "comparison_category": "Model-Assisted Proxy SDLC Comparison",
+  "status": "UNVERIFIED_ANECDOTAL_ESTIMATE",
+  "comparison_category": "Model-Assisted Proxy SDLC Comparison (Anecdotal Observation)",
   "native_invocation_verified": false,
-  "audit_disclaimer": "CRITICAL AUDIT NOTE: Neither control nor treatment executed native BMAD skills via host tool dispatch, because Level 4 native invocation is BLOCKED in this session due to host discovery lifecycle constraints. The benchmark compares multi-turn interactive BMAD prompt guidance (control proxy) against single-intent BRAD command routing (treatment proxy). Metrics reflect real human-agent interaction counts in the prompt harness, but DO NOT constitute verified native BMAD engine execution.",
-  "methodology": "Matched control vs treatment evaluation across 3 core SDLC tasks on RelayDesk codebase. All metrics represent actual observed prompt counts, human interventions, rework loops, and wall-clock duration in the model-assisted harness. Token and dollar costs are omitted per clean-room protocol without synthetic extrapolation.",
+  "timing_traces_verified": false,
+  "audit_disclaimer": "CRITICAL AUDIT DISCLAIMER — UNVERIFIED PROMPT & TIMING METRICS: The prompt counts (10 vs 3) and duration metrics (391s vs 111s) in this comparison were recorded as manual operator estimates during exploratory demonstration sessions. They LACK independent automated machine-timestamped execution traces. Furthermore, neither control nor treatment executed native BMAD skills via host tool dispatch (Level 4 BLOCKED). These figures must be treated strictly as unverified anecdotal observations and NOT as proven benchmark performance.",
+  "methodology": "Manual exploratory comparison across 3 core SDLC tasks on the RelayDesk codebase. All metrics represent manual operator notes, lacking automated machine timestamp traces. Token and dollar costs are omitted per clean-room protocol without synthetic extrapolation.",
   "tasks": [
     {
       "task_id": "CMP-001",
       "name": "Requirements Refinement (REQ-B7 SLA Risk Summary)",
+      "measurement_verification": "UNVERIFIED_MANUAL_ESTIMATE",
       "control": {
         "mechanism": "Interactive BMAD Prompt Guidance (Proxy)",
         "intended_native_skill": "bmad-prd / bmad-agent-po",
         "native_invocation_executed": false,
-        "status": "COMPLETED_VIA_PROMPT_FLOW",
+        "status": "UNVERIFIED_MANUAL_ESTIMATE",
         "prompts_count": 4,
         "human_interventions": 3,
         "rework_loops": 1,
         "duration_seconds": 182,
         "correctness": "PASS",
-        "notes": "Required user to select between coaching vs fast-path, resolve config paths manually, and select rubric reviewers."
+        "notes": "Manual operator estimate: required user to select between coaching vs fast-path, resolve config paths, and select rubric reviewers."
       },
       "treatment": {
         "mechanism": "BRAD-mediated Routing (Proxy)",
         "intended_command": "/brad plan REQ-B7",
         "native_invocation_executed": false,
-        "status": "COMPLETED_VIA_PROMPT_FLOW",
+        "status": "UNVERIFIED_MANUAL_ESTIMATE",
         "prompts_count": 1,
         "human_interventions": 0,
         "rework_loops": 0,
         "duration_seconds": 42,
         "correctness": "PASS",
-        "notes": "BRAD directly resolved requirements lane, detected installed BMM v6, and bypassed redundant interactive prompts."
+        "notes": "Manual operator estimate: BRAD resolved requirements lane, detected installed BMM v6, and bypassed redundant interactive prompts."
       },
       "delta": {
         "prompt_reduction_pct": 75.0,
@@ -44,29 +46,30 @@
     {
       "task_id": "CMP-002",
       "name": "Bounded Story Implementation (GET /api/analytics/sla-summary)",
+      "measurement_verification": "UNVERIFIED_MANUAL_ESTIMATE",
       "control": {
         "mechanism": "Interactive BMAD Build Guidance (Proxy)",
         "intended_native_skill": "bmad-build",
         "native_invocation_executed": false,
-        "status": "COMPLETED_VIA_PROMPT_FLOW",
+        "status": "UNVERIFIED_MANUAL_ESTIMATE",
         "prompts_count": 3,
         "human_interventions": 2,
         "rework_loops": 1,
         "duration_seconds": 115,
         "correctness": "PASS",
-        "notes": "Required interactive confirmation of sprint status file and manual acknowledgement of build preconditions."
+        "notes": "Manual operator estimate: required interactive confirmation of sprint status file and manual acknowledgement of build preconditions."
       },
       "treatment": {
         "mechanism": "BRAD-mediated Build Routing (Proxy)",
         "intended_command": "/brad 1.7 --local",
         "native_invocation_executed": false,
-        "status": "COMPLETED_VIA_PROMPT_FLOW",
+        "status": "UNVERIFIED_MANUAL_ESTIMATE",
         "prompts_count": 1,
         "human_interventions": 0,
         "rework_loops": 0,
         "duration_seconds": 38,
         "correctness": "PASS",
-        "notes": "BRAD executed preflight, bound execution strictly to story 1.7, and prevented unauthorized git push/merge."
+        "notes": "Manual operator estimate: BRAD executed preflight, bound execution strictly to story 1.7, and prevented unauthorized git push/merge."
       },
       "delta": {
         "prompt_reduction_pct": 66.7,
@@ -77,29 +80,30 @@
     {
       "task_id": "CMP-003",
       "name": "QA / Code Review (REQ-B7 Verification)",
+      "measurement_verification": "UNVERIFIED_MANUAL_ESTIMATE",
       "control": {
         "mechanism": "Interactive BMAD Review Guidance (Proxy)",
         "intended_native_skill": "bmad-code-review",
         "native_invocation_executed": false,
-        "status": "COMPLETED_VIA_PROMPT_FLOW",
+        "status": "UNVERIFIED_MANUAL_ESTIMATE",
         "prompts_count": 3,
         "human_interventions": 1,
         "rework_loops": 0,
         "duration_seconds": 94,
         "correctness": "PASS",
-        "notes": "Required user to disambiguate whether TEA testarch or standard code-review applied."
+        "notes": "Manual operator estimate: required user to disambiguate whether TEA testarch or standard code-review applied."
       },
       "treatment": {
         "mechanism": "BRAD-mediated Review Routing (Proxy)",
         "intended_command": "/brad review PR #12",
         "native_invocation_executed": false,
-        "status": "COMPLETED_VIA_PROMPT_FLOW",
+        "status": "UNVERIFIED_MANUAL_ESTIMATE",
         "prompts_count": 1,
         "human_interventions": 0,
         "rework_loops": 0,
         "duration_seconds": 31,
         "correctness": "PASS",
-        "notes": "BRAD selected exact review workflow with read-only review safety, preventing code mutation."
+        "notes": "Manual operator estimate: BRAD selected exact review workflow with read-only review safety, preventing code mutation."
       },
       "delta": {
         "prompt_reduction_pct": 66.7,
@@ -109,13 +113,11 @@
     }
   ],
   "aggregate_summary": {
+    "benchmark_status": "UNVERIFIED_ESTIMATE",
     "total_control_prompts": 10,
     "total_treatment_prompts": 3,
-    "total_prompt_reduction_pct": 70.0,
-    "total_control_interventions": 6,
-    "total_treatment_interventions": 0,
-    "total_time_saved_seconds": 280,
-    "correctness_parity": "100% PASS for both control and treatment in prompt harness",
-    "native_invocation_summary": "0/3 verified native BMAD invocations (Level 4 BLOCKED)"
+    "claimed_prompt_reduction_pct": 70.0,
+    "claimed_time_saved_seconds": 280,
+    "audit_conclusion": "Timing and prompt metrics lack independent machine execution traces; must not be cited as verified benchmark performance."
   }
 }

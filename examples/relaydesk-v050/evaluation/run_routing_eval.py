@@ -1,91 +1,131 @@
 #!/usr/bin/env python3
 """
-BRAD v0.5.0 Routing & Behavioral Evaluation Engine.
-Evaluates all 85 canonical routing scenarios from skills/brad/evals/routing-cases.json
-Strictly distinguishes L1 (Contract), L2 (Target Resolve), L3 (Selected Route),
-L4 (Native Invocation), and L5 (Verified Outcome) without synthetic claims.
+BRAD v0.5.0 Routing & Behavioral Evaluation Engine (Audited & Corrected).
+Evaluates canonical routing scenarios against skills/brad/evals/routing-cases.json.
+STRICT AUDIT RULES:
+- Never copies expected answers into observed selections.
+- Requires independently captured model selections with execution IDs and evidence paths.
+- Unobserved scenarios are marked NOT_RUN.
+- Hardcoded Windows paths replaced with repository-relative paths and CLI options.
 """
 
+from __future__ import annotations
+import argparse
 import json
 import re
 import sys
 from pathlib import Path
 from subprocess import run, PIPE
 
-BRAD_REPO = Path(r"C:\Projects\Personal\brad")
-CASES_FILE = BRAD_REPO / "skills" / "brad" / "evals" / "routing-cases.json"
-AUDIT_SCRIPT = BRAD_REPO / "skills" / "brad" / "scripts" / "audit_routing_results.py"
-
-OUT_DIR = Path(__file__).resolve().parent
-RESULTS_FILE = OUT_DIR / "routing-results.json"
-OBSERVED_FOR_AUDIT = OUT_DIR / "observed-for-audit.json"
-FINDINGS_FILE = OUT_DIR / "findings.json"
-IMPROVEMENTS_FILE = OUT_DIR / "improvement-backlog.json"
-
 NATIVE_RE = re.compile(r"\b(?:bmad|gds)-[a-z][a-z0-9-]*\b")
 
-HIGH_RISK_25_IDS = {
-    "V6-01", "V6-02", "V6-03", "V6-06", "V6-08",
-    "V6-12", "V6-14", "V6-17", "V6-20", "V6-25",
-    "V7-01", "V7-03", "V7-05", "V7-10", "V7-15",
-    "TEA-01", "TEA-03", "TEA-05", "TEA-08", "TEA-12",
-    "DELIV-01", "DELIV-02", "DELIV-05", "SAFE-01", "SAFE-03"
-}
+def find_repo_root() -> Path:
+    """Find repository root by walking up from this script."""
+    current = Path(__file__).resolve().parent
+    for p in [current] + list(current.parents):
+        if (p / "skills" / "brad" / "evals" / "routing-cases.json").is_file():
+            return p
+    # Fallback to 3 levels up
+    return current.parents[2]
 
-def extract_primary_skill(expected_route: str) -> str:
-    matches = NATIVE_RE.findall(expected_route.lower())
-    if matches:
-        return matches[0]
-    return expected_route.split()[0] if expected_route else "unknown"
+def parse_args():
+    parser = argparse.ArgumentParser(description=__doc__)
+    repo_default = find_repo_root()
+    parser.add_argument("--brad-root", type=Path, default=repo_default,
+                        help=f"BRAD repository root (default: {repo_default})")
+    parser.add_argument("--cases-file", type=Path, default=None,
+                        help="Path to canonical routing-cases.json")
+    parser.add_argument("--evidence-file", type=Path, default=None,
+                        help="Path to observed-routing-evidence.json")
+    parser.add_argument("--out-dir", type=Path, default=None,
+                        help="Output directory for generated evaluation artifacts")
+    return parser.parse_args()
 
-def evaluate_cases():
-    with open(CASES_FILE, "r", encoding="utf-8") as f:
+def main():
+    args = parse_args()
+    repo_root = args.brad_root
+    cases_file = args.cases_file or (repo_root / "skills" / "brad" / "evals" / "routing-cases.json")
+    script_dir = Path(__file__).resolve().parent
+    out_dir = args.out_dir or script_dir
+    evidence_file = args.evidence_file or (script_dir / "observed-routing-evidence.json")
+
+    if not cases_file.is_file():
+        print(f"ERROR: Cannot find cases file at {cases_file}", file=sys.stderr)
+        sys.exit(1)
+
+    if not evidence_file.is_file():
+        print(f"ERROR: Cannot find evidence file at {evidence_file}", file=sys.stderr)
+        sys.exit(1)
+
+    with open(cases_file, "r", encoding="utf-8") as f:
         cases_data = json.load(f)
     cases = cases_data["cases"]
 
+    with open(evidence_file, "r", encoding="utf-8") as f:
+        evidence_data = json.load(f)
+    observed_map = {item["id"]: item for item in evidence_data.get("observed_cases", [])}
+
     results = []
-    audit_observed = []
+    observed_for_audit = []
 
     for c in cases:
-        case_id = c["id"]
+        cid = c["id"]
         expected = c["expected_route"]
         native_skills = NATIVE_RE.findall(expected.lower())
-        primary_skill = extract_primary_skill(expected)
 
-        # L1: Static Contract Validation
-        # In BRAD v0.5.0, all 85 scenarios have a defined canonical specification.
-        l1_status = "PASS"
+        # L1: Static Schema Validation of canonical specification
+        l1_status = "PASS" if c.get("user_request") and expected else "FAIL"
 
-        # L2: Target Resolution
-        # BRAD resolves based on initiative, fixture state, or ticket syntax
-        l2_status = "PASS"
+        if cid in observed_map:
+            obs = observed_map[cid]
+            selected = obs["observed_selection"]
+            execution_id = obs["execution_id"]
+            evidence_path = obs["evidence_path"]
+            trace = obs["execution_trace"]
+            l3_status = obs["selection_status"]
 
-        # L3: Selected Route
-        # BRAD selects the exact canonical skill or conditional route
-        selected_route = expected
-        l3_status = "PASS" if native_skills else "REVIEW_REQUIRED"
+            # L2: Target resolution verified by empirical execution
+            l2_status = "PASS"
 
-        # L4: Actual Native Invocation
-        # In our active host environment, native BMAD CLI/skills are uninstalled.
-        # BRAD accurately detects missing BMAD via doctor / inspect_bmad.
-        # Therefore L4 is truthfully BLOCKED by missing host BMAD capability.
-        l4_status = "BLOCKED"
-        l4_reason = "Native BMAD Method v6/v7 is uninstalled in active host. Invocation blocked at host boundary."
+            # L4: Native host invocation
+            l4_status = obs["native_invocation"]["status"]
+            l4_reason = obs["native_invocation"]["reason"]
 
-        # L5: Verified Requested Outcome
-        # Since native specialist was not invoked by host, L5 delivery is NOT_RUN / BLOCKED.
-        l5_status = "NOT_RUN"
-        l5_reason = "No native execution trace available; outcome unverified."
+            # L5: Verified outcome
+            l5_status = obs["outcome"]["status"]
+            l5_reason = obs["outcome"]["reason"]
 
-        is_high_risk = case_id in HIGH_RISK_25_IDS
+            observed_for_audit.append({
+                "id": cid,
+                "selected": selected,
+                "invoked": [],
+                "delivery": {
+                    "status": "BLOCKED",
+                    "evidence": evidence_path
+                }
+            })
+        else:
+            # Unobserved scenario: DO NOT copy expected route; mark NOT_RUN
+            selected = None
+            execution_id = None
+            evidence_path = None
+            trace = "Scenario was not executed in this demonstration run."
+            l2_status = "NOT_RUN"
+            l3_status = "NOT_RUN"
+            l4_status = "NOT_RUN"
+            l4_reason = "No execution trace recorded."
+            l5_status = "NOT_RUN"
+            l5_reason = "Scenario not run."
 
-        case_result = {
-            "id": case_id,
+        results.append({
+            "id": cid,
             "fixture": c.get("fixture"),
             "user_request": c.get("user_request"),
             "expected_route": expected,
-            "selected_route": selected_route,
-            "is_high_risk_sample": is_high_risk,
+            "selected_route": selected,
+            "execution_id": execution_id,
+            "evidence_path": evidence_path,
+            "trace": trace,
             "critical_behavior": c.get("critical_behavior"),
             "clarification_or_block_expected": c.get("clarification_or_block_expected", False),
             "levels": {
@@ -94,119 +134,56 @@ def evaluate_cases():
                 "L3_route_selection": l3_status,
                 "L4_native_invocation": l4_status,
                 "L5_verified_outcome": l5_status
-            },
-            "evidence": {
-                "host_bmad_detected": False,
-                "l4_blocker": l4_reason,
-                "l5_status": l5_reason
             }
-        }
-        results.append(case_result)
+        })
 
-        # Build entry for audit_routing_results.py
-        audit_entry = {
-            "id": case_id,
-            "selected": selected_route,
-            "invoked": [],  # Zero fake invocations claimed!
-            "delivery": {
-                "status": "BLOCKED",
-                "evidence": "evidence/bmad-missing.txt"
-            }
-        }
-        audit_observed.append(audit_entry)
+    # Summary statistics
+    total = len(results)
+    observed_count = len(observed_map)
+    l1_pass = sum(1 for r in results if r["levels"]["L1_contract"] == "PASS")
+    l2_pass = sum(1 for r in results if r["levels"]["L2_target_resolve"] == "PASS")
+    l3_pass = sum(1 for r in results if r["levels"]["L3_route_selection"] == "PASS")
+    l3_review = sum(1 for r in results if r["levels"]["L3_route_selection"] == "REVIEW_REQUIRED")
+    l3_not_run = sum(1 for r in results if r["levels"]["L3_route_selection"] == "NOT_RUN")
+    l4_blocked = sum(1 for r in results if r["levels"]["L4_native_invocation"] == "BLOCKED")
+    l4_not_run = sum(1 for r in results if r["levels"]["L4_native_invocation"] == "NOT_RUN")
+    l5_not_run = sum(1 for r in results if r["levels"]["L5_verified_outcome"] == "NOT_RUN")
 
-    # Save detailed evaluation results
-    with open(RESULTS_FILE, "w", encoding="utf-8") as f:
-        json.dump({
-            "run_id": "relaydesk-v050-exp-01",
-            "brad_version": "0.5.0",
-            "total_cases": len(results),
-            "high_risk_cases_count": len([r for r in results if r["is_high_risk_sample"]]),
-            "host_environment": {
-                "host": "Antigravity",
-                "model": "Gemini 3.8 Flash (High)",
-                "native_bmad_installed": False
-            },
-            "summary": {
-                "L1_contract_pass": sum(1 for r in results if r["levels"]["L1_contract"] == "PASS"),
-                "L2_resolve_pass": sum(1 for r in results if r["levels"]["L2_target_resolve"] == "PASS"),
-                "L3_route_pass": sum(1 for r in results if r["levels"]["L3_route_selection"] == "PASS"),
-                "L3_review_required": sum(1 for r in results if r["levels"]["L3_route_selection"] == "REVIEW_REQUIRED"),
-                "L4_invocation_blocked": sum(1 for r in results if r["levels"]["L4_native_invocation"] == "BLOCKED"),
-                "L5_verified_not_run": sum(1 for r in results if r["levels"]["L5_verified_outcome"] == "NOT_RUN")
-            },
-            "cases": results
-        }, f, indent=2)
+    summary = {
+        "total_cases": total,
+        "empirically_observed": observed_count,
+        "unobserved_not_run": total - observed_count,
+        "l1_contract_schema_pass": l1_pass,
+        "l2_target_resolve_pass": l2_pass,
+        "l2_target_resolve_not_run": total - l2_pass,
+        "l3_route_selection_pass": l3_pass,
+        "l3_route_selection_review_required": l3_review,
+        "l3_route_selection_not_run": l3_not_run,
+        "l4_native_invocation_pass": 0,
+        "l4_native_invocation_blocked": l4_blocked,
+        "l4_native_invocation_not_run": l4_not_run,
+        "l5_verified_outcome_pass": 0,
+        "l5_verified_outcome_not_run": l5_not_run,
+        "audit_policy": "Strict empirical evidence only. No synthetic pass assignments."
+    }
 
-    # Save audit observations file
-    with open(OBSERVED_FOR_AUDIT, "w", encoding="utf-8") as f:
-        json.dump(audit_observed, f, indent=2)
+    output_data = {
+        "suite": "Canonical BRAD Routing Evaluation (Audited)",
+        "brad_baseline_version": "0.5.0",
+        "summary": summary,
+        "cases": results
+    }
 
-    print(f"Evaluated {len(results)} canonical routing cases.")
-    print(f"Saved results to {RESULTS_FILE}")
-    print(f"Saved audit observed payload to {OBSERVED_FOR_AUDIT}")
+    out_results_file = out_dir / "routing-results.json"
+    with open(out_results_file, "w", encoding="utf-8") as f:
+        json.dump(output_data, f, indent=2)
 
-    # Run official audit_routing_results.py
-    cmd = [
-        sys.executable,
-        str(AUDIT_SCRIPT),
-        "--cases", str(CASES_FILE),
-        "--observed", str(OBSERVED_FOR_AUDIT),
-        "--pretty"
-    ]
-    proc = run(cmd, stdout=PIPE, stderr=PIPE, text=True)
-    print("\n--- Audit Script Output ---")
-    print(proc.stdout)
-    if proc.stderr:
-        print("STDERR:", proc.stderr)
+    out_audit_file = out_dir / "observed-for-audit.json"
+    with open(out_audit_file, "w", encoding="utf-8") as f:
+        json.dump(observed_for_audit, f, indent=2)
 
-    # Save findings
-    findings = [
-        {
-            "finding_id": "FND-001",
-            "severity": "HIGH",
-            "category": "BMAD compatibility",
-            "expected_behavior": "Native BMAD specialist skills can be invoked directly by BRAD when installed.",
-            "observed_behavior": "Host environment lacks native BMAD CLI/skills in host catalog. BRAD doctor reports 'BMAD Method not detected'. Direct L4/L5 execution is blocked without host installation.",
-            "root_cause_verified": True,
-            "root_cause": "BMAD is a user-installed prerequisite, not bundled into BRAD core distribution.",
-            "affected_brad_files": ["cli/core.mjs", "skills/brad/scripts/inspect_bmad.py"],
-            "proposed_smallest_fix": "Add clearer diagnostic guidance in `brad doctor` explaining exact one-step command to install BMAD in current host (e.g. npx bmad-method install or agent-specific setup).",
-            "risk": "LOW",
-            "priority": "HIGH"
-        },
-        {
-            "finding_id": "FND-002",
-            "severity": "MEDIUM",
-            "category": "BRAD routing",
-            "expected_behavior": "BRAD should distinguish extending an approved module increment from authoring a greenfield PRD.",
-            "observed_behavior": "Conditional routing for increment-level changes can collapse to generic PRD generation if no explicit story ID is supplied.",
-            "root_cause_verified": True,
-            "root_cause": "Lack of explicit keyword resolution for 'increment' / 'delta' in regex matcher.",
-            "affected_brad_files": ["skills/brad/SKILL.md", "skills/brad/references/epics-and-stories.md"],
-            "proposed_smallest_fix": "Add increment-aware keyword routing in SKILL.md and epics-and-stories.md guidance.",
-            "risk": "LOW",
-            "priority": "MEDIUM"
-        },
-        {
-            "finding_id": "FND-003",
-            "severity": "MEDIUM",
-            "category": "BRAD delivery policy",
-            "expected_behavior": "Read-only review requests must not propose code modifications or PR generation.",
-            "observed_behavior": "Ticket-to-PR default can over-eagerly propose branch and PR creation on review requests unless --plan / read-only is emphasized.",
-            "root_cause_verified": True,
-            "root_cause": "Rule priority #4 ('One command, one requested outcome') default to PR delivery needs stronger guardrails against review-only intents.",
-            "affected_brad_files": ["skills/brad/SKILL.md", "skills/brad/references/ticket-to-pr.md"],
-            "proposed_smallest_fix": "Reinforce Rule #1 and ticket-to-pr contract that 'review' intents strictly forbid write actions without explicit override.",
-            "risk": "LOW",
-            "priority": "MEDIUM"
-        }
-    ]
-
-    with open(FINDINGS_FILE, "w", encoding="utf-8") as f:
-        json.dump(findings, f, indent=2)
-
-    print(f"Recorded {len(findings)} verified findings to {FINDINGS_FILE}")
+    print(f"Wrote {out_results_file} with {observed_count} observed cases and {total - observed_count} NOT_RUN cases.")
+    print(f"Summary: L3 PASS={l3_pass}, REVIEW={l3_review}, NOT_RUN={l3_not_run}, L4 BLOCKED={l4_blocked}")
 
 if __name__ == "__main__":
-    evaluate_cases()
+    main()

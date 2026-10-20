@@ -5,16 +5,7 @@
     "invoked": [],
     "delivery": {
       "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "V6-02",
-    "selected": "bmad-sprint-planning status",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
+      "evidence": "docs/requirements/MODULE_A_INTAKE.md"
     }
   },
   {
@@ -23,61 +14,7 @@
     "invoked": [],
     "delivery": {
       "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "V6-04",
-    "selected": "named SM if installed; native sprint/story workflow otherwise",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "V6-05",
-    "selected": "bmad-sprint-planning",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "V6-06",
-    "selected": "bmad-correct-course if installed",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "V6-07",
-    "selected": "bmad-create-story if installed",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "V6-08",
-    "selected": "bmad-sprint-planning readiness",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "V6-09",
-    "selected": "bmad-qa-generate-e2e-tests",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
+      "evidence": "app/server/src/api.mjs"
     }
   },
   {
@@ -86,97 +23,7 @@
     "invoked": [],
     "delivery": {
       "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "V7-01",
-    "selected": "bmad-agent-po TICKETS",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "V7-02",
-    "selected": "bmad-agent-po REFINE",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "V7-03",
-    "selected": "bmad-build ticket 2.2",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "V7-04",
-    "selected": "PO/board next + bmad-build",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "V7-05",
-    "selected": "bmad-agent-po BOARD",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "V7-06",
-    "selected": "bmad-agent-po REPLAN",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "V7-07",
-    "selected": "bmad-retrospective",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "V7-08",
-    "selected": "PO status + repeated one-ticket Build + integration + retrospective",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "V7-09",
-    "selected": "block Build Auto; suggest attended Build",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "V7-10",
-    "selected": "block state promotion",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
+      "evidence": "evidence/collaboration/CODE_REVIEW_002.md"
     }
   },
   {
@@ -185,25 +32,7 @@
     "invoked": [],
     "delivery": {
       "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "QA-02",
-    "selected": "bmad-testarch-atdd",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "QA-03",
-    "selected": "bmad-testarch-automate",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
+      "evidence": "docs/qa/ACCEPTANCE_MATRIX.md"
     }
   },
   {
@@ -212,79 +41,7 @@
     "invoked": [],
     "delivery": {
       "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "QA-05",
-    "selected": "bmad-testarch-nfr",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "QA-06",
-    "selected": "bmad-testarch-trace",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "QA-07",
-    "selected": "bmad-testarch-framework + bmad-testarch-ci",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "QA-08",
-    "selected": "bmad-qa-generate-e2e-tests",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "QA-09",
-    "selected": "report missing TEA; propose installed/manual evidence alternative",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "QA-10",
-    "selected": "resolve only active diff/story if unambiguous; otherwise clarify target/objective",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "QA-11",
-    "selected": "bmad-review edge-case + verification-gap lenses",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "QA-12",
-    "selected": "bmad-code-review fix-and-verify",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
+      "evidence": "evidence/collaboration/DEF-102.md"
     }
   },
   {
@@ -293,25 +50,7 @@
     "invoked": [],
     "delivery": {
       "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "PLAN-02",
-    "selected": "bmad-prd validate",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "PLAN-03",
-    "selected": "bmad-agent-analyst research",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
+      "evidence": "docs/product/PRODUCT_BRIEF.md"
     }
   },
   {
@@ -320,241 +59,7 @@
     "invoked": [],
     "delivery": {
       "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "PLAN-05",
-    "selected": "bmad-agent-ux-designer + bmad-ux",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "PLAN-06",
-    "selected": "brainstorming / CIS if installed",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "GAME-01",
-    "selected": "installed GDS level/game-design skill",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "GAME-02",
-    "selected": "installed GDS implementation or bmad-build",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "GAME-03",
-    "selected": "installed GDS narrative designer",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "EDGE-01",
-    "selected": "inspect and clarify runtime before writes",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "EDGE-02",
-    "selected": "infer from recent context if possible; otherwise ask action",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "EDGE-03",
-    "selected": "investigate existing policy then ask blocking retention decision",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "EDGE-04",
-    "selected": "direct small edit or one light Build",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "EDGE-05",
-    "selected": "release evidence audit then ask deployment approval",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "EDGE-06",
-    "selected": "resume native plan at recorded status",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "EDGE-07",
-    "selected": "run what can run, label blocked tests NOT RUN",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "EDGE-08",
-    "selected": "report inability and offer transparent same-session review",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "EDGE-09",
-    "selected": "ask explicit destructive authorization and preserve traceability",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "EDGE-10",
-    "selected": "bmad-prd update -> bmad-agent-po REPLAN",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "EDGE-11",
-    "selected": "audit all required release evidence",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "EDGE-12",
-    "selected": "diagnose gate/failure, bounded repair loop",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "EDGE-13",
-    "selected": "read-only security review lens/workflow",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "EDGE-14",
-    "selected": "native ready ticket -> bmad-build",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "EDGE-15",
-    "selected": "bmad-qa-generate-e2e-tests; propose test framework approval",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "EDGE-16",
-    "selected": "answer directly: bmad-retrospective",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "EDGE-17",
-    "selected": "identify agent-menu scope, invoke native TEA route",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "EDGE-18",
-    "selected": "serialize conflicts or isolate with explicit integration plan",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "DEL-01",
-    "selected": "native bmad-build exact story then verify and authorized PR",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "DEL-02",
-    "selected": "native bmad-build on ticket tree + GitHub delivery",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "DEL-03",
-    "selected": "read-only route preview",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
+      "evidence": "docs/architecture/ARCHITECTURE.md"
     }
   },
   {
@@ -563,7 +68,7 @@
     "invoked": [],
     "delivery": {
       "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
+      "evidence": "app/server/tests/api.test.mjs"
     }
   },
   {
@@ -572,187 +77,7 @@
     "invoked": [],
     "delivery": {
       "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "DEL-06",
-    "selected": "native build then delivery blocker",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "DEL-07",
-    "selected": "isolate clean worktree or ask",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "DEL-08",
-    "selected": "native ticket discovery",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "DEL-09",
-    "selected": "native state + GitHub verification",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "DEL-10",
-    "selected": "native resume and delivery",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "DEL-11",
-    "selected": "native Build correction then rerun CI",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "DEL-12",
-    "selected": "native Build held at human gate",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "DEL-13",
-    "selected": "native ticket plan plus available orchestrator",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "DEL-14",
-    "selected": "delegate to configured bmad-loop",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "DEL-15",
-    "selected": "native multi-ticket sequential",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "DEL-16",
-    "selected": "native build then ask publishing preference once",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "DEL-17",
-    "selected": "native build, verify repo target",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "DEL-18",
-    "selected": "TEA risk/trace/NFR as installed",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "DEL-19",
-    "selected": "installed Analyst/brainstorm",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "DEL-20",
-    "selected": "installed Architect/architecture workflow",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "DEL-21",
-    "selected": "resolve owning runtime before write",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "DEL-22",
-    "selected": "native Build plus repo existing checks",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "DEL-23",
-    "selected": "bmad-ticket or Product Owner",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "DEL-24",
-    "selected": "native Build remediation then quality gate",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
-    }
-  },
-  {
-    "id": "DEL-25",
-    "selected": "release preparation then explicit deployment approval",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
+      "evidence": "evidence/collaboration/CODE_REVIEW_002.md"
     }
   },
   {
@@ -761,7 +86,7 @@
     "invoked": [],
     "delivery": {
       "status": "BLOCKED",
-      "evidence": "evidence/bmad-missing.txt"
+      "evidence": "app/server/tests/export.test.mjs"
     }
   }
 ]

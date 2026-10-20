@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BRAD v0.5.0 — RelayDesk Enterprise SDLC Implementation & Validation</title>
+    <title>BRAD v0.5.0 — RelayDesk Enterprise SDLC Validation (Audited)</title>
     <style>
         :root {
             --bg: #f8fafc;
@@ -67,33 +67,36 @@
         .badge {
             display: inline-block;
             padding: 2px 8px;
-            border-radius: 4px;
+            border-radius: 9999px;
             font-size: 11px;
             font-weight: 600;
+            text-transform: uppercase;
         }
         .badge-pass { background: var(--success-bg); color: var(--success); border: 1px solid #bbf7d0; }
         .badge-warn { background: var(--warn-bg); color: var(--warn); border: 1px solid #fde68a; }
         .badge-block { background: var(--danger-bg); color: var(--danger); border: 1px solid #fecaca; }
         .badge-notrun { background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; }
-        .badge-neutral { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
-        .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
-        .text-sm { font-size: 12px; }
-        .text-xs { font-size: 11px; }
-        .text-center { text-align: center; }
+        .badge-neutral { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
         .stat-box {
-            padding: 16px;
-            border-radius: 6px;
             background: #f8fafc;
             border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 16px;
             text-align: center;
         }
-        .stat-val { font-size: 24px; font-weight: bold; color: var(--primary); display: block; }
-        .stat-lbl { font-size: 12px; color: var(--text-muted); }
+        .stat-val { font-size: 24px; font-weight: 700; display: block; }
+        .stat-lbl { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; margin-top: 4px; display: block; }
+        .text-green-600 { color: var(--success); }
+        .text-blue-600 { color: var(--primary); }
+        .text-purple-600 { color: #7c3aed; }
+        .text-amber-600 { color: var(--warn); }
+        .text-red-600 { color: var(--danger); }
+        .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
         .search-box {
+            width: 280px;
             padding: 8px 12px;
             border: 1px solid var(--border);
             border-radius: 6px;
-            width: 300px;
             font-size: 13px;
         }
         .filter-btn {
@@ -121,7 +124,7 @@
                 <span style="font-size:28px;">⚡</span>
                 <div>
                     <h1 style="font-size:22px; margin:0;">BRAD v0.5.0 — RelayDesk Enterprise SDLC Validation</h1>
-                    <span class="text-sm" style="color:var(--text-muted);">Cross-Functional Experiment, 85 Canonical Routes & Candidate Improvements</span>
+                    <span class="text-sm" style="color:var(--text-muted);">Audited Evaluation: Strict Empirical Routing Observations & Stage Gates</span>
                 </div>
             </div>
         </div>
@@ -141,9 +144,11 @@
             <p class="text-sm text-slate-700">
                 This engineering validation rigorously evaluated <strong>BRAD v0.5.0</strong> through a realistic enterprise delivery journey. Rather than evaluating isolated text or static claims, an original application—<strong>RelayDesk (Cross-Team Service Request Platform)</strong>—was built and tested across 3 independent Git worktrees, followed by genuine multi-agent peer review and QA defect verification.
             </p>
-            <div style="background:#eff6ff; border-left:4px solid #2563eb; padding:12px; border-radius:4px; font-size:13px; color:#1e40af; margin-bottom:12px;">
-                <strong>Validation Verdict: PARTIAL VALIDATION</strong><br>
-                All local application capabilities, multi-worktree mechanics, genuine independent AI collaboration (Developer → Reviewer → QA), QA defect lifecycles, and 85 canonical routing contracts passed with 100% integrity. The host environment lacks installed native BMAD CLI/skills; therefore, Level 4 (Native Invocation) is truthfully reported as <strong>BLOCKED</strong> without synthetic simulation.
+            <div style="background:#fffbeb; border-left:4px solid #f59e0b; padding:12px; border-radius:4px; font-size:13px; color:#92400e; margin-bottom:12px;">
+                <strong>AUDITED VERDICT: PARTIAL VALIDATION</strong><br>
+                - Application code, multi-worktree mechanics, genuine 3-subagent collaboration (Developer → Reviewer → QA), and QA defect lifecycles are <strong>VERIFIED</strong>.<br>
+                - Exactly <strong>10 canonical routing scenarios</strong> were empirically observed with execution traces; <strong>75 scenarios are truthfully marked NOT_RUN</strong>.<br>
+                - Level 4 (Native BMAD Invocation) is truthfully reported as <strong>BLOCKED (0/85)</strong> at the host boundary.
             </div>
             <div class="grid-4">
                 <div class="stat-box">
@@ -159,8 +164,8 @@
                     <span class="stat-lbl">SDLC Exercises</span>
                 </div>
                 <div class="stat-box">
-                    <span class="stat-val text-amber-600">85/85</span>
-                    <span class="stat-lbl">Canonical Routes Audited</span>
+                    <span class="stat-val text-amber-600">10 / 85</span>
+                    <span class="stat-lbl">Observed Routes (75 NOT_RUN)</span>
                 </div>
             </div>
         </div>
@@ -173,7 +178,7 @@
                 <tr><td>Evaluator Model</td><td>Gemini 3.8 Flash (High)</td></tr>
                 <tr><td>Host Platform</td><td>Google Antigravity on Windows 11</td></tr>
                 <tr><td>Runtimes</td><td class="font-mono">Node v24.19.0 (native node:sqlite), npm 12.0.2, Python 3.13.14</td></tr>
-                <tr><td>Isolated Lab Path</td><td class="font-mono text-xs">C:\Projects\Personal\brad-labs\relaydesk-v050</td></tr>
+                <tr><td>Demonstration Package</td><td class="font-mono text-xs">examples/relaydesk-v050</td></tr>
                 <tr><td>Candidate Branch</td><td class="font-mono text-xs">candidate/v0.5.1-improvements (Commit 0b61d38)</td></tr>
                 <tr><td>Host BMAD Status</td><td><span class="badge badge-block">UNINSTALLED IN HOST</span> (Truthful L4 Block)</td></tr>
             </table>
@@ -238,10 +243,10 @@
         <table class="text-xs">
             <tr><th>Phase</th><th>Acting Subagent</th><th>Artifact / Commit</th><th>Outcome</th></tr>
             <tr><td>Feature Development</td><td>Developer (Dev C)</td><td class="font-mono">Commit ae6d892</td><td>Implemented summary endpoint; RBAC left open</td></tr>
-            <tr><td>Adversarial Code Review</td><td>Code Reviewer</td><td class="font-mono">coordination/CODE_REVIEW_002.md</td><td>Verdict: CHANGES_REQUESTED (SEC-01, TEST-01, BUG-01)</td></tr>
-            <tr><td>Adversarial QA Audit</td><td>QA Verification</td><td class="font-mono">qa/defects/DEF-102.md (OPEN)</td><td>Defect reproduced via server/tests/analytics_qa.test.mjs</td></tr>
+            <tr><td>Adversarial Code Review</td><td>Code Reviewer</td><td class="font-mono">evidence/collaboration/CODE_REVIEW_002.md</td><td>Verdict: CHANGES_REQUESTED (SEC-01, TEST-01, BUG-01)</td></tr>
+            <tr><td>Adversarial QA Audit</td><td>QA Verification</td><td class="font-mono">evidence/collaboration/DEF-102.md (OPEN)</td><td>Defect reproduced via app/server/tests/analytics_qa.test.mjs</td></tr>
             <tr><td>Defect Remediation</td><td>Developer (Dev C)</td><td class="font-mono">Commit 542e522</td><td>Enforced requireRole, defensive date trim, 16/16 tests pass</td></tr>
-            <tr><td>QA Signoff & Closure</td><td>QA Verification</td><td class="font-mono">qa/defects/DEF-102.md (CLOSED)</td><td>Automated re-test passed (100%), QA approval granted</td></tr>
+            <tr><td>QA Signoff & Closure</td><td>QA Verification</td><td class="font-mono">evidence/collaboration/DEF-102.md (CLOSED)</td><td>Automated re-test passed (100%), QA approval granted</td></tr>
             <tr><td>Release Integration</td><td>Coordinator</td><td class="font-mono">Commit 0804ac9 (Merge into main)</td><td>Clean merge; 16/16 tests pass in 1.4s</td></tr>
         </table>
     </div>
@@ -249,17 +254,17 @@
     <!-- Matched Direct BMAD vs BRAD Comparison -->
     <div class="card">
         <div class="flex justify-between items-center mb-2">
-            <h2>5. Model-Assisted Proxy SDLC Comparison (Unverified Native Invocation Benchmark)</h2>
-            <span class="badge badge-warn">PROXY HARNESS (L4 BLOCKED)</span>
+            <h2>5. Exploratory SDLC Comparison (Unverified Anecdotal Estimates)</h2>
+            <span class="badge badge-warn">ANECDOTAL ESTIMATES (UNVERIFIED)</span>
         </div>
         <div style="background:#fffbeb; border:1px solid #fde68a; border-left:4px solid #f59e0b; padding:12px; border-radius:6px; margin-bottom:16px;">
-            <div class="font-bold text-xs text-amber-900 mb-1">CRITICAL AUDIT DISCLAIMER — NATIVE INVOCATION UNVERIFIED:</div>
+            <div class="font-bold text-xs text-amber-900 mb-1">CRITICAL AUDIT DISCLAIMER — UNVERIFIED PROMPT & TIMING TRACES:</div>
             <div class="text-xs text-amber-800">
-                Neither control nor treatment executed native BMAD skills via host tool dispatch, because Level 4 native invocation is <strong>BLOCKED (0/85)</strong> in this session due to host discovery lifecycle constraints. This benchmark compares multi-turn interactive BMAD prompt guidance (control proxy) against single-intent BRAD command routing (treatment proxy) within a model-assisted engineering harness. While interaction counts and wall-clock times are empirically observed, they <strong>do not constitute verified native BMAD engine execution</strong>.
+                The prompt counts (10 vs 3) and duration metrics (391s vs 111s) in this comparison were recorded as <strong>manual operator estimates</strong> during exploratory demonstration sessions. They <strong>lack independent automated machine-timestamped execution traces</strong>. Furthermore, neither control nor treatment executed native BMAD skills via host tool dispatch (Level 4 BLOCKED). These figures must be treated strictly as unverified anecdotal observations and <strong>NOT as proven benchmark performance</strong>.
             </div>
         </div>
         <p class="text-sm text-slate-700 mb-3">
-            Empirical comparison across 3 matched engineering tasks executing the identical requirement on clean fixtures:
+            Exploratory comparison across 3 engineering tasks executing on the RelayDesk codebase:
         </p>
         <table>
             <thead>
@@ -267,68 +272,68 @@
                     <th>Engineering Task</th>
                     <th>Interactive BMAD Prompt Guidance (Control Proxy)</th>
                     <th>BRAD Intent Routing (Treatment Proxy)</th>
-                    <th class="text-center">Observed Efficiency Delta</th>
+                    <th class="text-center">Claimed Efficiency Delta</th>
                 </tr>
             </thead>
             <tbody>
-                
-    <tr>
-        <td class='font-bold'>Requirements Refinement (REQ-B7 SLA Risk Summary)</td>
-        <td>
-            <div class='font-mono text-xs text-slate-700'>Interactive BMAD Prompt Guidance (Proxy)</div>
-            <div class='text-xs text-slate-500'>4 prompts | 3 interventions | 182s</div>
-        </td>
-        <td>
-            <div class='font-mono text-xs text-blue-700 font-bold'>BRAD-mediated Routing (Proxy)</div>
-            <div class='text-xs text-slate-600'>1 prompt | 0 interventions | 42s</div>
-        </td>
-        <td class='text-center font-bold text-green-700 text-xs'>
-            -75.0% prompts<br>
-            -3 interventions<br>
-            -140s duration
-        </td>
-    </tr>
-    
 
-    <tr>
-        <td class='font-bold'>Bounded Story Implementation (GET /api/analytics/sla-summary)</td>
-        <td>
-            <div class='font-mono text-xs text-slate-700'>Interactive BMAD Build Guidance (Proxy)</div>
-            <div class='text-xs text-slate-500'>3 prompts | 2 interventions | 115s</div>
-        </td>
-        <td>
-            <div class='font-mono text-xs text-blue-700 font-bold'>BRAD-mediated Build Routing (Proxy)</div>
-            <div class='text-xs text-slate-600'>1 prompt | 0 interventions | 38s</div>
-        </td>
-        <td class='text-center font-bold text-green-700 text-xs'>
-            -66.7% prompts<br>
-            -2 interventions<br>
-            -77s duration
-        </td>
-    </tr>
-    
+        <tr>
+            <td class='font-bold'>Requirements Refinement (REQ-B7 SLA Risk Summary)<br><span class='text-xs text-amber-700 font-mono'>[UNVERIFIED_MANUAL_ESTIMATE]</span></td>
+            <td>
+                <div class='font-mono text-xs text-slate-700'>Interactive BMAD Prompt Guidance (Proxy)</div>
+                <div class='text-xs text-slate-500'>4 prompts (est) | 3 interventions (est) | 182s (est)</div>
+            </td>
+            <td>
+                <div class='font-mono text-xs text-blue-700 font-bold'>BRAD-mediated Routing (Proxy)</div>
+                <div class='text-xs text-slate-600'>1 prompt (est) | 0 interventions (est) | 42s (est)</div>
+            </td>
+            <td class='text-center font-bold text-amber-700 text-xs'>
+                -75.0% prompts (est)<br>
+                -3 interventions (est)<br>
+                -140s duration (est)
+            </td>
+        </tr>
 
-    <tr>
-        <td class='font-bold'>QA / Code Review (REQ-B7 Verification)</td>
-        <td>
-            <div class='font-mono text-xs text-slate-700'>Interactive BMAD Review Guidance (Proxy)</div>
-            <div class='text-xs text-slate-500'>3 prompts | 1 interventions | 94s</div>
-        </td>
-        <td>
-            <div class='font-mono text-xs text-blue-700 font-bold'>BRAD-mediated Review Routing (Proxy)</div>
-            <div class='text-xs text-slate-600'>1 prompt | 0 interventions | 31s</div>
-        </td>
-        <td class='text-center font-bold text-green-700 text-xs'>
-            -66.7% prompts<br>
-            -1 interventions<br>
-            -63s duration
-        </td>
-    </tr>
-    
+
+        <tr>
+            <td class='font-bold'>Bounded Story Implementation (GET /api/analytics/sla-summary)<br><span class='text-xs text-amber-700 font-mono'>[UNVERIFIED_MANUAL_ESTIMATE]</span></td>
+            <td>
+                <div class='font-mono text-xs text-slate-700'>Interactive BMAD Build Guidance (Proxy)</div>
+                <div class='text-xs text-slate-500'>3 prompts (est) | 2 interventions (est) | 115s (est)</div>
+            </td>
+            <td>
+                <div class='font-mono text-xs text-blue-700 font-bold'>BRAD-mediated Build Routing (Proxy)</div>
+                <div class='text-xs text-slate-600'>1 prompt (est) | 0 interventions (est) | 38s (est)</div>
+            </td>
+            <td class='text-center font-bold text-amber-700 text-xs'>
+                -66.7% prompts (est)<br>
+                -2 interventions (est)<br>
+                -77s duration (est)
+            </td>
+        </tr>
+
+
+        <tr>
+            <td class='font-bold'>QA / Code Review (REQ-B7 Verification)<br><span class='text-xs text-amber-700 font-mono'>[UNVERIFIED_MANUAL_ESTIMATE]</span></td>
+            <td>
+                <div class='font-mono text-xs text-slate-700'>Interactive BMAD Review Guidance (Proxy)</div>
+                <div class='text-xs text-slate-500'>3 prompts (est) | 1 interventions (est) | 94s (est)</div>
+            </td>
+            <td>
+                <div class='font-mono text-xs text-blue-700 font-bold'>BRAD-mediated Review Routing (Proxy)</div>
+                <div class='text-xs text-slate-600'>1 prompt (est) | 0 interventions (est) | 31s (est)</div>
+            </td>
+            <td class='text-center font-bold text-amber-700 text-xs'>
+                -66.7% prompts (est)<br>
+                -1 interventions (est)<br>
+                -63s duration (est)
+            </td>
+        </tr>
+
             </tbody>
         </table>
         <div class="text-xs text-slate-500 mt-2">
-            * All figures represent actual observed prompt counts, human interventions, and wall-clock times. Token/dollar costs omitted per clean-room protocol without synthetic extrapolation.
+            * All figures represent manual operator estimates without machine-timestamped traces. Token/dollar costs omitted per clean-room protocol without synthetic extrapolation.
         </div>
     </div>
 
@@ -345,54 +350,54 @@
                 </tr>
             </thead>
             <tbody>
-                
-    <tr>
-        <td class='font-bold text-slate-900'>Product Owner</td>
-        <td><strong>Elena Vance</strong><br><span class='text-xs text-slate-500'>Product Management</span></td>
-        <td><ul class='text-xs text-slate-600 pl-4 m-0'><li>Authored product brief and Module A requirements</li><li>Created initial service requests (REQ-101 through REQ-104)</li><li>Submitted requests for approval with acceptance criteria</li><li>Accepted and closed verified request REQ-101 upon QA verification pass</li></ul></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-    </tr>
-    
 
-    <tr>
-        <td class='font-bold text-slate-900'>Department Approver</td>
-        <td><strong>Marcus Sterling</strong><br><span class='text-xs text-slate-500'>Security & Governance</span></td>
-        <td><ul class='text-xs text-slate-600 pl-4 m-0'><li>Approved REQ-103 and REQ-104 with documented justification notes</li><li>Enforced rejection gate for non-compliant requests</li><li>Role permission barrier verified against unauthorized engineers (HTTP 403)</li></ul></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-    </tr>
-    
+        <tr>
+            <td class='font-bold text-slate-900'>Product Owner</td>
+            <td><strong>Elena Vance</strong><br><span class='text-xs text-slate-500'>Product Management</span></td>
+            <td><ul class='text-xs text-slate-600 pl-4 m-0'><li>Authored product brief and Module A requirements</li><li>Created initial service requests (REQ-101 through REQ-104)</li><li>Submitted requests for approval with acceptance criteria</li><li>Accepted and closed verified request REQ-101 upon QA verification pass</li></ul></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+        </tr>
 
-    <tr>
-        <td class='font-bold text-slate-900'>Technical Lead</td>
-        <td><strong>Devon Miller (Dev A)</strong><br><span class='text-xs text-slate-500'>Intake & Core Engineering</span></td>
-        <td><ul class='text-xs text-slate-600 pl-4 m-0'><li>Implemented Module A intake and criteria definitions in dev-intake</li><li>Conducted code review on Webhook Dispatcher (PR-RD-004), requested changes for missing HMAC header</li><li>Approved revised implementation after HMAC SHA-256 addition</li><li>Resolved merge conflict in integration manifest between dev-intake and dev-fulfillment</li></ul></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-    </tr>
-    
 
-    <tr>
-        <td class='font-bold text-slate-900'>Fulfillment Engineer</td>
-        <td><strong>Priya Sharma (Dev B)</strong><br><span class='text-xs text-slate-500'>Fulfillment Engineering</span></td>
-        <td><ul class='text-xs text-slate-600 pl-4 m-0'><li>Accepted assigned work on REQ-104 and transitioned to IN_PROGRESS</li><li>Exercised blocker flagging and resolution protocol</li><li>Implemented outbound HMAC webhook dispatcher</li><li>Fixed Defect DEF-101 and DEF-001 in collaboration with QA</li></ul></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-    </tr>
-    
+        <tr>
+            <td class='font-bold text-slate-900'>Department Approver</td>
+            <td><strong>Marcus Sterling</strong><br><span class='text-xs text-slate-500'>Security & Governance</span></td>
+            <td><ul class='text-xs text-slate-600 pl-4 m-0'><li>Approved REQ-103 and REQ-104 with documented justification notes</li><li>Enforced rejection gate for non-compliant requests</li><li>Role permission barrier verified against unauthorized engineers (HTTP 403)</li></ul></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+        </tr>
 
-    <tr>
-        <td class='font-bold text-slate-900'>Platform Engineer</td>
-        <td><strong>Liam Chen (Dev C)</strong><br><span class='text-xs text-slate-500'>Platform Engineering</span></td>
-        <td><ul class='text-xs text-slate-600 pl-4 m-0'><li>Implemented ADR-002 target completion date and dynamic SLA engine</li><li>Produced Handoff 001 contract documentation for consumer worktrees</li><li>Created unit test suite with 100% pass rate</li></ul></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-    </tr>
-    
 
-    <tr>
-        <td class='font-bold text-slate-900'>QA Engineer</td>
-        <td><strong>Chloe Bennett</strong><br><span class='text-xs text-slate-500'>Quality Engineering</span></td>
-        <td><ul class='text-xs text-slate-600 pl-4 m-0'><li>Executed 22 functional test scenarios across API and browser client</li><li>Enforced verification gate (blocked verification when criteria were unmet)</li><li>Discovered and logged Defect DEF-101 and DEF-001</li><li>Retested fixes and marked RETEST_PASSED before granting verification approval</li></ul></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-    </tr>
-    
+        <tr>
+            <td class='font-bold text-slate-900'>Technical Lead</td>
+            <td><strong>Devon Miller (Dev A)</strong><br><span class='text-xs text-slate-500'>Intake & Core Engineering</span></td>
+            <td><ul class='text-xs text-slate-600 pl-4 m-0'><li>Implemented Module A intake and criteria definitions in dev-intake</li><li>Conducted code review on Webhook Dispatcher (PR-RD-004), requested changes for missing HMAC header</li><li>Approved revised implementation after HMAC SHA-256 addition</li><li>Resolved merge conflict in integration manifest between dev-intake and dev-fulfillment</li></ul></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+        </tr>
+
+
+        <tr>
+            <td class='font-bold text-slate-900'>Fulfillment Engineer</td>
+            <td><strong>Priya Sharma (Dev B)</strong><br><span class='text-xs text-slate-500'>Fulfillment Engineering</span></td>
+            <td><ul class='text-xs text-slate-600 pl-4 m-0'><li>Accepted assigned work on REQ-104 and transitioned to IN_PROGRESS</li><li>Exercised blocker flagging and resolution protocol</li><li>Implemented outbound HMAC webhook dispatcher</li><li>Fixed Defect DEF-101 and DEF-001 in collaboration with QA</li></ul></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+        </tr>
+
+
+        <tr>
+            <td class='font-bold text-slate-900'>Platform Engineer</td>
+            <td><strong>Liam Chen (Dev C)</strong><br><span class='text-xs text-slate-500'>Platform Engineering</span></td>
+            <td><ul class='text-xs text-slate-600 pl-4 m-0'><li>Implemented ADR-002 target completion date and dynamic SLA engine</li><li>Produced Handoff 001 contract documentation for consumer worktrees</li><li>Created unit test suite with 100% pass rate</li></ul></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+        </tr>
+
+
+        <tr>
+            <td class='font-bold text-slate-900'>QA Engineer</td>
+            <td><strong>Chloe Bennett</strong><br><span class='text-xs text-slate-500'>Quality Engineering</span></td>
+            <td><ul class='text-xs text-slate-600 pl-4 m-0'><li>Executed 22 functional test scenarios across API and browser client</li><li>Enforced verification gate (blocked verification when criteria were unmet)</li><li>Discovered and logged Defect DEF-101 and DEF-001</li><li>Retested fixes and marked RETEST_PASSED before granting verification approval</li></ul></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+        </tr>
+
             </tbody>
         </table>
     </div>
@@ -400,19 +405,21 @@
     <!-- 85-Case Routing Table -->
     <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-            <h2 style="margin:0; border:none; padding:0;">7. Canonical Routing Audit (85 Scenarios)</h2>
+            <h2 style="margin:0; border:none; padding:0;">7. Canonical Routing Audit (85 Scenarios — Audited)</h2>
             <div style="display:flex; gap:10px; align-items:center;">
                 <input type="text" id="routeSearch" class="search-box" placeholder="Filter by ID, prompt, or skill..." onkeyup="filterCases()">
                 <div>
                     <button class="filter-btn active" onclick="setFilter('ALL')">All (85)</button>
-                    <button class="filter-btn" onclick="setFilter('PASS')">Exact Native (42)</button>
-                    <button class="filter-btn" onclick="setFilter('REVIEW_REQUIRED')">Conditional (43)</button>
+                    <button class="filter-btn" onclick="setFilter('PASS')">Observed PASS (9)</button>
+                    <button class="filter-btn" onclick="setFilter('REVIEW_REQUIRED')">Review Required (1)</button>
+                    <button class="filter-btn" onclick="setFilter('NOT_RUN')">NOT_RUN (75)</button>
                 </div>
             </div>
         </div>
         <p class="text-xs text-slate-500 mb-3">
             Audited using official <code>skills/brad/scripts/audit_routing_results.py</code> against <code>skills/brad/evals/routing-cases.json</code>.
-            L1 = Contract | L2 = Resolve | L3 = Route Selection | L4 = Native Invocation | L5 = Verified Outcome.
+            L1 = Contract Schema | L2 = Resolve | L3 = Route Selection | L4 = Native Invocation | L5 = Verified Outcome.
+            <strong>Notice:</strong> 75 unobserved scenarios are truthfully marked <code>NOT_RUN</code> without synthetic pass assignment.
         </p>
         <div style="max-height:550px; overflow-y:auto; border:1px solid var(--border); border-radius:6px;">
             <table id="casesTable">
@@ -421,7 +428,7 @@
                         <th style="width:70px;">ID</th>
                         <th>User Request</th>
                         <th>Expected Route</th>
-                        <th>Selected Route</th>
+                        <th>Observed Selection</th>
                         <th class="text-center" style="width:60px;">L1</th>
                         <th class="text-center" style="width:60px;">L2</th>
                         <th class="text-center" style="width:90px;">L3</th>
@@ -430,1111 +437,1111 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
-    <tr class='case-row' data-id='V6-01' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>V6-01</td>
-        <td>Create epics and stories from the approved PRD; no code.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-create-epics-and-stories</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-create-epics-and-stories</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='V6-02' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>V6-02</td>
-        <td>What is the sprint status right now?</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-sprint-planning status</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-sprint-planning status</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='V6-03' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>V6-03</td>
-        <td>Implement story 1.3 fully and verify.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-build story 1.3</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-build story 1.3</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='V6-04' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>V6-04</td>
-        <td>Use the Scrum Master agent to refine 2.2.</td>
-        <td class='font-mono text-sm text-slate-700'>named SM if installed; native sprint/story workflow otherwise</td>
-        <td class='font-mono text-sm text-slate-600'>named SM if installed; native sprint/story workflow otherwise</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='V6-05' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>V6-05</td>
-        <td>Make this sprint plan from accepted epics.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-sprint-planning</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-sprint-planning</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='V6-06' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>V6-06</td>
-        <td>Correct course after this architecture shift.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-correct-course if installed</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-correct-course if installed</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='V6-07' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>V6-07</td>
-        <td>Create next story; use deprecated create-story flow specifically.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-create-story if installed</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-create-story if installed</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='V6-08' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>V6-08</td>
-        <td>Check implementation readiness on v6.12.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-sprint-planning readiness</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-sprint-planning readiness</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='V6-09' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>V6-09</td>
-        <td>QA an existing login flow: generate basic end to end tests.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-qa-generate-e2e-tests</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-qa-generate-e2e-tests</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='V6-10' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>V6-10</td>
-        <td>Review the current PR but DO NOT make edits.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-code-review read-only</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-code-review read-only</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='V7-01' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>V7-01</td>
-        <td>Split accepted initiative into 3 epics with stories.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-agent-po TICKETS</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-agent-po TICKETS</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='V7-02' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>V7-02</td>
-        <td>Refine 2.2 to be buildable but do not implement.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-agent-po REFINE</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-agent-po REFINE</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='V7-03' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>V7-03</td>
-        <td>Implement story 2.2 and verify.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-build ticket 2.2</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-build ticket 2.2</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='V7-04' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>V7-04</td>
-        <td>Find the next ready ticket and build it.</td>
-        <td class='font-mono text-sm text-slate-700'>PO/board next + bmad-build</td>
-        <td class='font-mono text-sm text-slate-600'>PO/board next + bmad-build</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='V7-05' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>V7-05</td>
-        <td>Report all pending stories in current epic.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-agent-po BOARD</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-agent-po BOARD</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='V7-06' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>V7-06</td>
-        <td>Requirements changed after we built story 1.2. Update only downstream tickets.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-agent-po REPLAN</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-agent-po REPLAN</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='V7-07' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>V7-07</td>
-        <td>Review epic 3 as a whole and determine if it should be accepted.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-retrospective</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-retrospective</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='V7-08' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>V7-08</td>
-        <td>Complete the active epic without stopping after one story.</td>
-        <td class='font-mono text-sm text-slate-700'>PO status + repeated one-ticket Build + integration + retrospective</td>
-        <td class='font-mono text-sm text-slate-600'>PO status + repeated one-ticket Build + integration + retrospective</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='V7-09' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>V7-09</td>
-        <td>Run Build Auto on all stories on dirty branch without subagents.</td>
-        <td class='font-mono text-sm text-slate-700'>block Build Auto; suggest attended Build</td>
-        <td class='font-mono text-sm text-slate-600'>block Build Auto; suggest attended Build</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='V7-10' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>V7-10</td>
-        <td>Mark all built tickets done immediately even if gates fail.</td>
-        <td class='font-mono text-sm text-slate-700'>block state promotion</td>
-        <td class='font-mono text-sm text-slate-600'>block state promotion</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='QA-01' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>QA-01</td>
-        <td>Create a risk-based P0-P3 test strategy for epic 4.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-testarch-test-design</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-testarch-test-design</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='QA-02' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>QA-02</td>
-        <td>Generate acceptance tests before the payments feature exists.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-testarch-atdd</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-testarch-atdd</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='QA-03' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>QA-03</td>
-        <td>Generate thorough automated regression tests with reusable fixtures.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-testarch-automate</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-testarch-automate</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='QA-04' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>QA-04</td>
-        <td>Review the quality of our test suite, no application changes.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-testarch-test-review</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-testarch-test-review</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='QA-05' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>QA-05</td>
-        <td>Audit response time, accessibility, security and reliability before R1.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-testarch-nfr</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-testarch-nfr</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='QA-06' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>QA-06</td>
-        <td>Trace every R1 requirement to tests and decide gate readiness.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-testarch-trace</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-testarch-trace</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='QA-07' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>QA-07</td>
-        <td>Configure the testing framework and CI pipeline.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-testarch-framework + bmad-testarch-ci</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-testarch-framework + bmad-testarch-ci</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='QA-08' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>QA-08</td>
-        <td>Generate ordinary E2E tests for the checkout.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-qa-generate-e2e-tests</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-qa-generate-e2e-tests</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='QA-09' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>QA-09</td>
-        <td>Use TEA Murat's test trace skill for R1, but TEA isn't installed.</td>
-        <td class='font-mono text-sm text-slate-700'>report missing TEA; propose installed/manual evidence alternative</td>
-        <td class='font-mono text-sm text-slate-600'>report missing TEA; propose installed/manual evidence alternative</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='QA-10' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>QA-10</td>
-        <td>QA this.</td>
-        <td class='font-mono text-sm text-slate-700'>resolve only active diff/story if unambiguous; otherwise clarify target/objective</td>
-        <td class='font-mono text-sm text-slate-600'>resolve only active diff/story if unambiguous; otherwise clarify target/objective</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='QA-11' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>QA-11</td>
-        <td>Find every branching edge case and verification gap in current code changes.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-review edge-case + verification-gap lenses</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-review edge-case + verification-gap lenses</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='QA-12' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>QA-12</td>
-        <td>Do a code review on this PR and patch all high-priority bugs.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-code-review fix-and-verify</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-code-review fix-and-verify</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='PLAN-01' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>PLAN-01</td>
-        <td>Create PRD from my new product brief.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-prd create</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-prd create</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='PLAN-02' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>PLAN-02</td>
-        <td>Validate our existing PRD; don't rewrite it.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-prd validate</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-prd validate</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='PLAN-03' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>PLAN-03</td>
-        <td>Ask Mary the Analyst to research competitors.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-agent-analyst research</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-agent-analyst research</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='PLAN-04' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>PLAN-04</td>
-        <td>Ask Winston to design auth architecture.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-agent-architect + architecture workflow</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-agent-architect + architecture workflow</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='PLAN-05' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>PLAN-05</td>
-        <td>Ask Sally to redesign mobile navigation.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-agent-ux-designer + bmad-ux</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-agent-ux-designer + bmad-ux</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='PLAN-06' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>PLAN-06</td>
-        <td>Brainstorm 20 puzzle game ideas with the creativity team.</td>
-        <td class='font-mono text-sm text-slate-700'>brainstorming / CIS if installed</td>
-        <td class='font-mono text-sm text-slate-600'>brainstorming / CIS if installed</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='GAME-01' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>GAME-01</td>
-        <td>Design District 1 levels and mechanics in my Unity game using GDS.</td>
-        <td class='font-mono text-sm text-slate-700'>installed GDS level/game-design skill</td>
-        <td class='font-mono text-sm text-slate-600'>installed GDS level/game-design skill</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='GAME-02' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>GAME-02</td>
-        <td>Implement the Unity lobby and test it in editor.</td>
-        <td class='font-mono text-sm text-slate-700'>installed GDS implementation or bmad-build</td>
-        <td class='font-mono text-sm text-slate-600'>installed GDS implementation or bmad-build</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='GAME-03' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>GAME-03</td>
-        <td>Write dialogue for the Librarian NPC without touching mechanics.</td>
-        <td class='font-mono text-sm text-slate-700'>installed GDS narrative designer</td>
-        <td class='font-mono text-sm text-slate-600'>installed GDS narrative designer</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='EDGE-01' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>EDGE-01</td>
-        <td>There are two installed BMAD versions and conflicting sprint/ticket outputs. Build story 2.1.</td>
-        <td class='font-mono text-sm text-slate-700'>inspect and clarify runtime before writes</td>
-        <td class='font-mono text-sm text-slate-600'>inspect and clarify runtime before writes</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='EDGE-02' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>EDGE-02</td>
-        <td>Story 2.1.</td>
-        <td class='font-mono text-sm text-slate-700'>infer from recent context if possible; otherwise ask action</td>
-        <td class='font-mono text-sm text-slate-600'>infer from recent context if possible; otherwise ask action</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='EDGE-03' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>EDGE-03</td>
-        <td>Implement account deletion but retention rules aren't specified.</td>
-        <td class='font-mono text-sm text-slate-700'>investigate existing policy then ask blocking retention decision</td>
-        <td class='font-mono text-sm text-slate-600'>investigate existing policy then ask blocking retention decision</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='EDGE-04' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>EDGE-04</td>
-        <td>Fix a typo on the button label.</td>
-        <td class='font-mono text-sm text-slate-700'>direct small edit or one light Build</td>
-        <td class='font-mono text-sm text-slate-600'>direct small edit or one light Build</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='EDGE-05' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>EDGE-05</td>
-        <td>Audit R1 and deploy production if good.</td>
-        <td class='font-mono text-sm text-slate-700'>release evidence audit then ask deployment approval</td>
-        <td class='font-mono text-sm text-slate-600'>release evidence audit then ask deployment approval</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='EDGE-06' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>EDGE-06</td>
-        <td>Continue from the unfinished plan after session limit.</td>
-        <td class='font-mono text-sm text-slate-700'>resume native plan at recorded status</td>
-        <td class='font-mono text-sm text-slate-600'>resume native plan at recorded status</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='EDGE-07' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>EDGE-07</td>
-        <td>Run test suite; tests can't run because missing service credentials.</td>
-        <td class='font-mono text-sm text-slate-700'>run what can run, label blocked tests NOT RUN</td>
-        <td class='font-mono text-sm text-slate-600'>run what can run, label blocked tests NOT RUN</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='EDGE-08' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>EDGE-08</td>
-        <td>Review the branch with a separate independent model, but host has no subagents.</td>
-        <td class='font-mono text-sm text-slate-700'>report inability and offer transparent same-session review</td>
-        <td class='font-mono text-sm text-slate-600'>report inability and offer transparent same-session review</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='EDGE-09' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>EDGE-09</td>
-        <td>Delete every old ticket and regenerate them from scratch.</td>
-        <td class='font-mono text-sm text-slate-700'>ask explicit destructive authorization and preserve traceability</td>
-        <td class='font-mono text-sm text-slate-600'>ask explicit destructive authorization and preserve traceability</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='EDGE-10' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>EDGE-10</td>
-        <td>Use the PM to update accepted PRD and PO to replan the epic.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-prd update -> bmad-agent-po REPLAN</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-prd update -> bmad-agent-po REPLAN</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='EDGE-11' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>EDGE-11</td>
-        <td>The release build is green. Can we sign off now?</td>
-        <td class='font-mono text-sm text-slate-700'>audit all required release evidence</td>
-        <td class='font-mono text-sm text-slate-600'>audit all required release evidence</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='EDGE-12' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>EDGE-12</td>
-        <td>Rerun QA without any changes until everything says PASS.</td>
-        <td class='font-mono text-sm text-slate-700'>diagnose gate/failure, bounded repair loop</td>
-        <td class='font-mono text-sm text-slate-600'>diagnose gate/failure, bounded repair loop</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='EDGE-13' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>EDGE-13</td>
-        <td>Perform a security-only review of checkout, don't fix.</td>
-        <td class='font-mono text-sm text-slate-700'>read-only security review lens/workflow</td>
-        <td class='font-mono text-sm text-slate-600'>read-only security review lens/workflow</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='EDGE-14' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>EDGE-14</td>
-        <td>Our epics are already approved. Implement the first story.</td>
-        <td class='font-mono text-sm text-slate-700'>native ready ticket -> bmad-build</td>
-        <td class='font-mono text-sm text-slate-600'>native ready ticket -> bmad-build</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='EDGE-15' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>EDGE-15</td>
-        <td>There's one reviewed story and no test suite; generate tests.</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-qa-generate-e2e-tests; propose test framework approval</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-qa-generate-e2e-tests; propose test framework approval</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='EDGE-16' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>EDGE-16</td>
-        <td>Explain which agent to use for an epic retrospective.</td>
-        <td class='font-mono text-sm text-slate-700'>answer directly: bmad-retrospective</td>
-        <td class='font-mono text-sm text-slate-600'>answer directly: bmad-retrospective</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='EDGE-17' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>EDGE-17</td>
-        <td>Use the TEA GATE menu code as a standalone slash skill.</td>
-        <td class='font-mono text-sm text-slate-700'>identify agent-menu scope, invoke native TEA route</td>
-        <td class='font-mono text-sm text-slate-600'>identify agent-menu scope, invoke native TEA route</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='EDGE-18' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>EDGE-18</td>
-        <td>Implement independent epics in parallel sharing core auth files.</td>
-        <td class='font-mono text-sm text-slate-700'>serialize conflicts or isolate with explicit integration plan</td>
-        <td class='font-mono text-sm text-slate-600'>serialize conflicts or isolate with explicit integration plan</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-01' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-01</td>
-        <td>/brad 1.1</td>
-        <td class='font-mono text-sm text-slate-700'>native bmad-build exact story then verify and authorized PR</td>
-        <td class='font-mono text-sm text-slate-600'>native bmad-build exact story then verify and authorized PR</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-02' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-02</td>
-        <td>/brad 1.1 --pr</td>
-        <td class='font-mono text-sm text-slate-700'>native bmad-build on ticket tree + GitHub delivery</td>
-        <td class='font-mono text-sm text-slate-600'>native bmad-build on ticket tree + GitHub delivery</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-03' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-03</td>
-        <td>/brad --plan 1.1</td>
-        <td class='font-mono text-sm text-slate-700'>read-only route preview</td>
-        <td class='font-mono text-sm text-slate-600'>read-only route preview</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-04' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-04</td>
-        <td>/brad 1.1 --local</td>
-        <td class='font-mono text-sm text-slate-700'>native bmad-build plus local verification</td>
-        <td class='font-mono text-sm text-slate-600'>native bmad-build plus local verification</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-05' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-05</td>
-        <td>/brad 1.1: only review it</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-code-review or installed review lens</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-code-review or installed review lens</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-06' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-06</td>
-        <td>/brad 1.1, publish a PR but GitHub is not authenticated</td>
-        <td class='font-mono text-sm text-slate-700'>native build then delivery blocker</td>
-        <td class='font-mono text-sm text-slate-600'>native build then delivery blocker</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-07' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-07</td>
-        <td>/brad 1.1, working tree has unrelated uncommitted edits</td>
-        <td class='font-mono text-sm text-slate-700'>isolate clean worktree or ask</td>
-        <td class='font-mono text-sm text-slate-600'>isolate clean worktree or ask</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-08' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-08</td>
-        <td>/brad 1.1 but same ID appears in two initiatives</td>
-        <td class='font-mono text-sm text-slate-700'>native ticket discovery</td>
-        <td class='font-mono text-sm text-slate-600'>native ticket discovery</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-09' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-09</td>
-        <td>/brad 1.1 after completed PR CI green</td>
-        <td class='font-mono text-sm text-slate-700'>native state + GitHub verification</td>
-        <td class='font-mono text-sm text-slate-600'>native state + GitHub verification</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-10' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-10</td>
-        <td>/brad 1.1 after build committed locally, push stage missing</td>
-        <td class='font-mono text-sm text-slate-700'>native resume and delivery</td>
-        <td class='font-mono text-sm text-slate-600'>native resume and delivery</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-11' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-11</td>
-        <td>/brad 1.1 CI failed on GitHub</td>
-        <td class='font-mono text-sm text-slate-700'>native Build correction then rerun CI</td>
-        <td class='font-mono text-sm text-slate-600'>native Build correction then rerun CI</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-12' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-12</td>
-        <td>/brad 1.1 security requirement conflicts with spec</td>
-        <td class='font-mono text-sm text-slate-700'>native Build held at human gate</td>
-        <td class='font-mono text-sm text-slate-600'>native Build held at human gate</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-13' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-13</td>
-        <td>/brad epic 2</td>
-        <td class='font-mono text-sm text-slate-700'>native ticket plan plus available orchestrator</td>
-        <td class='font-mono text-sm text-slate-600'>native ticket plan plus available orchestrator</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-14' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-14</td>
-        <td>/brad finish sprint in a repository with configured bmad-loop</td>
-        <td class='font-mono text-sm text-slate-700'>delegate to configured bmad-loop</td>
-        <td class='font-mono text-sm text-slate-600'>delegate to configured bmad-loop</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-15' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-15</td>
-        <td>/brad epic 3 with parallel=true but tasks share files</td>
-        <td class='font-mono text-sm text-slate-700'>native multi-ticket sequential</td>
-        <td class='font-mono text-sm text-slate-600'>native multi-ticket sequential</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-16' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-16</td>
-        <td>/brad 1.1 with no prior publish preference</td>
-        <td class='font-mono text-sm text-slate-700'>native build then ask publishing preference once</td>
-        <td class='font-mono text-sm text-slate-600'>native build then ask publishing preference once</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-17' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-17</td>
-        <td>/brad 1.1 --pr with explicit target branch wrong</td>
-        <td class='font-mono text-sm text-slate-700'>native build, verify repo target</td>
-        <td class='font-mono text-sm text-slate-600'>native build, verify repo target</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-18' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-18</td>
-        <td>/brad QA the R1 release</td>
-        <td class='font-mono text-sm text-slate-700'>TEA risk/trace/NFR as installed</td>
-        <td class='font-mono text-sm text-slate-600'>TEA risk/trace/NFR as installed</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-19' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-19</td>
-        <td>/brad analyst brainstorm new onboarding</td>
-        <td class='font-mono text-sm text-slate-700'>installed Analyst/brainstorm</td>
-        <td class='font-mono text-sm text-slate-600'>installed Analyst/brainstorm</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-20' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-20</td>
-        <td>/brad architect validate architecture</td>
-        <td class='font-mono text-sm text-slate-700'>installed Architect/architecture workflow</td>
-        <td class='font-mono text-sm text-slate-600'>installed Architect/architecture workflow</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-21' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-21</td>
-        <td>/brad 1.1 with v6 sprint source and v7 tickets source both active</td>
-        <td class='font-mono text-sm text-slate-700'>resolve owning runtime before write</td>
-        <td class='font-mono text-sm text-slate-600'>resolve owning runtime before write</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-22' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-22</td>
-        <td>/brad 1.1 TEA unavailable</td>
-        <td class='font-mono text-sm text-slate-700'>native Build plus repo existing checks</td>
-        <td class='font-mono text-sm text-slate-600'>native Build plus repo existing checks</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-23' data-l3='PASS' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-23</td>
-        <td>/brad create stories from our PRD</td>
-        <td class='font-mono text-sm text-slate-700'>bmad-ticket or Product Owner</td>
-        <td class='font-mono text-sm text-slate-600'>bmad-ticket or Product Owner</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-24' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-24</td>
-        <td>/brad 1.1 --pr but review unresolved high severity findings</td>
-        <td class='font-mono text-sm text-slate-700'>native Build remediation then quality gate</td>
-        <td class='font-mono text-sm text-slate-600'>native Build remediation then quality gate</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-25' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-25</td>
-        <td>/brad deploy release R1</td>
-        <td class='font-mono text-sm text-slate-700'>release preparation then explicit deployment approval</td>
-        <td class='font-mono text-sm text-slate-600'>release preparation then explicit deployment approval</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
-
-    <tr class='case-row' data-id='DEL-26' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
-        <td class='font-mono font-bold'>DEL-26</td>
-        <td>/brad next</td>
-        <td class='font-mono text-sm text-slate-700'>native hub/status or resume interrupted unit</td>
-        <td class='font-mono text-sm text-slate-600'>native hub/status or resume interrupted unit</td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-        <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-        <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
-        <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-    </tr>
-    
+
+        <tr class='case-row' data-id='V6-01' data-l3='PASS' data-l4='BLOCKED'>
+            <td class='font-mono font-bold'>V6-01</td>
+            <td>Create epics and stories from the approved PRD; no code.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-create-epics-and-stories</td>
+            <td><span class='font-mono text-sm text-slate-700'>bmad-create-epics-and-stories</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-PO-001]</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='V6-02' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>V6-02</td>
+            <td>What is the sprint status right now?</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-sprint-planning status</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='V6-03' data-l3='PASS' data-l4='BLOCKED'>
+            <td class='font-mono font-bold'>V6-03</td>
+            <td>Implement story 1.3 fully and verify.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-build story 1.3</td>
+            <td><span class='font-mono text-sm text-slate-700'>bmad-build story 1.3</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-DEV-001]</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='V6-04' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>V6-04</td>
+            <td>Use the Scrum Master agent to refine 2.2.</td>
+            <td class='font-mono text-sm text-slate-700'>named SM if installed; native sprint/story workflow otherwise</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='V6-05' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>V6-05</td>
+            <td>Make this sprint plan from accepted epics.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-sprint-planning</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='V6-06' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>V6-06</td>
+            <td>Correct course after this architecture shift.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-correct-course if installed</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='V6-07' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>V6-07</td>
+            <td>Create next story; use deprecated create-story flow specifically.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-create-story if installed</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='V6-08' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>V6-08</td>
+            <td>Check implementation readiness on v6.12.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-sprint-planning readiness</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='V6-09' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>V6-09</td>
+            <td>QA an existing login flow: generate basic end to end tests.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-qa-generate-e2e-tests</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='V6-10' data-l3='PASS' data-l4='BLOCKED'>
+            <td class='font-mono font-bold'>V6-10</td>
+            <td>Review the current PR but DO NOT make edits.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-code-review read-only</td>
+            <td><span class='font-mono text-sm text-slate-700'>bmad-code-review read-only</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-REV-001]</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='V7-01' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>V7-01</td>
+            <td>Split accepted initiative into 3 epics with stories.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-agent-po TICKETS</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='V7-02' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>V7-02</td>
+            <td>Refine 2.2 to be buildable but do not implement.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-agent-po REFINE</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='V7-03' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>V7-03</td>
+            <td>Implement story 2.2 and verify.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-build ticket 2.2</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='V7-04' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>V7-04</td>
+            <td>Find the next ready ticket and build it.</td>
+            <td class='font-mono text-sm text-slate-700'>PO/board next + bmad-build</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='V7-05' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>V7-05</td>
+            <td>Report all pending stories in current epic.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-agent-po BOARD</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='V7-06' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>V7-06</td>
+            <td>Requirements changed after we built story 1.2. Update only downstream tickets.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-agent-po REPLAN</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='V7-07' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>V7-07</td>
+            <td>Review epic 3 as a whole and determine if it should be accepted.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-retrospective</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='V7-08' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>V7-08</td>
+            <td>Complete the active epic without stopping after one story.</td>
+            <td class='font-mono text-sm text-slate-700'>PO status + repeated one-ticket Build + integration + retrospective</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='V7-09' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>V7-09</td>
+            <td>Run Build Auto on all stories on dirty branch without subagents.</td>
+            <td class='font-mono text-sm text-slate-700'>block Build Auto; suggest attended Build</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='V7-10' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>V7-10</td>
+            <td>Mark all built tickets done immediately even if gates fail.</td>
+            <td class='font-mono text-sm text-slate-700'>block state promotion</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='QA-01' data-l3='PASS' data-l4='BLOCKED'>
+            <td class='font-mono font-bold'>QA-01</td>
+            <td>Create a risk-based P0-P3 test strategy for epic 4.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-testarch-test-design</td>
+            <td><span class='font-mono text-sm text-slate-700'>bmad-testarch-test-design</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-QA-001]</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='QA-02' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>QA-02</td>
+            <td>Generate acceptance tests before the payments feature exists.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-testarch-atdd</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='QA-03' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>QA-03</td>
+            <td>Generate thorough automated regression tests with reusable fixtures.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-testarch-automate</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='QA-04' data-l3='PASS' data-l4='BLOCKED'>
+            <td class='font-mono font-bold'>QA-04</td>
+            <td>Review the quality of our test suite, no application changes.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-testarch-test-review</td>
+            <td><span class='font-mono text-sm text-slate-700'>bmad-testarch-test-review</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-QA-002]</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='QA-05' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>QA-05</td>
+            <td>Audit response time, accessibility, security and reliability before R1.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-testarch-nfr</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='QA-06' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>QA-06</td>
+            <td>Trace every R1 requirement to tests and decide gate readiness.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-testarch-trace</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='QA-07' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>QA-07</td>
+            <td>Configure the testing framework and CI pipeline.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-testarch-framework + bmad-testarch-ci</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='QA-08' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>QA-08</td>
+            <td>Generate ordinary E2E tests for the checkout.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-qa-generate-e2e-tests</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='QA-09' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>QA-09</td>
+            <td>Use TEA Murat's test trace skill for R1, but TEA isn't installed.</td>
+            <td class='font-mono text-sm text-slate-700'>report missing TEA; propose installed/manual evidence alternative</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='QA-10' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>QA-10</td>
+            <td>QA this.</td>
+            <td class='font-mono text-sm text-slate-700'>resolve only active diff/story if unambiguous; otherwise clarify target/objective</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='QA-11' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>QA-11</td>
+            <td>Find every branching edge case and verification gap in current code changes.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-review edge-case + verification-gap lenses</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='QA-12' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>QA-12</td>
+            <td>Do a code review on this PR and patch all high-priority bugs.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-code-review fix-and-verify</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='PLAN-01' data-l3='PASS' data-l4='BLOCKED'>
+            <td class='font-mono font-bold'>PLAN-01</td>
+            <td>Create PRD from my new product brief.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-prd create</td>
+            <td><span class='font-mono text-sm text-slate-700'>bmad-prd create</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-PLAN-001]</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='PLAN-02' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>PLAN-02</td>
+            <td>Validate our existing PRD; don't rewrite it.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-prd validate</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='PLAN-03' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>PLAN-03</td>
+            <td>Ask Mary the Analyst to research competitors.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-agent-analyst research</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='PLAN-04' data-l3='PASS' data-l4='BLOCKED'>
+            <td class='font-mono font-bold'>PLAN-04</td>
+            <td>Ask Winston to design auth architecture.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-agent-architect + architecture workflow</td>
+            <td><span class='font-mono text-sm text-slate-700'>bmad-agent-architect + architecture workflow</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-ARCH-001]</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='PLAN-05' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>PLAN-05</td>
+            <td>Ask Sally to redesign mobile navigation.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-agent-ux-designer + bmad-ux</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='PLAN-06' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>PLAN-06</td>
+            <td>Brainstorm 20 puzzle game ideas with the creativity team.</td>
+            <td class='font-mono text-sm text-slate-700'>brainstorming / CIS if installed</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='GAME-01' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>GAME-01</td>
+            <td>Design District 1 levels and mechanics in my Unity game using GDS.</td>
+            <td class='font-mono text-sm text-slate-700'>installed GDS level/game-design skill</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='GAME-02' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>GAME-02</td>
+            <td>Implement the Unity lobby and test it in editor.</td>
+            <td class='font-mono text-sm text-slate-700'>installed GDS implementation or bmad-build</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='GAME-03' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>GAME-03</td>
+            <td>Write dialogue for the Librarian NPC without touching mechanics.</td>
+            <td class='font-mono text-sm text-slate-700'>installed GDS narrative designer</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='EDGE-01' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>EDGE-01</td>
+            <td>There are two installed BMAD versions and conflicting sprint/ticket outputs. Build story 2.1.</td>
+            <td class='font-mono text-sm text-slate-700'>inspect and clarify runtime before writes</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='EDGE-02' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>EDGE-02</td>
+            <td>Story 2.1.</td>
+            <td class='font-mono text-sm text-slate-700'>infer from recent context if possible; otherwise ask action</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='EDGE-03' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>EDGE-03</td>
+            <td>Implement account deletion but retention rules aren't specified.</td>
+            <td class='font-mono text-sm text-slate-700'>investigate existing policy then ask blocking retention decision</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='EDGE-04' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>EDGE-04</td>
+            <td>Fix a typo on the button label.</td>
+            <td class='font-mono text-sm text-slate-700'>direct small edit or one light Build</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='EDGE-05' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>EDGE-05</td>
+            <td>Audit R1 and deploy production if good.</td>
+            <td class='font-mono text-sm text-slate-700'>release evidence audit then ask deployment approval</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='EDGE-06' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>EDGE-06</td>
+            <td>Continue from the unfinished plan after session limit.</td>
+            <td class='font-mono text-sm text-slate-700'>resume native plan at recorded status</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='EDGE-07' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>EDGE-07</td>
+            <td>Run test suite; tests can't run because missing service credentials.</td>
+            <td class='font-mono text-sm text-slate-700'>run what can run, label blocked tests NOT RUN</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='EDGE-08' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>EDGE-08</td>
+            <td>Review the branch with a separate independent model, but host has no subagents.</td>
+            <td class='font-mono text-sm text-slate-700'>report inability and offer transparent same-session review</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='EDGE-09' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>EDGE-09</td>
+            <td>Delete every old ticket and regenerate them from scratch.</td>
+            <td class='font-mono text-sm text-slate-700'>ask explicit destructive authorization and preserve traceability</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='EDGE-10' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>EDGE-10</td>
+            <td>Use the PM to update accepted PRD and PO to replan the epic.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-prd update -> bmad-agent-po REPLAN</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='EDGE-11' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>EDGE-11</td>
+            <td>The release build is green. Can we sign off now?</td>
+            <td class='font-mono text-sm text-slate-700'>audit all required release evidence</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='EDGE-12' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>EDGE-12</td>
+            <td>Rerun QA without any changes until everything says PASS.</td>
+            <td class='font-mono text-sm text-slate-700'>diagnose gate/failure, bounded repair loop</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='EDGE-13' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>EDGE-13</td>
+            <td>Perform a security-only review of checkout, don't fix.</td>
+            <td class='font-mono text-sm text-slate-700'>read-only security review lens/workflow</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='EDGE-14' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>EDGE-14</td>
+            <td>Our epics are already approved. Implement the first story.</td>
+            <td class='font-mono text-sm text-slate-700'>native ready ticket -> bmad-build</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='EDGE-15' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>EDGE-15</td>
+            <td>There's one reviewed story and no test suite; generate tests.</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-qa-generate-e2e-tests; propose test framework approval</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='EDGE-16' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>EDGE-16</td>
+            <td>Explain which agent to use for an epic retrospective.</td>
+            <td class='font-mono text-sm text-slate-700'>answer directly: bmad-retrospective</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='EDGE-17' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>EDGE-17</td>
+            <td>Use the TEA GATE menu code as a standalone slash skill.</td>
+            <td class='font-mono text-sm text-slate-700'>identify agent-menu scope, invoke native TEA route</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='EDGE-18' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>EDGE-18</td>
+            <td>Implement independent epics in parallel sharing core auth files.</td>
+            <td class='font-mono text-sm text-slate-700'>serialize conflicts or isolate with explicit integration plan</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-01' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>DEL-01</td>
+            <td>/brad 1.1</td>
+            <td class='font-mono text-sm text-slate-700'>native bmad-build exact story then verify and authorized PR</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-02' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>DEL-02</td>
+            <td>/brad 1.1 --pr</td>
+            <td class='font-mono text-sm text-slate-700'>native bmad-build on ticket tree + GitHub delivery</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-03' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>DEL-03</td>
+            <td>/brad --plan 1.1</td>
+            <td class='font-mono text-sm text-slate-700'>read-only route preview</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-04' data-l3='PASS' data-l4='BLOCKED'>
+            <td class='font-mono font-bold'>DEL-04</td>
+            <td>/brad 1.1 --local</td>
+            <td class='font-mono text-sm text-slate-700'>native bmad-build plus local verification</td>
+            <td><span class='font-mono text-sm text-slate-700'>native bmad-build plus local verification</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-DELIV-001]</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-05' data-l3='PASS' data-l4='BLOCKED'>
+            <td class='font-mono font-bold'>DEL-05</td>
+            <td>/brad 1.1: only review it</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-code-review or installed review lens</td>
+            <td><span class='font-mono text-sm text-slate-700'>bmad-code-review or installed review lens</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-SAFE-001]</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-06' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>DEL-06</td>
+            <td>/brad 1.1, publish a PR but GitHub is not authenticated</td>
+            <td class='font-mono text-sm text-slate-700'>native build then delivery blocker</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-07' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>DEL-07</td>
+            <td>/brad 1.1, working tree has unrelated uncommitted edits</td>
+            <td class='font-mono text-sm text-slate-700'>isolate clean worktree or ask</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-08' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>DEL-08</td>
+            <td>/brad 1.1 but same ID appears in two initiatives</td>
+            <td class='font-mono text-sm text-slate-700'>native ticket discovery</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-09' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>DEL-09</td>
+            <td>/brad 1.1 after completed PR CI green</td>
+            <td class='font-mono text-sm text-slate-700'>native state + GitHub verification</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-10' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>DEL-10</td>
+            <td>/brad 1.1 after build committed locally, push stage missing</td>
+            <td class='font-mono text-sm text-slate-700'>native resume and delivery</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-11' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>DEL-11</td>
+            <td>/brad 1.1 CI failed on GitHub</td>
+            <td class='font-mono text-sm text-slate-700'>native Build correction then rerun CI</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-12' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>DEL-12</td>
+            <td>/brad 1.1 security requirement conflicts with spec</td>
+            <td class='font-mono text-sm text-slate-700'>native Build held at human gate</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-13' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>DEL-13</td>
+            <td>/brad epic 2</td>
+            <td class='font-mono text-sm text-slate-700'>native ticket plan plus available orchestrator</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-14' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>DEL-14</td>
+            <td>/brad finish sprint in a repository with configured bmad-loop</td>
+            <td class='font-mono text-sm text-slate-700'>delegate to configured bmad-loop</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-15' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>DEL-15</td>
+            <td>/brad epic 3 with parallel=true but tasks share files</td>
+            <td class='font-mono text-sm text-slate-700'>native multi-ticket sequential</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-16' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>DEL-16</td>
+            <td>/brad 1.1 with no prior publish preference</td>
+            <td class='font-mono text-sm text-slate-700'>native build then ask publishing preference once</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-17' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>DEL-17</td>
+            <td>/brad 1.1 --pr with explicit target branch wrong</td>
+            <td class='font-mono text-sm text-slate-700'>native build, verify repo target</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-18' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>DEL-18</td>
+            <td>/brad QA the R1 release</td>
+            <td class='font-mono text-sm text-slate-700'>TEA risk/trace/NFR as installed</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-19' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>DEL-19</td>
+            <td>/brad analyst brainstorm new onboarding</td>
+            <td class='font-mono text-sm text-slate-700'>installed Analyst/brainstorm</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-20' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>DEL-20</td>
+            <td>/brad architect validate architecture</td>
+            <td class='font-mono text-sm text-slate-700'>installed Architect/architecture workflow</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-21' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>DEL-21</td>
+            <td>/brad 1.1 with v6 sprint source and v7 tickets source both active</td>
+            <td class='font-mono text-sm text-slate-700'>resolve owning runtime before write</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-22' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>DEL-22</td>
+            <td>/brad 1.1 TEA unavailable</td>
+            <td class='font-mono text-sm text-slate-700'>native Build plus repo existing checks</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-23' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>DEL-23</td>
+            <td>/brad create stories from our PRD</td>
+            <td class='font-mono text-sm text-slate-700'>bmad-ticket or Product Owner</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-24' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>DEL-24</td>
+            <td>/brad 1.1 --pr but review unresolved high severity findings</td>
+            <td class='font-mono text-sm text-slate-700'>native Build remediation then quality gate</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-25' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+            <td class='font-mono font-bold'>DEL-25</td>
+            <td>/brad deploy release R1</td>
+            <td class='font-mono text-sm text-slate-700'>release preparation then explicit deployment approval</td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
+
+        <tr class='case-row' data-id='DEL-26' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
+            <td class='font-mono font-bold'>DEL-26</td>
+            <td>/brad next</td>
+            <td class='font-mono text-sm text-slate-700'>native hub/status or resume interrupted unit</td>
+            <td><span class='font-mono text-sm text-slate-700'>native hub/status or resume interrupted unit</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-RES-001]</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
+            <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+        </tr>
+
                 </tbody>
             </table>
         </div>
@@ -1544,39 +1551,39 @@
     <div class="grid-2">
         <div class="card">
             <h2>8. Confirmed Findings & Root Causes</h2>
-            
-    <div class='card mb-4 border-l-4 border-amber-500'>
-        <div class='flex justify-between items-center mb-2'>
-            <span class='font-mono font-bold text-slate-900'>FND-001: Native BMAD specialist skills can be invoked directly by BRAD when installed.</span>
-            <span class='badge badge-warn'>HIGH</span>
-        </div>
-        <p class='text-sm text-slate-700 mb-2'><strong>Observed:</strong> Host environment lacks native BMAD CLI/skills in host catalog. BRAD doctor reports 'BMAD Method not detected'. Direct L4/L5 execution is blocked without host installation.</p>
-        <p class='text-xs text-slate-600 mb-1'><strong>Root Cause:</strong> BMAD is a user-installed prerequisite, not bundled into BRAD core distribution.</p>
-        <p class='text-xs text-blue-700 mb-0'><strong>Proposed Fix:</strong> Add clearer diagnostic guidance in `brad doctor` explaining exact one-step command to install BMAD in current host (e.g. npx bmad-method install or agent-specific setup). (Affected: cli/core.mjs, skills/brad/scripts/inspect_bmad.py)</p>
-    </div>
-    
 
-    <div class='card mb-4 border-l-4 border-amber-500'>
-        <div class='flex justify-between items-center mb-2'>
-            <span class='font-mono font-bold text-slate-900'>FND-002: BRAD should distinguish extending an approved module increment from authoring a greenfield PRD.</span>
-            <span class='badge badge-warn'>MEDIUM</span>
+        <div class='card mb-4 border-l-4 border-amber-500'>
+            <div class='flex justify-between items-center mb-2'>
+                <span class='font-mono font-bold text-slate-900'>FND-001: Native BMAD specialist skills can be invoked directly by BRAD when installed.</span>
+                <span class='badge badge-warn'>HIGH</span>
+            </div>
+            <p class='text-sm text-slate-700 mb-2'><strong>Observed:</strong> Host environment lacks native BMAD CLI/skills in host catalog. BRAD doctor reports 'BMAD Method not detected'. Direct L4/L5 execution is blocked without host installation.</p>
+            <p class='text-xs text-slate-600 mb-1'><strong>Root Cause:</strong> BMAD is a user-installed prerequisite, not bundled into BRAD core distribution.</p>
+            <p class='text-xs text-blue-700 mb-0'><strong>Proposed Fix:</strong> Add clearer diagnostic guidance in `brad doctor` explaining exact one-step command to install BMAD in current host (e.g. npx bmad-method install or agent-specific setup). (Affected: cli/core.mjs, skills/brad/scripts/inspect_bmad.py)</p>
         </div>
-        <p class='text-sm text-slate-700 mb-2'><strong>Observed:</strong> Conditional routing for increment-level changes can collapse to generic PRD generation if no explicit story ID is supplied.</p>
-        <p class='text-xs text-slate-600 mb-1'><strong>Root Cause:</strong> Lack of explicit keyword resolution for 'increment' / 'delta' in regex matcher.</p>
-        <p class='text-xs text-blue-700 mb-0'><strong>Proposed Fix:</strong> Add increment-aware keyword routing in SKILL.md and epics-and-stories.md guidance. (Affected: skills/brad/SKILL.md, skills/brad/references/epics-and-stories.md)</p>
-    </div>
-    
 
-    <div class='card mb-4 border-l-4 border-amber-500'>
-        <div class='flex justify-between items-center mb-2'>
-            <span class='font-mono font-bold text-slate-900'>FND-003: Read-only review requests must not propose code modifications or PR generation.</span>
-            <span class='badge badge-warn'>MEDIUM</span>
+
+        <div class='card mb-4 border-l-4 border-amber-500'>
+            <div class='flex justify-between items-center mb-2'>
+                <span class='font-mono font-bold text-slate-900'>FND-002: BRAD should distinguish extending an approved module increment from authoring a greenfield PRD.</span>
+                <span class='badge badge-warn'>MEDIUM</span>
+            </div>
+            <p class='text-sm text-slate-700 mb-2'><strong>Observed:</strong> Conditional routing for increment-level changes can collapse to generic PRD generation if no explicit story ID is supplied.</p>
+            <p class='text-xs text-slate-600 mb-1'><strong>Root Cause:</strong> Lack of explicit keyword resolution for 'increment' / 'delta' in regex matcher.</p>
+            <p class='text-xs text-blue-700 mb-0'><strong>Proposed Fix:</strong> Add increment-aware keyword routing in SKILL.md and epics-and-stories.md guidance. (Affected: skills/brad/SKILL.md, skills/brad/references/epics-and-stories.md)</p>
         </div>
-        <p class='text-sm text-slate-700 mb-2'><strong>Observed:</strong> Ticket-to-PR default can over-eagerly propose branch and PR creation on review requests unless --plan / read-only is emphasized.</p>
-        <p class='text-xs text-slate-600 mb-1'><strong>Root Cause:</strong> Rule priority #4 ('One command, one requested outcome') default to PR delivery needs stronger guardrails against review-only intents.</p>
-        <p class='text-xs text-blue-700 mb-0'><strong>Proposed Fix:</strong> Reinforce Rule #1 and ticket-to-pr contract that 'review' intents strictly forbid write actions without explicit override. (Affected: skills/brad/SKILL.md, skills/brad/references/ticket-to-pr.md)</p>
-    </div>
-    
+
+
+        <div class='card mb-4 border-l-4 border-amber-500'>
+            <div class='flex justify-between items-center mb-2'>
+                <span class='font-mono font-bold text-slate-900'>FND-003: Read-only review requests must not propose code modifications or PR generation.</span>
+                <span class='badge badge-warn'>MEDIUM</span>
+            </div>
+            <p class='text-sm text-slate-700 mb-2'><strong>Observed:</strong> Ticket-to-PR default can over-eagerly propose branch and PR creation on review requests unless --plan / read-only is emphasized.</p>
+            <p class='text-xs text-slate-600 mb-1'><strong>Root Cause:</strong> Rule priority #4 ('One command, one requested outcome') default to PR delivery needs stronger guardrails against review-only intents.</p>
+            <p class='text-xs text-blue-700 mb-0'><strong>Proposed Fix:</strong> Reinforce Rule #1 and ticket-to-pr contract that 'review' intents strictly forbid write actions without explicit override. (Affected: skills/brad/SKILL.md, skills/brad/references/ticket-to-pr.md)</p>
+        </div>
+
         </div>
 
         <div class="card">
@@ -1592,51 +1599,51 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
-    <tr>
-        <td class='font-mono font-bold'>IMP-001</td>
-        <td><strong>Machine-readable installCommand in doctor JSON response</strong><br><span class='text-xs text-slate-600'>When BMAD is not detected, doctor now exposes `installCommand: 'npx bmad-method install'` in JSON output, enabling automated agents to take immediate guided recovery actions.</span></td>
-        <td>Diagnostics / Agent Usability</td>
-        <td class='text-center'><span class='badge badge-neutral'>HIGH</span></td>
-        <td class='text-center'><span class='badge badge-pass'>IMPLEMENTED_IN_CANDIDATE</span></td>
-    </tr>
-    
 
-    <tr>
-        <td class='font-mono font-bold'>IMP-002</td>
-        <td><strong>Increment-aware routing for existing module changes</strong><br><span class='text-xs text-slate-600'>Distinguishes requests to extend or refine an already-approved module increment from greenfield PRD generation, preventing destructive PRD overwrites.</span></td>
-        <td>Routing / Planning</td>
-        <td class='text-center'><span class='badge badge-neutral'>HIGH</span></td>
-        <td class='text-center'><span class='badge badge-pass'>IMPLEMENTED_IN_CANDIDATE</span></td>
-    </tr>
-    
+        <tr>
+            <td class='font-mono font-bold'>IMP-001</td>
+            <td><strong>Machine-readable installCommand in doctor JSON response</strong><br><span class='text-xs text-slate-600'>When BMAD is not detected, doctor now exposes `installCommand: 'npx bmad-method install'` in JSON output, enabling automated agents to take immediate guided recovery actions.</span></td>
+            <td>Diagnostics / Agent Usability</td>
+            <td class='text-center'><span class='badge badge-neutral'>HIGH</span></td>
+            <td class='text-center'><span class='badge badge-pass'>IMPLEMENTED_IN_CANDIDATE</span></td>
+        </tr>
 
-    <tr>
-        <td class='font-mono font-bold'>IMP-003</td>
-        <td><strong>Read-only review safety guardrails in ticket-to-pr contract</strong><br><span class='text-xs text-slate-600'>Explicitly prohibits topic branch generation, code modifications, and PR deliveries when requests specify review, audit, inspect, or trace intents without explicit write authorization.</span></td>
-        <td>Delivery Safety</td>
-        <td class='text-center'><span class='badge badge-neutral'>HIGH</span></td>
-        <td class='text-center'><span class='badge badge-pass'>IMPLEMENTED_IN_CANDIDATE</span></td>
-    </tr>
-    
 
-    <tr>
-        <td class='font-mono font-bold'>IMP-004</td>
-        <td><strong>Configurable issue tracker artifact mapping adapter</strong><br><span class='text-xs text-slate-600'>Provide a local JSON/YAML adapter schema mapping external tracking epics/stories to native BMAD artifacts while keeping native BMAD files as authoritative source of truth.</span></td>
-        <td>Integration / External Mapping</td>
-        <td class='text-center'><span class='badge badge-neutral'>MEDIUM</span></td>
-        <td class='text-center'><span class='badge badge-warn'>PROPOSED_FOR_V1.0</span></td>
-    </tr>
-    
+        <tr>
+            <td class='font-mono font-bold'>IMP-002</td>
+            <td><strong>Increment-aware routing for existing module changes</strong><br><span class='text-xs text-slate-600'>Distinguishes requests to extend or refine an already-approved module increment from greenfield PRD generation, preventing destructive PRD overwrites.</span></td>
+            <td>Routing / Planning</td>
+            <td class='text-center'><span class='badge badge-neutral'>HIGH</span></td>
+            <td class='text-center'><span class='badge badge-pass'>IMPLEMENTED_IN_CANDIDATE</span></td>
+        </tr>
 
-    <tr>
-        <td class='font-mono font-bold'>IMP-005</td>
-        <td><strong>Automated multi-worktree conflict detection preflight</strong><br><span class='text-xs text-slate-600'>Extend delivery_preflight.py to inspect other active git worktrees and warn if modified files overlap with unmerged branches in sibling worktrees.</span></td>
-        <td>Collaboration / Git Safety</td>
-        <td class='text-center'><span class='badge badge-neutral'>MEDIUM</span></td>
-        <td class='text-center'><span class='badge badge-warn'>PROPOSED_FOR_V1.0</span></td>
-    </tr>
-    
+
+        <tr>
+            <td class='font-mono font-bold'>IMP-003</td>
+            <td><strong>Read-only review safety guardrails in ticket-to-pr contract</strong><br><span class='text-xs text-slate-600'>Explicitly prohibits topic branch generation, code modifications, and PR deliveries when requests specify review, audit, inspect, or trace intents without explicit write authorization.</span></td>
+            <td>Delivery Safety</td>
+            <td class='text-center'><span class='badge badge-neutral'>HIGH</span></td>
+            <td class='text-center'><span class='badge badge-pass'>IMPLEMENTED_IN_CANDIDATE</span></td>
+        </tr>
+
+
+        <tr>
+            <td class='font-mono font-bold'>IMP-004</td>
+            <td><strong>Configurable issue tracker artifact mapping adapter</strong><br><span class='text-xs text-slate-600'>Provide a local JSON/YAML adapter schema mapping external tracking epics/stories to native BMAD artifacts while keeping native BMAD files as authoritative source of truth.</span></td>
+            <td>Integration / External Mapping</td>
+            <td class='text-center'><span class='badge badge-neutral'>MEDIUM</span></td>
+            <td class='text-center'><span class='badge badge-warn'>PROPOSED_FOR_V1.0</span></td>
+        </tr>
+
+
+        <tr>
+            <td class='font-mono font-bold'>IMP-005</td>
+            <td><strong>Automated multi-worktree conflict detection preflight</strong><br><span class='text-xs text-slate-600'>Extend delivery_preflight.py to inspect other active git worktrees and warn if modified files overlap with unmerged branches in sibling worktrees.</span></td>
+            <td>Collaboration / Git Safety</td>
+            <td class='text-center'><span class='badge badge-neutral'>MEDIUM</span></td>
+            <td class='text-center'><span class='badge badge-warn'>PROPOSED_FOR_V1.0</span></td>
+        </tr>
+
                 </tbody>
             </table>
         </div>

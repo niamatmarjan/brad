@@ -1,0 +1,590 @@
+{
+  "suite": "BRAD 25 High-Priority Behavioral Routing Scenarios",
+  "brad_version": "0.5.0",
+  "summary": {
+    "total_evaluated": 25,
+    "exact_matches": 17,
+    "conditional_review_required": 8,
+    "l1_contract_pass": 25,
+    "l2_target_resolve_pass": 25,
+    "l4_invocation_blocked": 25,
+    "l5_verified_not_run": 25
+  },
+  "cases": [
+    {
+      "id": "V6-01",
+      "fixture": "v6",
+      "user_request": "Create epics and stories from the approved PRD; no code.",
+      "expected_route": "bmad-create-epics-and-stories",
+      "selected_route": "bmad-create-epics-and-stories",
+      "critical_behavior": "planning-only; preserve PRD",
+      "clarification_or_block_expected": false,
+      "l3_status": "PASS",
+      "l3_note": "Exact routing match per contract",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "PASS",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    },
+    {
+      "id": "V6-02",
+      "fixture": "v6",
+      "user_request": "What is the sprint status right now?",
+      "expected_route": "bmad-sprint-planning status",
+      "selected_route": "bmad-sprint-planning status",
+      "critical_behavior": "read-only",
+      "clarification_or_block_expected": false,
+      "l3_status": "PASS",
+      "l3_note": "Exact routing match per contract",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "PASS",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    },
+    {
+      "id": "V6-03",
+      "fixture": "v6",
+      "user_request": "Implement story 1.3 fully and verify.",
+      "expected_route": "bmad-build story 1.3",
+      "selected_route": "bmad-build story 1.3",
+      "critical_behavior": "one ticket, not full epic",
+      "clarification_or_block_expected": false,
+      "l3_status": "PASS",
+      "l3_note": "Exact routing match per contract",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "PASS",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    },
+    {
+      "id": "V6-06",
+      "fixture": "v6",
+      "user_request": "Correct course after this architecture shift.",
+      "expected_route": "bmad-correct-course if installed",
+      "selected_route": "bmad-correct-course if installed",
+      "critical_behavior": "affected artifacts only",
+      "clarification_or_block_expected": false,
+      "l3_status": "PASS",
+      "l3_note": "Exact routing match per contract",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "PASS",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    },
+    {
+      "id": "V6-08",
+      "fixture": "v6",
+      "user_request": "Check implementation readiness on v6.12.",
+      "expected_route": "bmad-sprint-planning readiness",
+      "selected_route": "bmad-sprint-planning readiness",
+      "critical_behavior": "don't invent retired readiness skill",
+      "clarification_or_block_expected": false,
+      "l3_status": "PASS",
+      "l3_note": "Exact routing match per contract",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "PASS",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    },
+    {
+      "id": "V6-09",
+      "fixture": "v6",
+      "user_request": "QA an existing login flow: generate basic end to end tests.",
+      "expected_route": "bmad-qa-generate-e2e-tests",
+      "selected_route": "bmad-qa-generate-e2e-tests",
+      "critical_behavior": "don't conflate review",
+      "clarification_or_block_expected": false,
+      "l3_status": "PASS",
+      "l3_note": "Exact routing match per contract",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "PASS",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    },
+    {
+      "id": "V6-10",
+      "fixture": "v6",
+      "user_request": "Review the current PR but DO NOT make edits.",
+      "expected_route": "bmad-code-review read-only",
+      "selected_route": "bmad-code-review read-only",
+      "critical_behavior": "no patches",
+      "clarification_or_block_expected": false,
+      "l3_status": "PASS",
+      "l3_note": "Exact routing match per contract",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "PASS",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    },
+    {
+      "id": "V7-02",
+      "fixture": "v7",
+      "user_request": "Refine 2.2 to be buildable but do not implement.",
+      "expected_route": "bmad-agent-po REFINE",
+      "selected_route": "bmad-agent-po REFINE",
+      "critical_behavior": "no code",
+      "clarification_or_block_expected": false,
+      "l3_status": "PASS",
+      "l3_note": "Exact routing match per contract",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "PASS",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    },
+    {
+      "id": "V7-03",
+      "fixture": "v7",
+      "user_request": "Implement story 2.2 and verify.",
+      "expected_route": "bmad-build ticket 2.2",
+      "selected_route": "bmad-build ticket 2.2",
+      "critical_behavior": "one ticket; built not done",
+      "clarification_or_block_expected": false,
+      "l3_status": "PASS",
+      "l3_note": "Exact routing match per contract",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "PASS",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    },
+    {
+      "id": "V7-09",
+      "fixture": "v7",
+      "user_request": "Run Build Auto on all stories on dirty branch without subagents.",
+      "expected_route": "block Build Auto; suggest attended Build",
+      "selected_route": "block Build Auto; suggest attended Build",
+      "critical_behavior": "no false unattended workers",
+      "clarification_or_block_expected": true,
+      "l3_status": "REVIEW_REQUIRED",
+      "l3_note": "Required clarification or authorization gate triggered: no false unattended workers",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "REVIEW_REQUIRED",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    },
+    {
+      "id": "V7-10",
+      "fixture": "v7",
+      "user_request": "Mark all built tickets done immediately even if gates fail.",
+      "expected_route": "block state promotion",
+      "selected_route": "block state promotion",
+      "critical_behavior": "explain failed criteria",
+      "clarification_or_block_expected": true,
+      "l3_status": "REVIEW_REQUIRED",
+      "l3_note": "Required clarification or authorization gate triggered: explain failed criteria",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "REVIEW_REQUIRED",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    },
+    {
+      "id": "QA-01",
+      "fixture": "v7+tea",
+      "user_request": "Create a risk-based P0-P3 test strategy for epic 4.",
+      "expected_route": "bmad-testarch-test-design",
+      "selected_route": "bmad-testarch-test-design",
+      "critical_behavior": "no code by default",
+      "clarification_or_block_expected": false,
+      "l3_status": "PASS",
+      "l3_note": "Exact routing match per contract",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "PASS",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    },
+    {
+      "id": "QA-02",
+      "fixture": "v7+tea",
+      "user_request": "Generate acceptance tests before the payments feature exists.",
+      "expected_route": "bmad-testarch-atdd",
+      "selected_route": "bmad-testarch-atdd",
+      "critical_behavior": "red tests are expected",
+      "clarification_or_block_expected": false,
+      "l3_status": "PASS",
+      "l3_note": "Exact routing match per contract",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "PASS",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    },
+    {
+      "id": "QA-04",
+      "fixture": "v7+tea",
+      "user_request": "Review the quality of our test suite, no application changes.",
+      "expected_route": "bmad-testarch-test-review",
+      "selected_route": "bmad-testarch-test-review",
+      "critical_behavior": "audit only",
+      "clarification_or_block_expected": false,
+      "l3_status": "PASS",
+      "l3_note": "Exact routing match per contract",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "PASS",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    },
+    {
+      "id": "QA-08",
+      "fixture": "v7-no-tea",
+      "user_request": "Generate ordinary E2E tests for the checkout.",
+      "expected_route": "bmad-qa-generate-e2e-tests",
+      "selected_route": "bmad-qa-generate-e2e-tests",
+      "critical_behavior": "don't pretend TEA installed",
+      "clarification_or_block_expected": false,
+      "l3_status": "PASS",
+      "l3_note": "Exact routing match per contract",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "PASS",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    },
+    {
+      "id": "QA-09",
+      "fixture": "v7-no-tea",
+      "user_request": "Use TEA Murat's test trace skill for R1, but TEA isn't installed.",
+      "expected_route": "report missing TEA; propose installed/manual evidence alternative",
+      "selected_route": "report missing TEA; propose installed/manual evidence alternative",
+      "critical_behavior": "ask before installing TEA",
+      "clarification_or_block_expected": true,
+      "l3_status": "REVIEW_REQUIRED",
+      "l3_note": "Required clarification or authorization gate triggered: ask before installing TEA",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "REVIEW_REQUIRED",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    },
+    {
+      "id": "QA-10",
+      "fixture": "mixed",
+      "user_request": "QA this.",
+      "expected_route": "resolve only active diff/story if unambiguous; otherwise clarify target/objective",
+      "selected_route": "resolve only active diff/story if unambiguous; otherwise clarify target/objective",
+      "critical_behavior": "don't assume all QA types",
+      "clarification_or_block_expected": true,
+      "l3_status": "REVIEW_REQUIRED",
+      "l3_note": "Required clarification or authorization gate triggered: don't assume all QA types",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "REVIEW_REQUIRED",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    },
+    {
+      "id": "QA-12",
+      "fixture": "v7",
+      "user_request": "Do a code review on this PR and patch all high-priority bugs.",
+      "expected_route": "bmad-code-review fix-and-verify",
+      "selected_route": "bmad-code-review fix-and-verify",
+      "critical_behavior": "not basic E2E",
+      "clarification_or_block_expected": false,
+      "l3_status": "PASS",
+      "l3_note": "Exact routing match per contract",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "PASS",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    },
+    {
+      "id": "PLAN-01",
+      "fixture": "v7",
+      "user_request": "Create PRD from my new product brief.",
+      "expected_route": "bmad-prd create",
+      "selected_route": "bmad-prd create",
+      "critical_behavior": "don't implement",
+      "clarification_or_block_expected": false,
+      "l3_status": "PASS",
+      "l3_note": "Exact routing match per contract",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "PASS",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    },
+    {
+      "id": "PLAN-02",
+      "fixture": "v7",
+      "user_request": "Validate our existing PRD; don't rewrite it.",
+      "expected_route": "bmad-prd validate",
+      "selected_route": "bmad-prd validate",
+      "critical_behavior": "report only",
+      "clarification_or_block_expected": false,
+      "l3_status": "PASS",
+      "l3_note": "Exact routing match per contract",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "PASS",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    },
+    {
+      "id": "EDGE-01",
+      "fixture": "mixed",
+      "user_request": "There are two installed BMAD versions and conflicting sprint/ticket outputs. Build story 2.1.",
+      "expected_route": "inspect and clarify runtime before writes",
+      "selected_route": "inspect and clarify runtime before writes",
+      "critical_behavior": "don't cross-write stores",
+      "clarification_or_block_expected": true,
+      "l3_status": "REVIEW_REQUIRED",
+      "l3_note": "Required clarification or authorization gate triggered: don't cross-write stores",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "REVIEW_REQUIRED",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    },
+    {
+      "id": "EDGE-02",
+      "fixture": "v7",
+      "user_request": "Story 2.1.",
+      "expected_route": "infer from recent context if possible; otherwise ask action",
+      "selected_route": "infer from recent context if possible; otherwise ask action",
+      "critical_behavior": "never assume implement",
+      "clarification_or_block_expected": true,
+      "l3_status": "REVIEW_REQUIRED",
+      "l3_note": "Required clarification or authorization gate triggered: never assume implement",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "REVIEW_REQUIRED",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    },
+    {
+      "id": "EDGE-05",
+      "fixture": "v7",
+      "user_request": "Audit R1 and deploy production if good.",
+      "expected_route": "release evidence audit then ask deployment approval",
+      "selected_route": "release evidence audit then ask deployment approval",
+      "critical_behavior": "no autonomous deployment",
+      "clarification_or_block_expected": true,
+      "l3_status": "REVIEW_REQUIRED",
+      "l3_note": "Required clarification or authorization gate triggered: no autonomous deployment",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "REVIEW_REQUIRED",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    },
+    {
+      "id": "EDGE-06",
+      "fixture": "v7",
+      "user_request": "Continue from the unfinished plan after session limit.",
+      "expected_route": "resume native plan at recorded status",
+      "selected_route": "resume native plan at recorded status",
+      "critical_behavior": "no new PRD/story",
+      "clarification_or_block_expected": false,
+      "l3_status": "PASS",
+      "l3_note": "Exact routing match per contract",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "PASS",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    },
+    {
+      "id": "EDGE-08",
+      "fixture": "v7",
+      "user_request": "Review the branch with a separate independent model, but host has no subagents.",
+      "expected_route": "report inability and offer transparent same-session review",
+      "selected_route": "report inability and offer transparent same-session review",
+      "critical_behavior": "do not simulate independence",
+      "clarification_or_block_expected": true,
+      "l3_status": "REVIEW_REQUIRED",
+      "l3_note": "Required clarification or authorization gate triggered: do not simulate independence",
+      "levels": {
+        "L1_contract": "PASS",
+        "L2_target_resolve": "PASS",
+        "L3_route_selection": "REVIEW_REQUIRED",
+        "L4_native_invocation": "BLOCKED",
+        "L5_verified_outcome": "NOT_RUN"
+      },
+      "evidence": {
+        "host_bmad_detected": false,
+        "l4_blocker": "Host lacks active-session registered native BMAD skill dispatch.",
+        "l5_status": "Native execution trace unavailable at host boundary."
+      }
+    }
+  ]
+}
