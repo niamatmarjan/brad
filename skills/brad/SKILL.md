@@ -94,6 +94,10 @@ before invoking. These references are guides, never proof of installed behavior.
   Never choose an arbitrary backlog item without configured policy.
 - `/brad epic 2` / `finish sprint`: resolve scope/dependencies, choose
   native planning or installed orchestrator; see epics-and-stories.
+- `/brad increment <module>`, `refine increment`, `extend existing PRD`:
+  **incremental planning**; inspect the existing approved PRD and architecture,
+  then delegate only the requested delta to the installed native workflow.
+  Do not create a replacement PRD or imply approval. See epics-and-stories.
 - `/brad qa login`, `review PR #12`, `test-design epic 2`, `release R1`:
   route to *specific* installed QA, review, or gate; see quality-and-release.
 - `/brad architect ...`, `analyst ...`, `UX ...`, `GDS ...`, `PM ...`:

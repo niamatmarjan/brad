@@ -22,6 +22,11 @@ class PackageContractTests(unittest.TestCase):
         self.assertEqual(len(ids), len(set(ids)))
         self.assertGreaterEqual(sum(x.startswith("DEL-") for x in ids), 20)
 
+    def test_increment_lane_is_visible_in_primary_skill(self):
+        skill = (ROOT / "SKILL.md").read_text()
+        self.assertIn("/brad increment <module>", skill)
+        self.assertIn("Do not create a replacement PRD or imply approval", skill)
+
     def test_incremental_changes_preserve_approved_artifacts(self):
         planning = (ROOT / "references" / "epics-and-stories.md").read_text()
         self.assertIn("do not regenerate the whole PRD", planning)
