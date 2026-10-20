@@ -3,7 +3,7 @@ import { join, dirname, relative, resolve, sep, isAbsolute } from 'node:path';
 import { homedir } from 'node:os';
 import { createHash, randomUUID } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 
 export const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const skillRoot = join(packageRoot, 'skills', 'brad');
@@ -35,7 +35,7 @@ function allFiles(dir, prefix = '') {
 const SOURCE_FILES = () => allFiles(skillRoot);
 
 function parse(args) {
-  const o = { command: 'init', agent: 'auto', dir: process.cwd(), global: false, force: false, dryRun: false, json: false, yes: false, help: false };
+  const o = { command: 'init', agent: 'auto', dir: process.cwd(), global: false, force: false, dryRun: false, json: false, yes: false, help: false, withBmad: false, bmadChannel: 'stable', bmadChannelSpecified: false };
   const rest = [...args];
   if (rest[0] && !rest[0].startsWith('-')) o.command = rest.shift();
   while (rest.length) {
@@ -47,6 +47,9 @@ function parse(args) {
     else if (['--dry-run', '-n'].includes(token)) o.dryRun = true;
     else if (token === '--json') o.json = true;
     else if (['--yes', '-y'].includes(token)) o.yes = true;
+    else if (token === '--with-bmad') o.withBmad = true;
+    else if (token.startsWith('--bmad-channel=')) { o.bmadChannel = token.substring(15); o.bmadChannelSpecified = true; }
+    else if (token === '--bmad-channel') { o.bmadChannel = rest.shift() || ''; o.bmadChannelSpecified = true; }
     else if (token.startsWith('--agent=')) o.agent = token.substring(8);
     else if (token === '--agent') o.agent = rest.shift() || '';
     else if (token.startsWith('--dir=')) o.dir = token.substring(6);
@@ -54,6 +57,11 @@ function parse(args) {
     else throw new Error(`Unknown option: ${token}`);
   }
   if (o.global && o.dir !== process.cwd()) throw new Error('--global cannot be combined with --dir');
+  if (o.withBmad && o.global) throw new Error('--with-bmad is project-local; --global is unsupported');
+  if (o.withBmad && o.command !== 'setup') throw new Error('--with-bmad is only supported with brad setup');
+  if (o.bmadChannelSpecified && !o.withBmad) throw new Error('--bmad-channel requires --with-bmad');
+  if (!['stable', 'preview'].includes(o.bmadChannel)) throw new Error('--bmad-channel must be stable or preview');
+  if (o.withBmad && o.json && !o.dryRun) throw new Error('Interactive BMAD setup cannot use --json; use --dry-run --json to preview the plan.');
   if (!o.dir) throw new Error('--dir needs a path');
   if (!['init', 'setup', 'prompt', 'update', 'doctor', 'uninstall', 'version', 'help'].includes(o.command)) throw new Error(`Unknown command: ${o.command}`);
   o.dir = resolve(o.dir);
@@ -64,6 +72,7 @@ const help = `BRAD — BMAD Routing & Agent Delegation
 
 Usage:
   brad setup [--agent auto|portable|claude|codex|copilot|antigravity|all] [--dir PATH]
+  brad setup --with-bmad [--bmad-channel stable|preview] [--agent HOST] [--dir PATH]
   brad prompt [--agent ...] [--dir PATH]   # copy instructions to your AI
   brad init [--agent ...] [--dir PATH]     # installer-only alias
   brad doctor [--dir PATH] [--json]
@@ -79,14 +88,18 @@ Options:
   --force, -f     Back up and replace an existing modified/unmanaged install
   --json          Output structured JSON for automation
   --yes, -y       Non-interactive acknowledgment (no hidden approvals)
+  --with-bmad     Explicitly authorize upstream BMAD setup when absent
+  --bmad-channel Select latest stable (default) or v7 preview (alpha)
 
 Examples:
   npx --yes "github:niamatmarjan/brad#v${version()}" setup
   npx --yes "github:niamatmarjan/brad#v${version()}" setup --agent claude
   npx --yes "github:niamatmarjan/brad#v${version()}" doctor
 
-BRAD installs a thin skill; it does NOT install or modify BMAD Method.
-An AI agent may offer to install official BMAD separately after your consent.
+Normal BRAD setup installs only BRAD. --with-bmad explicitly runs the official
+interactive installer in this project when BMAD is absent (not an upgrade).
+V7 preview requires the installed native bmad skill to run bmad setup in the
+coding host after skill installation. Host invocation remains unverified.
 `;
 
 function detectAgents(root) {
@@ -358,7 +371,7 @@ Host: ${host}.
 }
 function nextSteps(options, bmad, plans) {
   const messages = [];
-  if (!bmad.detected) messages.push('Ask your coding agent to install official BMAD Method (v6.12 stable or v7 preview) after you choose a version. BRAD alone does not install BMAD.');
+  if (!bmad.detected) messages.push('With explicit consent, run brad setup --with-bmad (latest stable) or --with-bmad --bmad-channel preview (v7 alpha). The official installer handles module choices.');
   else if (!bmad.configured) messages.push('Ask your agent to inspect and finish the native BMAD project setup; runtime configuration was not verified.');
   messages.push('Restart or reload your coding agent if its skill catalog was cached.');
   messages.push('In your AI coding chat, ask: "Use the BRAD skill to inspect this project and preview the next ticket workflow; do not change files."');
@@ -366,6 +379,28 @@ function nextSteps(options, bmad, plans) {
   if (plans.some(p => p.kind === 'copilot-agent')) messages.push('For GitHub Copilot, select the BRAD coordinator agent if automatic skill discovery is not available.');
   return messages;
 }
+// Plan only; native BMAD remains owned by the official upstream installer.
+function officialBmadSetupPlan(bmad, options) {
+  if (!options.withBmad) return null;
+  if (bmad.detected) return {
+    status: 'SKIPPED_EXISTING', channel: options.bmadChannel,
+    command: null, args: [], explanation: 'BMAD runtime or skills already exist. Preserve and inspect the existing installation; do not reinstall or upgrade.'
+  };
+  const stable = options.bmadChannel === 'stable';
+  return {
+    status: options.dryRun ? 'WOULD_INSTALL' : 'READY_TO_INSTALL',
+    channel: options.bmadChannel,
+    command: process.platform === 'win32' ? 'npx.cmd' : 'npx',
+    args: stable ? ['--yes', 'bmad-method@latest', 'install'] :
+      ['--yes', 'skills', 'add', 'bmad-code-org/BMAD-METHOD'],
+    upstreamInstaller: stable ? 'official-npm-stable' : 'official-skills-cli-preview',
+    interactive: true, authorizedByFlag: true,
+    nextStep: stable ?
+      'Complete official v6 installer prompts. Restart your coding host and verify BMAD configuration and its actual skill catalog.' :
+      'Select host and skills in the Skills CLI; restart your coding host, invoke the native bmad skill to run bmad setup, then run bmad status.'
+  };
+}
+
 export function execute(argv) {
   const options = parse(argv);
   if (options.help || options.command === 'help') return { help };
@@ -391,13 +426,34 @@ export function execute(argv) {
   const results = plans.map(p => options.command === 'uninstall' ? uninstall(p, options) : moveWithRollback(p, options));
   const bmad = options.global ? null : bmadCheck(options.dir);
   return { command: options.command, version: version(), root: options.global ? homedir() : options.dir, hosts: selectedAgents(options), results,
-    ...(options.global ? {} : { bmad }), nextSteps: bmad ? nextSteps(options, bmad, plans) : [],
+    ...(options.global ? {} : { bmad }),
+    ...(options.withBmad ? { bmadSetup: officialBmadSetupPlan(bmad, options) } : {}),
+    nextSteps: bmad ? nextSteps(options, bmad, plans) : [],
     readiness: readinessSummary(results, bmad), executionVerified: false };
 }
 export async function main(argv) {
   let json = argv.includes('--json');
   try {
     const result = execute(argv);
+    if (result.bmadSetup?.status === 'READY_TO_INSTALL') {
+      const plan = result.bmadSetup;
+      process.stdout.write(`BRAD installed. Starting official BMAD ${plan.channel} installer in ${result.root}.\n`);
+      if (plan.channel === 'preview') process.stdout.write('BMAD preview is alpha; finish native bmad setup from the coding host after skill installation.\n');
+      // Only static official tokens; cwd is passed separately, never interpolated
+      // into shell arguments. .cmd on Windows requires shell handling.
+      const run = spawnSync(plan.command, plan.args, {
+        cwd: result.root, stdio: 'inherit', shell: process.platform === 'win32'
+      });
+      if (run.error || run.status !== 0) {
+        throw new Error(`BRAD installed, but the official BMAD installer failed (${run.error?.message || `exit code ${run.status ?? 'unknown'}`}). See the upstream error; BRAD did not replace any existing BMAD files.`);
+      }
+      result.bmad = bmadCheck(result.root);
+      result.readiness = readinessSummary(result.results, result.bmad);
+      result.bmadSetup = { ...plan, status: 'UPSTREAM_INSTALLER_EXITED_SUCCESS',
+        exitCode: run.status, runtimeConfigured: result.bmad.configured,
+        hostDiscovery: 'NOT_VERIFIED' };
+      result.nextSteps = [...nextSteps({ dir: result.root }, result.bmad, []), plan.nextStep];
+    }
     if (json) process.stdout.write(JSON.stringify({ ok: true, ...result }, null, 2) + '\n');
     else if (result.help) process.stdout.write(result.help);
     else if (result.command === 'prompt') process.stdout.write(result.prompt + '\n');
@@ -405,6 +461,7 @@ export async function main(argv) {
     else {
       process.stdout.write(`BRAD v${result.version} — ${result.command}\n`);
       for (const r of result.results) process.stdout.write(`  ${r.action || r.status}: ${r.path}${r.backup ? ` (backup: ${r.backup})` : ''}\n`);
+      if (result.bmadSetup) process.stdout.write(`  BMAD: ${result.bmadSetup.status} (${result.bmadSetup.channel})\n`);
       if (result.bmad && !result.bmad.detected) process.stdout.write(`\nNote: ${result.bmad.note}\n`);
       if (result.nextSteps?.length) { process.stdout.write('\nNext steps for your AI agent:\n'); for (const step of result.nextSteps) process.stdout.write(`  - ${step}\n`); }
     }
