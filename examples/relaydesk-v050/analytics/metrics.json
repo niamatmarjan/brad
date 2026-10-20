@@ -35,36 +35,38 @@
       "note": "Static canonical specification schema validity"
     },
     "routing_empirically_observed_rate": {
-      "value": 11.76,
-      "numerator": 10,
+      "value": 8.24,
+      "numerator": 7,
       "denominator": 85,
       "status": "PARTIAL",
-      "note": "10 scenarios evaluated with real execution traces"
+      "note": "7 scenarios evaluated with authentic blind model execution traces; 10 retrospective records archived"
     },
     "routing_unobserved_not_run_rate": {
-      "value": 88.24,
-      "numerator": 75,
+      "value": 91.76,
+      "numerator": 78,
       "denominator": 85,
       "status": "NOT_RUN",
-      "note": "75 scenarios unobserved and truthfully marked NOT_RUN"
+      "note": "78 scenarios unobserved and truthfully marked NOT_RUN"
     },
     "routing_l3_observed_pass_rate": {
-      "value": 10.59,
-      "numerator": 9,
+      "value": 8.24,
+      "numerator": 7,
       "denominator": 85,
-      "status": "PASS"
+      "status": "PASS",
+      "note": "All 7 blind trial selections verified by evaluator.py against canonical native skills"
     },
     "routing_l3_conditional_review_rate": {
-      "value": 1.18,
-      "numerator": 1,
+      "value": 0.0,
+      "numerator": 0,
       "denominator": 85,
-      "status": "REVIEW_REQUIRED"
+      "status": "NOT_RUN"
     },
     "routing_l4_native_invocation_rate": {
       "value": 0.0,
       "numerator": 0,
       "denominator": 85,
-      "status": "BLOCKED"
+      "status": "BLOCKED",
+      "note": "0/85 native invocations verified; host lacks active session skill invocation"
     },
     "routing_l5_verified_outcome_rate": {
       "value": 0.0,

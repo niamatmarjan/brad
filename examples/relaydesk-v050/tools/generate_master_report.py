@@ -621,8 +621,9 @@ def main():
 </html>
 """
 
-    out_html.write_text(html_content, encoding="utf-8")
-    print(f"Generated self-contained MASTER_REPORT.html at {out_html} ({len(html_content)} bytes)")
+    clean_html = "\n".join(line.rstrip() for line in html_content.splitlines()) + "\n"
+    out_html.write_text(clean_html, encoding="utf-8")
+    print(f"Generated self-contained MASTER_REPORT.html at {out_html} ({len(clean_html)} bytes)")
 
 if __name__ == "__main__":
     main()

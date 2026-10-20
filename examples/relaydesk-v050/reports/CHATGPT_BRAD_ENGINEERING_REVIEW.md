@@ -39,12 +39,17 @@
 
 ### 1. What Was Actually Proven vs What Was Blocked
 
-To ensure complete scientific integrity, this evaluation enforced strict evidence classification using BRAD's 5-level ladder:
-- **Level 1 (Contract & Schema):** PASS (85/85 canonical routing scenarios match schema).
-- **Level 2 (Target Resolution):** UNVERIFIED (10/85 scenarios empirically observed with execution traces; 75/85 NOT_RUN).
-- **Level 3 (Model Route Selection):** UNVERIFIED (9 PASS, 1 REVIEW_REQUIRED, 75 NOT_RUN). Synthetic pass assignments where `selected_route = expected` have been completely discarded.
-- **Level 4 (Native Host Invocation):** **BLOCKED (0/85)**. The active AI host session did not discover BMAD skills at session startup because BMAD is an unbundled workspace dependency (10 blocked, 75 NOT_RUN). No simulated native dispatches were manufactured.
+To ensure complete scientific integrity, this evaluation enforced strict evidence classification using BRAD's 5-level ladder and independent `evaluator.py` audit gates:
+- **Level 1 (Contract & Schema):** PASS (85/85 canonical routing scenarios match specification schema).
+- **Level 2 (Target Resolution):** UNVERIFIED (7/85 scenarios empirically observed with execution traces; 78/85 NOT_RUN).
+- **Level 3 (Model Route Selection):** UNVERIFIED (7 PASS, 78 NOT_RUN).
+  - All 10 previous retrospective records were audited: confirmed `V6-03` was a ticket mismatch (story 1.3 requested, implementation performed story 1.7), and the remaining 9 lacked blind routing transcripts. These retrospective records were archived to `evaluation/historical/observed-routing-evidence-retrospective.json`.
+  - Conducted 7 genuine blind model routing trials (`V6-01`, `V6-02`, `V6-03`, `V6-10`, `QA-01`, `PLAN-01`, `DEL-05`) without expected answers. Captured full verbatim model response traces and archived the transcript at `evaluation/trials/blind-routing-transcript.jsonl`.
+  - Evaluated via `evaluator.py`: in `V6-03`, the model correctly bounded ticket scope to story 1.3 (`selected_ticket: "1.3"`), and in `DEL-05` and `V6-10`, strictly enforced `is_read_only: true`.
+  - All 7 trials passed L3 native skill verification. The remaining 78 unobserved scenarios are truthfully marked `NOT_RUN`. Synthetic pass assignments where `selected = expected` are strictly prohibited.
+- **Level 4 (Native Host Invocation):** **BLOCKED (0/85)**. The active AI host session did not discover BMAD skills at session startup because BMAD is an unbundled workspace dependency (7 blocked, 78 NOT_RUN). No simulated native dispatches were manufactured.
 - **Level 5 (Verified Host Outcomes):** **NOT RUN (0/85)** pending Level 4 resolution.
+- **Auditor Verification:** Validated with official `python skills/brad/scripts/audit_routing_results.py --observed evaluation/observed-for-audit.json`, confirming 7 observed PASS, 78 NOT_RUN selections, 85 NOT_RUN invocations, and 7 BLOCKED delivery records.
 
 ### 2. Stage Gate Audit Matrix
 
@@ -54,11 +59,11 @@ To ensure complete scientific integrity, this evaluation enforced strict evidenc
 | **Gate B** | Runnable Application | **PASS** | Complete RelayDesk application built on Node 24 (`node:sqlite`) + React 19 / Vite 6. 16/16 automated server integration tests pass in 1.7s. 22 functional user journeys verified. |
 | **Gate C** | Multi-Agent Collaboration | **PASS** | 10 Git worktree exercises executed. Conflict resolution commit `a8a757d` verified. Genuine independent 3-subagent cycle (Developer `0e1296d6` → Reviewer `735f91db` → QA `4c6f5dda` → Dev fix → QA signoff) executed on REQ-B7 with commits `ae6d892`, `542e522`, and merge `0804ac9`. |
 | **Gate D** | QA Defect Lifecycle | **PASS** | Two critical defects reproduced, mitigated, and verified with regression tests: `DEF-101` (SLA negative duration clamp) and `DEF-102` (Missing RBAC & NaN date sort poisoning). |
-| **Gate E** | BRAD Routing Validation | **BLOCKED** | Audited canonical 85 routing suite without synthetic pass assignments: L1 Schema=85/85 PASS, L2 Resolve=10/85 PASS (75 NOT_RUN), L3 Exact Selection=9/85 PASS, 1/85 REVIEW_REQUIRED (75 NOT_RUN), L4 Native Invocation=0/85 BLOCKED. |
+| **Gate E** | BRAD Routing Validation | **BLOCKED** | Audited canonical 85 routing suite without synthetic pass assignments: L1 Schema=85/85 PASS, L2 Resolve=7/85 PASS (78 NOT_RUN), L3 Exact Selection=7/85 PASS (78 NOT_RUN), L4 Native Invocation=0/85 BLOCKED (7 blocked, 78 NOT_RUN). |
 | **Gate F** | Improvement Verification | **PASS** | 3 candidate improvements implemented in isolated worktree `candidate/v0.5.1-improvements` (commit `0b61d38`). Full test suite: 55/55 tests pass (100%). Zero regressions. |
 | **Gate G** | Final Delivery Package | **PASS** | Self-contained, offline `MASTER_REPORT.html` (110 KB), telemetry events, audit trails, and this engineering review package packaged into `examples/relaydesk-v050`. |
 
-**Overall Verdict:** `PARTIAL_VALIDATION` (Application, multi-agent collaboration, QA lifecycle, and candidate fixes verified; Native BMAD invocation truthfully blocked at host boundary; 75/85 routing scenarios marked NOT_RUN).
+**Overall Verdict:** `PARTIAL_VALIDATION` (Application, multi-agent collaboration, QA lifecycle, and candidate fixes verified; Native BMAD invocation truthfully blocked at host boundary; 78/85 routing scenarios marked NOT_RUN).
 
 ---
 

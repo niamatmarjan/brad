@@ -410,9 +410,9 @@
                 <input type="text" id="routeSearch" class="search-box" placeholder="Filter by ID, prompt, or skill..." onkeyup="filterCases()">
                 <div>
                     <button class="filter-btn active" onclick="setFilter('ALL')">All (85)</button>
-                    <button class="filter-btn" onclick="setFilter('PASS')">Observed PASS (9)</button>
-                    <button class="filter-btn" onclick="setFilter('REVIEW_REQUIRED')">Review Required (1)</button>
-                    <button class="filter-btn" onclick="setFilter('NOT_RUN')">NOT_RUN (75)</button>
+                    <button class="filter-btn" onclick="setFilter('PASS')">Observed PASS (7)</button>
+                    <button class="filter-btn" onclick="setFilter('REVIEW_REQUIRED')">Review Required (0)</button>
+                    <button class="filter-btn" onclick="setFilter('NOT_RUN')">NOT_RUN (78)</button>
                 </div>
             </div>
         </div>
@@ -442,7 +442,7 @@
             <td class='font-mono font-bold'>V6-01</td>
             <td>Create epics and stories from the approved PRD; no code.</td>
             <td class='font-mono text-sm text-slate-700'>bmad-create-epics-and-stories</td>
-            <td><span class='font-mono text-sm text-slate-700'>bmad-create-epics-and-stories</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-PO-001]</span></td>
+            <td><span class='font-mono text-sm text-slate-700'>bmad-create-epics-and-stories</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-BLIND-001]</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
@@ -451,15 +451,15 @@
         </tr>
 
 
-        <tr class='case-row' data-id='V6-02' data-l3='NOT_RUN' data-l4='NOT_RUN'>
+        <tr class='case-row' data-id='V6-02' data-l3='PASS' data-l4='BLOCKED'>
             <td class='font-mono font-bold'>V6-02</td>
             <td>What is the sprint status right now?</td>
             <td class='font-mono text-sm text-slate-700'>bmad-sprint-planning status</td>
-            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
+            <td><span class='font-mono text-sm text-slate-700'>bmad-sprint-planning</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-BLIND-002]</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
-            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
+            <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
             <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
         </tr>
 
@@ -468,7 +468,7 @@
             <td class='font-mono font-bold'>V6-03</td>
             <td>Implement story 1.3 fully and verify.</td>
             <td class='font-mono text-sm text-slate-700'>bmad-build story 1.3</td>
-            <td><span class='font-mono text-sm text-slate-700'>bmad-build story 1.3</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-DEV-001]</span></td>
+            <td><span class='font-mono text-sm text-slate-700'>bmad-build</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-BLIND-003]</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
@@ -559,7 +559,7 @@
             <td class='font-mono font-bold'>V6-10</td>
             <td>Review the current PR but DO NOT make edits.</td>
             <td class='font-mono text-sm text-slate-700'>bmad-code-review read-only</td>
-            <td><span class='font-mono text-sm text-slate-700'>bmad-code-review read-only</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-REV-001]</span></td>
+            <td><span class='font-mono text-sm text-slate-700'>bmad-code-review</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-BLIND-004]</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
@@ -702,7 +702,7 @@
             <td class='font-mono font-bold'>QA-01</td>
             <td>Create a risk-based P0-P3 test strategy for epic 4.</td>
             <td class='font-mono text-sm text-slate-700'>bmad-testarch-test-design</td>
-            <td><span class='font-mono text-sm text-slate-700'>bmad-testarch-test-design</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-QA-001]</span></td>
+            <td><span class='font-mono text-sm text-slate-700'>bmad-testarch-test-design</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-BLIND-005]</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
@@ -737,15 +737,15 @@
         </tr>
 
 
-        <tr class='case-row' data-id='QA-04' data-l3='PASS' data-l4='BLOCKED'>
+        <tr class='case-row' data-id='QA-04' data-l3='NOT_RUN' data-l4='NOT_RUN'>
             <td class='font-mono font-bold'>QA-04</td>
             <td>Review the quality of our test suite, no application changes.</td>
             <td class='font-mono text-sm text-slate-700'>bmad-testarch-test-review</td>
-            <td><span class='font-mono text-sm text-slate-700'>bmad-testarch-test-review</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-QA-002]</span></td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
             <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
         </tr>
 
@@ -858,7 +858,7 @@
             <td class='font-mono font-bold'>PLAN-01</td>
             <td>Create PRD from my new product brief.</td>
             <td class='font-mono text-sm text-slate-700'>bmad-prd create</td>
-            <td><span class='font-mono text-sm text-slate-700'>bmad-prd create</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-PLAN-001]</span></td>
+            <td><span class='font-mono text-sm text-slate-700'>bmad-prd</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-BLIND-006]</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
@@ -893,15 +893,15 @@
         </tr>
 
 
-        <tr class='case-row' data-id='PLAN-04' data-l3='PASS' data-l4='BLOCKED'>
+        <tr class='case-row' data-id='PLAN-04' data-l3='NOT_RUN' data-l4='NOT_RUN'>
             <td class='font-mono font-bold'>PLAN-04</td>
             <td>Ask Winston to design auth architecture.</td>
             <td class='font-mono text-sm text-slate-700'>bmad-agent-architect + architecture workflow</td>
-            <td><span class='font-mono text-sm text-slate-700'>bmad-agent-architect + architecture workflow</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-ARCH-001]</span></td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
             <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
         </tr>
 
@@ -1244,15 +1244,15 @@
         </tr>
 
 
-        <tr class='case-row' data-id='DEL-04' data-l3='PASS' data-l4='BLOCKED'>
+        <tr class='case-row' data-id='DEL-04' data-l3='NOT_RUN' data-l4='NOT_RUN'>
             <td class='font-mono font-bold'>DEL-04</td>
             <td>/brad 1.1 --local</td>
             <td class='font-mono text-sm text-slate-700'>native bmad-build plus local verification</td>
-            <td><span class='font-mono text-sm text-slate-700'>native bmad-build plus local verification</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-DELIV-001]</span></td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
             <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
         </tr>
 
@@ -1261,7 +1261,7 @@
             <td class='font-mono font-bold'>DEL-05</td>
             <td>/brad 1.1: only review it</td>
             <td class='font-mono text-sm text-slate-700'>bmad-code-review or installed review lens</td>
-            <td><span class='font-mono text-sm text-slate-700'>bmad-code-review or installed review lens</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-SAFE-001]</span></td>
+            <td><span class='font-mono text-sm text-slate-700'>bmad-code-review</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-BLIND-007]</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
@@ -1530,15 +1530,15 @@
         </tr>
 
 
-        <tr class='case-row' data-id='DEL-26' data-l3='REVIEW_REQUIRED' data-l4='BLOCKED'>
+        <tr class='case-row' data-id='DEL-26' data-l3='NOT_RUN' data-l4='NOT_RUN'>
             <td class='font-mono font-bold'>DEL-26</td>
             <td>/brad next</td>
             <td class='font-mono text-sm text-slate-700'>native hub/status or resume interrupted unit</td>
-            <td><span class='font-mono text-sm text-slate-700'>native hub/status or resume interrupted unit</span><br><span class='text-xs font-mono text-blue-600'>[EXEC-RES-001]</span></td>
+            <td><span class='text-slate-400 italic text-xs'>None (NOT_RUN)</span></td>
             <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-pass'>PASS</span></td>
-            <td class='text-center'><span class='badge badge-warn'>REVIEW_REQUIRED</span></td>
-            <td class='text-center'><span class='badge badge-block'>BLOCKED</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
+            <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
             <td class='text-center'><span class='badge badge-notrun'>NOT_RUN</span></td>
         </tr>
 

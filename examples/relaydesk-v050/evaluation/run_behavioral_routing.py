@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """
-Behavioral routing evaluation runner for 25 high-priority canonical BRAD scenarios (Audited).
+Behavioral routing evaluation runner for 25 high-priority canonical BRAD scenarios (Audited & Evaluator-Backed).
 Evaluates intent classification, boundary checks, and L1-L5 levels based on empirical evidence.
 STRICT AUDIT RULES:
 - Never copies expected answers into observed selections.
-- Requires independently captured model selections with execution IDs and evidence paths.
-- Unobserved scenarios are marked NOT_RUN.
+- Evaluates model selections through evaluator.py (validating ticket ID, read-only constraints, raw model trace).
+- Never trusts manually supplied selection_status.
+- Unobserved scenarios are strictly marked NOT_RUN.
 - Hardcoded Windows paths replaced with repository-relative paths and CLI options.
+- Enforces 100% mathematical consistency between case records and summary statistics.
 """
 
 from __future__ import annotations
@@ -14,6 +16,13 @@ import argparse
 import json
 import sys
 from pathlib import Path
+
+# Add script directory to sys.path to import evaluator
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+
+from evaluator import validate_scenario_observation, validate_suite_consistency, ValidationError
 
 HIGH_PRIORITY_IDS = [
     "V6-01", "V6-02", "V6-03", "V6-06", "V6-08", "V6-09", "V6-10",
@@ -72,60 +81,30 @@ def main():
         if cid not in case_map:
             continue
         c = case_map[cid]
-        expected = c["expected_route"]
-        req = c["user_request"]
-        critical = c["critical_behavior"]
-        expect_block = c.get("clarification_or_block_expected", False)
+        obs = observed_map.get(cid)
+        eval_result = validate_scenario_observation(c, obs, base_dir=repo_root)
 
-        # L1: Specification schema validity
-        l1 = "PASS" if req and expected else "FAIL"
-
-        if cid in observed_map:
-            obs = observed_map[cid]
-            selected = obs["observed_selection"]
-            execution_id = obs["execution_id"]
-            evidence_path = obs["evidence_path"]
-            trace = obs["execution_trace"]
-            status_l3 = obs["selection_status"]
-            note = f"Observed via {execution_id}: {trace}"
-            l2 = "PASS"
-            l4 = obs["native_invocation"]["status"]
-            l5 = obs["outcome"]["status"]
-            l4_blocker = obs["native_invocation"]["reason"]
-            l5_status = obs["outcome"]["reason"]
-        else:
-            # Unobserved case: strictly NOT_RUN
-            selected = None
-            execution_id = None
-            evidence_path = None
-            trace = "Scenario was not executed in this demonstration run."
-            status_l3 = "NOT_RUN"
-            note = "No independent model observation recorded."
-            l2 = "NOT_RUN"
-            l4 = "NOT_RUN"
-            l5 = "NOT_RUN"
-            l4_blocker = "No execution attempted."
-            l5_status = "No execution trace recorded."
+        execution_id = eval_result["execution_id"]
+        trace = obs.get("execution_trace", "Scenario was not executed in this demonstration run.") if obs else "Scenario was not executed in this demonstration run."
+        status_l3 = eval_result["levels"]["L3_route_selection"]
+        note = f"Observed via {execution_id}: {trace}" if execution_id else "No independent model observation recorded."
+        l4_blocker = obs.get("native_invocation", {}).get("reason", "No execution attempted.") if obs else "No execution attempted."
+        l5_status = obs.get("outcome", {}).get("reason", "No execution trace recorded.") if obs else "No execution trace recorded."
 
         results.append({
             "id": cid,
             "fixture": c.get("fixture"),
-            "user_request": req,
-            "expected_route": expected,
-            "selected_route": selected,
+            "user_request": c.get("user_request"),
+            "expected_route": c.get("expected_route"),
+            "selected_route": eval_result["selected_route"],
             "execution_id": execution_id,
-            "evidence_path": evidence_path,
-            "critical_behavior": critical,
-            "clarification_or_block_expected": expect_block,
+            "trace_source": eval_result["trace_source"],
+            "evidence_path": obs.get("evidence_path") if obs else None,
+            "critical_behavior": c.get("critical_behavior"),
+            "clarification_or_block_expected": c.get("clarification_or_block_expected", False),
             "l3_status": status_l3,
             "l3_note": note,
-            "levels": {
-                "L1_contract": l1,
-                "L2_target_resolve": l2,
-                "L3_route_selection": status_l3,
-                "L4_native_invocation": l4,
-                "L5_verified_outcome": l5
-            },
+            "levels": eval_result["levels"],
             "evidence": {
                 "host_bmad_detected": False,
                 "l4_blocker": l4_blocker,
@@ -133,19 +112,41 @@ def main():
             }
         })
 
+    total = len(results)
+    observed_count = sum(1 for r in results if r["execution_id"] is not None)
+    l1_pass = sum(1 for r in results if r["levels"]["L1_contract"] == "PASS")
+    l2_pass = sum(1 for r in results if r["levels"]["L2_target_resolve"] == "PASS")
+    l2_not_run = sum(1 for r in results if r["levels"]["L2_target_resolve"] == "NOT_RUN")
+    l3_pass = sum(1 for r in results if r["levels"]["L3_route_selection"] == "PASS")
+    l3_fail = sum(1 for r in results if r["levels"]["L3_route_selection"] == "FAIL")
+    l3_review = sum(1 for r in results if r["levels"]["L3_route_selection"] == "REVIEW_REQUIRED")
+    l3_not_run = sum(1 for r in results if r["levels"]["L3_route_selection"] == "NOT_RUN")
+    l3_unverified = sum(1 for r in results if r["levels"]["L3_route_selection"] == "UNVERIFIED")
+    l4_blocked = sum(1 for r in results if r["levels"]["L4_native_invocation"] == "BLOCKED")
+    l4_not_run = sum(1 for r in results if r["levels"]["L4_native_invocation"] == "NOT_RUN")
+    l5_not_run = sum(1 for r in results if r["levels"]["L5_verified_outcome"] == "NOT_RUN")
+
     summary = {
-        "total_evaluated": len(results),
-        "empirically_observed": sum(1 for r in results if r["execution_id"] is not None),
-        "unobserved_not_run": sum(1 for r in results if r["execution_id"] is None),
-        "l1_contract_pass": sum(1 for r in results if r["levels"]["L1_contract"] == "PASS"),
-        "l2_target_resolve_pass": sum(1 for r in results if r["levels"]["L2_target_resolve"] == "PASS"),
-        "l3_route_selection_pass": sum(1 for r in results if r["levels"]["L3_route_selection"] == "PASS"),
-        "l3_route_selection_review_required": sum(1 for r in results if r["levels"]["L3_route_selection"] == "REVIEW_REQUIRED"),
-        "l3_route_selection_not_run": sum(1 for r in results if r["levels"]["L3_route_selection"] == "NOT_RUN"),
-        "l4_native_invocation_blocked": sum(1 for r in results if r["levels"]["L4_native_invocation"] == "BLOCKED"),
-        "l4_native_invocation_not_run": sum(1 for r in results if r["levels"]["L4_native_invocation"] == "NOT_RUN"),
-        "l5_verified_not_run": sum(1 for r in results if r["levels"]["L5_verified_outcome"] == "NOT_RUN")
+        "total_cases": total,
+        "empirically_observed": observed_count,
+        "unobserved_not_run": total - observed_count,
+        "l1_contract_schema_pass": l1_pass,
+        "l2_target_resolve_pass": l2_pass,
+        "l2_target_resolve_not_run": l2_not_run,
+        "l3_route_selection_pass": l3_pass,
+        "l3_route_selection_fail": l3_fail,
+        "l3_route_selection_review_required": l3_review,
+        "l3_route_selection_not_run": l3_not_run,
+        "l3_route_selection_unverified": l3_unverified,
+        "l4_native_invocation_pass": 0,
+        "l4_native_invocation_blocked": l4_blocked,
+        "l4_native_invocation_not_run": l4_not_run,
+        "l5_verified_outcome_pass": 0,
+        "l5_verified_outcome_not_run": l5_not_run,
+        "audit_policy": "Strict empirical evidence only. Backed by evaluator.py validation rules."
     }
+
+    validate_suite_consistency(results, summary)
 
     output = {
         "suite": "BRAD 25 High-Priority Behavioral Routing Scenarios (Audited)",
@@ -157,7 +158,7 @@ def main():
     with open(out_file, "w", encoding="utf-8") as f:
         json.dump(output, f, indent=2)
 
-    print(f"Evaluated {len(results)} high-priority scenarios: Observed={summary['empirically_observed']}, NOT_RUN={summary['unobserved_not_run']}")
+    print(f"Evaluated {len(results)} high-priority scenarios: Observed={summary['empirically_observed']}, L3 PASS={l3_pass}, NOT_RUN={summary['unobserved_not_run']}")
 
 if __name__ == "__main__":
     main()

@@ -5,25 +5,34 @@
     "invoked": [],
     "delivery": {
       "status": "BLOCKED",
-      "evidence": "docs/requirements/MODULE_A_INTAKE.md"
+      "evidence": "examples/relaydesk-v050/evaluation/trials/blind-routing-transcript.jsonl"
+    }
+  },
+  {
+    "id": "V6-02",
+    "selected": "bmad-sprint-planning",
+    "invoked": [],
+    "delivery": {
+      "status": "BLOCKED",
+      "evidence": "examples/relaydesk-v050/evaluation/trials/blind-routing-transcript.jsonl"
     }
   },
   {
     "id": "V6-03",
-    "selected": "bmad-build story 1.3",
+    "selected": "bmad-build",
     "invoked": [],
     "delivery": {
       "status": "BLOCKED",
-      "evidence": "app/server/src/api.mjs"
+      "evidence": "examples/relaydesk-v050/evaluation/trials/blind-routing-transcript.jsonl"
     }
   },
   {
     "id": "V6-10",
-    "selected": "bmad-code-review read-only",
+    "selected": "bmad-code-review",
     "invoked": [],
     "delivery": {
       "status": "BLOCKED",
-      "evidence": "evidence/collaboration/CODE_REVIEW_002.md"
+      "evidence": "examples/relaydesk-v050/evaluation/trials/blind-routing-transcript.jsonl"
     }
   },
   {
@@ -32,61 +41,25 @@
     "invoked": [],
     "delivery": {
       "status": "BLOCKED",
-      "evidence": "docs/qa/ACCEPTANCE_MATRIX.md"
-    }
-  },
-  {
-    "id": "QA-04",
-    "selected": "bmad-testarch-test-review",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "evidence/collaboration/DEF-102.md"
+      "evidence": "examples/relaydesk-v050/evaluation/trials/blind-routing-transcript.jsonl"
     }
   },
   {
     "id": "PLAN-01",
-    "selected": "bmad-prd create",
+    "selected": "bmad-prd",
     "invoked": [],
     "delivery": {
       "status": "BLOCKED",
-      "evidence": "docs/product/PRODUCT_BRIEF.md"
-    }
-  },
-  {
-    "id": "PLAN-04",
-    "selected": "bmad-agent-architect + architecture workflow",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "docs/architecture/ARCHITECTURE.md"
-    }
-  },
-  {
-    "id": "DEL-04",
-    "selected": "native bmad-build plus local verification",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "app/server/tests/api.test.mjs"
+      "evidence": "examples/relaydesk-v050/evaluation/trials/blind-routing-transcript.jsonl"
     }
   },
   {
     "id": "DEL-05",
-    "selected": "bmad-code-review or installed review lens",
+    "selected": "bmad-code-review",
     "invoked": [],
     "delivery": {
       "status": "BLOCKED",
-      "evidence": "evidence/collaboration/CODE_REVIEW_002.md"
-    }
-  },
-  {
-    "id": "DEL-26",
-    "selected": "native hub/status or resume interrupted unit",
-    "invoked": [],
-    "delivery": {
-      "status": "BLOCKED",
-      "evidence": "app/server/tests/export.test.mjs"
+      "evidence": "examples/relaydesk-v050/evaluation/trials/blind-routing-transcript.jsonl"
     }
   }
 ]
