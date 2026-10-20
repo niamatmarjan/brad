@@ -15,6 +15,18 @@
   dispatch subagent, run commands, and access GitHub. An instruction to a
   single assistant to "be architect" does not create independent architect.
 
+## Native skill discovery and execution evidence ladder
+
+When a stakeholder requests a native BMAD specialist, distinguish:
+
+1. **External cache** — reading a cached `SKILL.md` is not proof that BMAD is installed in this workspace.
+2. **Workspace installation** — native `SKILL.md` and project configuration exist; this is still not host registration.
+3. **Host discovery** — the *current session's* skill catalog/loader actually exposes the requested skill.
+4. **Invocation** — the host invokes the installed native workflow and returns tool/agent evidence, including errors.
+5. **Delivered outcome** — the expected artifacts or read-only results are checked against their acceptance criteria.
+
+If the native loader reports `not found`, report **BLOCKED** and the precise host/workspace distinction. Do not substitute Help, PRD, Build or a fictional persona and claim the original specialist executed. Loading `bmad-help` only suggests a future command; it is not workflow execution. External cached instructions should never count as installed native workflows. `brad doctor` inspects local project state, **not** the host's private skill registry.
+
 ## Delegate without duplicating specialist logic
 
 1. Read target installed `SKILL.md` and linked instructions. The router passes

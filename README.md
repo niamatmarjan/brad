@@ -25,7 +25,7 @@ See the [AI setup guide](docs/AI_SETUP.md) for the full agent protocol, includin
 **Node.js 20+** is required for the installer. From your project root:
 
 ```bash
-npx --yes "github:niamatmarjan/brad#v0.4.1" setup
+npx --yes "github:niamatmarjan/brad#v0.5.0" setup
 ```
 
 That uses the GitHub release tag and **does not require an npm registry publication**. It detects explicit project host conventions and installs the native BRAD skill in the supported location. An ordinary `.github/workflows` folder alone does not imply Copilot; an ambiguous project gets the shared portable `.agents/skills/brad` path. It never installs BMAD Method for you or silently replaces existing user-customized files.
@@ -33,22 +33,22 @@ That uses the GitHub release tag and **does not require an npm registry publicat
 Choose a host explicitly (useful in a fresh project):
 
 ```bash
-npx --yes "github:niamatmarjan/brad#v0.4.1" setup --agent antigravity
-npx --yes "github:niamatmarjan/brad#v0.4.1" setup --agent claude
-npx --yes "github:niamatmarjan/brad#v0.4.1" setup --agent copilot
-npx --yes "github:niamatmarjan/brad#v0.4.1" setup --agent codex
+npx --yes "github:niamatmarjan/brad#v0.5.0" setup --agent antigravity
+npx --yes "github:niamatmarjan/brad#v0.5.0" setup --agent claude
+npx --yes "github:niamatmarjan/brad#v0.5.0" setup --agent copilot
+npx --yes "github:niamatmarjan/brad#v0.5.0" setup --agent codex
 ```
 
 To generate an instruction tailored to this project for your AI assistant:
 
 ```bash
-npx --yes "github:niamatmarjan/brad#v0.4.1" prompt
+npx --yes "github:niamatmarjan/brad#v0.5.0" prompt
 ```
 
 To verify your install:
 
 ```bash
-npx --yes "github:niamatmarjan/brad#v0.4.1" doctor --json
+npx --yes "github:niamatmarjan/brad#v0.5.0" doctor --json
 ```
 
 The `doctor` command checks installed skill integrity, native BMAD **hints versus configured state**, prerequisites, and next actions; it does not prove native agent invocation. On Windows PowerShell, use `npx.cmd` in place of `npx` if the `.ps1` shim is blocked. Install/configure BMAD separately if needed:
@@ -103,7 +103,7 @@ selection, native invocation and delivered outcome metrics separate.
 - **BMAD v7:** preview-aware route discovery; compatibility depends on *installed* v7 interfaces and must be retested as they evolve.
 - **TEA and optional modules:** used if installed and relevant, never faked.
 - **Runtime:** skill instructions, references, read-only preflight tools, and evaluation cases; **not** a standalone autonomous daemon.
-- **Maturity:** v0.4.1 is a **public preview / supervised pilot**. The included 85 routing cases are a test specification, not proof of live host behavior.
+- **Maturity:** v0.5.0 is a **public preview / supervised pilot**. The included 85 routing cases are a test specification, not proof of live host behavior. Concourse v0.4.1 remains a PARTIAL baseline evaluation.
 
 ## Project layout
 

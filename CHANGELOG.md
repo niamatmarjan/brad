@@ -2,6 +2,18 @@
 
 All notable changes will be documented here. Versions follow [Semantic Versioning](https://semver.org/); releases before 1.0 are preview.
 
+## [0.5.0] - 2026-10-20
+
+### Changed
+- Normalize the distribution test across npm pack JSON output formats without accepting malformed packages.
+- Exercise linked-target and linked-parent safety checks on Windows without requiring symlink elevation (directory junctions); retain POSIX symlink coverage.
+- Make project-local native skill inventory separate from host discovery and native invocation claims.
+- Expand GitHub CI to Node 24 on Linux and Windows, while keeping Node 20/22 coverage.
+
+### Validation boundaries
+- v0.5.0 does not certify native BMM/TEA execution, independent multi-agent collaboration, 85-case behavioral routing, or remote ticket-to-PR orchestration.
+- The v0.4.1 Concourse evaluation is PARTIAL, not a production certification.
+
 ## [0.4.1] - 2026-10-19
 
 ### Added

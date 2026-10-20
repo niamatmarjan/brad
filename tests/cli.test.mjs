@@ -1,8 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, existsSync, readdirSync, rmSync, symlinkSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, existsSync, readdirSync, rmSync, symlinkSync, lstatSync, realpathSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { parsePackMetadata } from './pack-metadata.mjs';
 import { spawnSync } from 'node:child_process';
 import { execute, version, packageRoot } from '../cli/core.mjs';
 const fixture = fn => {
@@ -77,13 +78,34 @@ test('uninstall modified managed install requires --force and backs up', () => f
   assert.equal(result.results[0].action, 'backed-up');
   assert.ok(existsSync(join(result.results[0].backup, 'custom.md')));
 }));
-test('symlinked targets are rejected without touching targets', () => fixture(root => {
-  const external = mkdtempSync(join(tmpdir(), 'brad-symlink-test-'));
+test('linked skill targets are rejected without touching external targets', () => fixture(root => {
+  const external = mkdtempSync(join(tmpdir(), 'brad-link-target-'));
+  const sentinel = join(external, 'do-not-touch.txt');
+  writeFileSync(sentinel, 'untouched');
   try {
     mkdirSync(join(root, '.agents/skills'), { recursive: true });
-    symlinkSync(external, join(root, '.agents/skills/brad'), 'dir');
+    const link = join(root, '.agents/skills/brad');
+    // Windows junctions avoid elevated symlink privileges; POSIX uses symlinks.
+    symlinkSync(external, link, process.platform === 'win32' ? 'junction' : 'dir');
+    assert.equal(lstatSync(link).isSymbolicLink(), true, 'test fixture must be a filesystem redirect');
+    assert.equal(realpathSync(link), realpathSync(external));
     assert.throws(() => execute(['init', '--dir', root, '--force']), /symlink/i);
-    assert.equal(readdirSync(external).length, 0);
+    assert.throws(() => execute(['update', '--dir', root, '--force']), /symlink/i);
+    assert.throws(() => execute(['uninstall', '--dir', root, '--force']), /symlink/i);
+    assert.equal(readFileSync(sentinel, 'utf8'), 'untouched');
+  } finally { rmSync(external, { recursive: true, force: true }); }
+}));
+
+test('linked parent directories cannot redirect BRAD outside project', () => fixture(root => {
+  const external = mkdtempSync(join(tmpdir(), 'brad-link-parent-'));
+  const sentinel = join(external, 'do-not-touch.txt');
+  writeFileSync(sentinel, 'untouched');
+  try {
+    const link = join(root, '.agents');
+    symlinkSync(external, link, process.platform === 'win32' ? 'junction' : 'dir');
+    assert.equal(lstatSync(link).isSymbolicLink(), true, 'test fixture must be a filesystem redirect');
+    assert.throws(() => execute(['setup', '--dir', root, '--force']), /symlink/i);
+    assert.equal(readFileSync(sentinel, 'utf8'), 'untouched');
   } finally { rmSync(external, { recursive: true, force: true }); }
 }));
 test('unknown agent and command are rejected clearly', () => fixture(root => {
@@ -110,13 +132,33 @@ test('distribution contains files required by the npm CLI', () => {
   const command = npmCli ? process.execPath : (process.platform === 'win32' ? 'npm.cmd' : 'npm');
   const r = spawnSync(command, args, { cwd: packageRoot, encoding: 'utf8', shell: !npmCli && process.platform === 'win32' });
   assert.equal(r.status, 0, r.stderr);
-  const data = JSON.parse(r.stdout)[0];
-  const names = data.files.map(x => x.path);
+  const metadata = parsePackMetadata(r.stdout, JSON.parse(readFileSync(join(packageRoot, 'package.json'), 'utf8')).name);
+  const names = metadata.files.map(x => x.path);
   assert.ok(names.includes('cli/brad.mjs'));
   assert.ok(names.includes('skills/brad/SKILL.md'));
   assert.ok(names.includes('.github/agents/brad.agent.md'), 'Copilot coordinator must be published');
   assert.ok(names.includes('docs/AI_SETUP.md'), 'AI onboarding instructions must ship in npm package');
 });
+test('npm pack parser supports legacy array and npm 12 name-keyed object responses', () => {
+  const name = '@niamatmarjan/brad';
+  const entry = { name, files: [{ path: 'cli/brad.mjs' }] };
+  assert.deepEqual(parsePackMetadata(JSON.stringify([entry]), name), entry);
+  assert.deepEqual(parsePackMetadata(JSON.stringify({ [name]: entry }), name), entry);
+  assert.deepEqual(parsePackMetadata(JSON.stringify(entry), name), entry);
+});
+
+test('npm pack parser rejects invalid, empty, and misleading responses', () => {
+  const name = '@niamatmarjan/brad';
+  for (const body of [
+    '', 'not json', '{}', '[]', 'null', 'true',
+    JSON.stringify([{ name: 'other/pkg', files: [] }]),
+    JSON.stringify({ 'other/pkg': { name: 'other/pkg', files: [] } }),
+    JSON.stringify({ [name]: { name, files: null } }),
+    JSON.stringify({ [name]: { name, files: [{ wrong: 'not a path' }] } }),
+    JSON.stringify({ [name]: { name, files: [{ path: '../unsafe' }] } }),
+  ]) assert.throws(() => parsePackMetadata(body, name), /npm pack/i, body);
+});
+
 test('documentation pins npm GitHub dependency using #tag syntax', () => {
   for (const path of ['README.md', 'docs/installation.md', 'cli/core.mjs']) {
     const content = readFileSync(join(packageRoot, path), 'utf8');
@@ -170,6 +212,22 @@ test('doctor discovers configured runtime, native skills, and mixed state hints'
   assert.deepEqual(d.bmad.nativeSkills, ['bmad-build']);
   assert.equal(d.bmad.stateHints.mixed, true);
   assert.match(d.bmad.warnings.join(' '), /v6 and v7/);
+}));
+
+test('doctor does not mistake cached TEA instructions for native host execution', () => fixture(root => {
+  const cache = mkdtempSync(join(tmpdir(), 'brad-external-tea-cache-'));
+  try {
+    mkdirSync(join(cache, 'bmad-testarch-test-review'), { recursive: true });
+    writeFileSync(join(cache, 'bmad-testarch-test-review/SKILL.md'), '---\nname: bmad-testarch-test-review\n---\n');
+    const d = execute(['doctor', '--dir', root, '--agent', 'antigravity']);
+    assert.equal(d.bmad.detected, false);
+    assert.deepEqual(d.bmad.nativeSkills, []);
+    assert.equal(d.bmad.discovery.workspaceSkillInventory, 'NOT_FOUND');
+    assert.equal(d.bmad.discovery.externalCaches, 'NOT_INSPECTED');
+    assert.equal(d.bmad.discovery.hostSkillCatalog, 'NOT_VERIFIED');
+    assert.equal(d.bmad.discovery.nativeWorkflowInvocation, 'NOT_VERIFIED');
+    assert.equal(d.readiness.specialistDelegation, 'NOT_VERIFIED');
+  } finally { rmSync(cache, { recursive: true, force: true }); }
 }));
 
 test('setup dry-run leaves no files including auxiliary state', () => fixture(root => {
