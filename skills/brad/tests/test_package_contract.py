@@ -22,6 +22,18 @@ class PackageContractTests(unittest.TestCase):
         self.assertEqual(len(ids), len(set(ids)))
         self.assertGreaterEqual(sum(x.startswith("DEL-") for x in ids), 20)
 
+    def test_incremental_changes_preserve_approved_artifacts(self):
+        planning = (ROOT / "references" / "epics-and-stories.md").read_text()
+        self.assertIn("do not regenerate the whole PRD", planning)
+        self.assertIn("read-only PRD, architecture, or backlog review", planning)
+        self.assertIn("second authoritative backlog", planning)
+
+    def test_review_intent_never_authorizes_delivery(self):
+        delivery = (ROOT / "references" / "ticket-to-pr.md").read_text()
+        self.assertIn("Strict review-only boundary", delivery)
+        self.assertIn("even when repository policy normally enables", delivery)
+        self.assertIn("Do **not** change code, create a branch", delivery)
+
     def test_pr_is_gated_and_merge_not_default(self):
         md = (ROOT / "SKILL.md").read_text()
         delivery = (ROOT / "references" / "ticket-to-pr.md").read_text()
