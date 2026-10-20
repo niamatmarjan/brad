@@ -2,6 +2,18 @@
 
 All notable changes will be documented here. Versions follow [Semantic Versioning](https://semver.org/); releases before 1.0 are preview.
 
+## [0.5.1] - 2026-10-20
+
+### Changed
+- Make `brad doctor --json` recovery advice actionable, approval-gated, and read-only while separating local skill installation from actual host discovery.
+- Clarify incremental PRD refinement, preservation of approvals and IDs, and strictly non-mutating review-only routing.
+- Distinguish host-native skill dispatch, inline execution of installed BMAD workflows, independent subagents, and helper-script-only activities with explicit evidence rules.
+- Organize topic documentation while preserving legacy compatibility paths, and update pinned installer examples.
+
+### Testing and evidence
+- Add doctor-recovery and routing/host handoff regression contracts; retain Linux/Windows Node.js and Python CI matrices.
+- Release remains a supervised preview: no 85-case live routing certification, general host-native execution guarantee, or autonomous PR-delivery certification. RelayDesk remains an independently reviewed, non-release evaluation.
+
 ## [0.5.0] - 2026-10-20
 
 ### Changed
