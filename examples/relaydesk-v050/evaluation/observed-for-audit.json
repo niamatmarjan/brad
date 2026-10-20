@@ -5,7 +5,7 @@
     "invoked": [],
     "delivery": {
       "status": "BLOCKED",
-      "evidence": "examples/relaydesk-v050/evaluation/trials/blind-routing-transcript.jsonl"
+      "evidence": "examples/relaydesk-v050/evaluation/trials/sanitized-trials.json"
     }
   },
   {
@@ -14,7 +14,7 @@
     "invoked": [],
     "delivery": {
       "status": "BLOCKED",
-      "evidence": "examples/relaydesk-v050/evaluation/trials/blind-routing-transcript.jsonl"
+      "evidence": "examples/relaydesk-v050/evaluation/trials/sanitized-trials.json"
     }
   },
   {
@@ -23,7 +23,25 @@
     "invoked": [],
     "delivery": {
       "status": "BLOCKED",
-      "evidence": "examples/relaydesk-v050/evaluation/trials/blind-routing-transcript.jsonl"
+      "evidence": "examples/relaydesk-v050/evaluation/trials/sanitized-trials.json"
+    }
+  },
+  {
+    "id": "V6-06",
+    "selected": "bmad-correct-course",
+    "invoked": [],
+    "delivery": {
+      "status": "BLOCKED",
+      "evidence": "examples/relaydesk-v050/evaluation/trials/sanitized-trials.json"
+    }
+  },
+  {
+    "id": "V6-08",
+    "selected": "bmad-sprint-planning",
+    "invoked": [],
+    "delivery": {
+      "status": "BLOCKED",
+      "evidence": "examples/relaydesk-v050/evaluation/trials/sanitized-trials.json"
     }
   },
   {
@@ -32,7 +50,16 @@
     "invoked": [],
     "delivery": {
       "status": "BLOCKED",
-      "evidence": "examples/relaydesk-v050/evaluation/trials/blind-routing-transcript.jsonl"
+      "evidence": "examples/relaydesk-v050/evaluation/trials/sanitized-trials.json"
+    }
+  },
+  {
+    "id": "V7-03",
+    "selected": "bmad-build",
+    "invoked": [],
+    "delivery": {
+      "status": "BLOCKED",
+      "evidence": "examples/relaydesk-v050/evaluation/trials/sanitized-trials.json"
     }
   },
   {
@@ -41,7 +68,16 @@
     "invoked": [],
     "delivery": {
       "status": "BLOCKED",
-      "evidence": "examples/relaydesk-v050/evaluation/trials/blind-routing-transcript.jsonl"
+      "evidence": "examples/relaydesk-v050/evaluation/trials/sanitized-trials.json"
+    }
+  },
+  {
+    "id": "QA-08",
+    "selected": "bmad-qa-generate-e2e-tests",
+    "invoked": [],
+    "delivery": {
+      "status": "BLOCKED",
+      "evidence": "examples/relaydesk-v050/evaluation/trials/sanitized-trials.json"
     }
   },
   {
@@ -50,7 +86,16 @@
     "invoked": [],
     "delivery": {
       "status": "BLOCKED",
-      "evidence": "examples/relaydesk-v050/evaluation/trials/blind-routing-transcript.jsonl"
+      "evidence": "examples/relaydesk-v050/evaluation/trials/sanitized-trials.json"
+    }
+  },
+  {
+    "id": "EDGE-01",
+    "selected": "inspect and clarify runtime before writes",
+    "invoked": [],
+    "delivery": {
+      "status": "BLOCKED",
+      "evidence": "examples/relaydesk-v050/evaluation/trials/sanitized-trials.json"
     }
   },
   {
@@ -59,7 +104,7 @@
     "invoked": [],
     "delivery": {
       "status": "BLOCKED",
-      "evidence": "examples/relaydesk-v050/evaluation/trials/blind-routing-transcript.jsonl"
+      "evidence": "examples/relaydesk-v050/evaluation/trials/sanitized-trials.json"
     }
   }
 ]

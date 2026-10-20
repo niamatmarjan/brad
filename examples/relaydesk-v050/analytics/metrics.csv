@@ -4,9 +4,9 @@ candidate_tests_pass_rate,55,55,100.0,PASS,Candidate tests passing
 relaydesk_server_tests,16,16,100.0,PASS,Server integration suite
 canonical_routing_cases_total,85,85,100.0,PASS,Total canonical cases in specification
 routing_l1_contract_schema_rate,85,85,100.0,PASS,Static specification schema validation
-routing_empirically_observed_rate,7,85,8.24,PARTIAL,7 scenarios evaluated with authentic blind model execution traces
-routing_unobserved_not_run_rate,78,85,91.76,NOT_RUN,78 scenarios unobserved and marked NOT_RUN
-routing_l3_observed_pass_rate,7,85,8.24,PASS,All 7 blind trial selections verified by evaluator.py against canonical native skills
+routing_empirically_observed_rate,12,85,14.12,PARTIAL,12 scenarios evaluated in isolated workspace with authentic blind model execution traces
+routing_unobserved_not_run_rate,73,85,85.88,NOT_RUN,73 scenarios unobserved and marked NOT_RUN
+routing_l3_observed_pass_rate,12,85,14.12,PASS,All 12 isolated blind trial selections verified by evaluator.py against canonical native skills
 routing_l3_conditional_review_rate,0,85,0.0,NOT_RUN,No conditional routes in evaluated trial subset
 routing_l4_native_invocation_rate,0,85,0.0,BLOCKED,0/85 native invocations verified; host lacks active session skill invocation
 routing_l5_verified_outcome_rate,0,85,0.0,NOT_RUN,No native delivery traces

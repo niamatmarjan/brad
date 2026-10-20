@@ -40,12 +40,11 @@ This directory contains the complete, sanitized evaluation artifacts for the **B
 
 | Dataset | Path | Description |
 |---|---|---|
-| **Canonical 85 Scenarios** | [`evaluation/routing-results.json`](evaluation/routing-results.json) | Audited results across canonical 85 routing suite (7 observed, 78 NOT_RUN) |
-| **Observed Routing Evidence** | [`evaluation/observed-routing-evidence.json`](evaluation/observed-routing-evidence.json) | Empirical blind trial model observations with execution IDs and evidence paths |
-| **25 Behavioral Cases** | [`evaluation/behavioral-routing-25.json`](evaluation/behavioral-routing-25.json) | High-priority behavioral intent tests (6 observed, 19 NOT_RUN) |
-| **Blind Trial Transcript** | [`evaluation/trials/blind-routing-transcript.jsonl`](evaluation/trials/blind-routing-transcript.jsonl) | Archived blind trial session transcript for 7 canonical scenarios |
-| **Exploratory SDLC Comparison** | [`evaluation/matched-comparison.json`](evaluation/matched-comparison.json) | Anecdotal comparison labeled UNVERIFIED_ANECDOTAL_ESTIMATE |
-| **Historical Pre-Audit Records** | [`evaluation/historical/`](evaluation/historical/) | Preserved synthetic baseline records and retrospective observations prior to audit |
+| **Canonical 85 Scenarios** | [`evaluation/routing-results.json`](evaluation/routing-results.json) | Audited results across canonical 85 routing suite (12 observed PASS, 73 NOT_RUN) |
+| **Observed Routing Evidence** | [`evaluation/observed-routing-evidence.json`](evaluation/observed-routing-evidence.json) | Empirical blind trial model observations with execution IDs, SHA-256 hashes, and sanitized evidence paths |
+| **25 Behavioral Cases** | [`evaluation/behavioral-routing-25.json`](evaluation/behavioral-routing-25.json) | High-priority behavioral intent tests (11 observed PASS, 14 NOT_RUN) |
+| **Sanitized Blind Trials** | [`evaluation/trials/sanitized-trials.json`](evaluation/trials/sanitized-trials.json) | 12 sanitized blind routing trials with SHA-256 hashes and tool calls (raw thinking/paths omitted) |
+| **Historical Pre-Audit Records** | [`evaluation/historical/`](evaluation/historical/) | Preserved retrospective records (Run 0) and answer-exposed trials (Run 1) prior to isolated blind run |
 | **Findings Register** | [`evaluation/findings.json`](evaluation/findings.json) | Machine-readable defects register |
 | **Improvement Backlog** | [`evaluation/improvement-backlog.json`](evaluation/improvement-backlog.json) | Prioritized candidate fixes |
 | **Stakeholder Outcomes** | [`evaluation/stakeholder-results.json`](evaluation/stakeholder-results.json) | Stakeholder persona delivery outcomes |

@@ -330,8 +330,8 @@ def main():
                     <span class="stat-lbl">SDLC Exercises</span>
                 </div>
                 <div class="stat-box">
-                    <span class="stat-val text-amber-600">10 / 85</span>
-                    <span class="stat-lbl">Observed Routes (75 NOT_RUN)</span>
+                    <span class="stat-val text-amber-600">{summary['empirically_observed']} / {summary['total_cases']}</span>
+                    <span class="stat-lbl">Observed Routes ({summary['unobserved_not_run']} NOT_RUN)</span>
                 </div>
             </div>
         </div>
@@ -485,7 +485,7 @@ def main():
         <p class="text-xs text-slate-500 mb-3">
             Audited using official <code>skills/brad/scripts/audit_routing_results.py</code> against <code>skills/brad/evals/routing-cases.json</code>.
             L1 = Contract Schema | L2 = Resolve | L3 = Route Selection | L4 = Native Invocation | L5 = Verified Outcome.
-            <strong>Notice:</strong> 75 unobserved scenarios are truthfully marked <code>NOT_RUN</code> without synthetic pass assignment.
+            <strong>Notice:</strong> {summary['unobserved_not_run']} unobserved scenarios are truthfully marked <code>NOT_RUN</code> without synthetic pass assignment.
         </p>
         <div style="max-height:550px; overflow-y:auto; border:1px solid var(--border); border-radius:6px;">
             <table id="casesTable">

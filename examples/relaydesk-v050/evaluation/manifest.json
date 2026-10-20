@@ -48,11 +48,11 @@
     "gate_e_brad_validation": {
       "overall": "BLOCKED",
       "l1_contract": "PASS (85/85 specification schema valid)",
-      "l2_target_resolve": "UNVERIFIED (7/85 observed, 78 NOT_RUN)",
-      "l3_exact_route_selection": "UNVERIFIED (7 PASS, 78 NOT_RUN)",
-      "l4_native_invocation": "BLOCKED (0/85 invoked; 7 blocked, 78 NOT_RUN)",
+      "l2_target_resolve": "PARTIAL (12/85 observed, 73 NOT_RUN)",
+      "l3_exact_route_selection": "PARTIAL (12 PASS, 73 NOT_RUN)",
+      "l4_native_invocation": "BLOCKED (0/85 invoked; 12 blocked, 73 NOT_RUN)",
       "l5_verified_outcome": "NOT_RUN (0/85)",
-      "details": "Canonical 85 routing suite evaluated under strict evaluator.py verification rules without synthetic pass assignments. 7 scenarios evaluated via authentic blind model trials with raw response traces and execution IDs; 78 scenarios truthfully marked NOT_RUN. Native host invocation blocked at host boundary."
+      "details": "Canonical 85 routing suite evaluated under strict evaluator.py verification rules without synthetic pass assignments or answer exposure. 12 scenarios evaluated via authentic blind model trials in an isolated selector environment with raw response traces, SHA-256 hashes, and execution IDs; 73 scenarios truthfully marked NOT_RUN. Native host invocation blocked at host boundary."
     },
     "gate_f_improvement_verification": {
       "overall": "PASS",
@@ -64,5 +64,5 @@
     }
   },
   "overall_verdict": "PARTIAL_VALIDATION",
-  "verdict_rationale": "Application foundation, Git multi-worktree mechanics, genuine independent multi-agent collaboration, QA defect lifecycle, and candidate improvements were verified. Native BMAD invocation remains BLOCKED at the active host boundary, and 78/85 canonical routing scenarios are truthfully marked NOT_RUN."
+  "verdict_rationale": "Application foundation, Git multi-worktree mechanics, genuine independent multi-agent collaboration, QA defect lifecycle, and candidate improvements were verified. Native BMAD invocation remains BLOCKED at the active host boundary, and 73/85 canonical routing scenarios are truthfully marked NOT_RUN."
 }
