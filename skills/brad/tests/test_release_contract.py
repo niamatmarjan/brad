@@ -24,6 +24,7 @@ class ReleaseContractTests(unittest.TestCase):
             self.assertIn('brad/evals/routing-cases.json',z.namelist())
             self.assertIn('copilot/brad.agent.md',z.namelist())
             self.assertIn('AI_SETUP.md',z.namelist())
+            self.assertIn('canonical, copyable onboarding instruction', z.read('AI_SETUP.md').decode('utf-8'))
             self.assertIn('LICENSE',z.namelist())
             self.assertIn('NOTICE.md',z.namelist())
             self.assertIn('BRANDING.md',z.namelist())

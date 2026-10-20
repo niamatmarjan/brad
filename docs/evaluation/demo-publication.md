@@ -1,6 +1,6 @@
 # Publishing validation demos and master reports
 
-This repository includes a **sanitized BRAD v0.4.1 Concourse evaluation**, explicitly marked PARTIAL, under [`examples/concourse-sdlc-lab/`](../../examples/concourse-sdlc-lab/). It does not establish native BMAD workflow execution, independent multi-agent orchestration, or full production readiness. Further demos require the publication gates below.
+This repository includes a **sanitized BRAD v0.4.1 Concourse evaluation**, explicitly marked PARTIAL, under [`examples/concourse-sdlc-lab/` ](../../examples/concourse-sdlc-lab/README.md). It does not establish native BMAD workflow execution, independent multi-agent orchestration, or full production readiness. Further demos require the publication gates below.
 
 ## Publication gates
 

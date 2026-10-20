@@ -30,7 +30,7 @@ for p, name in [
     (ROOT / "NOTICE.md", "NOTICE.md"),
     (ROOT / "BRANDING.md", "BRANDING.md"),
     (ROOT / "SECURITY.md", "SECURITY.md"),
-    (ROOT / "docs/AI_SETUP.md", "AI_SETUP.md"),
+    (ROOT / "docs/getting-started/ai-setup.md", "AI_SETUP.md"),
     (ROOT / "VERSION", "VERSION"),
 ]:
     files.append((p,name))
