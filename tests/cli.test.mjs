@@ -388,3 +388,13 @@ test('opt-in setup invokes a fake official installer exactly once and reports on
   assert.match(second.stdout, /SKIPPED_EXISTING/);
   assert.equal(readFileSync(log, 'utf8').trim().split(/\r?\n/).length, 1, 'must never reinstall');
 }));
+
+test('setup detects native BMAD in the Antigravity singular .agent skill folder', () => fixture(root => {
+  const native = join(root, '.agent', 'skills', 'bmad-build');
+  mkdirSync(native, { recursive: true });
+  writeFileSync(join(native, 'SKILL.md'), '---\nname: bmad-build\n---\n');
+  const r = execute(['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad']);
+  assert.equal(r.bmadSetup.status, 'SKIPPED_EXISTING');
+  assert.ok(r.bmad.nativeSkills.includes('bmad-build'));
+  assert.equal(r.bmad.discovery.hostSkillCatalog, 'NOT_VERIFIED');
+}));

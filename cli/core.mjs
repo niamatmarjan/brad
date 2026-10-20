@@ -233,7 +233,7 @@ function uninstall(plan, options) {
 function bmadCheck(root) {
   const paths = ['_bmad', '_bmad-output', '.bmad'].filter(p => existsSync(join(root, p)));
   const configured = ['_bmad/config.toml', '_bmad/config.yaml', '_bmad/core/config.yaml'].some(p => isFile(join(root, p)));
-  const roots = ['.agents/skills', '.claude/skills', '.github/skills'];
+  const roots = ['.agents/skills', '.agent/skills', '.claude/skills', '.codex/skills', '.github/skills'];
   const installedSkillNames = new Set();
   for (const skillDir of roots) {
     const path = join(root, skillDir);
@@ -253,6 +253,8 @@ function bmadCheck(root) {
   const recovery = !detected ? {
     status: 'OFFICIAL_BMAD_INSTALL_REQUIRED',
     installCommand: `${process.platform === 'win32' ? 'npx.cmd' : 'npx'} bmad-method install`,
+    bradSetupCommand: 'brad setup --with-bmad',
+    previewSetupCommand: 'brad setup --with-bmad --bmad-channel preview',
     requiresApproval: true,
     guidance: 'Choose a supported BMAD version with the user before installing official BMAD into the intended project.'
   } : !configured ? {
