@@ -371,7 +371,7 @@ Host: ${host}.
 }
 function nextSteps(options, bmad, plans) {
   const messages = [];
-  if (!bmad.detected) messages.push('With explicit consent, run brad setup --with-bmad (latest stable) or --with-bmad --bmad-channel preview (v7 alpha). The official installer handles module choices.');
+  if (!bmad.detected) messages.push('With explicit consent, run brad setup --with-bmad to install official BMAD Method (latest stable), or --with-bmad --bmad-channel preview (v7 alpha). The official installer handles module choices.');
   else if (!bmad.configured) messages.push('Ask your agent to inspect and finish the native BMAD project setup; runtime configuration was not verified.');
   messages.push('Restart or reload your coding agent if its skill catalog was cached.');
   messages.push('In your AI coding chat, ask: "Use the BRAD skill to inspect this project and preview the next ticket workflow; do not change files."');

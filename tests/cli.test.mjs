@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, existsSync, readdirSync, rmSync, symlinkSync, lstatSync, realpathSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, existsSync, readdirSync, rmSync, symlinkSync, lstatSync, realpathSync, chmodSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, delimiter } from 'node:path';
 import { parsePackMetadata } from './pack-metadata.mjs';
 import { spawnSync } from 'node:child_process';
 import { execute, version, packageRoot } from '../cli/core.mjs';
@@ -344,4 +344,47 @@ test('BMAD setup preserves an existing runtime and never upgrades it', () => fix
   assert.equal(r.bmadSetup.status, 'SKIPPED_EXISTING');
   assert.equal(r.bmadSetup.command, null);
   assert.equal(r.bmad.runtime, true);
+}));
+
+test('opt-in setup invokes a fake official installer exactly once and reports only verified local state', () => fixture(root => {
+  const bin = join(root, 'mock-bin');
+  mkdirSync(bin, { recursive: true });
+  const script = join(bin, process.platform === 'win32' ? 'npx.cmd' : 'npx');
+  if (process.platform === 'win32') {
+    writeFileSync(script, [
+      '@echo off',
+      'echo %* >> "%CD%\\upstream-calls.txt"',
+      'if not exist "%CD%\\_bmad" mkdir "%CD%\\_bmad"',
+      'echo [core] > "%CD%\\_bmad\\config.toml"',
+      'exit /b 0',
+      ''
+    ].join('\r\n'));
+  } else {
+    writeFileSync(script, [
+      '#!/bin/sh',
+      'printf "%s\\n" "$*" >> "$PWD/upstream-calls.txt"',
+      'mkdir -p "$PWD/_bmad"',
+      'printf "%s\\n" "[core]" > "$PWD/_bmad/config.toml"',
+      'exit 0',
+      ''
+    ].join('\n'));
+    chmodSync(script, 0o755);
+  }
+  const env = { ...process.env };
+  for (const k of Object.keys(env)) if (k.toLowerCase() === 'path') delete env[k];
+  env.PATH = bin + delimiter + (process.env.PATH || process.env.Path || '');
+  const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad'];
+  const first = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
+    { env, cwd: root, encoding: 'utf8', timeout: 20000 });
+  assert.equal(first.status, 0, first.stderr || first.stdout);
+  assert.match(first.stdout, /UPSTREAM_INSTALLER_EXITED_SUCCESS/);
+  assert.match(first.stdout, /host|skill catalog/i);
+  const log = join(root, 'upstream-calls.txt');
+  assert.ok(existsSync(log), 'the official installer command must actually be invoked');
+  assert.match(readFileSync(log, 'utf8'), /bmad-method@latest install/);
+  const second = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
+    { env, cwd: root, encoding: 'utf8', timeout: 20000 });
+  assert.equal(second.status, 0, second.stderr || second.stdout);
+  assert.match(second.stdout, /SKIPPED_EXISTING/);
+  assert.equal(readFileSync(log, 'utf8').trim().split(/\r?\n/).length, 1, 'must never reinstall');
 }));
