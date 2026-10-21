@@ -3,7 +3,7 @@ import { join, dirname, relative, resolve, sep, isAbsolute } from 'node:path';
 import { homedir } from 'node:os';
 import { createHash, randomUUID } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { execFileSync, spawnSync } from 'node:child_process';
+import { execFileSync, spawnSync, spawn } from 'node:child_process';
 
 export const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const skillRoot = join(packageRoot, 'skills', 'brad');
@@ -11,6 +11,33 @@ const copilotSource = join(packageRoot, '.github', 'agents', 'brad.agent.md');
 const AGENTS = ['claude', 'codex', 'copilot', 'antigravity'];
 const HOST_CHOICES = [...AGENTS, 'portable'];
 const MARKER = '.brad-install.json';
+
+export const KNOWN_BMAD_TOOLS = [
+  'claude-code', 'codex', 'cursor', 'github-copilot', 'antigravity', 'antigravity-cli',
+  'adal', 'auggie', 'goose', 'cline', 'codebuddy', 'codewhale', 'command-code', 'crush',
+  'droid', 'firebender', 'gemini', 'grok', 'hermes', 'bob', 'iflow', 'junie', 'kilo',
+  'kimi-code', 'kiro', 'kode', 'mistral-vibe', 'mux', 'neovate', 'ona', 'openclaw',
+  'opencode', 'openhands', 'pi', 'pochi', 'polytoken', 'qoder', 'qwen', 'replit',
+  'roo', 'rovo-dev', 'cortex', 'amp', 'trae', 'warp', 'windsurf', 'zcode', 'zencoder'
+];
+
+export function detectTerminal(options = {}) {
+  if (options.nonInteractive) {
+    return { mode: 'non-interactive', isTTY: false, reason: 'explicit-flag' };
+  }
+  if (typeof options.isTTY === 'boolean') {
+    return options.isTTY ? { mode: 'interactive', isTTY: true } : { mode: 'headless', isTTY: false, reason: 'option-override' };
+  }
+  const stdinTTY = Boolean(process.stdin && process.stdin.isTTY);
+  const stdoutTTY = Boolean(process.stdout && process.stdout.isTTY);
+  if (stdinTTY && stdoutTTY) {
+    return { mode: 'interactive', isTTY: true };
+  }
+  if (!stdinTTY) {
+    return { mode: 'headless', isTTY: false, reason: 'no-stdin-tty' };
+  }
+  return { mode: 'unreliable', isTTY: false, reason: 'no-stdout-tty' };
+}
 
 export function version() {
   const pkg = JSON.parse(readFileSync(join(packageRoot, 'package.json'), 'utf8'));
@@ -35,7 +62,12 @@ function allFiles(dir, prefix = '') {
 const SOURCE_FILES = () => allFiles(skillRoot);
 
 function parse(args) {
-  const o = { command: 'init', agent: 'auto', dir: process.cwd(), global: false, force: false, dryRun: false, json: false, yes: false, help: false, withBmad: false, bmadChannel: 'stable', bmadChannelSpecified: false };
+  const o = {
+    command: 'init', agent: 'auto', dir: process.cwd(), global: false, force: false,
+    dryRun: false, json: false, yes: false, help: false, withBmad: false,
+    bmadChannel: 'stable', bmadChannelSpecified: false,
+    bmadModules: null, bmadTools: null, bmadTimeout: 180000, nonInteractive: false
+  };
   const rest = [...args];
   if (rest[0] && !rest[0].startsWith('-')) o.command = rest.shift();
   while (rest.length) {
@@ -50,6 +82,13 @@ function parse(args) {
     else if (token === '--with-bmad') o.withBmad = true;
     else if (token.startsWith('--bmad-channel=')) { o.bmadChannel = token.substring(15); o.bmadChannelSpecified = true; }
     else if (token === '--bmad-channel') { o.bmadChannel = rest.shift() || ''; o.bmadChannelSpecified = true; }
+    else if (token.startsWith('--bmad-modules=')) { o.bmadModules = token.substring(15); }
+    else if (token === '--bmad-modules') { o.bmadModules = rest.shift() || ''; }
+    else if (token.startsWith('--bmad-tools=')) { o.bmadTools = token.substring(13); }
+    else if (token === '--bmad-tools') { o.bmadTools = rest.shift() || ''; }
+    else if (token.startsWith('--bmad-timeout=')) { o.bmadTimeout = Number(token.substring(15)); }
+    else if (token === '--bmad-timeout') { o.bmadTimeout = Number(rest.shift() || ''); }
+    else if (['--non-interactive', '--noninteractive'].includes(token)) o.nonInteractive = true;
     else if (token.startsWith('--agent=')) o.agent = token.substring(8);
     else if (token === '--agent') o.agent = rest.shift() || '';
     else if (token.startsWith('--dir=')) o.dir = token.substring(6);
@@ -60,7 +99,36 @@ function parse(args) {
   if (o.withBmad && o.global) throw new Error('--with-bmad is project-local; --global is unsupported');
   if (o.withBmad && o.command !== 'setup') throw new Error('--with-bmad is only supported with brad setup');
   if (o.bmadChannelSpecified && !o.withBmad) throw new Error('--bmad-channel requires --with-bmad');
+  if (o.bmadModules !== null && !o.withBmad) throw new Error('--bmad-modules requires --with-bmad');
+  if (o.bmadTools !== null && !o.withBmad) throw new Error('--bmad-tools requires --with-bmad');
+  if (o.bmadTimeout !== 180000 && !o.withBmad) throw new Error('--bmad-timeout requires --with-bmad');
   if (!['stable', 'preview'].includes(o.bmadChannel)) throw new Error('--bmad-channel must be stable or preview');
+  if (o.bmadChannel === 'preview' && (o.bmadModules !== null || o.bmadTools !== null)) {
+    throw new Error('--bmad-modules and --bmad-tools are not supported with --bmad-channel preview');
+  }
+  if (!Number.isFinite(o.bmadTimeout) || o.bmadTimeout <= 0) {
+    throw new Error('--bmad-timeout must be a positive number of milliseconds');
+  }
+  if (o.bmadModules !== null) {
+    const trimmed = o.bmadModules.trim();
+    if (!trimmed || !/^[a-z0-9_-]+(,[a-z0-9_-]+)*$/.test(trimmed)) {
+      throw new Error(`Invalid BMAD module list: "${o.bmadModules}". Use comma-separated lowercase module identifiers (e.g. bmm,tea).`);
+    }
+    o.bmadModules = trimmed;
+  }
+  if (o.bmadTools !== null) {
+    const trimmed = o.bmadTools.trim();
+    if (!trimmed || !/^[a-z0-9_-]+(,[a-z0-9_-]+)*$/.test(trimmed)) {
+      throw new Error(`Invalid BMAD tool list: "${o.bmadTools}". Use comma-separated tool identifiers (e.g. antigravity,claude-code).`);
+    }
+    const tools = trimmed.split(',').map(t => t.trim());
+    for (const t of tools) {
+      if (!KNOWN_BMAD_TOOLS.includes(t)) {
+        throw new Error(`Unknown BMAD tool identifier: "${t}". Use a supported tool (e.g. antigravity, claude-code, codex, github-copilot).`);
+      }
+    }
+    o.bmadTools = trimmed;
+  }
   if (o.withBmad && o.json && !o.dryRun) throw new Error('Interactive BMAD setup cannot use --json; use --dry-run --json to preview the plan.');
   if (!o.dir) throw new Error('--dir needs a path');
   if (!['init', 'setup', 'prompt', 'update', 'doctor', 'uninstall', 'version', 'help'].includes(o.command)) throw new Error(`Unknown command: ${o.command}`);
@@ -72,7 +140,7 @@ const help = `BRAD — BMAD Routing & Agent Delegation
 
 Usage:
   brad setup [--agent auto|portable|claude|codex|copilot|antigravity|all] [--dir PATH]
-  brad setup --with-bmad [--bmad-channel stable|preview] [--agent HOST] [--dir PATH]
+  brad setup --with-bmad [--bmad-channel stable|preview] [--bmad-modules <list>] [--bmad-tools <list>] [--non-interactive] [--bmad-timeout <ms>] [--agent HOST] [--dir PATH]
   brad prompt [--agent ...] [--dir PATH]   # copy instructions to your AI
   brad init [--agent ...] [--dir PATH]     # installer-only alias
   brad doctor [--dir PATH] [--json]
@@ -89,17 +157,23 @@ Options:
   --json          Output structured JSON for automation
   --yes, -y       Non-interactive acknowledgment (no hidden approvals)
   --with-bmad     Explicitly authorize upstream BMAD setup when absent
-  --bmad-channel Select latest stable (default) or v7 preview (alpha)
+  --bmad-channel  Select latest stable (default) or v7 preview (alpha)
+  --bmad-modules  Comma-separated module IDs for unattended setup (e.g. bmm,tea)
+  --bmad-tools    Comma-separated tool IDs for unattended setup (e.g. antigravity)
+  --non-interactive Run setup without terminal prompts; fails if config missing
+  --bmad-timeout  Upstream installer timeout in milliseconds (default: 180000)
 
 Examples:
   npx --yes "github:niamatmarjan/brad#v${version()}" setup
   npx --yes "github:niamatmarjan/brad#v${version()}" setup --agent claude
   npx --yes "github:niamatmarjan/brad#v${version()}" doctor
+  npx --yes "github:niamatmarjan/brad#v${version()}" setup --with-bmad --bmad-modules bmm --bmad-tools antigravity
 
 Normal BRAD setup installs only BRAD. --with-bmad explicitly runs the official
-interactive installer in this project when BMAD is absent (not an upgrade).
-V7 preview requires the installed native bmad skill to run bmad setup in the
-coding host after skill installation. Host invocation remains unverified.
+installer in this project when BMAD is absent (not an upgrade). In headless or
+non-TTY terminals, unattended stable setup requires --bmad-modules and
+--bmad-tools to prevent hanging on prompts. V7 preview requires an interactive
+terminal and host completion.
 `;
 
 function detectAgents(root) {
@@ -373,7 +447,7 @@ Host: ${host}.
 }
 function nextSteps(options, bmad, plans) {
   const messages = [];
-  if (!bmad.detected) messages.push('With explicit consent, run brad setup --with-bmad to install official BMAD Method (latest stable), or --with-bmad --bmad-channel preview (v7 alpha). The official installer handles module choices.');
+  if (!bmad.detected) messages.push('With explicit consent, run brad setup --with-bmad to install official BMAD Method (latest stable), or --with-bmad --bmad-channel preview (v7 alpha). In non-interactive/agent environments, provide --bmad-modules and --bmad-tools.');
   else if (!bmad.configured) messages.push('Ask your agent to inspect and finish the native BMAD project setup; runtime configuration was not verified.');
   messages.push('Restart or reload your coding agent if its skill catalog was cached.');
   messages.push('In your AI coding chat, ask: "Use the BRAD skill to inspect this project and preview the next ticket workflow; do not change files."');
@@ -382,29 +456,103 @@ function nextSteps(options, bmad, plans) {
   return messages;
 }
 // Plan only; native BMAD remains owned by the official upstream installer.
-function officialBmadSetupPlan(bmad, options) {
+export function officialBmadSetupPlan(bmad, options) {
   if (!options.withBmad) return null;
-  if (bmad.detected) return {
+  if (bmad?.detected) return {
     status: 'SKIPPED_EXISTING', channel: options.bmadChannel,
     command: null, args: [], explanation: 'BMAD runtime or skills already exist. Preserve and inspect the existing installation; do not reinstall or upgrade.'
   };
+
+  const terminal = detectTerminal(options);
   const stable = options.bmadChannel === 'stable';
+  const hasHeadlessConfig = Boolean(options.bmadModules && options.bmadTools);
+
+  if (!stable) {
+    if (!terminal.isTTY && !options.dryRun) {
+      return {
+        status: 'BLOCKED_NO_TTY',
+        channel: 'preview',
+        command: null,
+        args: [],
+        explanation: 'BMAD v7 preview (Skills CLI) requires an interactive terminal and cannot run unattended in a headless environment. Finish native bmad setup in your host.',
+        suggestedCommands: {
+          foreground: 'brad setup --with-bmad --bmad-channel preview'
+        }
+      };
+    }
+    return {
+      status: options.dryRun ? 'WOULD_INSTALL' : 'READY_TO_INSTALL',
+      channel: 'preview',
+      command: process.platform === 'win32' ? 'npx.cmd' : 'npx',
+      args: ['--yes', 'skills', 'add', 'bmad-code-org/BMAD-METHOD'],
+      upstreamInstaller: 'official-skills-cli-preview',
+      interactive: true,
+      authorizedByFlag: true,
+      timeout: options.bmadTimeout || 180000,
+      nextStep: 'Select host and skills in the Skills CLI; restart your coding host, invoke the native bmad skill to run bmad setup, then run bmad status.'
+    };
+  }
+
+  // Stable channel
+  // In a headless / non-interactive environment without complete headless configuration:
+  if (!terminal.isTTY && !hasHeadlessConfig && (!options.dryRun || options.nonInteractive)) {
+    const missing = [];
+    if (!options.bmadModules) missing.push('--bmad-modules <modules>');
+    if (!options.bmadTools) missing.push('--bmad-tools <tools>');
+    const fallbackTool = options.agent && options.agent !== 'auto' && KNOWN_BMAD_TOOLS.includes(options.agent)
+      ? options.agent : 'antigravity';
+    return {
+      status: 'MISSING_HEADLESS_CONFIG',
+      channel: 'stable',
+      command: null,
+      args: [],
+      missingConfig: missing,
+      explanation: `Official BMAD stable installation in a non-interactive/headless terminal requires explicit configuration to avoid hanging on terminal input. Missing: ${missing.join(', ')}.`,
+      suggestedCommands: {
+        interactive: 'brad setup --with-bmad',
+        headless: `brad setup --with-bmad --bmad-modules bmm --bmad-tools ${fallbackTool}`
+      }
+    };
+  }
+
+  // If complete headless configuration is provided:
+  if (hasHeadlessConfig) {
+    const args = [
+      '--yes', 'bmad-method@latest', 'install',
+      '--yes',
+      '--directory', '.',
+      '--modules', options.bmadModules,
+      '--tools', options.bmadTools
+    ];
+    return {
+      status: options.dryRun ? 'WOULD_INSTALL' : 'READY_TO_INSTALL',
+      channel: 'stable',
+      command: process.platform === 'win32' ? 'npx.cmd' : 'npx',
+      args,
+      upstreamInstaller: 'official-npm-stable',
+      interactive: false,
+      authorizedByFlag: true,
+      timeout: options.bmadTimeout || 180000,
+      nextStep: 'Restart your coding host and verify BMAD configuration and its actual skill catalog.'
+    };
+  }
+
+  // Default interactive stable install:
   return {
     status: options.dryRun ? 'WOULD_INSTALL' : 'READY_TO_INSTALL',
-    channel: options.bmadChannel,
+    channel: 'stable',
     command: process.platform === 'win32' ? 'npx.cmd' : 'npx',
-    args: stable ? ['--yes', 'bmad-method@latest', 'install'] :
-      ['--yes', 'skills', 'add', 'bmad-code-org/BMAD-METHOD'],
-    upstreamInstaller: stable ? 'official-npm-stable' : 'official-skills-cli-preview',
-    interactive: true, authorizedByFlag: true,
-    nextStep: stable ?
-      'Complete official v6 installer prompts. Restart your coding host and verify BMAD configuration and its actual skill catalog.' :
-      'Select host and skills in the Skills CLI; restart your coding host, invoke the native bmad skill to run bmad setup, then run bmad status.'
+    args: ['--yes', 'bmad-method@latest', 'install'],
+    upstreamInstaller: 'official-npm-stable',
+    interactive: true,
+    authorizedByFlag: true,
+    timeout: options.bmadTimeout || 180000,
+    nextStep: 'Complete official v6 installer prompts. Restart your coding host and verify BMAD configuration and its actual skill catalog.'
   };
 }
 
-export function execute(argv) {
-  const options = parse(argv);
+export function execute(argv, overrides = {}) {
+  const options = { ...parse(argv), ...overrides };
   if (options.help || options.command === 'help') return { help };
   if (options.command === 'version') return { version: version() };
   if (!isDir(options.dir) && !options.global) throw new Error(`Project directory does not exist: ${options.dir}`);
@@ -437,18 +585,98 @@ export async function main(argv) {
   let json = argv.includes('--json');
   try {
     const result = execute(argv);
+    if (result.bmadSetup?.status === 'MISSING_HEADLESS_CONFIG' && !argv.includes('--dry-run') && !argv.includes('-n')) {
+      const plan = result.bmadSetup;
+      process.stdout.write(`BRAD v${result.version} — ${result.command}\n`);
+      for (const r of result.results) process.stdout.write(`  ${r.action || r.status}: ${r.path}${r.backup ? ` (backup: ${r.backup})` : ''}\n`);
+      process.stdout.write(`  BMAD: MISSING_HEADLESS_CONFIG (${plan.channel})\n`);
+      process.stderr.write(`\nBRAD error: Missing headless BMAD configuration.\n${plan.explanation}\n\nSupported foreground command:\n  ${plan.suggestedCommands.interactive}\n\nSupported headless command:\n  ${plan.suggestedCommands.headless}\n`);
+      process.exitCode = 1;
+      return;
+    }
+    if (result.bmadSetup?.status === 'BLOCKED_NO_TTY' && !argv.includes('--dry-run') && !argv.includes('-n')) {
+      const plan = result.bmadSetup;
+      process.stdout.write(`BRAD v${result.version} — ${result.command}\n`);
+      for (const r of result.results) process.stdout.write(`  ${r.action || r.status}: ${r.path}${r.backup ? ` (backup: ${r.backup})` : ''}\n`);
+      process.stdout.write(`  BMAD: BLOCKED_NO_TTY (${plan.channel})\n`);
+      process.stderr.write(`\nBRAD error: Cannot run BMAD installer without an interactive terminal.\n${plan.explanation}\n\nSupported foreground command:\n  ${plan.suggestedCommands.foreground}\n`);
+      process.exitCode = 1;
+      return;
+    }
     if (result.bmadSetup?.status === 'READY_TO_INSTALL') {
       const plan = result.bmadSetup;
       process.stdout.write(`BRAD installed. Starting official BMAD ${plan.channel} installer in ${result.root}.\n`);
       if (plan.channel === 'preview') process.stdout.write('BMAD preview is alpha; finish native bmad setup from the coding host after skill installation.\n');
-      // Only static official tokens; cwd is passed separately, never interpolated
-      // into shell arguments. .cmd on Windows requires shell handling.
-      const run = spawnSync(plan.command, plan.args, {
-        cwd: result.root, stdio: 'inherit', shell: process.platform === 'win32'
+      
+      const timeout = plan.timeout || 180000;
+      const spawnCmd = process.platform === 'win32' ? (process.env.ComSpec || 'cmd.exe') : plan.command;
+      const spawnArgs = process.platform === 'win32' ? ['/d', '/s', '/c', plan.command, ...plan.args] : plan.args;
+      const spawnEnv = process.platform === 'win32'
+        ? { ...process.env, NoDefaultCurrentDirectoryInExePath: '1' }
+        : process.env;
+      const spawnOpts = {
+        cwd: result.root,
+        stdio: plan.interactive ? 'inherit' : ['ignore', 'inherit', 'inherit'],
+        shell: false,
+        windowsHide: true,
+        env: spawnEnv
+      };
+      
+      const run = await new Promise(resolveRun => {
+        let child;
+        try {
+          child = spawn(spawnCmd, spawnArgs, spawnOpts);
+        } catch (err) {
+          resolveRun({ error: err, status: null, signal: null, pid: null });
+          return;
+        }
+        let timedOut = false;
+        let timer = null;
+        if (timeout && timeout > 0) {
+          timer = setTimeout(() => {
+            timedOut = true;
+            if (process.platform === 'win32' && child.pid) {
+              try { execFileSync('taskkill.exe', ['/F', '/T', '/PID', String(child.pid)], { stdio: 'ignore' }); } catch {}
+            } else {
+              try { child.kill('SIGTERM'); } catch {}
+            }
+          }, timeout);
+        }
+        child.on('error', err => {
+          if (timer) clearTimeout(timer);
+          resolveRun({ error: err, status: null, signal: null, pid: child.pid });
+        });
+        child.on('close', (status, signal) => {
+          if (timer) clearTimeout(timer);
+          if (timedOut) {
+            const err = new Error('timed out');
+            err.code = 'ETIMEDOUT';
+            resolveRun({ error: err, status, signal, pid: child.pid });
+          } else {
+            resolveRun({ error: null, status, signal, pid: child.pid });
+          }
+        });
       });
-      if (run.error || run.status !== 0) {
-        throw new Error(`BRAD installed, but the official BMAD installer failed (${run.error?.message || `exit code ${run.status ?? 'unknown'}`}). See the upstream error; BRAD did not replace any existing BMAD files.`);
+      
+      if (run.error) {
+        if (run.error.code === 'ETIMEDOUT') {
+          result.bmadSetup = { ...plan, status: 'UPSTREAM_INSTALLER_TIMED_OUT', exitCode: null, timeout };
+          throw new Error(`BRAD installed, but the official BMAD installer timed out after ${timeout}ms and was terminated. BRAD did not replace any existing BMAD files.`);
+        }
+        result.bmadSetup = { ...plan, status: 'UPSTREAM_INSTALLER_FAILED', exitCode: null, error: run.error.message };
+        throw new Error(`BRAD installed, but the official BMAD installer failed (${run.error.message}). BRAD did not replace any existing BMAD files.`);
       }
+      
+      if (run.signal) {
+        result.bmadSetup = { ...plan, status: 'UPSTREAM_INSTALLER_CANCELLED', signal: run.signal, exitCode: null };
+        throw new Error(`BRAD installed, but the official BMAD installer was cancelled (${run.signal}). BRAD did not replace any existing BMAD files.`);
+      }
+      
+      if (run.status !== 0) {
+        result.bmadSetup = { ...plan, status: 'UPSTREAM_INSTALLER_FAILED', exitCode: run.status };
+        throw new Error(`BRAD installed, but the official BMAD installer failed (exit code ${run.status ?? 'unknown'}). See the upstream error; BRAD did not replace any existing BMAD files.`);
+      }
+      
       result.bmad = bmadCheck(result.root);
       result.readiness = readinessSummary(result.results, result.bmad);
       result.bmadSetup = { ...plan, status: 'UPSTREAM_INSTALLER_EXITED_SUCCESS',

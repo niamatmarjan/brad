@@ -8,7 +8,7 @@ import { spawnSync } from 'node:child_process';
 import { execute, version, packageRoot } from '../cli/core.mjs';
 const fixture = fn => {
   const dir = mkdtempSync(join(tmpdir(), 'brad-cli-test-'));
-  try { return fn(dir); } finally { rmSync(dir, { recursive: true, force: true }); }
+  try { return fn(dir); } finally { rmSync(dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 50 }); }
 };
 
 test('package and release versions match', () => assert.equal(version(), readFileSync(join(packageRoot, 'VERSION'), 'utf8').trim()));
@@ -336,14 +336,60 @@ test('BMAD setup blocks accidental installation through other commands and unkno
   assert.throws(() => execute(['doctor', '--dir', root, '--with-bmad']), /only supported with brad setup/);
   assert.throws(() => execute(['setup', '--global', '--with-bmad']), /project-local/);
   assert.throws(() => execute(['setup', '--dir', root, '--with-bmad', '--json']), /cannot use --json/);
+  assert.throws(() => execute(['setup', '--dir', root, '--bmad-modules', 'bmm']), /requires --with-bmad/);
+  assert.throws(() => execute(['setup', '--dir', root, '--bmad-tools', 'antigravity']), /requires --with-bmad/);
+  assert.throws(() => execute(['setup', '--dir', root, '--bmad-timeout', '5000']), /requires --with-bmad/);
+  assert.throws(() => execute(['setup', '--dir', root, '--with-bmad', '--bmad-channel', 'preview', '--bmad-modules', 'bmm']), /not supported with --bmad-channel preview/);
+  assert.throws(() => execute(['setup', '--dir', root, '--with-bmad', '--bmad-channel', 'preview', '--bmad-tools', 'antigravity']), /not supported with --bmad-channel preview/);
+  assert.throws(() => execute(['setup', '--dir', root, '--with-bmad', '--bmad-timeout', '-1']), /positive number/);
+  assert.throws(() => execute(['setup', '--dir', root, '--with-bmad', '--bmad-modules', 'bmm;rm -rf /']), /Invalid BMAD module list/);
+  assert.throws(() => execute(['setup', '--dir', root, '--with-bmad', '--bmad-modules', 'bmm&calc.exe']), /Invalid BMAD module list/);
+  assert.throws(() => execute(['setup', '--dir', root, '--with-bmad', '--bmad-modules', 'bmm|calc.exe']), /Invalid BMAD module list/);
+  assert.throws(() => execute(['setup', '--dir', root, '--with-bmad', '--bmad-tools', 'antigravity&calc.exe']), /Invalid BMAD tool list/);
+  assert.throws(() => execute(['setup', '--dir', root, '--with-bmad', '--bmad-tools', 'antigravity|calc.exe']), /Invalid BMAD tool list/);
+  assert.throws(() => execute(['setup', '--dir', root, '--with-bmad', '--bmad-tools', 'unsupported-tool-id']), /Unknown BMAD tool identifier/);
 }));
 
-test('BMAD setup preserves an existing runtime and never upgrades it', () => fixture(root => {
-  mkdirSync(join(root, '_bmad'), { recursive: true });
-  const r = execute(['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad']);
-  assert.equal(r.bmadSetup.status, 'SKIPPED_EXISTING');
-  assert.equal(r.bmadSetup.command, null);
-  assert.equal(r.bmad.runtime, true);
+test('BRAD --yes alone cannot silently authorize or configure upstream BMAD', () => fixture(root => {
+  const normal = execute(['setup', '--dir', root, '--agent', 'antigravity', '--yes']);
+  assert.equal(normal.bmadSetup, undefined, '--yes alone must not authorize BMAD setup');
+  const headlessNoConfig = execute(['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad', '--yes'], { isTTY: false });
+  assert.equal(headlessNoConfig.bmadSetup.status, 'MISSING_HEADLESS_CONFIG', '--yes must not invent headless configuration');
+}));
+
+test('interactive mode preserves correct official installer invocation', () => fixture(root => {
+  const r = execute(['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad'], { isTTY: true });
+  assert.equal(r.bmadSetup.status, 'READY_TO_INSTALL');
+  assert.equal(r.bmadSetup.interactive, true);
+  assert.deepEqual(r.bmadSetup.args, ['--yes', 'bmad-method@latest', 'install']);
+}));
+
+test('missing TTY with incomplete configuration exits safely without launching an interactive process', () => fixture(root => {
+  const bin = join(root, 'mock-bin');
+  mkdirSync(bin, { recursive: true });
+  const script = join(bin, process.platform === 'win32' ? 'npx.cmd' : 'npx');
+  if (process.platform === 'win32') {
+    writeFileSync(script, '@echo off\r\necho FAIL >> "%CD%\\should-not-run.txt"\r\nexit /b 0\r\n');
+  } else {
+    writeFileSync(script, '#!/bin/sh\necho FAIL >> "$PWD/should-not-run.txt"\nexit 0\n');
+    chmodSync(script, 0o755);
+  }
+  const env = { ...process.env };
+  for (const k of Object.keys(env)) if (k.toLowerCase() === 'path') delete env[k];
+  env.PATH = bin + delimiter + (process.env.PATH || process.env.Path || '');
+  const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad'];
+  const res = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
+    { env, cwd: root, encoding: 'utf8', timeout: 5000 });
+  assert.equal(res.status, 1, 'must exit with error code 1');
+  assert.match(res.stderr, /Missing headless BMAD configuration/);
+  assert.match(res.stdout, /installed/i, 'BRAD itself should still install');
+  assert.ok(!existsSync(join(root, 'should-not-run.txt')), 'must never launch external installer when headless config is missing');
+}));
+
+test('preview v7 blocks in non-interactive environment with clear instructions', () => fixture(root => {
+  const r = execute(['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad', '--bmad-channel', 'preview'], { isTTY: false });
+  assert.equal(r.bmadSetup.status, 'BLOCKED_NO_TTY');
+  assert.match(r.bmadSetup.explanation, /interactive terminal/);
 }));
 
 test('opt-in setup invokes a fake official installer exactly once and reports only verified local state', () => fixture(root => {
@@ -373,7 +419,7 @@ test('opt-in setup invokes a fake official installer exactly once and reports on
   const env = { ...process.env };
   for (const k of Object.keys(env)) if (k.toLowerCase() === 'path') delete env[k];
   env.PATH = bin + delimiter + (process.env.PATH || process.env.Path || '');
-  const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad'];
+  const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad', '--bmad-modules', 'bmm', '--bmad-tools', 'antigravity'];
   const first = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
     { env, cwd: root, encoding: 'utf8', timeout: 20000 });
   assert.equal(first.status, 0, first.stderr || first.stdout);
@@ -381,12 +427,106 @@ test('opt-in setup invokes a fake official installer exactly once and reports on
   assert.match(first.stdout, /host|skill catalog/i);
   const log = join(root, 'upstream-calls.txt');
   assert.ok(existsSync(log), 'the official installer command must actually be invoked');
-  assert.match(readFileSync(log, 'utf8'), /bmad-method@latest install/);
+  assert.match(readFileSync(log, 'utf8'), /bmad-method@latest install --yes --directory \. --modules bmm --tools antigravity/);
   const second = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
     { env, cwd: root, encoding: 'utf8', timeout: 20000 });
   assert.equal(second.status, 0, second.stderr || second.stdout);
   assert.match(second.stdout, /SKIPPED_EXISTING/);
   assert.equal(readFileSync(log, 'utf8').trim().split(/\r?\n/).length, 1, 'must never reinstall');
+}));
+
+test('simulated installer waiting indefinitely is terminated by the configured timeout', () => fixture(root => {
+  const bin = join(root, 'mock-bin');
+  mkdirSync(bin, { recursive: true });
+  const script = join(bin, process.platform === 'win32' ? 'npx.cmd' : 'npx');
+  if (process.platform === 'win32') {
+    writeFileSync(script, [
+      '@echo off',
+      'echo HANGING >> "%CD%\\timeout-invoked.txt"',
+      ':loop',
+      'goto loop',
+      ''
+    ].join('\r\n'));
+  } else {
+    writeFileSync(script, [
+      '#!/bin/sh',
+      'echo HANGING >> "$PWD/timeout-invoked.txt"',
+      'while true; do sleep 1; done',
+      ''
+    ].join('\n'));
+    chmodSync(script, 0o755);
+  }
+  const env = { ...process.env };
+  for (const k of Object.keys(env)) if (k.toLowerCase() === 'path') delete env[k];
+  env.PATH = bin + delimiter + (process.env.PATH || process.env.Path || '');
+  const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad',
+    '--bmad-modules', 'bmm', '--bmad-tools', 'antigravity', '--bmad-timeout', '500'];
+  const res = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
+    { env, cwd: root, encoding: 'utf8', timeout: 5000 });
+  assert.equal(res.status, 1);
+  assert.match(res.stderr, /timed out after 500ms and was terminated/);
+  assert.ok(existsSync(join(root, 'timeout-invoked.txt')));
+}));
+
+test('nonzero upstream exit codes are reported accurately', () => fixture(root => {
+  const bin = join(root, 'mock-bin');
+  mkdirSync(bin, { recursive: true });
+  const script = join(bin, process.platform === 'win32' ? 'npx.cmd' : 'npx');
+  if (process.platform === 'win32') {
+    writeFileSync(script, '@echo off\r\nexit /b 42\r\n');
+  } else {
+    writeFileSync(script, '#!/bin/sh\nexit 42\n');
+    chmodSync(script, 0o755);
+  }
+  const env = { ...process.env };
+  for (const k of Object.keys(env)) if (k.toLowerCase() === 'path') delete env[k];
+  env.PATH = bin + delimiter + (process.env.PATH || process.env.Path || '');
+  const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad',
+    '--bmad-modules', 'bmm', '--bmad-tools', 'antigravity'];
+  const res = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
+    { env, cwd: root, encoding: 'utf8', timeout: 10000 });
+  assert.equal(res.status, 1);
+  assert.match(res.stderr, /exit code 42/);
+}));
+
+test('Windows paths containing spaces and shell characters are handled safely by headless installer', () => fixture(temp => {
+  const root = join(temp, 'folder with spaces & (special) ^ chars');
+  mkdirSync(root, { recursive: true });
+  const bin = join(root, 'mock-bin');
+  mkdirSync(bin, { recursive: true });
+  const script = join(bin, process.platform === 'win32' ? 'npx.cmd' : 'npx');
+  if (process.platform === 'win32') {
+    writeFileSync(script, [
+      '@echo off',
+      'echo %* >> "%CD%\\upstream-calls.txt"',
+      'if not exist "%CD%\\_bmad" mkdir "%CD%\\_bmad"',
+      'echo [core] > "%CD%\\_bmad\\config.toml"',
+      'exit /b 0',
+      ''
+    ].join('\r\n'));
+  } else {
+    writeFileSync(script, [
+      '#!/bin/sh',
+      'printf "%s\\n" "$*" >> "$PWD/upstream-calls.txt"',
+      'mkdir -p "$PWD/_bmad"',
+      'printf "%s\\n" "[core]" > "$PWD/_bmad/config.toml"',
+      'exit 0',
+      ''
+    ].join('\n'));
+    chmodSync(script, 0o755);
+  }
+  const env = { ...process.env };
+  for (const k of Object.keys(env)) if (k.toLowerCase() === 'path') delete env[k];
+  env.PATH = bin + delimiter + (process.env.PATH || process.env.Path || '');
+  const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad',
+    '--bmad-modules', 'bmm,tea', '--bmad-tools', 'antigravity'];
+  const res = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
+    { env, cwd: root, encoding: 'utf8', timeout: 10000 });
+  assert.equal(res.status, 0, res.stderr || res.stdout);
+  assert.match(res.stdout, /UPSTREAM_INSTALLER_EXITED_SUCCESS/);
+  const log = join(root, 'upstream-calls.txt');
+  assert.ok(existsSync(log));
+  assert.match(readFileSync(log, 'utf8'), /--directory \. --modules bmm,tea --tools antigravity/);
 }));
 
 test('setup detects native BMAD in the Antigravity singular .agent skill folder', () => fixture(root => {

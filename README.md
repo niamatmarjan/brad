@@ -29,11 +29,24 @@ Substitute `claude`, `copilot` or `codex` for `antigravity` as appropriate, or o
 Merged into BRAD `main` after v0.5.1: **explicit** `setup --with-bmad` support. Test before adopting; do **not** assume this flag exists in the released v0.5.1 tag.
 
 ```powershell
-npx.cmd --yes "github:niamatmarjan/brad#main" setup --agent antigravity --with-bmad --dry-run --json
+# Windows PowerShell (on macOS/Linux replace npx.cmd with npx):
+# Interactive terminal:
 npx.cmd --yes "github:niamatmarjan/brad#main" setup --agent antigravity --with-bmad
+
+# Headless / non-TTY terminal (requires explicit modules and tools):
+npx.cmd --yes "github:niamatmarjan/brad#main" setup --agent antigravity --with-bmad --bmad-modules bmm --bmad-tools antigravity
+
+# Dry-run plan preview:
+npx.cmd --yes "github:niamatmarjan/brad#main" setup --agent antigravity --with-bmad --dry-run --json
 ```
 
-This path hands off to the **interactive** upstream BMAD installer. In coding-host terminals that cannot answer prompts it may wait indefinitely. Until BRAD supports a validated headless installer handoff, use the official documented BMAD CLI with supported non-interactive flags, or a foreground interactive terminal. Do not interpret `npx.cmd --yes` as consent to all upstream configuration questions. Existing installations are detected and skipped rather than upgraded automatically. An explicit `--bmad-channel preview` exists on `main`, but **preview compatibility is not verified across hosts**.
+**Headless and terminal safety:**
+- In an interactive terminal, `setup --with-bmad` invokes the official stable installer interactively.
+- In a headless or non-TTY terminal (or with `--non-interactive`), unattended setup requires explicit `--bmad-modules` (e.g. `bmm` or `bmm,tea`) and `--bmad-tools` (e.g. `antigravity`, `claude-code`, `github-copilot`, `codex`). Missing configuration exits safely with code 1 instead of waiting indefinitely.
+- Upstream installer execution is bounded by a timeout (default: 180,000 ms, configurable via `--bmad-timeout <ms>`) and process trees are cleaned up on timeout or cancellation.
+- Existing BMAD runtime or skills are detected and skipped; BRAD never silently upgrades, overwrites, or migrates BMAD.
+- `--bmad-channel preview` selects the v7 alpha Skills CLI, which requires an interactive terminal and native `bmad setup` in the coding host.
+- Upstream installer completion and `brad doctor` establish local file presence only; **neither proves native skill invocation or host registration**.
 
 See [AI-assisted setup](docs/getting-started/ai-setup.md) and [CLI reference](docs/getting-started/installation.md) for safe updates, Windows behavior and diagnostics.
 
