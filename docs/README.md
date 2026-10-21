@@ -21,7 +21,7 @@ BRAD is a thin dispatcher to **installed native BMAD workflows**. Installation, 
 - [Validation policy and limitations](evaluation/validation.md)
 - [Historical validation lab findings](evaluation/validation-report-review.md)
 - [Demo publication and privacy policy](evaluation/demo-publication.md)
-- [Concourse evaluation (BRAD v0.4.1, PARTIAL)](../examples/concourse-sdlc-lab/README.md)
+- [Examples and historical evidence](../examples/README.md)
 
 ## Maintainers and releases
 
@@ -33,4 +33,4 @@ BRAD is a thin dispatcher to **installed native BMAD workflows**. Installation, 
 
 New maintained guides use **lowercase kebab-case Markdown filenames** and live in their subject directory. Repository-level standard files such as `README.md`, `LICENSE`, `SECURITY.md`, and `AGENTS.md` retain their conventional names.
 
-A few old `docs/*.md` URLs remain as short **compatibility redirects**, so release-tagged instructions and historical report links do not break. Do not add new documentation to those redirect paths. Do not move or rewrite immutable `docs/releases/` or `examples/concourse-sdlc-lab/evaluations/brad-v0.4.1/` evidence when reorganizing docs.
+A few old `docs/*.md` URLs remain as short **compatibility redirects**, so release-tagged instructions and historical report links do not break. Do not add new documentation to those redirect paths. Do not move or rewrite immutable `docs/releases/` or historical Git commit evidence when reorganizing docs.

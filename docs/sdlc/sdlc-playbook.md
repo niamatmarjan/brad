@@ -29,4 +29,4 @@ Use `PASS`, `FAIL`, `PARTIAL`, `BLOCKED`, `UNSUPPORTED`, and `NOT_RUN` with deno
 
 ## Rehearsal status
 
-The attached Concourse example has a locally verified server-backed application, a preserved prototype and role guidance. Earlier app implementation contexts and a native help-skill probe are recorded separately; they do not establish the later independent BRAD stakeholder study. Native product/TEA workflow execution, ten independent BRAD roles, behavioral route selection, and BRAD's application-ticket-to-PR/CI lifecycle remain unverified. See the [evaluation report](../../examples/concourse-sdlc-lab/report/MASTER_REPORT.html).
+The historical v0.4.1 Concourse rehearsal (preserved in Git history; see [examples documentation](../../examples/README.md)) recorded an initial locally verified application and role guidance. Earlier app implementation contexts and a native help-skill probe are recorded separately; they do not establish the later independent BRAD stakeholder study. Native product/TEA workflow execution, ten independent BRAD roles, behavioral route selection, and BRAD's application-ticket-to-PR/CI lifecycle remain unverified.

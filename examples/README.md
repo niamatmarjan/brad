@@ -6,8 +6,10 @@ The independent [BRAD E2E lab](https://github.com/niamatmarjan/brad-e2e-lab) con
 
 ## Historical: Concourse v0.4.1 (PARTIAL)
 
-[`concourse-sdlc-lab/`](concourse-sdlc-lab/README.md) preserves a large, older partial demonstration and its evaluation trail. It is **not** a production-ready BRAD reference, a current routing-performance benchmark, or evidence of universal native agent invocation. Portions duplicate older reports and evidence files.
+The historical Concourse v0.4.1 partial demonstration and evaluation trail has been retired from the active source tree to maintain repository hygiene and eliminate duplicated files.
 
-**Retention status:** this archive is kept for provenance/privacy review under [issue #16](https://github.com/niamatmarjan/brad/issues/16), including *previously reachable commits*. Removing or moving a current file alone would not sanitize public Git history. Do not republish raw sessions or classify the archive as a current capability demo.
+Its full historical evidence, offline reports, and sanitized evaluation trail remain preserved immutably in Git history at commit [`52acd28762`](https://github.com/niamatmarjan/brad/tree/52acd287624d888257e9b5d86dcddbadca19cc56/examples/concourse-sdlc-lab) (originally introduced in commit [`edeb76d`](https://github.com/niamatmarjan/brad/commit/edeb76d0eb2ad7aff53e07a81e480d6475e7bd51)). It is **not** a production-ready reference, a current routing-performance benchmark, or evidence of universal native agent invocation.
+
+**Retention and privacy audit:** Completed under [issue #16](https://github.com/niamatmarjan/brad/issues/16). Reachable `main` history was verified clean of active secrets and developer paths; no Git history rewrite was required.
 
 New lightweight examples should live in dedicated disposable repositories; add a small summary here only after source/privacy and evidence review.
