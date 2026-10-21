@@ -15,7 +15,7 @@ REQUIRED = [
     'ROADMAP.md', 'AGENTS.md', 'README.md', 'CHANGELOG.md',
     'docs/AI_SETUP.md', 'docs/installation.md', 'docs/releasing.md',
     'docs/validation.md', 'docs/demo-publication.md',
-    'docs/testing/GPT61_SOL_MASTER_PROMPT.md', 'examples/README.md',
+    'examples/README.md',
     # Canonical topic directories in addition to legacy compatibility pages.
     'docs/README.md', 'docs/getting-started/ai-setup.md',
     'docs/getting-started/installation.md', 'docs/sdlc/README.md',

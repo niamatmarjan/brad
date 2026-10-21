@@ -1,154 +1,92 @@
 # BRAD — BMAD Routing & Agent Delegation
 
-> **Just ask BRAD.** One entry point for native BMAD workflows — from a story to a reviewed pull request.
+> **One request. The appropriate installed BMAD workflow.** A supervised, thin router for coding agents.
 
 [![CI](https://github.com/niamatmarjan/brad/actions/workflows/ci.yml/badge.svg)](https://github.com/niamatmarjan/brad/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/niamatmarjan/brad)](https://github.com/niamatmarjan/brad/releases)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-**Open-source status:** MIT-licensed, community-maintained, **supervised preview**. A legitimate fork or commercial reuse is permitted under MIT with its required notices. This is **not** an officially endorsed BMAD Method product and live native-agent/PR delivery depends on your host and permissions. See [Notices](NOTICE.md), [branding](BRANDING.md), and [security policy](SECURITY.md).
+BRAD routes requests to **official, project-installed [BMAD Method](https://github.com/bmad-code-org/BMAD-METHOD) skills**. It helps resolve existing stories, choose Build, review and TEA specialists, resume unfinished work and coordinate authorized GitHub delivery. BMAD owns the implementation workflows and project state; BRAD does not replace BMAD or run an autonomous agent service.
 
----
+**Current published release:** [v0.5.1](https://github.com/niamatmarjan/brad/releases/tag/v0.5.1). BRAD is an independent, MIT-licensed **supervised preview**, not endorsed by BMAD Method. The `main` branch contains changes **not yet in the tagged release**; see [Changelog](CHANGELOG.md).
 
-BRAD is a **thin, user-invoked wrapper** for an existing [BMAD Method](https://github.com/bmad-code-org/BMAD-METHOD) installation. It discovers the native workflows actually installed in your project, routes your request to the smallest appropriate skill or agent, preserves BMAD's lifecycle, and coordinates authorized delivery steps. It **does not replace** BMAD's PM, Architect, Build, QA, or Test Architect.
+## Quick start
 
-## Quick start — ask your AI coding assistant to install it
+In the **project where you want BRAD to work**, with Node.js 20+ and Git:
 
-**Recommended:** Copy the instruction below into Antigravity, Claude Code, GitHub Copilot, or Codex while your project is open. Your agent should inspect the project, run the install, identify any missing official BMAD prerequisites, and verify the skill.
-
-> Install BRAD in this project using the instructions in https://github.com/niamatmarjan/brad/blob/main/docs/getting-started/ai-setup.md. Use the correct host and safe versioned release. Verify with `brad doctor --json`. If native BMAD Method is missing, ask me whether to use v6.12 stable or v7 preview before installing it. Preserve existing files and don't push or deploy.
-
-See the [AI setup guide](docs/getting-started/ai-setup.md) for the full agent protocol, including Windows, permissions, preflight, and smoke tests.
-
-**Upcoming setup enhancement (not in released v0.5.1):** The opt-in `brad setup --with-bmad` flag will let users initialize official BMAD Method when it is missing, using the latest stable installer by default or the newer preview by explicit choice. See the [installation guide](docs/getting-started/installation.md).
-
-### Terminal alternative
-
-**Node.js 20+** is required for the installer. From your project root:
-
-```bash
-npx --yes "github:niamatmarjan/brad#v0.5.1" setup
+```powershell
+# Windows PowerShell; on macOS/Linux replace npx.cmd with npx
+npx.cmd --yes "github:niamatmarjan/brad#v0.5.1" setup --agent antigravity
+npx.cmd --yes "github:niamatmarjan/brad#v0.5.1" doctor --agent antigravity --json
 ```
 
-That uses the GitHub release tag and **does not require an npm registry publication**. It detects explicit project host conventions and installs the native BRAD skill in the supported location. An ordinary `.github/workflows` folder alone does not imply Copilot; an ambiguous project gets the shared portable `.agents/skills/brad` path. It never installs BMAD Method for you or silently replaces existing user-customized files.
+Substitute `claude`, `copilot` or `codex` for `antigravity` as appropriate, or omit `--agent` to detect explicit host conventions. The installer writes project-local BRAD skills only; it does **not** implicitly install BMAD. Use a compatible host that can discover Agent Skills, refresh that host after installation, and **verify its actual skill catalog**.
 
-Choose a host explicitly (useful in a fresh project):
+**Native BMAD prerequisites:** Install and configure the [official BMAD Method](https://docs.bmad-method.org/start/install-bmad/) separately when missing. If already installed, preserve that runtime, its modules and its project state. For stable BMAD the upstream installer is `npx.cmd --yes bmad-method@latest install` (Windows). Select BMM and, if needed, TEA in the official setup. Installer success and `brad doctor` establish local setup signals; **neither proves a native skill was invoked**.
 
-```bash
-npx --yes "github:niamatmarjan/brad#v0.5.1" setup --agent antigravity
-npx --yes "github:niamatmarjan/brad#v0.5.1" setup --agent claude
-npx --yes "github:niamatmarjan/brad#v0.5.1" setup --agent copilot
-npx --yes "github:niamatmarjan/brad#v0.5.1" setup --agent codex
+### Opt-in BRAD → BMAD setup on `main` (unreleased)
+
+Merged into BRAD `main` after v0.5.1: **explicit** `setup --with-bmad` support. Test before adopting; do **not** assume this flag exists in the released v0.5.1 tag.
+
+```powershell
+npx.cmd --yes "github:niamatmarjan/brad#main" setup --agent antigravity --with-bmad --dry-run --json
+npx.cmd --yes "github:niamatmarjan/brad#main" setup --agent antigravity --with-bmad
 ```
 
-To generate an instruction tailored to this project for your AI assistant:
+This path hands off to the **interactive** upstream BMAD installer. In coding-host terminals that cannot answer prompts it may wait indefinitely. Until BRAD supports a validated headless installer handoff, use the official documented BMAD CLI with supported non-interactive flags, or a foreground interactive terminal. Do not interpret `npx.cmd --yes` as consent to all upstream configuration questions. Existing installations are detected and skipped rather than upgraded automatically. An explicit `--bmad-channel preview` exists on `main`, but **preview compatibility is not verified across hosts**.
 
-```bash
-npx --yes "github:niamatmarjan/brad#v0.5.1" prompt
-```
+See [AI-assisted setup](docs/getting-started/ai-setup.md) and [CLI reference](docs/getting-started/installation.md) for safe updates, Windows behavior and diagnostics.
 
-To verify your install:
+## Use BRAD
 
-```bash
-npx --yes "github:niamatmarjan/brad#v0.5.1" doctor --json
-```
-
-The `doctor` command checks installed skill integrity, native BMAD **hints versus configured state**, prerequisites, and next actions; it does not prove native agent invocation. On Windows PowerShell, use `npx.cmd` in place of `npx` if the `.ps1` shim is blocked. Install/configure BMAD separately if needed:
-
-```bash
-npx bmad-method install
-```
-
-The BRAD CLI includes `setup`, `prompt`, `init`, `doctor`, `update`, `uninstall`, `--dry-run`, `--global`, and `--json`. Updates are safe: managed files are checked before replacement; modified/unmanaged installs require explicit `--force` and are backed up. See the [CLI installation guide](docs/getting-started/installation.md).
-
-**Prerequisites:** BMAD configured for your project before trying BRAD workflows; a coding host supporting Agent Skills; Git. Pushing PRs additionally requires an authorized remote and the host's GitHub integration/credentials.
-
-**Note:** The package is currently **GitHub-backed**, not published to npm. The shorter `npx @niamatmarjan/brad` command is not available until npm publication is configured. The GitHub spec above is the supported installer.
-
-## What happens when you ask BRAD?
+Use the actual host-supported BRAD skill interface (slash commands are illustrative and not guaranteed in every host):
 
 ```text
-/brad 1.1                     # resolve native ticket, build, review, test; PR if authorized
-/brad 1.1 --pr                # explicitly request push + PR (no automatic merge)
-/brad 1.1 --local             # do not publish remotely
-/brad --plan 1.1              # read-only routing and delivery preview
-/brad resume 1.1              # resume existing branch/PR, don't duplicate
-/brad epic 2                  # native epic flow / installed orchestrator
-/brad qa authentication      # choose the relevant QA/TEA workflow
-/brad architect review auth  # call the installed specialist, review-scoped
-/brad release R1              # evidence-based readiness; does not deploy
+/brad 1.2 --local              # resolve the existing Story 1.2, do not publish
+/brad 1.2 --pr                 # request delivery and a PR when authorized
+/brad resume 1.2 --local       # recover branch, native story state and unfinished edits
+/brad review Story 1.2        # read-only specialist review
+/brad qa Story 1.2            # choose installed QA/TEA skill, if available
+/brad --plan 1.2              # read-only routing/preflight
 ```
 
-For a development ticket, BRAD aims for **resolve → native Build → review → verify → commit → push → PR → CI evidence**, conditioned on installation capabilities and publishing authorization. Native BMAD execution owns the implementation, and human clarification/approval checkpoints remain in force. BRAD does **not** auto-merge, deploy, bypass CI, invent subagent execution, or claim that unrun tests passed.
+BRAD's default delivery lane is **resolve → choose installed native workflow → implement → verify → review → authorized PR → inspect CI**. It never grants permission to merge, deploy, overwrite unrelated work, migrate BMAD, invent a specialist, or skip required human approvals. Explicit review-only and `--plan` requests must remain non-mutating.
 
-## Validate routing with observed evidence
+## What has actually been verified?
 
-An external Antigravity lab reported 85/85 static target checks, but only 55/85
-native selection/invocation outcomes and 10 full delivery outcomes. Several
-reported selections differed from the expected native workflow (such as
-epic planning routed to `bmad-prd`, or TEA test review routed to `bmad-help`).
-These results are **report claims**, not imported agent execution logs.
+- **Automated checks:** Cross-platform CLI and helper tests exercise installer safety, host discovery hints and routing contracts. The 85 canonical routing cases are **test scenarios**, not 85 confirmed live agent invocations.
+- **Real Windows Antigravity lab:** The separate [brad-e2e-lab](https://github.com/niamatmarjan/brad-e2e-lab) completed [Story 1.1](https://github.com/niamatmarjan/brad-e2e-lab/pull/2) and a controlled two-conversation [Story 1.2 resume](https://github.com/niamatmarjan/brad-e2e-lab/pull/4). Both PRs were merged after successful real GitHub Actions: **18** and **29** passing tests respectively. Native Build/TEA workflows were **reported as followed inline**; a separate reviewer subagent was reported. These facts do **not** establish host-native BMAD dispatch, general crash recovery or performance gains.
+- **Second-host readiness:** The Copilot CLI catalog reportedly recognized the BRAD skill in a disposable clone. Authenticated Copilot execution and native TEA in a second host **remain untested**.
+- **Open release gates:** [Validation tracker](https://github.com/niamatmarjan/brad/issues/15), [setup/terminal fix](https://github.com/niamatmarjan/brad/issues/21), [second-host TEA](https://github.com/niamatmarjan/brad/issues/20), and [public evaluation history/privacy](https://github.com/niamatmarjan/brad/issues/16). **v0.5.2 has not been released**.
 
-BRAD now includes a read-only audit utility for captured observations:
+BRAD distinguishes five levels: **L1** installed skill contract; **L2** exact target resolution; **L3** selected installed skill; **L4** actual execution mode (host-native, inline, independent subagent, helper-only or unverified); **L5** observed outputs, real PR and CI. Do not turn a static check, `doctor` result or a QA score into a claim of host-native invocation.
+
+## Repository guide
+
+| Location | Purpose |
+|---|---|
+| [`skills/brad/`](skills/brad/SKILL.md) | BRAD skill contract, references, read-only helper scripts and routing test cases |
+| [`cli/`](cli/brad.mjs) | Safe project installer, `doctor`, update and uninstall |
+| [`docs/getting-started/`](docs/getting-started/README.md) | Installation and agent-assisted onboarding |
+| [`docs/evaluation/`](docs/evaluation/README.md) | Evaluation methodology and honest evidence boundaries |
+| [`docs/reference/`](docs/reference/README.md) | Architecture |
+| [`docs/maintainers/`](docs/maintainers/README.md) | Release process |
+| [`examples/`](examples/README.md) | Historical examples (**not** current performance certification) |
+
+For maintainers, run:
 
 ```bash
-python skills/brad/scripts/audit_routing_results.py --observed actual-observations.json --pretty
-```
-
-Read [routing evidence and specialist choice](skills/brad/references/routing-verification.md)
-and [evaluation methodology](skills/brad/evals/HOW_TO_EVAL.md). Keep static,
-selection, native invocation and delivered outcome metrics separate.
-
-## Compatibility and current maturity
-
-- **BMAD v6:** designed against the v6.11/v6.12 skill and sprint patterns.
-- **BMAD v7:** preview-aware route discovery; compatibility depends on *installed* v7 interfaces and must be retested as they evolve.
-- **TEA and optional modules:** used if installed and relevant, never faked.
-- **Runtime:** skill instructions, references, read-only preflight tools, and evaluation cases; **not** a standalone autonomous daemon.
-- **Maturity:** v0.5.1 is a **public preview / supervised pilot**. The included 85 routing cases are a test specification, not proof of live host behavior. Concourse v0.4.1 remains a PARTIAL baseline evaluation.
-
-## Documentation
-
-Start from the [organized documentation index](docs/README.md) for setup, SDLC/role guides, architecture, evaluation, and release processes. Legacy documentation URLs are retained as compatibility pages.
-
-## Project layout
-
-```text
-cli/brad.mjs                # npx entry point (zero dependencies)
-cli/core.mjs                # safe installer and diagnostic logic
-package.json                # GitHub npm package manifest
-skills/brad/SKILL.md         # thin dispatcher and safety contract
-skills/brad/references/      # version, tickets, QA, clarifications, host handoffs
-skills/brad/scripts/         # read-only BMAD and delivery preflight
-skills/brad/evals/           # 85 behavioral routing evaluation cases
-skills/brad/tests/           # structural and helper tests
-.github/agents/brad.agent.md # optional Copilot coordinator agent
-brad.policy.example.yaml     # optional, consented publication policy
-```
-
-Run tests without installing dependencies:
-
-```bash
+npm test
 python -m unittest discover -s skills/brad/tests -v
+python tools/check_repository.py
 python tools/build_release.py
+npm pack --dry-run --json
 ```
 
-Read [AI setup](docs/getting-started/ai-setup.md), [validation boundaries](docs/evaluation/validation-report-review.md), [architecture](docs/reference/architecture.md), [testing limitations](docs/evaluation/validation.md), [contributing](CONTRIBUTING.md), [security](SECURITY.md), and [changelog](CHANGELOG.md). Releases follow [SemVer](https://semver.org/); instructions are in [docs/maintainers/releasing.md](docs/maintainers/releasing.md).
+**The Concourse v0.4.1 artifacts are historical partial results, not the current BRAD demonstration.** The archive remains in the repository pending the public-history privacy review, including older reachable commits; no archive or Git history has been rewritten by this documentation cleanup. See [examples](examples/README.md).
 
-## Attribution
+## License and attribution
 
-The initial `v0.1.0` sources were adapted and rebranded from the **BMAD Auto v3** prototype, retaining its core behavior and scenario evaluation suite. Inspired by [BAD](https://github.com/stephenleo/bmad-autonomous-development), [auto-bmad](https://github.com/stefanoginella/auto-bmad), and [official bmad-loop](https://github.com/bmad-code-org/bmad-loop). These projects are references, not bundled dependencies. This is an independent community project and is **not affiliated with or officially endorsed by the BMAD Method maintainers**.
+[MIT License](LICENSE) · [Notices](NOTICE.md) · [Branding and non-endorsement](BRANDING.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Changelog](CHANGELOG.md).
 
-MIT licensed. Copyright © 2026 Niamat Marjan.
-
-## Open-source project and roadmap
-
-- [MIT license](LICENSE) · [Notices and attribution](NOTICE.md) · [Branding / non-endorsement](BRANDING.md)
-- [Contributing](CONTRIBUTING.md) · [Code of conduct](CODE_OF_CONDUCT.md) · [Governance](GOVERNANCE.md)
-- [Security and private disclosure](SECURITY.md) · [Support](SUPPORT.md) · [Roadmap](ROADMAP.md)
-- [Release process](docs/maintainers/releasing.md) · [Evaluation integrity](docs/evaluation/validation.md) · [Demo publication policy](docs/evaluation/demo-publication.md)
-- [GPT-6.1 Sol v0.5.0 validation prompt](docs/evaluation/prompts/gpt-6-1-sol-master-validation.md) · [Demo/example index](examples/README.md)
-
-**About source reuse:** MIT allows use and redistribution, including for commercial projects, so long as its copyright and license notice obligations are observed. BRAD contributors should disclose third-party source provenance. A separate BRANDING policy discourages confusing claims of official endorsement without altering code-license rights. No previously unregistered name or logo is claimed here to be a registered trademark.
-
-**Future demos are not yet published:** We intend to add a small, redacted example after the next independent validation run. The presence of a planned test prompt or screenshots does not mean it has been executed.
+BRAD began as an adaptation of the **BMAD Auto v3** prototype and draws inspiration from community BMAD tooling; see [NOTICE.md](NOTICE.md) for attribution. The project is independent of and not officially endorsed by BMAD Method.
