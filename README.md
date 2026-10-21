@@ -83,7 +83,7 @@ python tools/build_release.py
 npm pack --dry-run --json
 ```
 
-**The Concourse v0.4.1 artifacts are historical partial results, not the current BRAD demonstration.** The archive remains in the repository pending the public-history privacy review, including older reachable commits; no archive or Git history has been rewritten by this documentation cleanup. See [examples](examples/README.md).
+**The Concourse v0.4.1 artifacts are historical partial results, not the current BRAD demonstration.** The bulky historical demo has been retired from the active source tree and remains preserved in Git history; see [examples](examples/README.md).
 
 ## License and attribution
 

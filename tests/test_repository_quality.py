@@ -17,7 +17,15 @@ class RepositoryAuditTest(unittest.TestCase):
 
     def _copy(self, temp):
         target = Path(temp) / 'repo'
-        shutil.copytree(ROOT, target, ignore=shutil.ignore_patterns('__pycache__', 'dist', '.git', '*.pyc'))
+        shutil.copytree(
+            ROOT,
+            target,
+            ignore=shutil.ignore_patterns(
+                '__pycache__', 'dist', '.git', '*.pyc', '*.pyo',
+                'node_modules', '.venv', 'venv', 'test-results',
+                'playwright-report', '.cache', '.turbo', '.next', '.pytest_cache'
+            )
+        )
         return target
 
     def test_missing_notice_is_reported(self):
