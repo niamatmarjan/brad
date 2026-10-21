@@ -1,26 +1,22 @@
 # BRAD roadmap
 
-BRAD is a **public preview**. This is direction, not a promise or a fixed delivery schedule. Priorities follow reproducible community feedback.
+BRAD is an independent **supervised preview**, currently released as [v0.5.1](https://github.com/niamatmarjan/brad/releases/tag/v0.5.1). Plans below describe validation work, not guaranteed delivery dates.
 
-## v0.4.x — repository and release quality
+## Completed foundations
+- [x] GitHub-backed CLI, project-local Agent Skill installation, read-only diagnostics and cross-platform test matrix.
+- [x] v0.5.1 review-only/refusal routing contracts and truthful native-workflow provenance vocabulary.
+- [x] Real disposable Antigravity Story 1.1 → PR → CI and Story 1.2 controlled conversation-resume → PR → CI, with scope-limited positive evidence.
 
-- [x] Native routing regression auditor and more truthful installer diagnostics (v0.4.0).
-- [x] Contributor, security, licensing/branding, provenance and demo-publication guidance (v0.4.1).
-- [x] Repository checks and repeatable CI packaging (v0.4.1).
+## Before a v0.5.2 release
+- [ ] [#21](https://github.com/niamatmarjan/brad/issues/21) — make opt-in official BMAD installation robust for non-interactive Windows/host terminals (no background hang); keep install consent and skip-existing safety.
+- [ ] [#16](https://github.com/niamatmarjan/brad/issues/16) — review sensitive historical evaluation files and reachable commits before moving/retiring the large Concourse archive.
+- [ ] [#20](https://github.com/niamatmarjan/brad/issues/20) — authenticate and genuinely run a native TEA review in a **second coding host**, not another Antigravity fixture.
+- [ ] [#19](https://github.com/niamatmarjan/brad/issues/19) — strengthen permission/refusal and mixed-v6/v7 validation beyond read-only helper diagnostics.
+- [ ] [#15](https://github.com/niamatmarjan/brad/issues/15) — publish an evidence-based go/no-go decision. No tagged v0.5.2 release yet.
 
-## v0.5.0 candidate — live-host validation
+## Longer term
+- Reproducible actual host-dispatch evidence separated from skills merely installed or loaded inline.
+- Validate BMAD v7 only against supported *live* native interfaces.
+- Minimal, privacy-reviewed examples and stronger release integrity.
 
-- [ ] Reproduce a full fresh BRAD+BMAD onboarding session with an actual coding host, not a static simulation.
-- [ ] Evaluate native BMM, Build, TEA, code-review and optional workflows using recorded real invocation evidence.
-- [ ] Run 5–10 **independent** developer contexts where genuinely supported; disclose host limits and serialize honestly if not.
-- [ ] Exercise real, authorized branch/PR/CI lifecycle and crash-safe resumption in a dedicated demo repository.
-- [ ] Establish stage-by-stage evaluation evidence for all 85 canonical routing cases; do not inflate pass rates with static matches.
-- [ ] Publish a redacted master HTML dossier and self-contained demo only after privacy/provenance approval.
-
-## Beyond v0.5.0
-
-- [ ] Improve cross-host install verification and reproducible real workflow probes.
-- [ ] Expand v7 support only against released native interfaces.
-- [ ] Explore stronger provenance, signing, and reproducible distribution supply-chain attestations.
-
-Contribute to the roadmap through issues; see [CONTRIBUTING.md](CONTRIBUTING.md).
+BRAD remains a **thin router**; no competing BMAD state database or new autonomous agent framework is planned.

@@ -13,4 +13,4 @@ Before labeling BRAD production-ready, evaluate real routing and native workflow
 
 Known risk: model-selected workflows can be wrong, hosts may not support nested subagents, and public BMAD interfaces change. Treat current releases as preview/attended unless the relevant environment has been validated end to end.
 
-Repository policies, evidence criteria and future report publication are in [../CONTRIBUTING.md](../../CONTRIBUTING.md) and [demo-publication.md](demo-publication.md). See the v0.5.0 [test master prompt](prompts/gpt-6-1-sol-master-validation.md).
+Repository policies, evidence criteria and future report publication are in [../CONTRIBUTING.md](../../CONTRIBUTING.md) and [demo-publication.md](demo-publication.md). Refer to [BRAD's validation workstream](https://github.com/niamatmarjan/brad/issues/15) for observed, current pilot evidence.

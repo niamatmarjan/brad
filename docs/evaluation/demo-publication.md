@@ -33,4 +33,4 @@ One **self-contained, responsive** `index.html` report should include executive 
 
 An attractive HTML report **is not independent verification**: link it to raw, sanitized machine-readable records. A report must never contain invented screenshots, statistics, or green badges.
 
-The test kickoff prompt is at [testing/GPT61_SOL_MASTER_PROMPT.md](prompts/gpt-6-1-sol-master-validation.md).
+Current validation and publication gates are tracked in [issue #15](https://github.com/niamatmarjan/brad/issues/15). Do not reuse obsolete model-specific evaluation prompts as current test instructions.

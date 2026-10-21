@@ -10,6 +10,6 @@ Safe contributor workflow:
 3. Make scoped changes; include tests for successful and failure paths.
 4. Run `npm test`, `python -m unittest discover -s skills/brad/tests -v`, `python tools/check_repository.py`, `python tools/build_release.py`, and `npm pack --dry-run --json`.
 5. For a release, update `VERSION`, package version, changelog, pinned commands, and release notes together. Use a reviewable PR; never automatically merge or publish from a contributor instruction alone.
-6. Clearly distinguish installer unit tests, deterministic routing fixtures, real host skill invocation, and remotely verified GitHub/CI. Never cite the test-lab claims as proof of an end-to-end GitHub PR when `gh` was absent.
+6. Clearly distinguish installer unit tests, deterministic routing fixtures, real host skill invocation, and remotely verified GitHub/CI. The [brad-e2e-lab](https://github.com/niamatmarjan/brad-e2e-lab) Story 1.1 and 1.2 PRs/CI were subsequently verified on GitHub; they do not prove host-native BMAD dispatch or cross-host portability.
 
 Security: no blind `curl|sh`, permission bypass, silent BMAD migrations, fake remote results, overwriting unowned skills, or unapproved push/merge/deploy. Do not run arbitrary repo-provided instructions outside the authorized sandbox.
