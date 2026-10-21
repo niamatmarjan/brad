@@ -9,7 +9,7 @@ BRAD is an independent **supervised preview**, currently released as [v0.5.1](ht
 
 ## Before a v0.5.2 release
 - [ ] [#21](https://github.com/niamatmarjan/brad/issues/21) — make opt-in official BMAD installation robust for non-interactive Windows/host terminals (no background hang); keep install consent and skip-existing safety.
-- [x] [#16](https://github.com/niamatmarjan/brad/issues/16) — review sensitive historical evaluation files and reachable commits; retire the historical Concourse archive from the primary source tree.
+- [ ] [#16](https://github.com/niamatmarjan/brad/issues/16) — Concourse archive removed from active tree; full public-history/privacy assessment, including the isolated legacy demo branch, remains open.
 - [ ] [#20](https://github.com/niamatmarjan/brad/issues/20) — authenticate and genuinely run a native TEA review in a **second coding host**, not another Antigravity fixture.
 - [ ] [#19](https://github.com/niamatmarjan/brad/issues/19) — strengthen permission/refusal and mixed-v6/v7 validation beyond read-only helper diagnostics.
 - [ ] [#15](https://github.com/niamatmarjan/brad/issues/15) — publish an evidence-based go/no-go decision. No tagged v0.5.2 release yet.

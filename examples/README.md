@@ -10,6 +10,6 @@ The historical Concourse v0.4.1 partial demonstration and evaluation trail has b
 
 Its full historical evidence, offline reports, and sanitized evaluation trail remain preserved immutably in Git history at commit [`52acd28762`](https://github.com/niamatmarjan/brad/tree/52acd287624d888257e9b5d86dcddbadca19cc56/examples/concourse-sdlc-lab) (originally introduced in commit [`edeb76d`](https://github.com/niamatmarjan/brad/commit/edeb76d0eb2ad7aff53e07a81e480d6475e7bd51)). It is **not** a production-ready reference, a current routing-performance benchmark, or evidence of universal native agent invocation.
 
-**Retention and privacy audit:** Completed under [issue #16](https://github.com/niamatmarjan/brad/issues/16). Reachable `main` history was verified clean of active secrets and developer paths; no Git history rewrite was required.
+**Retention and privacy:** The cleanup is tracked under [issue #16](https://github.com/niamatmarjan/brad/issues/16), which remains open. The operator's pattern-based scan found no matching credentials or personal paths in `main` history; that is not a definitive privacy clearance. The separate unmerged historical demo branch was left untouched, with reported raw session/path exposure requiring distinct remediation review. Deleting current files does not erase reachable Git objects.
 
 New lightweight examples should live in dedicated disposable repositories; add a small summary here only after source/privacy and evidence review.
