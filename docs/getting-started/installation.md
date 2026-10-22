@@ -18,10 +18,13 @@ The `main` branch contains an unreleased feature allowing users to explicitly au
 BMAD installer as part of one BRAD command:
 
 ```sh
-# Latest official stable BMAD, only if not already installed
+# Latest official stable BMAD (interactive terminal)
 brad setup --agent antigravity --with-bmad
 
-# Newer breaking-change-prone v7 alpha preview
+# Headless / non-TTY terminal (requires explicit modules and tools)
+brad setup --agent antigravity --with-bmad --bmad-modules bmm --bmad-tools antigravity
+
+# Newer breaking-change-prone v7 alpha preview (interactive terminal only)
 brad setup --agent antigravity --with-bmad --bmad-channel preview
 
 # Dry-run: preview both BRAD and BMAD plan without writes
@@ -34,11 +37,15 @@ a new release ships, use the official native installers directly: stable
 `npx skills add bmad-code-org/BMAD-METHOD` followed by the installed
 `bmad` skill's `bmad setup` workflow.
 
-The new opt-in mode never automatically upgrades or replaces an existing
-BMAD installation. **Current limitation:** The upstream installer remains interactive and may stall if a coding host starts it in a background terminal without input capability. Prefer a foreground terminal or the official stable installer with verified non-interactive options. An upstream success exit does not prove host registration.
-For preview, refresh the coding host and complete native `bmad setup`
-to install/configure the runtime. See the
-[official BMAD guide](https://docs.bmad-method.org/start/install-bmad/).
+### Headless BMAD installer reliability
+
+In headless, background agent, or non-TTY environments (or when `--non-interactive` is passed):
+- Unattended installation requires explicit `--bmad-modules` (e.g. `bmm` or `bmm,tea`) and `--bmad-tools` (e.g. `antigravity`, `claude-code`, `github-copilot`, `codex`).
+- If headless configuration is missing, the installer safely aborts with exit code 1 instead of waiting indefinitely on prompts.
+- Installer execution is bounded by a timeout (default: 180,000 ms, configurable via `--bmad-timeout <ms>`). On timeout, the child process tree is forcefully terminated.
+- Existing BMAD runtimes (`_bmad`) or native skills are detected and skipped; BRAD never upgrades, overwrites, or migrates BMAD.
+- For preview v7 (`--bmad-channel preview`), an interactive terminal is required; headless preview attempts are blocked with clear instructions.
+- An upstream exit code of 0 confirms local file installation only; it does not prove host skill discovery or native agent execution. See the [official BMAD guide](https://docs.bmad-method.org/start/install-bmad/).
 
 ## Pick a host
 

@@ -2,13 +2,25 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, existsSync, readdirSync, rmSync, symlinkSync, lstatSync, realpathSync, chmodSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, delimiter } from 'node:path';
+import { join, delimiter, resolve } from 'node:path';
 import { parsePackMetadata } from './pack-metadata.mjs';
-import { spawnSync } from 'node:child_process';
-import { execute, version, packageRoot } from '../cli/core.mjs';
+import { spawnSync, spawn, execFileSync } from 'node:child_process';
+import { pathToFileURL } from 'node:url';
+import { execute, main, version, packageRoot, terminateProcessTree } from '../cli/core.mjs';
 const fixture = fn => {
   const dir = mkdtempSync(join(tmpdir(), 'brad-cli-test-'));
-  try { return fn(dir); } finally { rmSync(dir, { recursive: true, force: true }); }
+  const clean = () => rmSync(dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 50 });
+  try {
+    const res = fn(dir);
+    if (res && typeof res.then === 'function') {
+      return res.finally(clean);
+    }
+    clean();
+    return res;
+  } catch (err) {
+    clean();
+    throw err;
+  }
 };
 
 test('package and release versions match', () => assert.equal(version(), readFileSync(join(packageRoot, 'VERSION'), 'utf8').trim()));
@@ -336,14 +348,60 @@ test('BMAD setup blocks accidental installation through other commands and unkno
   assert.throws(() => execute(['doctor', '--dir', root, '--with-bmad']), /only supported with brad setup/);
   assert.throws(() => execute(['setup', '--global', '--with-bmad']), /project-local/);
   assert.throws(() => execute(['setup', '--dir', root, '--with-bmad', '--json']), /cannot use --json/);
+  assert.throws(() => execute(['setup', '--dir', root, '--bmad-modules', 'bmm']), /requires --with-bmad/);
+  assert.throws(() => execute(['setup', '--dir', root, '--bmad-tools', 'antigravity']), /requires --with-bmad/);
+  assert.throws(() => execute(['setup', '--dir', root, '--bmad-timeout', '5000']), /requires --with-bmad/);
+  assert.throws(() => execute(['setup', '--dir', root, '--with-bmad', '--bmad-channel', 'preview', '--bmad-modules', 'bmm']), /not supported with --bmad-channel preview/);
+  assert.throws(() => execute(['setup', '--dir', root, '--with-bmad', '--bmad-channel', 'preview', '--bmad-tools', 'antigravity']), /not supported with --bmad-channel preview/);
+  assert.throws(() => execute(['setup', '--dir', root, '--with-bmad', '--bmad-timeout', '-1']), /positive number/);
+  assert.throws(() => execute(['setup', '--dir', root, '--with-bmad', '--bmad-modules', 'bmm;rm -rf /']), /Invalid BMAD module list/);
+  assert.throws(() => execute(['setup', '--dir', root, '--with-bmad', '--bmad-modules', 'bmm&calc.exe']), /Invalid BMAD module list/);
+  assert.throws(() => execute(['setup', '--dir', root, '--with-bmad', '--bmad-modules', 'bmm|calc.exe']), /Invalid BMAD module list/);
+  assert.throws(() => execute(['setup', '--dir', root, '--with-bmad', '--bmad-tools', 'antigravity&calc.exe']), /Invalid BMAD tool list/);
+  assert.throws(() => execute(['setup', '--dir', root, '--with-bmad', '--bmad-tools', 'antigravity|calc.exe']), /Invalid BMAD tool list/);
+  assert.throws(() => execute(['setup', '--dir', root, '--with-bmad', '--bmad-tools', 'unsupported-tool-id']), /Unknown BMAD tool identifier/);
 }));
 
-test('BMAD setup preserves an existing runtime and never upgrades it', () => fixture(root => {
-  mkdirSync(join(root, '_bmad'), { recursive: true });
-  const r = execute(['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad']);
-  assert.equal(r.bmadSetup.status, 'SKIPPED_EXISTING');
-  assert.equal(r.bmadSetup.command, null);
-  assert.equal(r.bmad.runtime, true);
+test('BRAD --yes alone cannot silently authorize or configure upstream BMAD', () => fixture(root => {
+  const normal = execute(['setup', '--dir', root, '--agent', 'antigravity', '--yes']);
+  assert.equal(normal.bmadSetup, undefined, '--yes alone must not authorize BMAD setup');
+  const headlessNoConfig = execute(['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad', '--yes'], { isTTY: false });
+  assert.equal(headlessNoConfig.bmadSetup.status, 'MISSING_HEADLESS_CONFIG', '--yes must not invent headless configuration');
+}));
+
+test('interactive mode preserves correct official installer invocation', () => fixture(root => {
+  const r = execute(['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad'], { isTTY: true });
+  assert.equal(r.bmadSetup.status, 'READY_TO_INSTALL');
+  assert.equal(r.bmadSetup.interactive, true);
+  assert.deepEqual(r.bmadSetup.args, ['--yes', 'bmad-method@latest', 'install']);
+}));
+
+test('missing TTY with incomplete configuration exits safely without launching an interactive process', () => fixture(root => {
+  const bin = join(root, 'mock-bin');
+  mkdirSync(bin, { recursive: true });
+  const script = join(bin, process.platform === 'win32' ? 'npx.cmd' : 'npx');
+  if (process.platform === 'win32') {
+    writeFileSync(script, '@echo off\r\necho FAIL >> "%CD%\\should-not-run.txt"\r\nexit /b 0\r\n');
+  } else {
+    writeFileSync(script, '#!/bin/sh\necho FAIL >> "$PWD/should-not-run.txt"\nexit 0\n');
+    chmodSync(script, 0o755);
+  }
+  const env = { ...process.env };
+  for (const k of Object.keys(env)) if (k.toLowerCase() === 'path') delete env[k];
+  env.PATH = bin + delimiter + (process.env.PATH || process.env.Path || '');
+  const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad'];
+  const res = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
+    { env, cwd: root, encoding: 'utf8', timeout: 5000 });
+  assert.equal(res.status, 1, 'must exit with error code 1');
+  assert.match(res.stderr, /Missing headless BMAD configuration/);
+  assert.match(res.stdout, /installed/i, 'BRAD itself should still install');
+  assert.ok(!existsSync(join(root, 'should-not-run.txt')), 'must never launch external installer when headless config is missing');
+}));
+
+test('preview v7 blocks in non-interactive environment with clear instructions', () => fixture(root => {
+  const r = execute(['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad', '--bmad-channel', 'preview'], { isTTY: false });
+  assert.equal(r.bmadSetup.status, 'BLOCKED_NO_TTY');
+  assert.match(r.bmadSetup.explanation, /interactive terminal/);
 }));
 
 test('opt-in setup invokes a fake official installer exactly once and reports only verified local state', () => fixture(root => {
@@ -373,7 +431,7 @@ test('opt-in setup invokes a fake official installer exactly once and reports on
   const env = { ...process.env };
   for (const k of Object.keys(env)) if (k.toLowerCase() === 'path') delete env[k];
   env.PATH = bin + delimiter + (process.env.PATH || process.env.Path || '');
-  const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad'];
+  const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad', '--bmad-modules', 'bmm', '--bmad-tools', 'antigravity'];
   const first = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
     { env, cwd: root, encoding: 'utf8', timeout: 20000 });
   assert.equal(first.status, 0, first.stderr || first.stdout);
@@ -381,12 +439,345 @@ test('opt-in setup invokes a fake official installer exactly once and reports on
   assert.match(first.stdout, /host|skill catalog/i);
   const log = join(root, 'upstream-calls.txt');
   assert.ok(existsSync(log), 'the official installer command must actually be invoked');
-  assert.match(readFileSync(log, 'utf8'), /bmad-method@latest install/);
+  assert.match(readFileSync(log, 'utf8'), /bmad-method@latest install --yes --directory \. --modules bmm --tools antigravity/);
   const second = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
     { env, cwd: root, encoding: 'utf8', timeout: 20000 });
   assert.equal(second.status, 0, second.stderr || second.stdout);
   assert.match(second.stdout, /SKIPPED_EXISTING/);
   assert.equal(readFileSync(log, 'utf8').trim().split(/\r?\n/).length, 1, 'must never reinstall');
+}));
+
+test('simulated installer waiting indefinitely is terminated by the configured timeout', () => fixture(root => {
+  const bin = join(root, 'mock-bin');
+  mkdirSync(bin, { recursive: true });
+  const script = join(bin, process.platform === 'win32' ? 'npx.cmd' : 'npx');
+  if (process.platform === 'win32') {
+    writeFileSync(script, [
+      '@echo off',
+      'echo HANGING >> "%CD%\\timeout-invoked.txt"',
+      ':loop',
+      'goto loop',
+      ''
+    ].join('\r\n'));
+  } else {
+    writeFileSync(script, [
+      '#!/bin/sh',
+      'echo HANGING >> "$PWD/timeout-invoked.txt"',
+      'while true; do sleep 1; done',
+      ''
+    ].join('\n'));
+    chmodSync(script, 0o755);
+  }
+  const env = { ...process.env };
+  for (const k of Object.keys(env)) if (k.toLowerCase() === 'path') delete env[k];
+  env.PATH = bin + delimiter + (process.env.PATH || process.env.Path || '');
+  const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad',
+    '--bmad-modules', 'bmm', '--bmad-tools', 'antigravity', '--bmad-timeout', '500'];
+  const res = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
+    { env, cwd: root, encoding: 'utf8', timeout: 5000 });
+  assert.equal(res.status, 1);
+  assert.match(res.stderr, /timed out after 500ms and was terminated/);
+  assert.ok(existsSync(join(root, 'timeout-invoked.txt')));
+}));
+
+test('terminateProcessTree cleanly terminates child process and its descendants', () => fixture(async root => {
+  const child = spawn(process.execPath, ['-e', 'setInterval(()=>{}, 1000)'], {
+    stdio: 'ignore',
+    detached: process.platform !== 'win32'
+  });
+  assert.ok(child.pid > 0);
+  terminateProcessTree(child, 'SIGTERM');
+  let isAlive = true;
+  for (let i = 0; i < 50; i++) {
+    if (process.platform === 'win32') {
+      const task = spawnSync('tasklist.exe', ['/FI', 'PID eq ' + child.pid], { encoding: 'utf8' });
+      isAlive = task.stdout.includes(String(child.pid));
+    } else {
+      try {
+        process.kill(child.pid, 0);
+        isAlive = true;
+      } catch {
+        isAlive = false;
+      }
+    }
+    if (!isAlive) break;
+    await new Promise(r => setTimeout(r, 20));
+  }
+  assert.equal(isAlive, false, 'process must be dead after terminateProcessTree');
+}));
+
+test('nested installer descendant processes are terminated when timeout fires', () => fixture(async root => {
+  const bin = join(root, 'mock-bin');
+  mkdirSync(bin, { recursive: true });
+  const pidFile = join(root, 'descendant.pid');
+  const runnerScript = join(bin, 'runner.cjs');
+  writeFileSync(runnerScript, [
+    'const cp = require("child_process");',
+    'const fs = require("fs");',
+    'const child = cp.spawn(process.execPath, ["-e", "setInterval(()=>{}, 1000)"], { stdio: "ignore" });',
+    `fs.writeFileSync(${JSON.stringify(pidFile)}, String(child.pid));`,
+    'setInterval(() => {}, 1000);'
+  ].join('\n'));
+  const script = join(bin, process.platform === 'win32' ? 'npx.cmd' : 'npx');
+  if (process.platform === 'win32') {
+    writeFileSync(script, `@echo off\r\n"${process.execPath}" "${runnerScript}"\r\n`);
+  } else {
+    writeFileSync(script, `#!/bin/sh\nexec "${process.execPath}" "${runnerScript}"\n`);
+    chmodSync(script, 0o755);
+  }
+  const env = { ...process.env };
+  for (const k of Object.keys(env)) if (k.toLowerCase() === 'path') delete env[k];
+  env.PATH = bin + delimiter + (process.env.PATH || process.env.Path || '');
+  const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad',
+    '--bmad-modules', 'bmm', '--bmad-tools', 'antigravity', '--bmad-timeout', '600'];
+  const res = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
+    { env, cwd: root, encoding: 'utf8', timeout: 5000 });
+  assert.equal(res.status, 1);
+  assert.match(res.stderr, /timed out after 600ms and was terminated/);
+  assert.ok(existsSync(pidFile), 'grandchild PID file must exist');
+  const descendantPid = Number(readFileSync(pidFile, 'utf8').trim());
+  assert.ok(descendantPid > 0);
+
+  let isAlive = true;
+  for (let i = 0; i < 50; i++) {
+    if (process.platform === 'win32') {
+      const task = spawnSync('tasklist.exe', ['/FI', 'PID eq ' + descendantPid], { encoding: 'utf8' });
+      isAlive = task.stdout.includes(String(descendantPid));
+    } else {
+      try {
+        process.kill(descendantPid, 0);
+        isAlive = true;
+      } catch {
+        isAlive = false;
+      }
+    }
+    if (!isAlive) break;
+    await new Promise(r => setTimeout(r, 20));
+  }
+  assert.equal(isAlive, false, 'descendant process must not be left running after timeout');
+}));
+
+test('stubborn installer process ignoring SIGTERM is terminated by escalation', () => fixture(root => {
+  const bin = join(root, 'mock-bin');
+  mkdirSync(bin, { recursive: true });
+  const runnerScript = join(bin, 'stubborn.cjs');
+  writeFileSync(runnerScript, [
+    'process.on("SIGTERM", () => { /* ignore */ });',
+    'setInterval(() => {}, 1000);'
+  ].join('\n'));
+  const script = join(bin, process.platform === 'win32' ? 'npx.cmd' : 'npx');
+  if (process.platform === 'win32') {
+    writeFileSync(script, `@echo off\r\n"${process.execPath}" "${runnerScript}"\r\n`);
+  } else {
+    writeFileSync(script, `#!/bin/sh\nexec "${process.execPath}" "${runnerScript}"\n`);
+    chmodSync(script, 0o755);
+  }
+  const env = { ...process.env };
+  for (const k of Object.keys(env)) if (k.toLowerCase() === 'path') delete env[k];
+  env.PATH = bin + delimiter + (process.env.PATH || process.env.Path || '');
+  const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad',
+    '--bmad-modules', 'bmm', '--bmad-tools', 'antigravity', '--bmad-timeout', '400'];
+  const start = Date.now();
+  const res = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
+    { env, cwd: root, encoding: 'utf8', timeout: 5000 });
+  const elapsed = Date.now() - start;
+  assert.equal(res.status, 1);
+  assert.match(res.stderr, /timed out after 400ms and was terminated/);
+  assert.ok(elapsed < 4000, `must terminate within bounded time, took ${elapsed}ms`);
+}));
+
+test('stubborn grandchild ignoring SIGTERM is terminated by escalation when direct child exits on SIGTERM', () => fixture(async root => {
+  const bin = join(root, 'mock-bin');
+  mkdirSync(bin, { recursive: true });
+  const pidFile = join(root, 'grandchild.pid');
+
+  const grandchildScript = join(bin, 'grandchild.cjs');
+  writeFileSync(grandchildScript, [
+    'const fs = require("fs");',
+    `fs.writeFileSync(${JSON.stringify(pidFile)}, String(process.pid));`,
+    'process.on("SIGTERM", () => { /* stubbornly ignore SIGTERM */ });',
+    'setInterval(() => {}, 1000);'
+  ].join('\n'));
+
+  const directScript = join(bin, 'direct-installer.cjs');
+  writeFileSync(directScript, [
+    'const cp = require("child_process");',
+    `const grandchild = cp.spawn(process.execPath, [${JSON.stringify(grandchildScript)}], { stdio: "ignore" });`,
+    'process.on("SIGTERM", () => { process.exit(0); });',
+    'setInterval(() => {}, 1000);'
+  ].join('\n'));
+
+  const script = join(bin, process.platform === 'win32' ? 'npx.cmd' : 'npx');
+  if (process.platform === 'win32') {
+    writeFileSync(script, `@echo off\r\n"${process.execPath}" "${directScript}"\r\n`);
+  } else {
+    writeFileSync(script, `#!/bin/sh\nexec "${process.execPath}" "${directScript}"\n`);
+    chmodSync(script, 0o755);
+  }
+
+  const env = { ...process.env };
+  for (const k of Object.keys(env)) if (k.toLowerCase() === 'path') delete env[k];
+  env.PATH = bin + delimiter + (process.env.PATH || process.env.Path || '');
+  const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad',
+    '--bmad-modules', 'bmm', '--bmad-tools', 'antigravity', '--bmad-timeout', '400'];
+
+  const start = Date.now();
+  const res = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
+    { env, cwd: root, encoding: 'utf8', timeout: 8000 });
+  const elapsed = Date.now() - start;
+
+  assert.equal(res.status, 1);
+  assert.match(res.stderr, /timed out after 400ms and was terminated/);
+  assert.ok(elapsed < 6000, `must terminate within bounded escalation time, took ${elapsed}ms`);
+
+  assert.ok(existsSync(pidFile), 'grandchild must have started and written PID');
+  const grandchildPid = Number(readFileSync(pidFile, 'utf8').trim());
+  assert.ok(grandchildPid > 0);
+
+  let isAlive = true;
+  for (let i = 0; i < 50; i++) {
+    if (process.platform === 'win32') {
+      const task = spawnSync('tasklist.exe', ['/FI', 'PID eq ' + grandchildPid], { encoding: 'utf8' });
+      isAlive = task.stdout.includes(String(grandchildPid));
+    } else {
+      try {
+        process.kill(grandchildPid, 0);
+        isAlive = true;
+      } catch {
+        isAlive = false;
+      }
+    }
+    if (!isAlive) break;
+    await new Promise(r => setTimeout(r, 20));
+  }
+  assert.equal(isAlive, false, 'stubborn grandchild process must be terminated and not orphaned');
+}));
+
+test('installer execution interrupted by signal reports cancellation and cleans up child', () => fixture(async root => {
+  const bin = join(root, 'mock-bin');
+  mkdirSync(bin, { recursive: true });
+  const pidFile = join(root, 'installer.pid');
+  const runnerScript = join(bin, 'slow-installer.cjs');
+  writeFileSync(runnerScript, [
+    'const fs = require("fs");',
+    `fs.writeFileSync(${JSON.stringify(pidFile)}, String(process.pid));`,
+    'setInterval(() => {}, 1000);'
+  ].join('\n'));
+  const script = join(bin, process.platform === 'win32' ? 'npx.cmd' : 'npx');
+  if (process.platform === 'win32') {
+    writeFileSync(script, `@echo off\r\n"${process.execPath}" "${runnerScript}"\r\n`);
+  } else {
+    writeFileSync(script, `#!/bin/sh\nexec "${process.execPath}" "${runnerScript}"\n`);
+    chmodSync(script, 0o755);
+  }
+
+  const harnessScript = join(root, 'run-interrupt-harness.mjs');
+  writeFileSync(harnessScript, [
+    `import { main } from ${JSON.stringify(pathToFileURL(resolve(packageRoot, 'cli/core.mjs')).href)};`,
+    'import { existsSync } from "node:fs";',
+    `const pidFile = ${JSON.stringify(pidFile)};`,
+    `const args = ['setup', '--dir', ${JSON.stringify(root)}, '--agent', 'antigravity', '--with-bmad', '--bmad-modules', 'bmm', '--bmad-tools', 'antigravity', '--bmad-timeout', '10000'];`,
+    'const mainPromise = main(args);',
+    'for (let i = 0; i < 50; i++) {',
+    '  if (existsSync(pidFile)) break;',
+    '  await new Promise(r => setTimeout(r, 50));',
+    '}',
+    'process.emit("SIGINT");',
+    'await mainPromise;'
+  ].join('\n'));
+
+  const env = { ...process.env };
+  for (const k of Object.keys(env)) if (k.toLowerCase() === 'path') delete env[k];
+  env.PATH = bin + delimiter + (process.env.PATH || process.env.Path || '');
+
+  const res = spawnSync(process.execPath, [harnessScript], {
+    env, cwd: root, encoding: 'utf8', timeout: 10000
+  });
+
+  assert.equal(res.status, 1, 'must set exit code 1 on cancellation');
+  assert.match(res.stderr, /cancelled \(SIGINT\)/i, 'stderr must report cancellation');
+
+  assert.ok(existsSync(pidFile), 'installer must have written PID');
+  const installerPid = Number(readFileSync(pidFile, 'utf8').trim());
+
+  let isAlive = true;
+  for (let i = 0; i < 50; i++) {
+    if (process.platform === 'win32') {
+      const task = spawnSync('tasklist.exe', ['/FI', 'PID eq ' + installerPid], { encoding: 'utf8' });
+      isAlive = task.stdout.includes(String(installerPid));
+    } else {
+      try {
+        process.kill(installerPid, 0);
+        isAlive = true;
+      } catch {
+        isAlive = false;
+      }
+    }
+    if (!isAlive) break;
+    await new Promise(r => setTimeout(r, 20));
+  }
+  assert.equal(isAlive, false, 'child installer process must be terminated on interrupt');
+}));
+
+test('nonzero upstream exit codes are reported accurately', () => fixture(root => {
+  const bin = join(root, 'mock-bin');
+  mkdirSync(bin, { recursive: true });
+  const script = join(bin, process.platform === 'win32' ? 'npx.cmd' : 'npx');
+  if (process.platform === 'win32') {
+    writeFileSync(script, '@echo off\r\nexit /b 42\r\n');
+  } else {
+    writeFileSync(script, '#!/bin/sh\nexit 42\n');
+    chmodSync(script, 0o755);
+  }
+  const env = { ...process.env };
+  for (const k of Object.keys(env)) if (k.toLowerCase() === 'path') delete env[k];
+  env.PATH = bin + delimiter + (process.env.PATH || process.env.Path || '');
+  const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad',
+    '--bmad-modules', 'bmm', '--bmad-tools', 'antigravity'];
+  const res = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
+    { env, cwd: root, encoding: 'utf8', timeout: 10000 });
+  assert.equal(res.status, 1);
+  assert.match(res.stderr, /exit code 42/);
+}));
+
+test('Windows paths containing spaces and shell characters are handled safely by headless installer', () => fixture(temp => {
+  const root = join(temp, 'folder with spaces & (special) ^ chars');
+  mkdirSync(root, { recursive: true });
+  const bin = join(root, 'mock-bin');
+  mkdirSync(bin, { recursive: true });
+  const script = join(bin, process.platform === 'win32' ? 'npx.cmd' : 'npx');
+  if (process.platform === 'win32') {
+    writeFileSync(script, [
+      '@echo off',
+      'echo %* >> "%CD%\\upstream-calls.txt"',
+      'if not exist "%CD%\\_bmad" mkdir "%CD%\\_bmad"',
+      'echo [core] > "%CD%\\_bmad\\config.toml"',
+      'exit /b 0',
+      ''
+    ].join('\r\n'));
+  } else {
+    writeFileSync(script, [
+      '#!/bin/sh',
+      'printf "%s\\n" "$*" >> "$PWD/upstream-calls.txt"',
+      'mkdir -p "$PWD/_bmad"',
+      'printf "%s\\n" "[core]" > "$PWD/_bmad/config.toml"',
+      'exit 0',
+      ''
+    ].join('\n'));
+    chmodSync(script, 0o755);
+  }
+  const env = { ...process.env };
+  for (const k of Object.keys(env)) if (k.toLowerCase() === 'path') delete env[k];
+  env.PATH = bin + delimiter + (process.env.PATH || process.env.Path || '');
+  const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad',
+    '--bmad-modules', 'bmm,tea', '--bmad-tools', 'antigravity'];
+  const res = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
+    { env, cwd: root, encoding: 'utf8', timeout: 10000 });
+  assert.equal(res.status, 0, res.stderr || res.stdout);
+  assert.match(res.stdout, /UPSTREAM_INSTALLER_EXITED_SUCCESS/);
+  const log = join(root, 'upstream-calls.txt');
+  assert.ok(existsSync(log));
+  assert.match(readFileSync(log, 'utf8'), /--directory \. --modules bmm,tea --tools antigravity/);
 }));
 
 test('setup detects native BMAD in the Antigravity singular .agent skill folder', () => fixture(root => {
