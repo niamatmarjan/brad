@@ -39,6 +39,23 @@ export function detectTerminal(options = {}) {
   return { mode: 'unreliable', isTTY: false, reason: 'no-stdout-tty' };
 }
 
+export function terminateProcessTree(child, signal = 'SIGTERM') {
+  if (!child || !child.pid) return;
+  if (process.platform === 'win32') {
+    try {
+      execFileSync('taskkill.exe', ['/F', '/T', '/PID', String(child.pid)], { stdio: 'ignore' });
+    } catch {}
+  } else {
+    try {
+      process.kill(-child.pid, signal);
+    } catch {
+      try {
+        child.kill(signal);
+      } catch {}
+    }
+  }
+}
+
 export function version() {
   const pkg = JSON.parse(readFileSync(join(packageRoot, 'package.json'), 'utf8'));
   const ver = readFileSync(join(packageRoot, 'VERSION'), 'utf8').trim();
@@ -263,6 +280,22 @@ function copyNew(plan, tmp) {
   cpSync(skillRoot, tmp, { recursive: true, filter: p => !p.split(sep).includes('__pycache__') && !p.endsWith('.pyc') });
   writeFileSync(join(tmp, MARKER), JSON.stringify({ tool: 'brad', version: version(), files: sourceHashMap() }, null, 2) + '\n');
 }
+function renameWithRetry(from, to) {
+  for (let i = 0; i < 5; i++) {
+    try {
+      renameSync(from, to);
+      return;
+    } catch (err) {
+      if (process.platform === 'win32' && ['EPERM', 'EACCES', 'EBUSY'].includes(err.code) && i < 4) {
+        const deadline = Date.now() + 50;
+        while (Date.now() < deadline) {}
+        continue;
+      }
+      throw err;
+    }
+  }
+}
+
 function moveWithRollback(plan, options) {
   ensureInside(options.global ? homedir() : options.dir, plan.path);
   const before = checkExisting(plan);
@@ -280,9 +313,9 @@ function moveWithRollback(plan, options) {
   try {
     if (plan.kind === 'skill') mkdirSync(staged); // cp on an existing directory copies contents into it
     copyNew(plan, staged);
-    if (existsSync(plan.path)) { renameSync(plan.path, backup); backed = true; }
-    try { renameSync(staged, plan.path); }
-    catch (e) { if (backed && !existsSync(plan.path)) renameSync(backup, plan.path); throw e; }
+    if (existsSync(plan.path)) { renameWithRetry(plan.path, backup); backed = true; }
+    try { renameWithRetry(staged, plan.path); }
+    catch (e) { if (backed && !existsSync(plan.path)) renameWithRetry(backup, plan.path); throw e; }
     if (backed && !isConflict) rmSync(backup, { recursive: true, force: true });
     return { ...plan, action: before.status === 'absent' ? 'installed' : 'updated', ...(backed && isConflict ? { backup } : {}) };
   } finally {
@@ -619,6 +652,7 @@ export async function main(argv) {
         stdio: plan.interactive ? 'inherit' : ['ignore', 'inherit', 'inherit'],
         shell: false,
         windowsHide: true,
+        detached: process.platform !== 'win32' && !plan.interactive,
         env: spawnEnv
       };
       
@@ -630,28 +664,68 @@ export async function main(argv) {
           resolveRun({ error: err, status: null, signal: null, pid: null });
           return;
         }
+
         let timedOut = false;
+        let cancelledSignal = null;
         let timer = null;
+        let forceTimer = null;
+
+        const cancelTimers = () => {
+          if (timer) { clearTimeout(timer); timer = null; }
+          if (forceTimer) { clearTimeout(forceTimer); forceTimer = null; }
+        };
+
+        const onSignal = sig => {
+          const effectiveSignal = sig || 'SIGINT';
+          if (cancelledSignal) {
+            terminateProcessTree(child, 'SIGKILL');
+            return;
+          }
+          cancelledSignal = effectiveSignal;
+          cancelTimers();
+          terminateProcessTree(child, effectiveSignal);
+          const grace = plan.escalationGrace || Math.min(2500, Math.max(200, Math.floor(timeout / 2) || 200));
+          forceTimer = setTimeout(() => {
+            terminateProcessTree(child, 'SIGKILL');
+          }, grace);
+        };
+
+        const onSigInt = () => onSignal('SIGINT');
+        const onSigTerm = () => onSignal('SIGTERM');
+
+        process.on('SIGINT', onSigInt);
+        process.on('SIGTERM', onSigTerm);
+
+        const cleanup = () => {
+          cancelTimers();
+          process.removeListener('SIGINT', onSigInt);
+          process.removeListener('SIGTERM', onSigTerm);
+        };
+
         if (timeout && timeout > 0) {
           timer = setTimeout(() => {
             timedOut = true;
-            if (process.platform === 'win32' && child.pid) {
-              try { execFileSync('taskkill.exe', ['/F', '/T', '/PID', String(child.pid)], { stdio: 'ignore' }); } catch {}
-            } else {
-              try { child.kill('SIGTERM'); } catch {}
-            }
+            terminateProcessTree(child, 'SIGTERM');
+            const grace = plan.escalationGrace || Math.min(2500, Math.max(200, Math.floor(timeout / 2) || 200));
+            forceTimer = setTimeout(() => {
+              terminateProcessTree(child, 'SIGKILL');
+            }, grace);
           }, timeout);
         }
+
         child.on('error', err => {
-          if (timer) clearTimeout(timer);
+          cleanup();
           resolveRun({ error: err, status: null, signal: null, pid: child.pid });
         });
+
         child.on('close', (status, signal) => {
-          if (timer) clearTimeout(timer);
+          cleanup();
           if (timedOut) {
             const err = new Error('timed out');
             err.code = 'ETIMEDOUT';
             resolveRun({ error: err, status, signal, pid: child.pid });
+          } else if (cancelledSignal) {
+            resolveRun({ error: null, status, signal: signal || cancelledSignal, pid: child.pid });
           } else {
             resolveRun({ error: null, status, signal, pid: child.pid });
           }

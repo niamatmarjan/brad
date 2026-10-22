@@ -4,11 +4,22 @@ import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, existsSync, readdi
 import { tmpdir } from 'node:os';
 import { join, delimiter } from 'node:path';
 import { parsePackMetadata } from './pack-metadata.mjs';
-import { spawnSync } from 'node:child_process';
-import { execute, version, packageRoot } from '../cli/core.mjs';
+import { spawnSync, spawn, execFileSync } from 'node:child_process';
+import { execute, main, version, packageRoot, terminateProcessTree } from '../cli/core.mjs';
 const fixture = fn => {
   const dir = mkdtempSync(join(tmpdir(), 'brad-cli-test-'));
-  try { return fn(dir); } finally { rmSync(dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 50 }); }
+  const clean = () => rmSync(dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 50 });
+  try {
+    const res = fn(dir);
+    if (res && typeof res.then === 'function') {
+      return res.finally(clean);
+    }
+    clean();
+    return res;
+  } catch (err) {
+    clean();
+    throw err;
+  }
 };
 
 test('package and release versions match', () => assert.equal(version(), readFileSync(join(packageRoot, 'VERSION'), 'utf8').trim()));
@@ -466,6 +477,189 @@ test('simulated installer waiting indefinitely is terminated by the configured t
   assert.equal(res.status, 1);
   assert.match(res.stderr, /timed out after 500ms and was terminated/);
   assert.ok(existsSync(join(root, 'timeout-invoked.txt')));
+}));
+
+test('terminateProcessTree cleanly terminates child process and its descendants', () => fixture(root => {
+  const child = spawn(process.execPath, ['-e', 'setInterval(()=>{}, 1000)'], {
+    stdio: 'ignore',
+    detached: process.platform !== 'win32'
+  });
+  assert.ok(child.pid > 0);
+  terminateProcessTree(child, 'SIGTERM');
+  let isAlive = false;
+  if (process.platform === 'win32') {
+    const task = spawnSync('tasklist.exe', ['/FI', 'PID eq ' + child.pid], { encoding: 'utf8' });
+    isAlive = task.stdout.includes(String(child.pid));
+  } else {
+    try {
+      process.kill(child.pid, 0);
+      isAlive = true;
+    } catch {
+      isAlive = false;
+    }
+  }
+  assert.equal(isAlive, false, 'process must be dead after terminateProcessTree');
+}));
+
+test('nested installer descendant processes are terminated when timeout fires', () => fixture(root => {
+  const bin = join(root, 'mock-bin');
+  mkdirSync(bin, { recursive: true });
+  const pidFile = join(root, 'descendant.pid');
+  const runnerScript = join(bin, 'runner.cjs');
+  writeFileSync(runnerScript, [
+    'const cp = require("child_process");',
+    'const fs = require("fs");',
+    'const child = cp.spawn(process.execPath, ["-e", "setInterval(()=>{}, 1000)"], { stdio: "ignore" });',
+    `fs.writeFileSync(${JSON.stringify(pidFile)}, String(child.pid));`,
+    'setInterval(() => {}, 1000);'
+  ].join('\n'));
+  const script = join(bin, process.platform === 'win32' ? 'npx.cmd' : 'npx');
+  if (process.platform === 'win32') {
+    writeFileSync(script, `@echo off\r\n"${process.execPath}" "${runnerScript}"\r\n`);
+  } else {
+    writeFileSync(script, `#!/bin/sh\nexec "${process.execPath}" "${runnerScript}"\n`);
+    chmodSync(script, 0o755);
+  }
+  const env = { ...process.env };
+  for (const k of Object.keys(env)) if (k.toLowerCase() === 'path') delete env[k];
+  env.PATH = bin + delimiter + (process.env.PATH || process.env.Path || '');
+  const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad',
+    '--bmad-modules', 'bmm', '--bmad-tools', 'antigravity', '--bmad-timeout', '600'];
+  const res = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
+    { env, cwd: root, encoding: 'utf8', timeout: 5000 });
+  assert.equal(res.status, 1);
+  assert.match(res.stderr, /timed out after 600ms and was terminated/);
+  assert.ok(existsSync(pidFile), 'grandchild PID file must exist');
+  const descendantPid = Number(readFileSync(pidFile, 'utf8').trim());
+  assert.ok(descendantPid > 0);
+
+  let isAlive = false;
+  if (process.platform === 'win32') {
+    const task = spawnSync('tasklist.exe', ['/FI', 'PID eq ' + descendantPid], { encoding: 'utf8' });
+    isAlive = task.stdout.includes(String(descendantPid));
+  } else {
+    try {
+      process.kill(descendantPid, 0);
+      isAlive = true;
+    } catch {
+      isAlive = false;
+    }
+  }
+  assert.equal(isAlive, false, 'descendant process must not be left running after timeout');
+}));
+
+test('stubborn installer process ignoring SIGTERM is terminated by escalation', () => fixture(root => {
+  const bin = join(root, 'mock-bin');
+  mkdirSync(bin, { recursive: true });
+  const runnerScript = join(bin, 'stubborn.cjs');
+  writeFileSync(runnerScript, [
+    'process.on("SIGTERM", () => { /* ignore */ });',
+    'setInterval(() => {}, 1000);'
+  ].join('\n'));
+  const script = join(bin, process.platform === 'win32' ? 'npx.cmd' : 'npx');
+  if (process.platform === 'win32') {
+    writeFileSync(script, `@echo off\r\n"${process.execPath}" "${runnerScript}"\r\n`);
+  } else {
+    writeFileSync(script, `#!/bin/sh\nexec "${process.execPath}" "${runnerScript}"\n`);
+    chmodSync(script, 0o755);
+  }
+  const env = { ...process.env };
+  for (const k of Object.keys(env)) if (k.toLowerCase() === 'path') delete env[k];
+  env.PATH = bin + delimiter + (process.env.PATH || process.env.Path || '');
+  const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad',
+    '--bmad-modules', 'bmm', '--bmad-tools', 'antigravity', '--bmad-timeout', '400'];
+  const start = Date.now();
+  const res = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
+    { env, cwd: root, encoding: 'utf8', timeout: 5000 });
+  const elapsed = Date.now() - start;
+  assert.equal(res.status, 1);
+  assert.match(res.stderr, /timed out after 400ms and was terminated/);
+  assert.ok(elapsed < 4000, `must terminate within bounded time, took ${elapsed}ms`);
+}));
+
+test('installer execution interrupted by signal reports cancellation and cleans up child', () => fixture(async root => {
+  const bin = join(root, 'mock-bin');
+  mkdirSync(bin, { recursive: true });
+  const pidFile = join(root, 'installer.pid');
+  const runnerScript = join(bin, 'slow-installer.cjs');
+  writeFileSync(runnerScript, [
+    'const fs = require("fs");',
+    `fs.writeFileSync(${JSON.stringify(pidFile)}, String(process.pid));`,
+    'setInterval(() => {}, 1000);'
+  ].join('\n'));
+  const script = join(bin, process.platform === 'win32' ? 'npx.cmd' : 'npx');
+  if (process.platform === 'win32') {
+    writeFileSync(script, `@echo off\r\n"${process.execPath}" "${runnerScript}"\r\n`);
+  } else {
+    writeFileSync(script, `#!/bin/sh\nexec "${process.execPath}" "${runnerScript}"\n`);
+    chmodSync(script, 0o755);
+  }
+  const savedEnv = { ...process.env };
+  const currentPath = process.env.PATH || process.env.Path || '';
+  for (const k of Object.keys(process.env)) {
+    if (k.toLowerCase() === 'path') delete process.env[k];
+  }
+  process.env.PATH = bin + delimiter + currentPath;
+
+  const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad',
+    '--bmad-modules', 'bmm', '--bmad-tools', 'antigravity', '--bmad-timeout', '10000'];
+
+  const origStderr = process.stderr.write;
+  const origExitCode = process.exitCode;
+  let stderr = '';
+  process.stderr.write = (chunk, ...rest) => {
+    stderr += chunk;
+    return true;
+  };
+
+  let installerPid = null;
+  try {
+    const mainPromise = main(args);
+
+    for (let i = 0; i < 50; i++) {
+      if (existsSync(pidFile)) {
+        installerPid = Number(readFileSync(pidFile, 'utf8').trim());
+        break;
+      }
+      await new Promise(r => setTimeout(r, 50));
+    }
+    assert.ok(installerPid, 'installer must have started and written PID');
+
+    process.emit('SIGINT');
+
+    await mainPromise;
+
+    assert.equal(process.exitCode, 1, 'must set exit code 1 on cancellation');
+    assert.match(stderr, /cancelled \(SIGINT\)/i, 'stderr must report cancellation');
+
+    let isAlive = false;
+    if (process.platform === 'win32') {
+      const task = spawnSync('tasklist.exe', ['/FI', 'PID eq ' + installerPid], { encoding: 'utf8' });
+      isAlive = task.stdout.includes(String(installerPid));
+    } else {
+      try {
+        process.kill(installerPid, 0);
+        isAlive = true;
+      } catch {
+        isAlive = false;
+      }
+    }
+    assert.equal(isAlive, false, 'child installer process must be terminated on interrupt');
+  } finally {
+    process.stderr.write = origStderr;
+    process.exitCode = origExitCode;
+    for (const k of Object.keys(process.env)) {
+      if (k.toLowerCase() === 'path') delete process.env[k];
+    }
+    Object.assign(process.env, savedEnv);
+    if (installerPid) {
+      if (process.platform === 'win32') {
+        try { execFileSync('taskkill.exe', ['/F', '/T', '/PID', String(installerPid)], { stdio: 'ignore' }); } catch {}
+      } else {
+        try { process.kill(-installerPid, 'SIGKILL'); } catch { try { process.kill(installerPid, 'SIGKILL'); } catch {} }
+      }
+    }
+  }
 }));
 
 test('nonzero upstream exit codes are reported accurately', () => fixture(root => {
