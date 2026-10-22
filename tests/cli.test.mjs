@@ -586,6 +586,73 @@ test('stubborn installer process ignoring SIGTERM is terminated by escalation', 
   assert.ok(elapsed < 4000, `must terminate within bounded time, took ${elapsed}ms`);
 }));
 
+test('stubborn grandchild ignoring SIGTERM is terminated by escalation when direct child exits on SIGTERM', () => fixture(async root => {
+  const bin = join(root, 'mock-bin');
+  mkdirSync(bin, { recursive: true });
+  const pidFile = join(root, 'grandchild.pid');
+
+  const grandchildScript = join(bin, 'grandchild.cjs');
+  writeFileSync(grandchildScript, [
+    'const fs = require("fs");',
+    `fs.writeFileSync(${JSON.stringify(pidFile)}, String(process.pid));`,
+    'process.on("SIGTERM", () => { /* stubbornly ignore SIGTERM */ });',
+    'setInterval(() => {}, 1000);'
+  ].join('\n'));
+
+  const directScript = join(bin, 'direct-installer.cjs');
+  writeFileSync(directScript, [
+    'const cp = require("child_process");',
+    `const grandchild = cp.spawn(process.execPath, [${JSON.stringify(grandchildScript)}], { stdio: "ignore" });`,
+    'process.on("SIGTERM", () => { process.exit(0); });',
+    'setInterval(() => {}, 1000);'
+  ].join('\n'));
+
+  const script = join(bin, process.platform === 'win32' ? 'npx.cmd' : 'npx');
+  if (process.platform === 'win32') {
+    writeFileSync(script, `@echo off\r\n"${process.execPath}" "${directScript}"\r\n`);
+  } else {
+    writeFileSync(script, `#!/bin/sh\nexec "${process.execPath}" "${directScript}"\n`);
+    chmodSync(script, 0o755);
+  }
+
+  const env = { ...process.env };
+  for (const k of Object.keys(env)) if (k.toLowerCase() === 'path') delete env[k];
+  env.PATH = bin + delimiter + (process.env.PATH || process.env.Path || '');
+  const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad',
+    '--bmad-modules', 'bmm', '--bmad-tools', 'antigravity', '--bmad-timeout', '400'];
+
+  const start = Date.now();
+  const res = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
+    { env, cwd: root, encoding: 'utf8', timeout: 8000 });
+  const elapsed = Date.now() - start;
+
+  assert.equal(res.status, 1);
+  assert.match(res.stderr, /timed out after 400ms and was terminated/);
+  assert.ok(elapsed < 6000, `must terminate within bounded escalation time, took ${elapsed}ms`);
+
+  assert.ok(existsSync(pidFile), 'grandchild must have started and written PID');
+  const grandchildPid = Number(readFileSync(pidFile, 'utf8').trim());
+  assert.ok(grandchildPid > 0);
+
+  let isAlive = true;
+  for (let i = 0; i < 50; i++) {
+    if (process.platform === 'win32') {
+      const task = spawnSync('tasklist.exe', ['/FI', 'PID eq ' + grandchildPid], { encoding: 'utf8' });
+      isAlive = task.stdout.includes(String(grandchildPid));
+    } else {
+      try {
+        process.kill(grandchildPid, 0);
+        isAlive = true;
+      } catch {
+        isAlive = false;
+      }
+    }
+    if (!isAlive) break;
+    await new Promise(r => setTimeout(r, 20));
+  }
+  assert.equal(isAlive, false, 'stubborn grandchild process must be terminated and not orphaned');
+}));
+
 test('installer execution interrupted by signal reports cancellation and cleans up child', () => fixture(async root => {
   const bin = join(root, 'mock-bin');
   mkdirSync(bin, { recursive: true });

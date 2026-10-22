@@ -280,22 +280,6 @@ function copyNew(plan, tmp) {
   cpSync(skillRoot, tmp, { recursive: true, filter: p => !p.split(sep).includes('__pycache__') && !p.endsWith('.pyc') });
   writeFileSync(join(tmp, MARKER), JSON.stringify({ tool: 'brad', version: version(), files: sourceHashMap() }, null, 2) + '\n');
 }
-function renameWithRetry(from, to) {
-  for (let i = 0; i < 5; i++) {
-    try {
-      renameSync(from, to);
-      return;
-    } catch (err) {
-      if (process.platform === 'win32' && ['EPERM', 'EACCES', 'EBUSY'].includes(err.code) && i < 4) {
-        const deadline = Date.now() + 50;
-        while (Date.now() < deadline) {}
-        continue;
-      }
-      throw err;
-    }
-  }
-}
-
 function moveWithRollback(plan, options) {
   ensureInside(options.global ? homedir() : options.dir, plan.path);
   const before = checkExisting(plan);
@@ -313,9 +297,9 @@ function moveWithRollback(plan, options) {
   try {
     if (plan.kind === 'skill') mkdirSync(staged); // cp on an existing directory copies contents into it
     copyNew(plan, staged);
-    if (existsSync(plan.path)) { renameWithRetry(plan.path, backup); backed = true; }
-    try { renameWithRetry(staged, plan.path); }
-    catch (e) { if (backed && !existsSync(plan.path)) renameWithRetry(backup, plan.path); throw e; }
+    if (existsSync(plan.path)) { renameSync(plan.path, backup); backed = true; }
+    try { renameSync(staged, plan.path); }
+    catch (e) { if (backed && !existsSync(plan.path)) renameSync(backup, plan.path); throw e; }
     if (backed && !isConflict) rmSync(backup, { recursive: true, force: true });
     return { ...plan, action: before.status === 'absent' ? 'installed' : 'updated', ...(backed && isConflict ? { backup } : {}) };
   } finally {
@@ -669,6 +653,7 @@ export async function main(argv) {
         let cancelledSignal = null;
         let timer = null;
         let forceTimer = null;
+        let terminationDeadline = null;
 
         const cancelTimers = () => {
           if (timer) { clearTimeout(timer); timer = null; }
@@ -685,6 +670,7 @@ export async function main(argv) {
           cancelTimers();
           terminateProcessTree(child, effectiveSignal);
           const grace = plan.escalationGrace || Math.min(2500, Math.max(200, Math.floor(timeout / 2) || 200));
+          terminationDeadline = Date.now() + grace;
           forceTimer = setTimeout(() => {
             terminateProcessTree(child, 'SIGKILL');
           }, grace);
@@ -707,6 +693,7 @@ export async function main(argv) {
             timedOut = true;
             terminateProcessTree(child, 'SIGTERM');
             const grace = plan.escalationGrace || Math.min(2500, Math.max(200, Math.floor(timeout / 2) || 200));
+            terminationDeadline = Date.now() + grace;
             forceTimer = setTimeout(() => {
               terminateProcessTree(child, 'SIGKILL');
             }, grace);
@@ -718,7 +705,48 @@ export async function main(argv) {
           resolveRun({ error: err, status: null, signal: null, pid: child.pid });
         });
 
-        child.on('close', (status, signal) => {
+        child.on('close', async (status, signal) => {
+          const terminationInitiated = timedOut || cancelledSignal;
+          const graceRemaining = terminationDeadline ? Math.max(0, terminationDeadline - Date.now()) : 0;
+          cancelTimers();
+
+          if (terminationInitiated && process.platform !== 'win32' && child.pid) {
+            let isGroupAlive = false;
+            try {
+              process.kill(-child.pid, 0);
+              isGroupAlive = true;
+            } catch {
+              isGroupAlive = false;
+            }
+
+            if (isGroupAlive) {
+              if (graceRemaining > 0) {
+                const start = Date.now();
+                while (Date.now() - start < graceRemaining) {
+                  try {
+                    process.kill(-child.pid, 0);
+                    await new Promise(r => setTimeout(r, 20));
+                  } catch {
+                    isGroupAlive = false;
+                    break;
+                  }
+                }
+              }
+
+              if (isGroupAlive) {
+                try { process.kill(-child.pid, 'SIGKILL'); } catch {}
+                for (let i = 0; i < 20; i++) {
+                  try {
+                    process.kill(-child.pid, 0);
+                    await new Promise(r => setTimeout(r, 50));
+                  } catch {
+                    break;
+                  }
+                }
+              }
+            }
+          }
+
           cleanup();
           if (timedOut) {
             const err = new Error('timed out');
