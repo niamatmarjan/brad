@@ -2,9 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, existsSync, readdirSync, rmSync, symlinkSync, lstatSync, realpathSync, chmodSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, delimiter } from 'node:path';
+import { join, delimiter, resolve } from 'node:path';
 import { parsePackMetadata } from './pack-metadata.mjs';
 import { spawnSync, spawn, execFileSync } from 'node:child_process';
+import { pathToFileURL } from 'node:url';
 import { execute, main, version, packageRoot, terminateProcessTree } from '../cli/core.mjs';
 const fixture = fn => {
   const dir = mkdtempSync(join(tmpdir(), 'brad-cli-test-'));
@@ -479,29 +480,33 @@ test('simulated installer waiting indefinitely is terminated by the configured t
   assert.ok(existsSync(join(root, 'timeout-invoked.txt')));
 }));
 
-test('terminateProcessTree cleanly terminates child process and its descendants', () => fixture(root => {
+test('terminateProcessTree cleanly terminates child process and its descendants', () => fixture(async root => {
   const child = spawn(process.execPath, ['-e', 'setInterval(()=>{}, 1000)'], {
     stdio: 'ignore',
     detached: process.platform !== 'win32'
   });
   assert.ok(child.pid > 0);
   terminateProcessTree(child, 'SIGTERM');
-  let isAlive = false;
-  if (process.platform === 'win32') {
-    const task = spawnSync('tasklist.exe', ['/FI', 'PID eq ' + child.pid], { encoding: 'utf8' });
-    isAlive = task.stdout.includes(String(child.pid));
-  } else {
-    try {
-      process.kill(child.pid, 0);
-      isAlive = true;
-    } catch {
-      isAlive = false;
+  let isAlive = true;
+  for (let i = 0; i < 50; i++) {
+    if (process.platform === 'win32') {
+      const task = spawnSync('tasklist.exe', ['/FI', 'PID eq ' + child.pid], { encoding: 'utf8' });
+      isAlive = task.stdout.includes(String(child.pid));
+    } else {
+      try {
+        process.kill(child.pid, 0);
+        isAlive = true;
+      } catch {
+        isAlive = false;
+      }
     }
+    if (!isAlive) break;
+    await new Promise(r => setTimeout(r, 20));
   }
   assert.equal(isAlive, false, 'process must be dead after terminateProcessTree');
 }));
 
-test('nested installer descendant processes are terminated when timeout fires', () => fixture(root => {
+test('nested installer descendant processes are terminated when timeout fires', () => fixture(async root => {
   const bin = join(root, 'mock-bin');
   mkdirSync(bin, { recursive: true });
   const pidFile = join(root, 'descendant.pid');
@@ -533,17 +538,21 @@ test('nested installer descendant processes are terminated when timeout fires', 
   const descendantPid = Number(readFileSync(pidFile, 'utf8').trim());
   assert.ok(descendantPid > 0);
 
-  let isAlive = false;
-  if (process.platform === 'win32') {
-    const task = spawnSync('tasklist.exe', ['/FI', 'PID eq ' + descendantPid], { encoding: 'utf8' });
-    isAlive = task.stdout.includes(String(descendantPid));
-  } else {
-    try {
-      process.kill(descendantPid, 0);
-      isAlive = true;
-    } catch {
-      isAlive = false;
+  let isAlive = true;
+  for (let i = 0; i < 50; i++) {
+    if (process.platform === 'win32') {
+      const task = spawnSync('tasklist.exe', ['/FI', 'PID eq ' + descendantPid], { encoding: 'utf8' });
+      isAlive = task.stdout.includes(String(descendantPid));
+    } else {
+      try {
+        process.kill(descendantPid, 0);
+        isAlive = true;
+      } catch {
+        isAlive = false;
+      }
     }
+    if (!isAlive) break;
+    await new Promise(r => setTimeout(r, 20));
   }
   assert.equal(isAlive, false, 'descendant process must not be left running after timeout');
 }));
@@ -594,45 +603,38 @@ test('installer execution interrupted by signal reports cancellation and cleans 
     writeFileSync(script, `#!/bin/sh\nexec "${process.execPath}" "${runnerScript}"\n`);
     chmodSync(script, 0o755);
   }
-  const savedEnv = { ...process.env };
-  const currentPath = process.env.PATH || process.env.Path || '';
-  for (const k of Object.keys(process.env)) {
-    if (k.toLowerCase() === 'path') delete process.env[k];
-  }
-  process.env.PATH = bin + delimiter + currentPath;
 
-  const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad',
-    '--bmad-modules', 'bmm', '--bmad-tools', 'antigravity', '--bmad-timeout', '10000'];
+  const harnessScript = join(root, 'run-interrupt-harness.mjs');
+  writeFileSync(harnessScript, [
+    `import { main } from ${JSON.stringify(pathToFileURL(resolve(packageRoot, 'cli/core.mjs')).href)};`,
+    'import { existsSync } from "node:fs";',
+    `const pidFile = ${JSON.stringify(pidFile)};`,
+    `const args = ['setup', '--dir', ${JSON.stringify(root)}, '--agent', 'antigravity', '--with-bmad', '--bmad-modules', 'bmm', '--bmad-tools', 'antigravity', '--bmad-timeout', '10000'];`,
+    'const mainPromise = main(args);',
+    'for (let i = 0; i < 50; i++) {',
+    '  if (existsSync(pidFile)) break;',
+    '  await new Promise(r => setTimeout(r, 50));',
+    '}',
+    'process.emit("SIGINT");',
+    'await mainPromise;'
+  ].join('\n'));
 
-  const origStderr = process.stderr.write;
-  const origExitCode = process.exitCode;
-  let stderr = '';
-  process.stderr.write = (chunk, ...rest) => {
-    stderr += chunk;
-    return true;
-  };
+  const env = { ...process.env };
+  for (const k of Object.keys(env)) if (k.toLowerCase() === 'path') delete env[k];
+  env.PATH = bin + delimiter + (process.env.PATH || process.env.Path || '');
 
-  let installerPid = null;
-  try {
-    const mainPromise = main(args);
+  const res = spawnSync(process.execPath, [harnessScript], {
+    env, cwd: root, encoding: 'utf8', timeout: 10000
+  });
 
-    for (let i = 0; i < 50; i++) {
-      if (existsSync(pidFile)) {
-        installerPid = Number(readFileSync(pidFile, 'utf8').trim());
-        break;
-      }
-      await new Promise(r => setTimeout(r, 50));
-    }
-    assert.ok(installerPid, 'installer must have started and written PID');
+  assert.equal(res.status, 1, 'must set exit code 1 on cancellation');
+  assert.match(res.stderr, /cancelled \(SIGINT\)/i, 'stderr must report cancellation');
 
-    process.emit('SIGINT');
+  assert.ok(existsSync(pidFile), 'installer must have written PID');
+  const installerPid = Number(readFileSync(pidFile, 'utf8').trim());
 
-    await mainPromise;
-
-    assert.equal(process.exitCode, 1, 'must set exit code 1 on cancellation');
-    assert.match(stderr, /cancelled \(SIGINT\)/i, 'stderr must report cancellation');
-
-    let isAlive = false;
+  let isAlive = true;
+  for (let i = 0; i < 50; i++) {
     if (process.platform === 'win32') {
       const task = spawnSync('tasklist.exe', ['/FI', 'PID eq ' + installerPid], { encoding: 'utf8' });
       isAlive = task.stdout.includes(String(installerPid));
@@ -644,22 +646,10 @@ test('installer execution interrupted by signal reports cancellation and cleans 
         isAlive = false;
       }
     }
-    assert.equal(isAlive, false, 'child installer process must be terminated on interrupt');
-  } finally {
-    process.stderr.write = origStderr;
-    process.exitCode = origExitCode;
-    for (const k of Object.keys(process.env)) {
-      if (k.toLowerCase() === 'path') delete process.env[k];
-    }
-    Object.assign(process.env, savedEnv);
-    if (installerPid) {
-      if (process.platform === 'win32') {
-        try { execFileSync('taskkill.exe', ['/F', '/T', '/PID', String(installerPid)], { stdio: 'ignore' }); } catch {}
-      } else {
-        try { process.kill(-installerPid, 'SIGKILL'); } catch { try { process.kill(installerPid, 'SIGKILL'); } catch {} }
-      }
-    }
+    if (!isAlive) break;
+    await new Promise(r => setTimeout(r, 20));
   }
+  assert.equal(isAlive, false, 'child installer process must be terminated on interrupt');
 }));
 
 test('nonzero upstream exit codes are reported accurately', () => fixture(root => {
