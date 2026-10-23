@@ -47,6 +47,8 @@ In headless, background agent, or non-TTY environments (or when `--non-interacti
 - For preview v7 (`--bmad-channel preview`), an interactive terminal is required; headless preview attempts are blocked with clear instructions.
 - An upstream exit code of 0 confirms local file installation only; it does not prove host skill discovery or native agent execution. See the [official BMAD guide](https://docs.bmad-method.org/start/install-bmad/).
 
+**Native BMAD Build dependency note:** In an observed Windows Claude Code pilot, the installed `bmad-build` workflow used `uv` to render its instructions. Verify `uv --version` if the **selected official native workflow** requires it. A missing `uv` should be reported as a native workflow prerequisite, not misdiagnosed as a failed BRAD CLI installation; never change global tooling without approval.
+
 ## Pick a host
 
 ```bash
