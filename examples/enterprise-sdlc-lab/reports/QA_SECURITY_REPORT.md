@@ -87,9 +87,21 @@ Total Tests: 21 | Passed: 21 (100.0%) | Failed: 0 | Execution Time: 2.65 s
 
 ---
 
-## 4. Web Accessibility Audit (WCAG 2.1 AA)
-The dashboard frontend (`apps/web/public/`) was audited against WCAG 2.1 AA guidelines:
+## 4. Web Accessibility Audit (WCAG 2.1 AA Structural Verification)
+The dashboard frontend (`apps/web/public/`) was audited using an automated structural landmark and DOM attribute test suite (`a11y.test.mjs`):
 1. **Semantic Landmarks**: `<header>`, `<main>`, `<section>`, `<table>`, and `<footer>` provide a clean landmark hierarchy for assistive technologies.
 2. **Form Controls & Labels**: Every `<select>` control has an associated `<label for="...">`.
 3. **Screen Reader Live Region**: An active `aria-live="polite"` element (`#live-announcer`) announces dynamic queue state changes and audit verification results.
 4. **Color Contrast & Indicators**: Status badges combine distinct foreground/background CSS colors with explicit text labels (`DRAFT`, `APPROVED`, `REJECTED`, `ESCALATED`) so information is never conveyed by color alone.
+
+> [!NOTE]
+> **Scope Clarification**: The accessibility verification conducted in this lab represents automated programmatic verification of HTML landmarks, ARIA attributes, and DOM structures. It does not replace a comprehensive human accessibility evaluation using physical screen readers (e.g. JAWS, NVDA, VoiceOver) across diverse browser environments.
+
+---
+
+## 5. Synthetic Lab Fixtures & Production Deployment Scope
+
+The AegisFlow Enterprise application was designed as an authentic reference project for battle-testing BRAD orchestration. Certain components are intentionally configured as self-contained synthetic fixtures:
+- **Authentication**: Tenant identity and user context are derived from HTTP headers (`X-Tenant-ID`, `X-User-ID`) in `auth.mjs`. In a live enterprise deployment, these headers must be validated and stripped by an authenticating reverse proxy or API gateway (JWT/mTLS).
+- **Storage Driver**: Evaluated against `MemoryDriver` for zero-dependency execution. Production persistence requires migrating the abstract `StorageDriver` interface to PostgreSQL or MongoDB with ACID transactions.
+

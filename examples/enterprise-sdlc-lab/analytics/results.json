@@ -1,168 +1,129 @@
 {
-  "benchmark": "BRAD Operation Ironclad Enterprise SDLC Battle-Hardening",
-  "baseline_version": "BRAD v0.5.3 (commit 477d64e)",
+  "benchmark_suite": "BRAD Enterprise SDLC 120-Case Adversarial Benchmark",
+  "eval_type": "LIVE_HOST_EXECUTION",
+  "baseline_version": "BRAD v0.5.3 (commit 62e66a4)",
+  "oracle_sha256": "3da3ee5a2ab62b2cc7555320b01d074a9f5bf00dd63a62381ea2499b92e2963f",
   "host_platform": "Google Antigravity (Windows x64)",
   "native_bmad_primary": "BMAD Method v6.12 (BMM + TEA modules)",
   "native_bmad_preview": "BMAD v7 Preview (Isolated Workspace)",
-  "timestamp": "2026-10-23T20:46:23Z",
-  "executive_verdict": "CONDITIONAL GO \u2014 Supervised Production Pilot",
-  "verdict_rationale": "100% routing accuracy on 120 adversarial prompts; 100% critical authorization & tenant-isolation attack prevention; 21/21 application tests pass; honest evidence classification enforced.",
+  "executive_verdict": "PARTIALLY READY \u2014 Supervised Pilot Only",
+  "verdict_rationale": "100% security gate enforcement (10/10) and 21/21 application tests pass. However, live unassisted routing accuracy is 50.0% with 27 human checkpoint requests and 33 misroutes. Safe for supervised developer pilots; unapproved for autonomous headless mode.",
   "routing": {
     "total_cases": 120,
-    "passed": 120,
-    "failed": 0,
-    "pass_rate_pct": 100.0,
-    "refusal_compliance_pct": 100.0,
-    "ambiguity_handling_pct": 100.0,
+    "passed": 60,
+    "failed": 33,
+    "blocked": 0,
+    "review_required": 27,
+    "pass_rate_pct": 50.0,
+    "security_refusal_pct": 100.0,
     "categories": {
       "R01": {
         "total": 10,
-        "pass": 10,
-        "fail": 0
+        "pass": 7,
+        "fail": 2,
+        "blocked": 0,
+        "review": 1
       },
       "R02": {
         "total": 10,
-        "pass": 10,
-        "fail": 0
+        "pass": 6,
+        "fail": 4,
+        "blocked": 0,
+        "review": 0
       },
       "R03": {
         "total": 10,
-        "pass": 10,
-        "fail": 0
+        "pass": 4,
+        "fail": 5,
+        "blocked": 0,
+        "review": 1
       },
       "R04": {
         "total": 10,
-        "pass": 10,
-        "fail": 0
+        "pass": 7,
+        "fail": 3,
+        "blocked": 0,
+        "review": 0
       },
       "R05": {
         "total": 10,
-        "pass": 10,
-        "fail": 0
+        "pass": 4,
+        "fail": 5,
+        "blocked": 0,
+        "review": 1
       },
       "R06": {
         "total": 10,
-        "pass": 10,
-        "fail": 0
+        "pass": 4,
+        "fail": 4,
+        "blocked": 0,
+        "review": 2
       },
       "R07": {
         "total": 10,
-        "pass": 10,
-        "fail": 0
+        "pass": 5,
+        "fail": 3,
+        "blocked": 0,
+        "review": 2
       },
       "R08": {
         "total": 10,
-        "pass": 10,
-        "fail": 0
+        "pass": 4,
+        "fail": 3,
+        "blocked": 0,
+        "review": 3
       },
       "R09": {
         "total": 10,
-        "pass": 10,
-        "fail": 0
+        "pass": 7,
+        "fail": 2,
+        "blocked": 0,
+        "review": 1
       },
       "R10": {
         "total": 10,
         "pass": 10,
-        "fail": 0
+        "fail": 0,
+        "blocked": 0,
+        "review": 0
       },
       "R11": {
         "total": 10,
-        "pass": 10,
-        "fail": 0
+        "pass": 2,
+        "fail": 2,
+        "blocked": 0,
+        "review": 6
       },
       "R12": {
         "total": 10,
-        "pass": 10,
-        "fail": 0
-      }
-    },
-    "stakeholders": {
-      "Maya Chen (PM)": {
-        "total": 13,
-        "pass": 13,
-        "fail": 0
-      },
-      "Aisha Rahman (BA)": {
-        "total": 10,
-        "pass": 10,
-        "fail": 0
-      },
-      "Sofia Patel (BA)": {
-        "total": 4,
-        "pass": 4,
-        "fail": 0
-      },
-      "Marcus Lee (Architect)": {
-        "total": 8,
-        "pass": 8,
-        "fail": 0
-      },
-      "Ethan Brooks (TechLead)": {
-        "total": 10,
-        "pass": 10,
-        "fail": 0
-      },
-      "Priya Shah (BackendDev)": {
-        "total": 16,
-        "pass": 16,
-        "fail": 0
-      },
-      "Elena Garcia (FullstackDev)": {
-        "total": 8,
-        "pass": 8,
-        "fail": 0
-      },
-      "Noah Kim (FrontendDev)": {
-        "total": 2,
-        "pass": 2,
-        "fail": 0
-      },
-      "Olivia Bennett (FunctionalQA)": {
-        "total": 9,
-        "pass": 9,
-        "fail": 0
-      },
-      "Ravi Perera (AutomationQA)": {
-        "total": 7,
-        "pass": 7,
-        "fail": 0
-      },
-      "Daniel Reed (PO)": {
-        "total": 10,
-        "pass": 10,
-        "fail": 0
-      },
-      "Isabel Torres (Security)": {
-        "total": 1,
-        "pass": 1,
-        "fail": 0
-      },
-      "Grace Wilson (DeliveryMgr)": {
-        "total": 13,
-        "pass": 13,
-        "fail": 0
-      },
-      "Lucas Martin (DevOps)": {
-        "total": 8,
-        "pass": 8,
-        "fail": 0
-      },
-      "Untrusted Fixture (Injection)": {
-        "total": 1,
-        "pass": 1,
-        "fail": 0
+        "pass": 0,
+        "fail": 0,
+        "blocked": 0,
+        "review": 10
       }
     }
+  },
+  "multiagent_experiments": {
+    "total": 8,
+    "passed": 8,
+    "failed": 0
   },
   "application_quality": {
     "unit_tests": 13,
     "api_lifecycle_tests": 4,
     "security_penetration_tests": 2,
     "concurrency_stress_tests": 1,
-    "accessibility_tests": 1,
+    "accessibility_structural_tests": 1,
     "total_passed": 21,
     "total_failed": 0,
     "pass_rate_pct": 100.0,
-    "duration_ms": 2213
+    "duration_ms": 2186
+  },
+  "comparison_baseline": {
+    "mode": "STATIC_RULE_SIMULATION",
+    "passed": 120,
+    "total": 120,
+    "pass_rate_pct": 100.0,
+    "note": "Preserved historical heuristic simulation baseline"
   }
 }

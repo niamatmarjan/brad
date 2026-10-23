@@ -102,5 +102,17 @@ $$\text{RecordHash}_n = \text{SHA-256}\Big(\text{Sequence}_n \,\|\, \text{Timest
 | **P95 API Latency** | $< 45\text{ms}$ under 50 concurrent virtual clients | Automated local load test harness |
 | **Tenant Boundary Leakage** | **Zero tolerance (0%)** | Adversarial cross-tenant penetration suite |
 | **Audit Ledger Verification** | $100\%$ chain integrity validation | Automated tamper-injection suite |
-| **UI Accessibility** | WCAG 2.1 AA Compliance | Keyboard navigation, ARIA labels, semantic markup |
+| **UI Accessibility** | WCAG 2.1 AA Structural Gate | Keyboard navigation, ARIA landmarks, semantic markup test |
 | **Recovery from Interruption** | Zero data loss, clean restart from preserved state | Simulated process kill & restart tests |
+
+---
+
+## 7. Demonstration Scope & Production Migration Guide
+
+### 7.1 Demonstration Harness vs Production Boundary
+To enable deterministic, zero-dependency local execution across diverse CI environments and host platforms, AegisFlow Enterprise incorporates explicit architectural boundaries:
+
+1. **Authentication & Tenant Identification**: In this benchmark fixture, tenant identity and actor roles are passed via HTTP headers (`X-Tenant-ID`, `X-User-ID`, `X-User-Role`). These headers are synthetic test-harness fixtures. In production deployments, identity assertion must be performed via cryptographically signed JWT/OIDC identity tokens validated against enterprise identity providers (Okta, Azure AD, Keycloak) or mTLS gateway context.
+2. **Persistence Layer**: The reference implementation runs an in-memory `ScopedTenantRepository` with optimistic concurrency locking (`version` sequence check). Data is ephemeral per process run. Production deployment requires swapping the storage driver to a durable relational database (PostgreSQL with Row-Level Security, Cloud Spanner) implementing the same `ScopedTenantRepository` interface.
+3. **Accessibility Scope**: Automated tests verify semantic landmark tags, form accessibility attributes, and table labeling. Full WCAG 2.1 AA compliance in enterprise production requires periodic manual screen-reader (JAWS, NVDA, VoiceOver) audits and dynamic color-contrast audits across customized corporate themes.
+

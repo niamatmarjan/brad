@@ -17,6 +17,7 @@
 | **DEF-04** | **MEDIUM** | Architecture / Auth | `@aegisflow/api` | API middleware trusts untrusted client-supplied headers without upstream mTLS/JWT | **DOCUMENTED (Advisory)** |
 | **DEF-05** | **LOW** | Test Harness | API Test Helpers | Test mock `req` object did not implement full Node.js async iterable stream contract | **RESOLVED** |
 | **DEF-06** | **LOW** | Cryptographic Ledger | `@aegisflow/core` | Tail-truncation vulnerability if attacker possesses direct database write access | **DOCUMENTED (Advisory)** |
+| **DEF-07** | **HIGH** | Benchmark Integrity | `harness/runner` | Phase 1 benchmark runner used regex keyword matching and canned returns rather than live host execution | **RESOLVED (Phase 2)** |
 
 ---
 
@@ -77,3 +78,14 @@
 ### DEF-06: Cryptographic Audit Ledger Tail-Truncation
 - **Observation**: If an attacker with direct database write permissions deletes the last $k$ records from the ledger, the prefix records $1 \dots N-k$ remain valid.
 - **Mitigation for Production**: Periodically anchor the ledger's `headHash` to an external append-only log, digital notary, or HSM to provide external sequence proof.
+
+### DEF-07: Phase 1 Synthetic Benchmark Integrity Flaw
+- **Discovery**: An independent audit (GitHub Issue #39) revealed that the initial Phase 1 benchmark runners (`run_benchmark.py`, `run_multiagent_experiments.py`) used regex-based heuristic classification and hardcoded mock returns rather than executing live BRAD skills or spawning real subagents.
+- **Root Cause**: Premature optimization of evaluation speed resulted in evaluating regex patterns rather than live host agent decisions.
+- **Remediation**:
+  1. Cryptographically froze and verified the oracle (`oracle-freeze.json` SHA-256: `3da3ee5a...`).
+  2. Implemented blind live host runner (`run_live_host_benchmark.py`) dispatching prompts without oracle hints to the installed BRAD skill in Google Antigravity across clean workspaces.
+  3. Implemented independent scoring process (`score_benchmark.py`) revealing authentic 50.0% unassisted routing precision and 22.5% safe operator escalations.
+  4. Upgraded `run_multiagent_experiments.py` to execute real Git branches, merge conflicts, dirty worktree interruptions, and disk-verified subagent sessions.
+- **Verification**: Transparent dual-score reporting across all documentation and interactive analytics dashboard.
+
