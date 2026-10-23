@@ -33,4 +33,4 @@ One **self-contained, responsive** `index.html` report should include executive 
 
 An attractive HTML report **is not independent verification**: link it to raw, sanitized machine-readable records. A report must never contain invented screenshots, statistics, or green badges.
 
-Current validation and publication gates are tracked in [issue #15](https://github.com/niamatmarjan/brad/issues/15). Do not reuse obsolete model-specific evaluation prompts as current test instructions.
+The v0.5.2 validation/release decision is preserved in **closed** [issue #15](https://github.com/niamatmarjan/brad/issues/15). Future host/v7 readiness must be separately verified in [#32](https://github.com/niamatmarjan/brad/issues/32) and [#33](https://github.com/niamatmarjan/brad/issues/33). Do not reuse obsolete model-specific evaluation prompts as current test instructions.
