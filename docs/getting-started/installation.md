@@ -1,10 +1,10 @@
-# Install BRAD v0.5.3 — release candidate, not published
+# Install BRAD v0.5.3
 
 ## Quick install (Node.js 20+)
 
 **Preferred:** Have your coding agent follow [AI setup](ai-setup.md) and install BRAD for you. This guide remains for direct CLI users.
 
-The **v0.5.3 GitHub tag does not exist yet**; commands below are prospective. Until publication use the tagged [v0.5.2 release](https://github.com/niamatmarjan/brad/releases/tag/v0.5.2). The earlier [v0.5.1 tag](https://github.com/niamatmarjan/brad/releases/tag/v0.5.1) lacks the opt-in official BMAD setup flags.
+Use the published [v0.5.3 GitHub release](https://github.com/niamatmarjan/brad/releases/tag/v0.5.3) for the commands below. The earlier [v0.5.1](https://github.com/niamatmarjan/brad/releases/tag/v0.5.1) lacked the opt-in official BMAD setup flags.
 
 In a project that already uses BMAD Method:
 
