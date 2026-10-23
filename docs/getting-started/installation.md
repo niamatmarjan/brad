@@ -1,12 +1,12 @@
-# Install BRAD v0.5.2 — release candidate (not published)
+# Install BRAD v0.5.2
 
 ## Quick install (Node.js 20+)
 
 **Preferred:** Have your coding agent follow [AI setup](ai-setup.md) and install BRAD for you. This guide remains for direct CLI users.
 
-**Candidate note:** the v0.5.2 tag does **not** exist yet. Commands below are **prospective** for the approved release, not currently executable. For present use, install [v0.5.1](https://github.com/niamatmarjan/brad/releases/tag/v0.5.1).
+Use the tagged [v0.5.2 release](https://github.com/niamatmarjan/brad/releases/tag/v0.5.2) for the commands below. The earlier [v0.5.1 tag](https://github.com/niamatmarjan/brad/releases/tag/v0.5.1) lacks the opt-in official BMAD setup flags.
 
-In a project that already uses BMAD Method (after the new tag is published):
+In a project that already uses BMAD Method:
 
 ```bash
 npx --yes "github:niamatmarjan/brad#v0.5.2" setup
@@ -14,10 +14,10 @@ npx --yes "github:niamatmarjan/brad#v0.5.2" setup
 
 This command installs BRAD's **native agent skill**, not BMAD Method itself. You can run `npx bmad-method install` to install/configure BMAD separately. The CLI requires `git` and network access on first npx invocation because npm retrieves the GitHub package. It has no third-party runtime dependencies.
 
-## Optional native BMAD initialization (included in the 0.5.2 candidate)
+## Optional native BMAD initialization (v0.5.2)
 
-The 0.5.2 candidate includes an opt-in feature allowing users to explicitly authorize the **official**
-BMAD installer as part of one BRAD command. The following examples require the prospective release to exist:
+v0.5.2 includes an opt-in feature allowing users to explicitly authorize the **official**
+BMAD installer as part of one BRAD command:
 
 ```sh
 # Latest official stable BMAD (interactive terminal)
@@ -33,8 +33,7 @@ brad setup --agent antigravity --with-bmad --bmad-channel preview
 brad setup --agent antigravity --with-bmad --dry-run --json
 ```
 
-**These flags are NOT available in the published v0.5.1 binary.** Until
-v0.5.2 is explicitly released, use the official native installers directly: stable
+**These flags are NOT available in v0.5.1.** If not using BRAD's opt-in setup, you can instead use the official native installer directly: stable
 `npx bmad-method install`, or preview
 `npx skills add bmad-code-org/BMAD-METHOD` followed by the installed
 `bmad` skill's `bmad setup` workflow.
