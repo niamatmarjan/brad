@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.5.3] - Unreleased (isolated release candidate; do not publish)
+
+### Fixed
+- Correct the **read-only** `inspect_bmad.py` skill inventory for Google Antigravity's official BMAD v6 native `.agent/skills` directory and project `.codex/skills` installations. The v0.5.2 inspector could mistakenly report no native BMAD skills when `brad doctor` correctly found 39.
+- Add Python regressions for singular/plural native skill roots, duplicated names, TEA module hints, and conservative preview-v7 detection. Version hints remain **not proof** of native host invocation.
+
+### Verification / limitations
+- [Antigravity acceptance of fix PR #35](https://github.com/niamatmarjan/brad/pull/35) observed 39 v6.12.4 BMM/TEA skills through the corrected inspector; the released v0.5.2 inspector saw zero. Operator's fixed-source Python tests were 28/28 PASS. [GitHub CI 40006077565](https://github.com/niamatmarjan/brad/actions/runs/40006077565) passed 8/8 verification jobs.
+- Native BMAD **v7 remains preview alpha**, and the separate Windows fixture reported a `bmad-retrospective` upstream YAML parse error plus transient upstream setup `WinError 5`. These were not corrected by BRAD.
+- Copilot CLI skill-list discovery was reported, but **Codex execution was NOT_RUN** (binary absent) and **Claude Code v0.5.2 live execution was BLOCKED** (not authenticated). Antigravity Build/QA were executed **inline**, not independently proven native Skill-tool dispatch for each task. BRAD remains a supervised router, not universal automation.
+
+**Release-stage only:** `VERSION=0.5.3` and matching pinned onboarding links are staged **on the isolated release-candidate branch only**. The latest published version is [v0.5.2](https://github.com/niamatmarjan/brad/releases/tag/v0.5.2). The v0.5.3 tag, checksum assets and GitHub Release do **not** exist, and must not be created until explicitly authorized.
+
 All notable changes will be documented here. Versions follow [Semantic Versioning](https://semver.org/); releases before 1.0 are preview.
 
 ## [0.5.2] - 2026-10-23
