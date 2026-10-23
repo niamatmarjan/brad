@@ -32,6 +32,7 @@ test('nested official installer does not inherit outer npm exec package selectio
   assert.equal(result.npm_config_registry, input.npm_config_registry);
   assert.equal(result.CUSTOM_VAR, 'preserve');
   assert.equal(input.npm_config_package, 'brad-0.5.2.tgz', 'must not modify process or caller environment');
+  assert.equal(input.NPM_CONFIG_PACKAGE, 'also-outer', 'case-insensitive package metadata must remain in caller environment');
   if (process.platform === 'win32') assert.equal(result.NoDefaultCurrentDirectoryInExePath, '1');
 });
 
