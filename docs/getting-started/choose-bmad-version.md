@@ -1,6 +1,6 @@
 # Choose BMAD v6.12 stable or v7 preview
 
-**Candidate-stage note:** the `#v0.5.3` installation examples below refer to an **unpublished** candidate. The current public release remains [v0.5.2](https://github.com/niamatmarjan/brad/releases/tag/v0.5.2). Do not run the v0.5.3 commands until it is published.
+The examples below use the published [BRAD v0.5.3](https://github.com/niamatmarjan/brad/releases/tag/v0.5.3). BMAD stable v6.12 and preview v7 follow separate upstream setup paths; do not migrate an existing project without approval.
 
 BRAD is the **router**; official BMAD is the **workflow engine**. The installations and their permissions are separate. Select the native runtime already used by the project; BRAD never silently migrates `_bmad` state.
 
