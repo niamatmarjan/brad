@@ -280,6 +280,20 @@ function copyNew(plan, tmp) {
   cpSync(skillRoot, tmp, { recursive: true, filter: p => !p.split(sep).includes('__pycache__') && !p.endsWith('.pyc') });
   writeFileSync(join(tmp, MARKER), JSON.stringify({ tool: 'brad', version: version(), files: sourceHashMap() }, null, 2) + '\n');
 }
+// Windows can briefly retain a handle to freshly copied directories (e.g. while
+// security software scans files). Retry only known transient rename failures;
+// preserve the original error after a bounded number of attempts.
+const renameWait = new Int32Array(new SharedArrayBuffer(4));
+export function renameWithRetry(from, to, operation = renameSync) {
+  for (let attempt = 0; ; attempt++) {
+    try { return operation(from, to); }
+    catch (error) {
+      if (process.platform !== 'win32' || !['EPERM', 'EACCES', 'EBUSY'].includes(error?.code) || attempt >= 5) throw error;
+      Atomics.wait(renameWait, 0, 0, (attempt + 1) * 50);
+    }
+  }
+}
+
 function moveWithRollback(plan, options) {
   ensureInside(options.global ? homedir() : options.dir, plan.path);
   const before = checkExisting(plan);
@@ -297,9 +311,9 @@ function moveWithRollback(plan, options) {
   try {
     if (plan.kind === 'skill') mkdirSync(staged); // cp on an existing directory copies contents into it
     copyNew(plan, staged);
-    if (existsSync(plan.path)) { renameSync(plan.path, backup); backed = true; }
-    try { renameSync(staged, plan.path); }
-    catch (e) { if (backed && !existsSync(plan.path)) renameSync(backup, plan.path); throw e; }
+    if (existsSync(plan.path)) { renameWithRetry(plan.path, backup); backed = true; }
+    try { renameWithRetry(staged, plan.path); }
+    catch (e) { if (backed && !existsSync(plan.path)) renameWithRetry(backup, plan.path); throw e; }
     if (backed && !isConflict) rmSync(backup, { recursive: true, force: true });
     return { ...plan, action: before.status === 'absent' ? 'installed' : 'updated', ...(backed && isConflict ? { backup } : {}) };
   } finally {
@@ -315,7 +329,7 @@ function uninstall(plan, options) {
   if (['modified', 'unmanaged'].includes(before.status) && !options.force) throw new Error(`Cannot remove modified/unmanaged path without --force: ${plan.path}`);
   if (options.dryRun) return { ...plan, action: 'would-uninstall' };
   const backup = join(dirname(plan.path), `.brad-uninstall-backup-${randomUUID()}`);
-  if (['modified', 'unmanaged'].includes(before.status)) { renameSync(plan.path, backup); return { ...plan, action: 'backed-up', backup }; }
+  if (['modified', 'unmanaged'].includes(before.status)) { renameWithRetry(plan.path, backup); return { ...plan, action: 'backed-up', backup }; }
   rmSync(plan.path, { recursive: true, force: true });
   return { ...plan, action: 'uninstalled' };
 }
@@ -598,6 +612,20 @@ export function execute(argv, overrides = {}) {
     nextSteps: bmad ? nextSteps(options, bmad, plans) : [],
     readiness: readinessSummary(results, bmad), executionVerified: false };
 }
+// An outer "npm exec --package <brad-tarball>" sets npm_config_package.
+// Passing that flag into the nested official BMAD npx invocation makes npx
+// attempt to run BMAD from BRAD's package instead of fetching bmad-method.
+// Strip only this outer command's package-selection hint, without altering the
+// parent process environment or other npm/user configuration.
+export function upstreamInstallerEnvironment(parentEnv = process.env) {
+  const clean = { ...parentEnv };
+  for (const key of Object.keys(clean)) {
+    if (key.toLowerCase() === 'npm_config_package') delete clean[key];
+  }
+  if (process.platform === 'win32') clean.NoDefaultCurrentDirectoryInExePath = '1';
+  return clean;
+}
+
 export async function main(argv) {
   let json = argv.includes('--json');
   try {
@@ -628,9 +656,7 @@ export async function main(argv) {
       const timeout = plan.timeout || 180000;
       const spawnCmd = process.platform === 'win32' ? (process.env.ComSpec || 'cmd.exe') : plan.command;
       const spawnArgs = process.platform === 'win32' ? ['/d', '/s', '/c', plan.command, ...plan.args] : plan.args;
-      const spawnEnv = process.platform === 'win32'
-        ? { ...process.env, NoDefaultCurrentDirectoryInExePath: '1' }
-        : process.env;
+      const spawnEnv = upstreamInstallerEnvironment();
       const spawnOpts = {
         cwd: result.root,
         stdio: plan.interactive ? 'inherit' : ['ignore', 'inherit', 'inherit'],
