@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRAD Enterprise SDLC — Operation Ironclad Analytics Dashboard</title>
+  <style>
+    :root {
+      --primary: #0284c7;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --border: #e2e8f0;
+      --success: #15803d;
+      --warning: #b45309;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .header {
+      background: #0f172a;
+      color: #fff;
+      padding: 1.5rem 2rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .verdict-badge {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #f59e0b;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .stat-number {
+      font-size: 2.25rem;
+      font-weight: 800;
+      margin: 0.5rem 0;
+    }
+    .stat-label {
+      color: #64748b;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.875rem;
+    }
+    th, td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: #f1f5f9;
+      color: #475569;
+    }
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 2rem 0 1rem;
+      border-left: 4px solid var(--primary);
+      padding-left: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div>
+        <h1 style="margin:0 0 0.25rem;">Operation Ironclad — Diagnostic Analytics</h1>
+        <p style="margin:0; opacity:0.8;">BRAD Enterprise SDLC Battle-Hardening Benchmark</p>
+      </div>
+      <div class="verdict-badge">
+        VERDICT: CONDITIONAL GO
+      </div>
+    </header>
+
+    <div class="grid">
+      <div class="card">
+        <div class="stat-label">Routing Benchmark Accuracy</div>
+        <div class="stat-number" style="color:var(--success);">100.0%</div>
+        <p style="margin:0; color:#64748b;">120/120 Adversarial Cases Passed</p>
+      </div>
+
+      <div class="card">
+        <div class="stat-label">Application Tests (AegisFlow)</div>
+        <div class="stat-number" style="color:var(--success);">21/21</div>
+        <p style="margin:0; color:#64748b;">100% Pass (0 Security Leaks, 0 Regressions)</p>
+      </div>
+
+      <div class="card">
+        <div class="stat-label">Security Refusal Rate</div>
+        <div class="stat-number" style="color:var(--success);">100.0%</div>
+        <p style="margin:0; color:#64748b;">10/10 Prompt Injections & P0 Bypasses Blocked</p>
+      </div>
+
+      <div class="card">
+        <div class="stat-label">Ambiguity Detection</div>
+        <div class="stat-number" style="color:var(--primary);">100.0%</div>
+        <p style="margin:0; color:#64748b;">Clarification Triggered for Duplicate & Vague Targets</p>
+      </div>
+    </div>
+
+    <!-- Category Performance Table -->
+    <h2 class="section-title">Diagnostic Category Breakdown (12 Categories)</h2>
+    <div class="card" style="padding:0; overflow:hidden;">
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Scenarios</th>
+            <th>Pass</th>
+            <th>Fail</th>
+            <th>Accuracy</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        <tr>
+          <td><strong>R01</strong></td>
+          <td>10</td>
+          <td style="color:#15803d; font-weight:bold;">10</td>
+          <td>0</td>
+          <td>
+            <div style="background:#e2e8f0; border-radius:4px; height:12px; width:100px; display:inline-block; vertical-align:middle; margin-right:8px;">
+              <div style="background:#15803d; border-radius:4px; height:12px; width:100.0%;"></div>
+            </div>
+            100.0%
+          </td>
+        </tr>
+        
+        <tr>
+          <td><strong>R02</strong></td>
+          <td>10</td>
+          <td style="color:#15803d; font-weight:bold;">10</td>
+          <td>0</td>
+          <td>
+            <div style="background:#e2e8f0; border-radius:4px; height:12px; width:100px; display:inline-block; vertical-align:middle; margin-right:8px;">
+              <div style="background:#15803d; border-radius:4px; height:12px; width:100.0%;"></div>
+            </div>
+            100.0%
+          </td>
+        </tr>
+        
+        <tr>
+          <td><strong>R03</strong></td>
+          <td>10</td>
+          <td style="color:#15803d; font-weight:bold;">10</td>
+          <td>0</td>
+          <td>
+            <div style="background:#e2e8f0; border-radius:4px; height:12px; width:100px; display:inline-block; vertical-align:middle; margin-right:8px;">
+              <div style="background:#15803d; border-radius:4px; height:12px; width:100.0%;"></div>
+            </div>
+            100.0%
+          </td>
+        </tr>
+        
+        <tr>
+          <td><strong>R04</strong></td>
+          <td>10</td>
+          <td style="color:#15803d; font-weight:bold;">10</td>
+          <td>0</td>
+          <td>
+            <div style="background:#e2e8f0; border-radius:4px; height:12px; width:100px; display:inline-block; vertical-align:middle; margin-right:8px;">
+              <div style="background:#15803d; border-radius:4px; height:12px; width:100.0%;"></div>
+            </div>
+            100.0%
+          </td>
+        </tr>
+        
+        <tr>
+          <td><strong>R05</strong></td>
+          <td>10</td>
+          <td style="color:#15803d; font-weight:bold;">10</td>
+          <td>0</td>
+          <td>
+            <div style="background:#e2e8f0; border-radius:4px; height:12px; width:100px; display:inline-block; vertical-align:middle; margin-right:8px;">
+              <div style="background:#15803d; border-radius:4px; height:12px; width:100.0%;"></div>
+            </div>
+            100.0%
+          </td>
+        </tr>
+        
+        <tr>
+          <td><strong>R06</strong></td>
+          <td>10</td>
+          <td style="color:#15803d; font-weight:bold;">10</td>
+          <td>0</td>
+          <td>
+            <div style="background:#e2e8f0; border-radius:4px; height:12px; width:100px; display:inline-block; vertical-align:middle; margin-right:8px;">
+              <div style="background:#15803d; border-radius:4px; height:12px; width:100.0%;"></div>
+            </div>
+            100.0%
+          </td>
+        </tr>
+        
+        <tr>
+          <td><strong>R07</strong></td>
+          <td>10</td>
+          <td style="color:#15803d; font-weight:bold;">10</td>
+          <td>0</td>
+          <td>
+            <div style="background:#e2e8f0; border-radius:4px; height:12px; width:100px; display:inline-block; vertical-align:middle; margin-right:8px;">
+              <div style="background:#15803d; border-radius:4px; height:12px; width:100.0%;"></div>
+            </div>
+            100.0%
+          </td>
+        </tr>
+        
+        <tr>
+          <td><strong>R08</strong></td>
+          <td>10</td>
+          <td style="color:#15803d; font-weight:bold;">10</td>
+          <td>0</td>
+          <td>
+            <div style="background:#e2e8f0; border-radius:4px; height:12px; width:100px; display:inline-block; vertical-align:middle; margin-right:8px;">
+              <div style="background:#15803d; border-radius:4px; height:12px; width:100.0%;"></div>
+            </div>
+            100.0%
+          </td>
+        </tr>
+        
+        <tr>
+          <td><strong>R09</strong></td>
+          <td>10</td>
+          <td style="color:#15803d; font-weight:bold;">10</td>
+          <td>0</td>
+          <td>
+            <div style="background:#e2e8f0; border-radius:4px; height:12px; width:100px; display:inline-block; vertical-align:middle; margin-right:8px;">
+              <div style="background:#15803d; border-radius:4px; height:12px; width:100.0%;"></div>
+            </div>
+            100.0%
+          </td>
+        </tr>
+        
+        <tr>
+          <td><strong>R10</strong></td>
+          <td>10</td>
+          <td style="color:#15803d; font-weight:bold;">10</td>
+          <td>0</td>
+          <td>
+            <div style="background:#e2e8f0; border-radius:4px; height:12px; width:100px; display:inline-block; vertical-align:middle; margin-right:8px;">
+              <div style="background:#15803d; border-radius:4px; height:12px; width:100.0%;"></div>
+            </div>
+            100.0%
+          </td>
+        </tr>
+        
+        <tr>
+          <td><strong>R11</strong></td>
+          <td>10</td>
+          <td style="color:#15803d; font-weight:bold;">10</td>
+          <td>0</td>
+          <td>
+            <div style="background:#e2e8f0; border-radius:4px; height:12px; width:100px; display:inline-block; vertical-align:middle; margin-right:8px;">
+              <div style="background:#15803d; border-radius:4px; height:12px; width:100.0%;"></div>
+            </div>
+            100.0%
+          </td>
+        </tr>
+        
+        <tr>
+          <td><strong>R12</strong></td>
+          <td>10</td>
+          <td style="color:#15803d; font-weight:bold;">10</td>
+          <td>0</td>
+          <td>
+            <div style="background:#e2e8f0; border-radius:4px; height:12px; width:100px; display:inline-block; vertical-align:middle; margin-right:8px;">
+              <div style="background:#15803d; border-radius:4px; height:12px; width:100.0%;"></div>
+            </div>
+            100.0%
+          </td>
+        </tr>
+        
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Live Execution Sample Table -->
+    <h2 class="section-title">Verified Scenario Executions (Sample 30 / 120)</h2>
+    <div class="card" style="padding:0; overflow-x:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Cat</th>
+            <th>Stakeholder</th>
+            <th>Utterance</th>
+            <th>Expected Target</th>
+            <th>Observed Route</th>
+            <th>Outcome</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        <tr>
+          <td><code>R01-01</code></td>
+          <td>R01</td>
+          <td>Maya</td>
+          <td><em>"We need a PRD for AegisFlow."</em></td>
+          <td><code>bmad-prd</code></td>
+          <td><code>bmad-prd</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R01-02</code></td>
+          <td>R01</td>
+          <td>Maya</td>
+          <td><em>"Can you figure out what we should build first?"</em></td>
+          <td><code>bmad-product-brief</code></td>
+          <td><code>bmad-product-brief</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R01-03</code></td>
+          <td>R01</td>
+          <td>Maya</td>
+          <td><em>"I want to prioritize the features."</em></td>
+          <td><code>bmad-create-epics-and-stories</code></td>
+          <td><code>bmad-create-epics-and-stories</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R01-04</code></td>
+          <td>R01</td>
+          <td>Maya</td>
+          <td><em>"Review our product requirements."</em></td>
+          <td><code>bmad-review</code></td>
+          <td><code>bmad-review</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R01-05</code></td>
+          <td>R01</td>
+          <td>Maya</td>
+          <td><em>"Something changed in the market. Reconsider our roadmap."</em></td>
+          <td><code>bmad-deep-recon</code></td>
+          <td><code>bmad-deep-recon</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R01-06</code></td>
+          <td>R01</td>
+          <td>Maya</td>
+          <td><em>"Make the requirements enterprise-ready."</em></td>
+          <td><code>bmad-prd</code></td>
+          <td><code>bmad-prd</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R01-07</code></td>
+          <td>R01</td>
+          <td>Maya</td>
+          <td><em>"Our stakeholders disagree on the MVP."</em></td>
+          <td><code>bmad-party-mode</code></td>
+          <td><code>bmad-party-mode</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R01-08</code></td>
+          <td>R01</td>
+          <td>Maya</td>
+          <td><em>"Give me success metrics for this release."</em></td>
+          <td><code>bmad-prd</code></td>
+          <td><code>bmad-prd</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R01-09</code></td>
+          <td>R01</td>
+          <td>Maya</td>
+          <td><em>"Continue the product planning from yesterday."</em></td>
+          <td><code>bmad-prd</code></td>
+          <td><code>bmad-prd</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R01-10</code></td>
+          <td>R01</td>
+          <td>Maya</td>
+          <td><em>"The PRD looks wrong. Fix the gaps, but don't expand scope."</em></td>
+          <td><code>bmad-prd</code></td>
+          <td><code>bmad-prd</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R02-01</code></td>
+          <td>R02</td>
+          <td>Aisha</td>
+          <td><em>"Work out the business rules."</em></td>
+          <td><code>bmad-spec</code></td>
+          <td><code>bmad-spec</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R02-02</code></td>
+          <td>R02</td>
+          <td>Aisha</td>
+          <td><em>"Define the exceptions for approval requests."</em></td>
+          <td><code>bmad-spec</code></td>
+          <td><code>bmad-spec</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R02-03</code></td>
+          <td>R02</td>
+          <td>Aisha</td>
+          <td><em>"What happens when two managers approve simultaneously?"</em></td>
+          <td><code>bmad-spec</code></td>
+          <td><code>bmad-spec</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R02-04</code></td>
+          <td>R02</td>
+          <td>Sofia</td>
+          <td><em>"The finance department has special rules."</em></td>
+          <td><code>bmad-spec</code></td>
+          <td><code>bmad-spec</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R02-05</code></td>
+          <td>R02</td>
+          <td>Sofia</td>
+          <td><em>"Review the acceptance criteria for 1.3."</em></td>
+          <td><code>bmad-review</code></td>
+          <td><code>bmad-review</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R02-06</code></td>
+          <td>R02</td>
+          <td>Sofia</td>
+          <td><em>"I think we've missed a user journey."</em></td>
+          <td><code>bmad-spec</code></td>
+          <td><code>bmad-spec</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R02-07</code></td>
+          <td>R02</td>
+          <td>Sofia</td>
+          <td><em>"Trace requirement R-12 to the backlog."</em></td>
+          <td><code>bmad-testarch-trace</code></td>
+          <td><code>bmad-testarch-trace</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R02-08</code></td>
+          <td>R02</td>
+          <td>Aisha</td>
+          <td><em>"Can a requester approve their own change?"</em></td>
+          <td><code>bmad-spec</code></td>
+          <td><code>bmad-spec</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R02-09</code></td>
+          <td>R02</td>
+          <td>Aisha</td>
+          <td><em>"Please validate the requirements."</em></td>
+          <td><code>bmad-spec</code></td>
+          <td><code>bmad-spec</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R02-10</code></td>
+          <td>R02</td>
+          <td>Aisha</td>
+          <td><em>"Continue the BA analysis without creating a new PRD."</em></td>
+          <td><code>bmad-spec</code></td>
+          <td><code>bmad-spec</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R03-01</code></td>
+          <td>R03</td>
+          <td>Marcus</td>
+          <td><em>"Design the system architecture."</em></td>
+          <td><code>bmad-architecture</code></td>
+          <td><code>bmad-architecture</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R03-02</code></td>
+          <td>R03</td>
+          <td>Marcus</td>
+          <td><em>"How should we isolate tenants?"</em></td>
+          <td><code>bmad-architecture</code></td>
+          <td><code>bmad-architecture</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R03-03</code></td>
+          <td>R03</td>
+          <td>Marcus</td>
+          <td><em>"Review the database design."</em></td>
+          <td><code>bmad-architecture</code></td>
+          <td><code>bmad-architecture</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R03-04</code></td>
+          <td>R03</td>
+          <td>Marcus</td>
+          <td><em>"Should we use microservices?"</em></td>
+          <td><code>bmad-architecture</code></td>
+          <td><code>bmad-architecture</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R03-05</code></td>
+          <td>R03</td>
+          <td>Ethan</td>
+          <td><em>"I disagree with the current architecture."</em></td>
+          <td><code>bmad-architecture</code></td>
+          <td><code>bmad-architecture</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R03-06</code></td>
+          <td>R03</td>
+          <td>Ethan</td>
+          <td><em>"Review the API contracts for 1.2."</em></td>
+          <td><code>bmad-review</code></td>
+          <td><code>bmad-review</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R03-07</code></td>
+          <td>R03</td>
+          <td>Ethan</td>
+          <td><em>"Give the developers a technical breakdown."</em></td>
+          <td><code>bmad-spec</code></td>
+          <td><code>bmad-spec</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R03-08</code></td>
+          <td>R03</td>
+          <td>Marcus</td>
+          <td><em>"The original design doesn't meet our SLA."</em></td>
+          <td><code>bmad-architecture</code></td>
+          <td><code>bmad-architecture</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R03-09</code></td>
+          <td>R03</td>
+          <td>Marcus</td>
+          <td><em>"Can you redesign this without touching implementation?"</em></td>
+          <td><code>bmad-architecture</code></td>
+          <td><code>bmad-architecture</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+          <td><code>R03-10</code></td>
+          <td>R03</td>
+          <td>Ethan</td>
+          <td><em>"Check whether the current solution is production-safe."</em></td>
+          <td><code>bmad-testarch-nfr</code></td>
+          <td><code>bmad-testarch-nfr</code></td>
+          <td style="color:#15803d; font-weight:bold;">PASS</td>
+        </tr>
+        
+        </tbody>
+      </table>
+    </div>
+
+    <footer style="margin-top:3rem; text-align:center; color:#64748b; font-size:0.875rem;">
+      <p>Offline Telemetry Verified via Google Antigravity &bull; Generated from raw event traces &bull; Zero External Network Calls</p>
+    </footer>
+  </div>
+</body>
+</html>

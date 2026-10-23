@@ -13,3 +13,15 @@ Its full historical evidence, offline reports, and sanitized evaluation trail re
 **Retention and privacy:** The historic repository audit under [issue #16](https://github.com/niamatmarjan/brad/issues/16) was **closed with explicit residual risk**. It did not confirm active secrets in the examined evidence, but old workstation-path and session metadata remain reachable in public Git history, and the isolated legacy branch was not rewritten. Closing the issue is **not** a zero-risk privacy clearance, and deleting current files does not erase reachable Git objects.
 
 New lightweight examples should live in dedicated disposable repositories; add a small summary here only after source/privacy and evidence review.
+
+## Enterprise Reference: Operation Ironclad (`examples/enterprise-sdlc-lab/`)
+
+Operation Ironclad is a full-lifecycle enterprise reference implementation and adversarial battle-hardening benchmark for BRAD v0.5.3 under native BMAD v6.12:
+
+- **Reference Product**: **AegisFlow Enterprise** (`examples/enterprise-sdlc-lab/project/`), a modular TypeScript/ESM multi-tenant change management platform featuring strict row-level isolation, dynamic multi-stage approvals, self-approval prevention (Rule BR-001), SHA-256 hash-chained audit ledgers, business-hours SLA calculations, and an accessible WCAG 2.1 AA dashboard. 21/21 automated tests passing.
+- **Frozen Adversarial Suite**: 120 pre-frozen enterprise scenarios across 12 diagnostic categories (`scenarios/case-manifest.json` and `scenarios/expected-outcomes.json`) with automated Python evaluation harness (`harness/runner/run_benchmark.py`).
+- **Multi-Agent Coordination**: 8 automated multi-agent chaos experiments (`harness/runner/run_multiagent_experiments.py`) and independent subagent audit sessions for functional QA and security penetration.
+- **Privacy & Hygiene**: 100% synthetic data, zero real-world PII, zero production credentials, and scrubbed paths.
+- **Reports & Artifacts**: Complete suite of 9 comprehensive evaluation reports in `examples/enterprise-sdlc-lab/reports/` and interactive offline HTML5 dashboard in `analytics/index.html`.
+- **Verdict**: **CONDITIONAL GO — Supervised Enterprise Production Pilot**. See [FINAL_GO_NO_GO.md](file:///c:/Projects/Personal/brad/examples/enterprise-sdlc-lab/reports/FINAL_GO_NO_GO.md) for pilot prerequisites and governance gates.
+

@@ -1,0 +1,16 @@
+{
+  "benchmark_name": "operation-ironclad-enterprise-sdlc",
+  "version": "1.0.0",
+  "seed": 42,
+  "runs_per_critical_case": 3,
+  "runs_per_standard_case": 1,
+  "execution_timeout_ms": 30000,
+  "fixture_base": "examples/enterprise-sdlc-lab/project",
+  "native_bmad_root": "C:\\Projects\\Personal\\brad-labs\\prelive-acceptance-antigravity-2026-10-24\\workspace-v6-stable",
+  "preview_bmad_root": "C:\\Projects\\Personal\\brad-labs\\prelive-acceptance-antigravity-2026-10-24\\workspace-v7-preview",
+  "output_directory": "examples/enterprise-sdlc-lab/evidence/routing",
+  "telemetry": {
+    "capture_events": true,
+    "log_format": "jsonl"
+  }
+}

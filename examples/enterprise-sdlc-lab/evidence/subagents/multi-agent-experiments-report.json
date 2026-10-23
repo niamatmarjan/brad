@@ -1,0 +1,114 @@
+{
+  "suite": "Operation Ironclad Multi-Agent Stress Test",
+  "timestamp": "2026-10-23T20:47:28Z",
+  "total_experiments": 8,
+  "passed": 8,
+  "failed": 0,
+  "experiments": [
+    {
+      "experiment_id": "EXP-01",
+      "name": "Independent Responsibilities",
+      "status": "PASS",
+      "subagent_sessions": [
+        {
+          "role": "Security Penetration Auditor",
+          "conversationId": "649ce8ba-1cfb-435b-82ad-fb23dbfdd9b4",
+          "isolation": "INDEPENDENT_PROCESS_CONTEXT",
+          "memory_shared": false
+        },
+        {
+          "role": "Functional QA Auditor",
+          "conversationId": "b0e0d02c-baf8-4894-82fb-2a5982941e0d",
+          "isolation": "INDEPENDENT_PROCESS_CONTEXT",
+          "memory_shared": false
+        }
+      ],
+      "evidence": "Genuine Antigravity subagent sessions spawned with isolated conversational transcripts.",
+      "findings": "Host successfully launched distinct contexts without context pollution."
+    },
+    {
+      "experiment_id": "EXP-02",
+      "name": "Parallel Nonconflicting Development",
+      "status": "PASS",
+      "tasks": [
+        {
+          "worker": "Backend Developer",
+          "file": "packages/core/src/state-machine.mjs",
+          "outcome": "SUCCESS"
+        },
+        {
+          "worker": "Frontend Developer",
+          "file": "apps/web/public/index.html",
+          "outcome": "SUCCESS"
+        }
+      ],
+      "integration_status": "CLEAN_MERGE",
+      "conflicts_detected": 0,
+      "evidence": "Separate component files developed in parallel without worktree contention."
+    },
+    {
+      "experiment_id": "EXP-03",
+      "name": "Parallel Conflicting Development",
+      "status": "PASS",
+      "target_file": "project/packages/core/src/types.mjs",
+      "worker_a_change": "Roles.SUPER_AUDITOR = 'SUPER_AUDITOR'",
+      "worker_b_change": "Roles.EXTERNAL_AUDITOR = 'EXTERNAL_AUDITOR'",
+      "conflict_detection": "DETECTED_ATOMICALLY",
+      "silent_overwrite_prevented": true,
+      "evidence": "Optimistic locking and Git branch arbitration prevent silent overwrites."
+    },
+    {
+      "experiment_id": "EXP-04",
+      "name": "Developer vs QA Independence",
+      "status": "PASS",
+      "author_context": "Main Agent Orchestrator",
+      "reviewer_context": "Functional QA Auditor (b0e0d02c-baf8-4894-82fb-2a5982941e0d)",
+      "clean_room_verified": true,
+      "evidence": "Reviewer context did not inherit developer's internal thinking tokens or scratch buffers."
+    },
+    {
+      "experiment_id": "EXP-05",
+      "name": "Specialist Unavailability Handling",
+      "status": "PASS",
+      "scenario": "Requesting bmad-agent-tea when TEA module is omitted",
+      "brad_action": "REPORT_MISSING_MODULE_REQUIRE_OPT_IN_FALLBACK",
+      "fake_persona_fabricated": false,
+      "evidence": "BRAD doctor and inspector report missing TEA module cleanly without pretending it ran."
+    },
+    {
+      "experiment_id": "EXP-06",
+      "name": "Operator Interruption & Safe Resume",
+      "status": "PASS",
+      "injected_fault": "Process killed mid-task leaving unstaged diffs",
+      "recovery_action": "INSPECT_LOCAL_BRANCH_PRESERVE_UNCOMMITTED_DIFFS",
+      "duplicate_branch_created": false,
+      "evidence": "Scenario R09-01 through R09-07 verify resume against existing branch."
+    },
+    {
+      "experiment_id": "EXP-07",
+      "name": "Agent Dominance & Routing Drift Resistance",
+      "status": "PASS",
+      "sequence_tested": [
+        "Build 1.1",
+        "Build 1.2",
+        "Build 1.3",
+        "Build 2.1",
+        "Build 2.2",
+        "Work out the business rules",
+        "We need a PRD for AegisFlow",
+        "Test 1.1"
+      ],
+      "routing_drift_detected": false,
+      "evidence": "After 5 consecutive developer prompts, subsequent BA/PM/QA requests routed correctly to bmad-spec, bmad-prd, and bmad-qa without stickiness."
+    },
+    {
+      "experiment_id": "EXP-08",
+      "name": "Concurrency & Host Resource Limits",
+      "status": "PASS",
+      "concurrent_subagents_supported": 2,
+      "timeout_handling": "GRACEFUL_ESCALATION",
+      "stale_lock_cleanup": true,
+      "evidence": "Host successfully arbitrated concurrent subagent contexts within quota without crashing."
+    }
+  ]
+}
