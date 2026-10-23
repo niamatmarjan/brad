@@ -1,6 +1,6 @@
 # BRAD documentation
 
-BRAD is a thin dispatcher to **installed native BMAD workflows**. Installation, host availability, actual invocation, and verified outcome are distinct levels of evidence. The latest published BRAD release is **v0.5.1 (supervised preview)**; newer `main` changes are unreleased.
+BRAD is a thin dispatcher to **installed native BMAD workflows**. Installation, host availability, actual invocation, and verified outcome are distinct levels of evidence. The latest published BRAD release is **v0.5.1 (supervised preview)**. The isolated **v0.5.2 release-candidate branch** has versioned metadata for testing only; the tag has not been published.
 
 ## Get started
 
