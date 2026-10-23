@@ -8,7 +8,7 @@
 
 BRAD routes requests to **official, project-installed [BMAD Method](https://github.com/bmad-code-org/BMAD-METHOD) skills**. It helps resolve existing stories, choose Build, review and TEA specialists, resume unfinished work and coordinate authorized GitHub delivery. BMAD owns the implementation workflows and project state; BRAD does not replace BMAD or run an autonomous agent service.
 
-**Release candidate (UNPUBLISHED): v0.5.3**, adding the read-only Antigravity/Codex BMAD inspector path fix verified in [PR #35](https://github.com/niamatmarjan/brad/pull/35). Latest **published** release remains [v0.5.2](https://github.com/niamatmarjan/brad/releases/tag/v0.5.2). **Do not execute the prospective `#v0.5.3` commands below until that GitHub tag is published.** BRAD is an independent, MIT-licensed project, not endorsed by BMAD Method. See [Changelog](CHANGELOG.md).
+**Current published release:** [v0.5.3](https://github.com/niamatmarjan/brad/releases/tag/v0.5.3). This supervised-preview patch corrects read-only discovery of Antigravity and Codex project-local BMAD skills; earlier [v0.5.2](https://github.com/niamatmarjan/brad/releases/tag/v0.5.2) remains available. BRAD is an independent, MIT-licensed project, not endorsed by BMAD Method. See [Changelog](CHANGELOG.md).
 
 ## Start here — choose your workflow
 
