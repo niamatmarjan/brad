@@ -1,6 +1,6 @@
 # BRAD compatibility matrix: versions, hosts, and evidence
 
-**Reviewed:** 2026-10-24. **Latest published BRAD:** [v0.5.2](https://github.com/niamatmarjan/brad/releases/tag/v0.5.2). **Unpublished prospective patch:** v0.5.3 release candidate, with the read-only inspector correction carried into [draft PR #37](https://github.com/niamatmarjan/brad/pull/37), which has **passed 0.5.3-stamped CI and external packed-distribution acceptance**. PR #35 was superseded and closed unmerged.
+**Reviewed:** 2026-10-24. **Current BRAD release:** [v0.5.3](https://github.com/niamatmarjan/brad/releases/tag/v0.5.3). The read-only Antigravity/Codex native skill inventory correction was accepted in [PR #37](https://github.com/niamatmarjan/brad/pull/37) using 0.5.3-stamped CI and an actual unpacked candidate tarball.
 
 Compatibility has distinct levels: **skill format**, **BRAD install**, **native BMAD files**, **current host discovery**, **actual invocation**, and **verified output**. A passing local check or written example does not prove the latter three.
 
@@ -8,7 +8,7 @@ Compatibility has distinct levels: **skill format**, **BRAD install**, **native 
 
 | Native BMAD | BRAD behavior and evidence | Limit / recommendation |
 |---|---|---|
-| **v6.12 stable (observed v6.12.4)** | CLI official stable installer; in a Windows Antigravity fixture BRAD doctor discovered 39 native skills in singular `.agent/skills`, while released v0.5.2 Python inspector missed them; prospective v0.5.3 patch fixed the helper (39/39) | **PARTIAL but recommended over v7 for stable teams**; verify actual coding-host invocation separately |
+| **v6.12 stable (observed v6.12.4)** | CLI official stable installer; in a Windows Antigravity fixture BRAD doctor discovered 39 native skills in singular `.agent/skills`, while released v0.5.2 Python inspector missed them; v0.5.3 corrects that helper (39/39) | **PARTIAL but recommended over v7 for stable teams**; verify actual coding-host invocation separately |
 | **v6.11** | Version-aware routing and `bmad-build` intent; older deprecated aliases differ | No complete end-to-end v6.11 host matrix: **PARTIAL** |
 | **Earlier v6** | Conservative file/skill detection only | **NOT_VERIFIED** per minor version; read the installed skills |
 | **v7 preview alpha (observed 6.13.0-next)** | Antigravity Skills CLI installed 30 v7 skills in a separate workspace. Native `bmad-build` instructions were rendered with `uv`; coordinator implemented synthetic `ping` example and passed **3/3 tests**, then dispatched a separate review subagent which reported PASS | **PARTIAL**: real `NATIVE_WORKFLOW_INLINE` + `SEPARATE_SPECIALIST_INVOKED` evidence; no verified full native **v7 ticket lifecycle and TEA Skill-tool dispatch**. Upstream `bmad-retrospective` YAML parse defect and transient setup `WinError 5` persist. See [#32](https://github.com/niamatmarjan/brad/issues/32) |
@@ -16,7 +16,7 @@ Compatibility has distinct levels: **skill format**, **BRAD install**, **native 
 
 The [official installation page](https://docs.bmad-method.org/start/install-bmad/) still calls v7 **preview alpha** as of this review and lists stable v6.12. The v7 ETA visible there is historical and does **not** establish current GA status. Stable uses `npx bmad-method install`; preview uses `npx skills add bmad-code-org/BMAD-METHOD` and the installed `bmad` skill's `bmad setup` flow. Current upstream stable guidance lists Node.js 20.12+, Python 3.10+, and `uv`; BRAD's own Node CLI is a separate dependency.
 
-## Host evidence in latest Windows acceptance (v0.5.2 source; v0.5.3 inspector candidate)
+## Host evidence in Windows acceptance (v0.5.2 stable baseline; v0.5.3 inspector patch)
 
 | Surface | Installation support | Native workflow evidence | Claim |
 |---|---|---|---|
@@ -30,7 +30,7 @@ The [official installation page](https://docs.bmad-method.org/start/install-bmad
 
 **Provenance clarification:** The operator's second report classified invoking `uv ... render_skill.py` plus seeing the host catalog as `HOST_NATIVE_INVOKED`. That proves **real installed native instruction rendering**, not necessarily a separate coding-host-native **Skill-tool** call. The v7 **implementation was inline**; a distinct Antigravity `invoke_subagent` event is credible **separate reviewer context**, not automatically an official BMAD TEA skill call. Those proof levels are deliberately separated here; inspect the sanitized host transcript before making a stronger dispatch claim.
 
-**Actual 0.5.3 package evidence:** The Windows operator unpacked `niamatmarjan-brad-0.5.3.tgz` built from RC commit `0b36954542974178f4d3ce6a3558de48125869f4`, ran its **packaged** inspector against 39 native v6.12.4 skills in `.agent/skills`, and observed 39 BMAD + one BRAD directory, `tea:true`, `v6_likely` and required version-hint warnings. [RC CI 40010815323](https://github.com/niamatmarjan/brad/actions/runs/40010815323) also passed 8/8 jobs. This tests the *inspector package*, not v7 host-wide compatibility.
+**Actual 0.5.3 package evidence:** The Windows operator unpacked `niamatmarjan-brad-0.5.3.tgz` built from the pre-release candidate commit `0b36954542974178f4d3ce6a3558de48125869f4`, ran its **packaged** inspector against 39 native v6.12.4 skills in `.agent/skills`, and observed 39 BMAD + one BRAD directory, `tea:true`, `v6_likely` and required version-hint warnings. [RC CI 40010815323](https://github.com/niamatmarjan/brad/actions/runs/40010815323) also passed 8/8 jobs. This tests the *inspector package*, not v7 host-wide compatibility.
 
 ## Route by actual installed skill, not marketing alias
 
