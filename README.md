@@ -10,6 +10,19 @@ BRAD routes requests to **official, project-installed [BMAD Method](https://gith
 
 **Current version:** [v0.5.2](https://github.com/niamatmarjan/brad/releases/tag/v0.5.2), a supervised-preview update to the official BMAD opt-in installation and Windows CLI reliability. BRAD is an independent, MIT-licensed project, not endorsed by BMAD Method. See [Changelog](CHANGELOG.md).
 
+## Start here — choose your workflow
+
+| I want to… | Start with |
+|---|---|
+| Install BRAD and BMAD correctly | [Choose stable BMAD v6.12 or v7 preview](docs/getting-started/choose-bmad-version.md) |
+| Use Claude Code, Codex, Antigravity or Copilot | [Host-by-host setup and exact skill invocation](docs/getting-started/host-support.md) |
+| Use BRAD as PM, BA, Architect, Lead, Dev or QA | [Ten stakeholder prompt recipes](docs/roles/quick-reference.md) → [full role guides](docs/roles/README.md) |
+| Check whether my AI host / BMAD version actually works | [Tested compatibility and evidence matrix](docs/reference/compatibility-matrix.md) |
+| Understand BRAD's limits and pre-live gates | [Launch-readiness checklist](docs/maintainers/launch-readiness.md) |
+| Contribute, troubleshoot or maintain | [Documentation hub](docs/README.md) · [Agent contributor guide](AGENTS.md) |
+
+**BRAD = task router; BMAD = native workflow engine; coding host = actual skill executor.** Installing one does not prove the other is installed or invoked. Claude.ai and ChatGPT chat are not direct replacements for Claude Code or Codex. BRAD is portable to some Agent Skills hosts, but **full v7 alpha and all-host native execution are not yet verified**.
+
 ## Quick start
 
 In the **project where you want BRAD to work**, with Node.js 20+ and Git:
@@ -22,9 +35,9 @@ npx.cmd --yes "github:niamatmarjan/brad#v0.5.2" doctor --agent antigravity --jso
 
 Substitute `claude`, `copilot` or `codex` for `antigravity` as appropriate, or omit `--agent` to detect explicit host conventions. The installer writes project-local BRAD skills only; it does **not** implicitly install BMAD. Use a compatible host that can discover Agent Skills, refresh that host after installation, and **verify its actual skill catalog**.
 
-**Native BMAD prerequisites:** Install and configure the [official BMAD Method](https://docs.bmad-method.org/start/install-bmad/) separately when missing. If already installed, preserve that runtime, its modules and its project state. For stable BMAD the upstream installer is `npx.cmd --yes bmad-method@latest install` (Windows). Select BMM and, if needed, TEA in the official setup. Installer success and `brad doctor` establish local setup signals; **neither proves a native skill was invoked**.
+**Native BMAD prerequisites:** The currently documented stable v6.12 line expects Node.js 20.12+, Python 3.10+ and `uv`; these are **upstream BMAD prerequisites**, distinct from BRAD's Node-based CLI. Install and configure the [official BMAD Method](https://docs.bmad-method.org/start/install-bmad/) separately when missing. If already installed, preserve that runtime, its modules and its project state. For stable BMAD the upstream installer is `npx.cmd --yes bmad-method@latest install` (Windows). Select BMM and, if needed, TEA in the official setup. Installer success and `brad doctor` establish local setup signals; **neither proves a native skill was invoked**.
 
-**When using native BMAD Build:** Some installed Build workflows use Python's `uv` command to render their instructions. Check the selected native skill's prerequisites and verify `uv --version` where required. The BRAD Node CLI itself does **not** require `uv`; do not auto-install global tools.
+**When using native BMAD workflows:** Verify `uv --version` for current upstream setup and any installed Build scripts that require it. The BRAD Node CLI itself does **not** require `uv`; do not install global tools silently. For v7 alpha, follow its **Skills CLI + native `bmad setup`** path, not the stable v6 `bmad-method install` command. See the [version guide](docs/getting-started/choose-bmad-version.md).
 
 ### Opt-in BRAD → BMAD setup (v0.5.2)
 
@@ -85,6 +98,8 @@ BRAD distinguishes five levels: **L1** installed skill contract; **L2** exact ta
 | [`skills/brad/`](skills/brad/SKILL.md) | BRAD skill contract, references, read-only helper scripts and routing test cases |
 | [`cli/`](cli/brad.mjs) | Safe project installer, `doctor`, update and uninstall |
 | [`docs/getting-started/`](docs/getting-started/README.md) | Installation and agent-assisted onboarding |
+| [`docs/roles/`](docs/roles/README.md) | Ten stakeholder role guides and copyable prompts |
+| [`docs/reference/compatibility-matrix.md`](docs/reference/compatibility-matrix.md) | Verified BMAD/host combinations versus untested claims |
 | [`docs/evaluation/`](docs/evaluation/README.md) | Evaluation methodology and honest evidence boundaries |
 | [`docs/reference/`](docs/reference/README.md) | Architecture |
 | [`docs/maintainers/`](docs/maintainers/README.md) | Release process |
