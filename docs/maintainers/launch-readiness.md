@@ -1,13 +1,13 @@
-# Launch readiness and cross-host acceptance — BRAD v0.5.2
+# Launch readiness and cross-host acceptance — BRAD v0.5.3
 
-BRAD is already published at [v0.5.2](https://github.com/niamatmarjan/brad/releases/tag/v0.5.2). A **test-only v0.5.3 release candidate** adds the verified read-only native skill inventory fix for Antigravity and Codex project paths; the new tag is NOT published and must not be treated as generally available. This is a **post-release product-readiness plan**, not a promise of universal compatibility or an authorization for a new version. Do not move or rewrite the existing release tag.
+BRAD [v0.5.3](https://github.com/niamatmarjan/brad/releases/tag/v0.5.3) adds the verified read-only native skill inventory fix for Antigravity and Codex project paths. This is a **post-release compatibility and product-readiness plan**, not proof of universal AI-host or BMAD v7 execution. Do not rewrite published release tags.
 
 ## Verified evidence and remaining work
 
 | Area | Known evidence (2026-10-24) | Required before claiming broader compatibility |
 |---|---|---|
 | Stable BMAD v6 | Windows first-run v6.12.4/BMM/TEA installation; bounded host Skill-tool pilot | Recheck with new upstream installers and each supported coding host |
-| CLI/package | Published v0.5.2 [release CI](https://github.com/niamatmarjan/brad/actions/runs/39999668437) passed; **unpublished v0.5.3 candidate [CI 40010815323](https://github.com/niamatmarjan/brad/actions/runs/40010815323) 8/8 PASS** and Windows operator tested an actual unpacked candidate npm tarball (39 native v6 skills + TEA found) | Final candidate release note review and **separate release authorization** before version-bump merge; current v0.5.2 asset hash recheck when required |
+| CLI/package | v0.5.2 [release CI](https://github.com/niamatmarjan/brad/actions/runs/39999668437) passed; v0.5.3 [candidate CI 40013336127](https://github.com/niamatmarjan/brad/actions/runs/40013336127) 8/8 PASS and a Windows operator tested an unpacked v0.5.3 npm tarball (39 native v6 skills + TEA found) | Final candidate release note review and **separate release authorization** before version-bump merge; current v0.5.2 asset hash recheck when required |
 | Windows safety | 54/54 tests on Windows Node 22/24; local 5/5 and 100-init checks reported after fixes | Preserve transient error tests; investigate regressions without masking with retries |
 | **BMAD v7 alpha** | Antigravity 1.1.12 rendered native `bmad-build` with `uv`, implemented an inline synthetic `ping` task (**3/3 tests PASS**) and dispatched an independent reviewer subagent. v7 Skills CLI still skipped `bmad-retrospective` due to confirmed YAML typo; native setup initially failed transient Windows `WinError 5` | **PARTIAL:** no demonstrated complete v7 ticket lifecycle or native TEA dispatch; upstream defects remain; see [#32](https://github.com/niamatmarjan/brad/issues/32) |
 | **Claude Code v0.5.2** | v0.5.1 native Build/TEA observations; new v0.5.2 Windows binary + doctor checked but CLI session **not logged in** | Authenticate in authorized disposable workspace and capture an actual native invocation; new run BLOCKED |
