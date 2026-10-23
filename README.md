@@ -8,7 +8,7 @@
 
 BRAD routes requests to **official, project-installed [BMAD Method](https://github.com/bmad-code-org/BMAD-METHOD) skills**. It helps resolve existing stories, choose Build, review and TEA specialists, resume unfinished work and coordinate authorized GitHub delivery. BMAD owns the implementation workflows and project state; BRAD does not replace BMAD or run an autonomous agent service.
 
-**Release candidate (UNPUBLISHED):** source version **0.5.2** on this isolated candidate branch. The latest published release remains [v0.5.1](https://github.com/niamatmarjan/brad/releases/tag/v0.5.1). Commands pinned to `#v0.5.2` below are **future-release examples only** until that tag actually exists. BRAD is an independent, MIT-licensed **supervised preview**, not endorsed by BMAD Method. See [Changelog](CHANGELOG.md).
+**Current version:** [v0.5.2](https://github.com/niamatmarjan/brad/releases/tag/v0.5.2), a supervised-preview update to the official BMAD opt-in installation and Windows CLI reliability. BRAD is an independent, MIT-licensed project, not endorsed by BMAD Method. See [Changelog](CHANGELOG.md).
 
 ## Quick start
 
@@ -26,9 +26,9 @@ Substitute `claude`, `copilot` or `codex` for `antigravity` as appropriate, or o
 
 **When using native BMAD Build:** Some installed Build workflows use Python's `uv` command to render their instructions. Check the selected native skill's prerequisites and verify `uv --version` where required. The BRAD Node CLI itself does **not** require `uv`; do not auto-install global tools.
 
-### Opt-in BRAD → BMAD setup in the v0.5.2 candidate (not released)
+### Opt-in BRAD → BMAD setup (v0.5.2)
 
-The source candidate includes **explicit** `setup --with-bmad` support. These examples use the **prospective** v0.5.2 tag; do not invoke them until it is actually published. The existing released v0.5.1 tag does **not** contain this flag.
+BRAD v0.5.2 supports **explicit** `setup --with-bmad`; the earlier v0.5.1 tag does **not** include these flags. The official BMAD installer runs only when opt-in is requested and no existing native runtime is detected.
 
 ```powershell
 # Windows PowerShell (on macOS/Linux replace npx.cmd with npx):
@@ -73,8 +73,8 @@ BRAD's default delivery lane is **resolve → choose installed native workflow �
 - **Real Windows Antigravity lab:** The separate [brad-e2e-lab](https://github.com/niamatmarjan/brad-e2e-lab) completed [Story 1.1](https://github.com/niamatmarjan/brad-e2e-lab/pull/2) and a controlled two-conversation [Story 1.2 resume](https://github.com/niamatmarjan/brad-e2e-lab/pull/4). Both PRs were merged after successful real GitHub Actions: **18** and **29** passing tests respectively. Native Build/TEA workflows were **reported as followed inline**; a separate reviewer subagent was reported. These facts do **not** establish host-native BMAD dispatch, general crash recovery or performance gains.
 - **Second-host validation:** Authenticated Windows Claude Code 2.1.299 exercised pinned BRAD v0.5.1 with native BMAD 6.12.4 / TEA 1.27.2. The operator reported an actual `Skill(bmad-testarch-test-review)` activation and four bounded safety cases; the results are **single-run, host-specific**, not a universal capability claim. Copilot CLI catalog discovery was partial; authenticated Copilot native TEA remains **NOT_RUN**. See [issue #20](https://github.com/niamatmarjan/brad/issues/20).
 - **Ticket-to-PR validation:** The disposable [lab PR #5](https://github.com/niamatmarjan/brad-e2e-lab/pull/5) follows exact Story 1.3 routing, a reported real Claude Code `Skill(bmad-build)` activation, implementation, distinct-model read-only review, one-time consent and verified green PR CI (32 tests). It remains **OPEN and UNMERGED**; the final tracking-only fix was not re-reviewed. See [issue #15](https://github.com/niamatmarjan/brad/issues/15).
-- **Opt-in setup validation:** [Issue #21](https://github.com/niamatmarjan/brad/issues/21) closed after a reported same-workspace Windows Antigravity headless stable BMAD install, skill discovery and read-only native workflow **inline** review; this was **not** a verified host-native skill-loader event. The opt-in feature remains unreleased in v0.5.1.
-- **Release status:** [Issue #15](https://github.com/niamatmarjan/brad/issues/15) still tracks the final go/no-go. Historical privacy audit [#16](https://github.com/niamatmarjan/brad/issues/16) was completed with retained historical metadata, and the Windows tester has reported intermittent default-parallel local test failures that warrant continued monitoring. **v0.5.2 has not been released.**
+- **Opt-in setup validation:** [Issue #21](https://github.com/niamatmarjan/brad/issues/21) closed after a reported same-workspace Windows Antigravity headless stable BMAD install, skill discovery and read-only native workflow **inline** review; this was **not** a verified host-native skill-loader event. The opt-in feature was not part of v0.5.1.
+- **v0.5.2 validation:** The [release workstream #15](https://github.com/niamatmarjan/brad/issues/15) records 8/8 passing integrated candidate CI checks, including 54/54 tests on Windows Node 22/24, and an operator-observed first-attempt official BMAD install from the packed candidate on Windows. The bounded Windows `EPERM` rename retry and nested npm package-environment corrections are tracked in [#28](https://github.com/niamatmarjan/brad/issues/28) and [#29](https://github.com/niamatmarjan/brad/issues/29); no permanent zero-flake claim is made. Fresh-workspace Antigravity IDE host loader execution remains unverified; historical privacy audit [#16](https://github.com/niamatmarjan/brad/issues/16) retained public metadata.
 
 BRAD distinguishes five levels: **L1** installed skill contract; **L2** exact target resolution; **L3** selected installed skill; **L4** actual execution mode (host-native, inline, independent subagent, helper-only or unverified); **L5** observed outputs, real PR and CI. Do not turn a static check, `doctor` result or a QA score into a claim of host-native invocation.
 
