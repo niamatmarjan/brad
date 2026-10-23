@@ -1,6 +1,6 @@
-# BRAD: AI-agent installation and verification contract (v0.5.2)
+# BRAD: AI-agent installation and verification contract (v0.5.3 candidate, not published)
 
-This is the **canonical, copyable onboarding instruction** for Claude Code, Antigravity, Codex, and GitHub Copilot. It is written for an AI coding agent acting on a user's project. BRAD is an independent community wrapper around native BMAD Method workflows; it does not install BMAD implicitly or replace its agents. The v0.5.2 opt-in CLI setup can call the **official** BMAD installer only with explicit project-local approval. An interactive terminal remains supported; unattended stable installation is also supported when explicit BMAD modules and target coding tools are supplied. The previous v0.5.1 tag does **not** include these opt-in flags. Use the tagged [v0.5.2 release](https://github.com/niamatmarjan/brad/releases/tag/v0.5.2) for the documented one-command setup.
+This is the **canonical, copyable onboarding instruction** for Claude Code, Antigravity, Codex, and GitHub Copilot. It is written for an AI coding agent acting on a user's project. BRAD is an independent community wrapper around native BMAD Method workflows; it does not install BMAD implicitly or replace its agents. The v0.5.2 opt-in CLI setup can call the **official** BMAD installer only with explicit project-local approval. An interactive terminal remains supported; unattended stable installation is also supported when explicit BMAD modules and target coding tools are supplied. The previous v0.5.1 tag does **not** include these opt-in flags. The future **v0.5.3 tag is not yet published**; the tagged [v0.5.2 release](https://github.com/niamatmarjan/brad/releases/tag/v0.5.2) works today. Candidate installation examples below are for CI and post-release use only.
 
 ## Agent objective
 
@@ -15,8 +15,8 @@ Install BRAD in the **user's intended repository**, with the minimum necessary c
 5. For modified or manually installed BRAD directories, run a dry run and inspect the differences; never use `--force` automatically.
 
 ```shell
-npx --yes "github:niamatmarjan/brad#v0.5.2" doctor --json
-npx --yes "github:niamatmarjan/brad#v0.5.2" setup --dry-run --json
+npx --yes "github:niamatmarjan/brad#v0.5.3" doctor --json
+npx --yes "github:niamatmarjan/brad#v0.5.3" setup --dry-run --json
 ```
 
 ## Phase 2: Install BRAD (authorized reversible change)
@@ -24,7 +24,7 @@ npx --yes "github:niamatmarjan/brad#v0.5.2" setup --dry-run --json
 Use the actual host when known. Otherwise use `--agent auto`. Install only into the agreed project or requested global scope.
 
 ```shell
-npx --yes "github:niamatmarjan/brad#v0.5.2" setup --agent auto --json
+npx --yes "github:niamatmarjan/brad#v0.5.3" setup --agent auto --json
 ```
 
 Host choices: `antigravity`, `claude`, `codex`, `copilot`, `all`. Never use `all` casually; it writes to several host directories. `setup` is safe/idempotent but does **not** install BMAD, configure GitHub, change existing BMAD versions, bypass permissions, or start a background daemon. Existing nonmanaged/modified skill files are preserved; seek approval before `--force`, then report the backup path. The `--with-bmad` flag introduced in v0.5.2 (not available in v0.5.1) permits official upstream installation **only after explicit user approval**; ordinary setup remains BRAD-only.
