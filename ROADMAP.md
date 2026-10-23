@@ -1,22 +1,25 @@
-# BRAD roadmap
+# BRAD roadmap — post-v0.5.2
 
-BRAD is an independent **supervised preview**, currently released as [v0.5.1](https://github.com/niamatmarjan/brad/releases/tag/v0.5.1). Plans below describe validation work, not guaranteed delivery dates.
+BRAD is an independent **supervised preview**, currently published at [v0.5.2](https://github.com/niamatmarjan/brad/releases/tag/v0.5.2). This roadmap records **observed milestones and unsatisfied acceptance gates**, not promises or release dates. See [launch readiness](docs/maintainers/launch-readiness.md) and the [compatibility matrix](docs/reference/compatibility-matrix.md).
 
-## Completed foundations
-- [x] GitHub-backed CLI, project-local Agent Skill installation, read-only diagnostics and cross-platform test matrix.
-- [x] v0.5.1 review-only/refusal routing contracts and truthful native-workflow provenance vocabulary.
-- [x] Real disposable Antigravity Story 1.1 → PR → CI and Story 1.2 controlled conversation-resume → PR → CI, with scope-limited positive evidence.
+## Completed foundations and v0.5.2 release
 
-## Before a v0.5.2 release
-- [ ] [#21](https://github.com/niamatmarjan/brad/issues/21) — make opt-in official BMAD installation robust for non-interactive Windows/host terminals (no background hang); keep install consent and skip-existing safety.
-- [ ] [#16](https://github.com/niamatmarjan/brad/issues/16) — Concourse archive removed from active tree; full public-history/privacy assessment, including the isolated legacy demo branch, remains open.
-- [ ] [#20](https://github.com/niamatmarjan/brad/issues/20) — authenticate and genuinely run a native TEA review in a **second coding host**, not another Antigravity fixture.
-- [ ] [#19](https://github.com/niamatmarjan/brad/issues/19) — strengthen permission/refusal and mixed-v6/v7 validation beyond read-only helper diagnostics.
-- [ ] [#15](https://github.com/niamatmarjan/brad/issues/15) — publish an evidence-based go/no-go decision. No tagged v0.5.2 release yet.
+- [x] GitHub-backed project-local Agent Skills installation, read-only `doctor`, safe opt-in official stable BMAD installation, cross-platform unit checks and GitHub ZIP/npm tarball packaging.
+- [x] [#21](https://github.com/niamatmarjan/brad/issues/21) — Windows/Antigravity headless official BMAD installer contract, with approval, bounded execution and no silent upgrades; scope-limited lab evidence.
+- [x] [#20](https://github.com/niamatmarjan/brad/issues/20) — one authenticated Claude Code native TEA execution with **v0.5.1**; *not* broad cross-host certification.
+- [x] [#19](https://github.com/niamatmarjan/brad/issues/19) — bounded routing/refusal and interrupted-resume validation.
+- [x] [#15](https://github.com/niamatmarjan/brad/issues/15) — observed ticket-to-PR pilot and final evidence-based v0.5.2 GO decision; [released v0.5.2](https://github.com/niamatmarjan/brad/releases/tag/v0.5.2) after passing CI.
+- [x] [#28](https://github.com/niamatmarjan/brad/issues/28) and [#29](https://github.com/niamatmarjan/brad/issues/29) — bounded Windows rename retry and nested npm environment contamination fixes, tested and shipped.
+- [x] [#16](https://github.com/niamatmarjan/brad/issues/16) — public-history audit and explicit risk-retention decision. Historical path/session metadata **remains reachable**; closing the review does not erase it.
 
-## Longer term
-- Reproducible actual host-dispatch evidence separated from skills merely installed or loaded inline.
-- Validate BMAD v7 only against supported *live* native interfaces.
-- Minimal, privacy-reviewed examples and stronger release integrity.
+## Pre-live experience and compatibility — still open
 
-BRAD remains a **thin router**; no competing BMAD state database or new autonomous agent framework is planned.
+- [ ] [#32](https://github.com/niamatmarjan/brad/issues/32) — **genuine BMAD v7 preview** installation, host-native ticket/Build/review execution, mixed-state safety, and observed routing regression fixtures.
+- [ ] [#33](https://github.com/niamatmarjan/brad/issues/33) — actual Claude Code, Codex, Antigravity and Copilot discovery/dispatch matrix for tagged v0.5.2; distinguish ChatGPT/Claude.ai chat from coding host execution.
+- [ ] [#34](https://github.com/niamatmarjan/brad/issues/34) — align read-only Python native-skill inventory with Antigravity's `.agent/skills` and test v7 ticket hints.
+- [ ] New-user onboarding and one representative task from each of PM, BA, Architect, Lead, Dev, QA and Delivery using the [stakeholder handbook](docs/roles/quick-reference.md).
+- [ ] Security/operational rechecks before broader publicity: owner approvals, host permissions, sanitized logs, history privacy warning, immutable tags and real artifact checksums.
+
+## Working principles
+
+BRAD remains a **thin router**: no second BMAD state database, no invented native agent personas, no assumed v7 GA, no universal host support claim without actual Skill-tool evidence, and no automatic force-push/merge/deployment. Feature changes after v0.5.2 require a separate reviewed, versioned release; do not rewrite the existing tag.
