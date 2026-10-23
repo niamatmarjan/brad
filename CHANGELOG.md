@@ -1,5 +1,7 @@
 # Changelog
 
+All notable changes will be documented here. Versions follow [Semantic Versioning](https://semver.org/); releases before 1.0 are preview.
+
 ## [0.5.3] - Unreleased (isolated release candidate; do not publish)
 
 ### Fixed
@@ -7,13 +9,11 @@
 - Add Python regressions for singular/plural native skill roots, duplicated names, TEA module hints, and conservative preview-v7 detection. Version hints remain **not proof** of native host invocation.
 
 ### Verification / limitations
-- [Antigravity acceptance of fix PR #35](https://github.com/niamatmarjan/brad/pull/35) observed 39 v6.12.4 BMM/TEA skills through the corrected inspector; the released v0.5.2 inspector saw zero. Operator's fixed-source Python tests were 28/28 PASS. [GitHub CI 40006077565](https://github.com/niamatmarjan/brad/actions/runs/40006077565) passed 8/8 verification jobs.
-- Native BMAD **v7 remains preview alpha**, and the separate Windows fixture reported a `bmad-retrospective` upstream YAML parse error plus transient upstream setup `WinError 5`. These were not corrected by BRAD.
-- Copilot CLI skill-list discovery was reported, but **Codex execution was NOT_RUN** (binary absent) and **Claude Code v0.5.2 live execution was BLOCKED** (not authenticated). Antigravity Build/QA were executed **inline**, not independently proven native Skill-tool dispatch for each task. BRAD remains a supervised router, not universal automation.
+- A Windows Antigravity operator tested both corrected source and the **actual unpacked v0.5.3 candidate npm tarball** against 39 official v6.12.4 BMM/TEA skills in `.agent/skills`; v0.5.2 inspector saw zero. The packaged inspector detected all 39 native definitions plus BRAD, `tea:true`, `v6_likely`, and mandatory version-hint warnings. [Candidate CI 40010815323](https://github.com/niamatmarjan/brad/actions/runs/40010815323) passed **8/8 verification jobs** (Python 28 tests, Windows Node 22/24 54/54 each), and built 0.5.3 ZIP/npm assets. **No v0.5.3 release has yet been published.**
+- Native BMAD **v7 remains preview alpha**. A disposable `6.13.0-next` workspace rendered installed `bmad-build` instructions and completed an **inline** synthetic implementation with **3/3 tests PASS**; a separately invoked reviewer subagent reported PASS. The upstream `bmad-retrospective` YAML parser defect was confirmed at `61e01f8`, and the Windows setup transient rename `WinError 5` was observed. These **upstream issues are not fixed by BRAD**; a complete native v7 ticket/Build/TEA host invocation chain remains unverified.
+- Copilot CLI skill catalog discovery was reported, but native prompt execution **BLOCKED** (no authentication); **Codex NOT_RUN** (binary absent) and **Claude Code v0.5.2 BLOCKED** (not logged in). Antigravity's `render_skill.py` is an actual native instruction-rendering helper, **not proof of a distinct host Skill-tool dispatch**. The external code-review subagent was a real separate context; it is not automatically an official BMAD TEA skill call.
 
 **Release-stage only:** `VERSION=0.5.3` and matching pinned onboarding links are staged **on the isolated release-candidate branch only**. The latest published version is [v0.5.2](https://github.com/niamatmarjan/brad/releases/tag/v0.5.2). The v0.5.3 tag, checksum assets and GitHub Release do **not** exist, and must not be created until explicitly authorized.
-
-All notable changes will be documented here. Versions follow [Semantic Versioning](https://semver.org/); releases before 1.0 are preview.
 
 ## [0.5.2] - 2026-10-23
 
