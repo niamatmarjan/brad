@@ -10,7 +10,9 @@
 - Claude Code: `.claude/skills/brad/SKILL.md`; use `/brad ...`
   when exposed by Claude's command UI.
 - Codex: `.agents/skills/brad/SKILL.md`; use the skill name in the
-  invocation style your Codex client supports (often `$bmad-auto`).
+  invocation style your Codex client supports (for example `$brad` if that client supports named skills).
+- Google Antigravity: project BRAD skill at `.agents/skills/brad/SKILL.md`; official BMAD native skills may install under `.agent/skills`. Verify both paths in the **same** live workspace before claiming activation.
+- ChatGPT web/Work and Claude.ai chat: neither is automatically equivalent to Codex/Claude Code as a local project skill host. Connector access, file reading or chat-side role-play does not prove that any installed native BMAD skill ran. See [host setup](../../../docs/getting-started/host-support.md).
 - Before announcing delegation, confirm host can actually invoke target skill,
   dispatch subagent, run commands, and access GitHub. An instruction to a
   single assistant to "be architect" does not create independent architect.

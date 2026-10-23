@@ -4,6 +4,8 @@ This map is illustrative, not an alias registry. Read the actual `SKILL.md`,
 linked runtime/config and target-specific instructions before invoking. Skill
 names and plans change across pre-releases. Avoid fixed substring-only routing.
 
+**Evidence as of 2026-10-24:** [upstream stable v6.12](https://docs.bmad-method.org/start/install-bmad/) and **v7 preview alpha** have different installer/state contracts. BRAD v0.5.2 has bounded v6 live host evidence; full end-to-end v7 host interoperability is **NOT_VERIFIED**. This table is for candidate routing, not a proof every listed skill exists. See [compatibility evidence](../../../docs/reference/compatibility-matrix.md).
+
 ## Runtime identification (read-only)
 
 1. Read project root, `AGENTS.md`, `_bmad` config/version/manifest, installed
@@ -33,8 +35,8 @@ names and plans change across pre-releases. Avoid fixed substring-only routing.
 | UX | installed UX/UX Designer | `bmad-ux` |
 | Implement one work unit | `bmad-build` | `bmad-build` |
 | Unattended single unit | `bmad-build-auto` when supported | `bmad-build-auto` when supported |
-| Code review | `bmad-code-review` | `bmad-code-review` |
-| E2E tests | `bmad-qa-generate-e2e-tests` | same if installed |
+| Code review | installed `bmad-code-review` | read the actual installed v7 review skill; **do not assume the v6 ID** |
+| E2E tests | installed TEA / `bmad-qa-generate-e2e-tests` if present | select an installed native test skill; **not necessarily the v6 alias** |
 | Multi-ticket unattended | configured bmad-loop/other runtime | installed orchestrator or tickets dispatch |
 | Correction | `bmad-correct-course` if installed | `bmad-ticket`/PO replanning, as installed |
 | Epic closure | `bmad-retrospective` | `bmad-retrospective` |
@@ -52,7 +54,10 @@ One persona session is not independent subagent delegation. A task mentioning
 'QA' does not necessarily require `bmad-agent-tea`; it might mean generating E2E
 or auditing a PR. Honor request's action+output over the literal role label.
 
-## Source links (retrieved 2026-10-19)
+## Source links (checked 2026-10-24)
+
+- https://docs.bmad-method.org/start/install-bmad/
+- https://github.com/bmad-code-org/BMAD-METHOD/tree/V6.12
 
 - https://github.com/bmad-code-org/BMAD-METHOD/releases
 - https://github.com/bmad-code-org/BMAD-METHOD/blob/main/docs/reference/skills-and-agents.md

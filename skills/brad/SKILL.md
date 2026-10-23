@@ -29,8 +29,8 @@ before invoking. These references are guides, never proof of installed behavior.
 1. **Honor the user.** Explicit workflow/agent, target, scope, read-only mode and
    stopping point beat defaults. `--plan`/"dry run" never changes code or remote. In an AI chat, `/brad setup` first inspects
    BMAD prerequisites, offers official native setup only with explicit approval,
-   and configures consented repo preferences; it never silently installs/upgrades BMAD. and `resume` restores existing work rather
-   than creating another branch.
+   and configures consented repo preferences; it never silently installs/upgrades BMAD.
+   `resume` restores existing work rather than creating another branch.
    `--local` never pushes; `--pr` requests ticket-to-PR delivery. `--no-pr` keeps local.
    Never interpret "review" as "fix" without permission. An exact `1.1` is a
    *candidate* ticket ref: resolve it against the selected project's native tree.

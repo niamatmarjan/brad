@@ -2,10 +2,12 @@
 
 BRAD is a thin dispatcher to **installed native BMAD workflows**. Installation, host availability, actual invocation, and verified outcome are distinct levels of evidence. The documented BRAD release is **[v0.5.2](https://github.com/niamatmarjan/brad/releases/tag/v0.5.2) (supervised preview)**. Installed files, host registration, native invocation, and verified outcomes remain separate evidence levels.
 
-## Get started
+## Start here
 
-- [AI-led setup (Antigravity, Claude, Copilot, Codex)](getting-started/ai-setup.md)
-- [Installation and CLI guide](getting-started/installation.md)
+- **New to BRAD?** [Choose BMAD stable v6 or v7 preview](getting-started/choose-bmad-version.md), then [select your AI coding host](getting-started/host-support.md).
+- **Installing:** [AI-assisted setup](getting-started/ai-setup.md) or [CLI installation/doctor reference](getting-started/installation.md).
+- **Doing real work:** [Ten stakeholder role recipes](roles/quick-reference.md) and [full role guides](roles/README.md).
+- **What is really supported?** [Compatibility and live evidence matrix](reference/compatibility-matrix.md); do not assume every v7/host combination is verified.
 
 ## Use BRAD in the software development lifecycle
 
@@ -25,7 +27,7 @@ BRAD is a thin dispatcher to **installed native BMAD workflows**. Installation, 
 
 ## Maintainers and releases
 
-- [Maintainer release checklist](maintainers/releasing.md)
+- [Pre-live acceptance gates](maintainers/launch-readiness.md) · [Maintainer release checklist](maintainers/releasing.md)
 - [Versioned release notes](releases/v0.5.2.md) · [Changelog](../CHANGELOG.md)
 - [Contributing](../CONTRIBUTING.md) · [Security](../SECURITY.md) · [Governance](../GOVERNANCE.md)
 
