@@ -46,7 +46,7 @@ class InspectorTests(unittest.TestCase):
             self.assertEqual(report["version_hint_not_proof"], "v6_likely")
             self.assertTrue(report["optional_module_hints"]["tea"])
             self.assertIn("bmad-testarch-test-review", report["installed_project_skill_definitions"])
-            self.assertIn(".agent/skills", report["installed_project_skill_definitions"]["bmad-help"][0])
+            self.assertIn(".agent", Path(report["installed_project_skill_definitions"]["bmad-help"][0]).parts)
             self.assertFalse(report["bmad_runtime_present"])
 
     def test_codex_project_skill_root_and_duplicates(self):
