@@ -2,6 +2,23 @@
 
 All notable changes will be documented here. Versions follow [Semantic Versioning](https://semver.org/); releases before 1.0 are preview.
 
+## [0.5.2] - Unreleased (candidate; not tagged)
+
+### Proposed additions and fixes already on `main`
+- Allow explicitly opt-in, project-local installation of **official** BMAD through `brad setup --with-bmad`, without changing BRAD-only setup defaults.
+- Support unattended stable BMAD installation with explicit `--bmad-modules` and `--bmad-tools`; fail promptly without a TTY when required configuration is missing.
+- Bound upstream installer runtime and clean up child processes; skip existing native runtimes and protect user-managed BMAD installation state.
+- Improve Windows PowerShell/headless diagnostics and Antigravity native-skill inventory detection, without claiming that installed files prove live host-native execution.
+
+### Validation / known limitations
+- Pre-merge and post-merge CI passed on supported Node/Python combinations; a disposable Windows Antigravity real-installer test and a bounded Claude Code native-skill-to-PR pilot were reported and separately documented in [issue #21](https://github.com/niamatmarjan/brad/issues/21) and [issue #15](https://github.com/niamatmarjan/brad/issues/15).
+- An observed Claude Code v0.5.1 `bmad-build` used Python `uv` for workflow rendering; this is a **native workflow dependency in that configuration**, not a new BRAD CLI requirement.
+- Some operator-run default-parallel Windows Node tests previously encountered transient temporary-directory file-lock errors; sequential tests passed and later local default-parallel reruns passed 3/3, but broad stability is not certified.
+- Authenticated Copilot native TEA, BMAD v7 preview workflows and universal host-native Build dispatch remain unverified.
+- Public evaluation history retains historical metadata under the documented [audit decision](https://github.com/niamatmarjan/brad/issues/16); no history rewrite or zero-risk guarantee was made.
+
+**Release preparation only:** this entry and the draft `docs/releases/v0.5.2.md` do not authorize a version bump, tag, merge, publication or production use. Finalize release checks and update the candidate wording only after an explicit release decision.
+
 ## [0.5.1] - 2026-10-20
 
 ### Changed
