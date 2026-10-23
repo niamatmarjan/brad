@@ -37,6 +37,38 @@ class InspectorTests(unittest.TestCase):
             self.assertEqual(data["version_hint_not_proof"], "v6_likely")
             self.assertEqual(len(data["sprint_status_files_sample"]), 1)
 
+    def test_antigravity_singular_native_skills(self):
+        """Official BMAD skills in .agent/skills are visible even without .agents/skills."""
+        with tempfile.TemporaryDirectory() as tmp:
+            skill(tmp, "bmad-help", ".agent/skills")
+            skill(tmp, "bmad-testarch-test-review", ".agent/skills")
+            report = inspect(Path(tmp))
+            self.assertEqual(report["version_hint_not_proof"], "v6_likely")
+            self.assertTrue(report["optional_module_hints"]["tea"])
+            self.assertIn("bmad-testarch-test-review", report["installed_project_skill_definitions"])
+            self.assertIn(".agent", Path(report["installed_project_skill_definitions"]["bmad-help"][0]).parts)
+            self.assertFalse(report["bmad_runtime_present"])
+
+    def test_codex_project_skill_root_and_duplicates(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            skill(tmp, "bmad-build", ".codex/skills")
+            skill(tmp, "bmad-build", ".agents/skills")
+            report = inspect(Path(tmp))
+            self.assertEqual(len(report["duplicate_skill_names"]["bmad-build"]), 2)
+            self.assertEqual(report["version_hint_not_proof"], "unknown",
+                             "Build alone cannot prove a BMAD major version")
+
+    def test_antigravity_v7_preview_hint_not_execution(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            skill(tmp, "bmad", ".agent/skills")
+            skill(tmp, "bmad-ticket", ".agent/skills")
+            report = inspect(Path(tmp))
+            self.assertEqual(report["version_hint_not_proof"], "v7_likely")
+            self.assertFalse(report["bmad_runtime_present"])
+            self.assertIn("bmad", report["installed_project_skill_definitions"])
+            self.assertIn("Version hint is NOT a guaranteed BMAD version identification.",
+                          report["warnings"])
+
     def test_v7(self):
         with tempfile.TemporaryDirectory() as tmp:
             skill(tmp, "bmad")

@@ -1,19 +1,19 @@
-# Launch readiness and cross-host acceptance — BRAD v0.5.2
+# Launch readiness and cross-host acceptance — BRAD v0.5.3
 
-BRAD is already published at [v0.5.2](https://github.com/niamatmarjan/brad/releases/tag/v0.5.2). This is a **post-release product-readiness plan**, not a promise of universal compatibility or an authorization for a new version. Do not move or rewrite the existing release tag.
+BRAD [v0.5.3](https://github.com/niamatmarjan/brad/releases/tag/v0.5.3) adds the verified read-only native skill inventory fix for Antigravity and Codex project paths. This is a **post-release compatibility and product-readiness plan**, not proof of universal AI-host or BMAD v7 execution. Do not rewrite published release tags.
 
 ## Verified evidence and remaining work
 
 | Area | Known evidence (2026-10-24) | Required before claiming broader compatibility |
 |---|---|---|
 | Stable BMAD v6 | Windows first-run v6.12.4/BMM/TEA installation; bounded host Skill-tool pilot | Recheck with new upstream installers and each supported coding host |
-| CLI/package | v0.5.2 [CI/release](https://github.com/niamatmarjan/brad/actions/runs/39999668437) passed; ZIP, tarball and checksums published | Independent downloaded-file hash check on releases |
+| CLI/package | v0.5.2 [release CI](https://github.com/niamatmarjan/brad/actions/runs/39999668437) passed; v0.5.3 [candidate CI 40013336127](https://github.com/niamatmarjan/brad/actions/runs/40013336127) 8/8 PASS and a Windows operator tested an unpacked v0.5.3 npm tarball (39 native v6 skills + TEA found) | Final candidate release note review and **separate release authorization** before version-bump merge; current v0.5.2 asset hash recheck when required |
 | Windows safety | 54/54 tests on Windows Node 22/24; local 5/5 and 100-init checks reported after fixes | Preserve transient error tests; investigate regressions without masking with retries |
-| **BMAD v7 alpha** | Routing hints and documentation only | **Host-native v7 Build/ticket/review test NOT_RUN**; no claim of full parity |
-| **Claude Code v0.5.2** | v0.5.1 native Build/TEA observations | Replay exact v0.5.2 tagged release and capture actual host invocation |
-| **Antigravity host v0.5.2** | Official BMAD installed into disposable workspace | Actually open that workspace in fresh GUI host; live skill catalog and native invocation **NOT_VERIFIED** |
-| **Codex** | Shared skill path and CLI setup/doctor | Real Codex v0.5.2 skill discovery and bounded v6/v7 native execution |
-| **GitHub Copilot** | Packaged skills and optional agent file | Authenticated VS Code/Copilot CLI Skill invocation + test result |
+| **BMAD v7 alpha** | Antigravity 1.1.12 rendered native `bmad-build` with `uv`, implemented an inline synthetic `ping` task (**3/3 tests PASS**) and dispatched an independent reviewer subagent. v7 Skills CLI still skipped `bmad-retrospective` due to confirmed YAML typo; native setup initially failed transient Windows `WinError 5` | **PARTIAL:** no demonstrated complete v7 ticket lifecycle or native TEA dispatch; upstream defects remain; see [#32](https://github.com/niamatmarjan/brad/issues/32) |
+| **Claude Code v0.5.2** | v0.5.1 native Build/TEA observations; new v0.5.2 Windows binary + doctor checked but CLI session **not logged in** | Authenticate in authorized disposable workspace and capture an actual native invocation; new run BLOCKED |
+| **Antigravity host v0.5.2** | Live catalog showed BRAD and stable v6 skills, inline v6 `/health` had **2/2** PASS; separate v7 inline Build `ping` had **3/3** PASS, with a genuine separate reviewer subagent | `render_skill.py` is an official instruction renderer **not** conclusive host Skill-tool dispatch; subagent review is independent context but not proof official native TEA dispatched |
+| **Codex** | Supported path and deterministic CLI tests; Codex CLI absent in latest tested Windows shell | Install/authenticate Codex where permitted, then run actual v6/v7 native skill flow; **NOT_RUN** |
+| **GitHub Copilot** | Copilot CLI 1.0.99-2 skill list found BRAD and 31 v7 entries under `.agents/skills`; no native invocation demonstrated | Run authenticated native Build/QA from selected skill, not just `skill list` |
 | **ChatGPT web/Work** | Supported connected GitHub operations in eligible surfaces | Don't equate connector access with local skill execution |
 | Security/privacy | Policy gates, public history audit | Recheck current repo for secrets; old metadata retained under [#16](https://github.com/niamatmarjan/brad/issues/16) |
 | Stakeholder usability | Ten guides and prompt recipes | New-user walkthrough for PM, BA, Architect, Dev, QA, Delivery |

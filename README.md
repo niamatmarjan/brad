@@ -8,7 +8,7 @@
 
 BRAD routes requests to **official, project-installed [BMAD Method](https://github.com/bmad-code-org/BMAD-METHOD) skills**. It helps resolve existing stories, choose Build, review and TEA specialists, resume unfinished work and coordinate authorized GitHub delivery. BMAD owns the implementation workflows and project state; BRAD does not replace BMAD or run an autonomous agent service.
 
-**Current version:** [v0.5.2](https://github.com/niamatmarjan/brad/releases/tag/v0.5.2), a supervised-preview update to the official BMAD opt-in installation and Windows CLI reliability. BRAD is an independent, MIT-licensed project, not endorsed by BMAD Method. See [Changelog](CHANGELOG.md).
+**Current published release:** [v0.5.3](https://github.com/niamatmarjan/brad/releases/tag/v0.5.3). This supervised-preview patch corrects read-only discovery of Antigravity and Codex project-local BMAD skills; earlier [v0.5.2](https://github.com/niamatmarjan/brad/releases/tag/v0.5.2) remains available. BRAD is an independent, MIT-licensed project, not endorsed by BMAD Method. See [Changelog](CHANGELOG.md).
 
 ## Start here — choose your workflow
 
@@ -29,8 +29,8 @@ In the **project where you want BRAD to work**, with Node.js 20+ and Git:
 
 ```powershell
 # Windows PowerShell; on macOS/Linux replace npx.cmd with npx
-npx.cmd --yes "github:niamatmarjan/brad#v0.5.2" setup --agent antigravity
-npx.cmd --yes "github:niamatmarjan/brad#v0.5.2" doctor --agent antigravity --json
+npx.cmd --yes "github:niamatmarjan/brad#v0.5.3" setup --agent antigravity
+npx.cmd --yes "github:niamatmarjan/brad#v0.5.3" doctor --agent antigravity --json
 ```
 
 Substitute `claude`, `copilot` or `codex` for `antigravity` as appropriate, or omit `--agent` to detect explicit host conventions. The installer writes project-local BRAD skills only; it does **not** implicitly install BMAD. Use a compatible host that can discover Agent Skills, refresh that host after installation, and **verify its actual skill catalog**.
@@ -39,20 +39,20 @@ Substitute `claude`, `copilot` or `codex` for `antigravity` as appropriate, or o
 
 **When using native BMAD workflows:** Verify `uv --version` for current upstream setup and any installed Build scripts that require it. The BRAD Node CLI itself does **not** require `uv`; do not install global tools silently. For v7 alpha, follow its **Skills CLI + native `bmad setup`** path, not the stable v6 `bmad-method install` command. See the [version guide](docs/getting-started/choose-bmad-version.md).
 
-### Opt-in BRAD → BMAD setup (v0.5.2)
+### Opt-in BRAD → BMAD setup (introduced in v0.5.2; retained in candidate v0.5.3)
 
 BRAD v0.5.2 supports **explicit** `setup --with-bmad`; the earlier v0.5.1 tag does **not** include these flags. The official BMAD installer runs only when opt-in is requested and no existing native runtime is detected.
 
 ```powershell
 # Windows PowerShell (on macOS/Linux replace npx.cmd with npx):
 # Interactive terminal:
-npx.cmd --yes "github:niamatmarjan/brad#v0.5.2" setup --agent antigravity --with-bmad
+npx.cmd --yes "github:niamatmarjan/brad#v0.5.3" setup --agent antigravity --with-bmad
 
 # Headless / non-TTY terminal (requires explicit modules and tools):
-npx.cmd --yes "github:niamatmarjan/brad#v0.5.2" setup --agent antigravity --with-bmad --bmad-modules bmm --bmad-tools antigravity
+npx.cmd --yes "github:niamatmarjan/brad#v0.5.3" setup --agent antigravity --with-bmad --bmad-modules bmm --bmad-tools antigravity
 
 # Dry-run plan preview:
-npx.cmd --yes "github:niamatmarjan/brad#v0.5.2" setup --agent antigravity --with-bmad --dry-run --json
+npx.cmd --yes "github:niamatmarjan/brad#v0.5.3" setup --agent antigravity --with-bmad --dry-run --json
 ```
 
 **Headless and terminal safety:**

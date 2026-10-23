@@ -1,5 +1,7 @@
 # Choose BMAD v6.12 stable or v7 preview
 
+The examples below use the published [BRAD v0.5.3](https://github.com/niamatmarjan/brad/releases/tag/v0.5.3). BMAD stable v6.12 and preview v7 follow separate upstream setup paths; do not migrate an existing project without approval.
+
 BRAD is the **router**; official BMAD is the **workflow engine**. The installations and their permissions are separate. Select the native runtime already used by the project; BRAD never silently migrates `_bmad` state.
 
 **Upstream status, checked 2026-10-24:** [official BMAD installation](https://docs.bmad-method.org/start/install-bmad/) still calls **v6.12 stable** and **v7 preview alpha**. Its historical v7 ETA is not evidence of general availability; always check current upstream documentation before upgrading.
@@ -26,16 +28,16 @@ git --version
 npx.cmd bmad-method install
 
 # Separately install BRAD into this same project:
-npx.cmd --yes "github:niamatmarjan/brad#v0.5.2" setup --agent antigravity
+npx.cmd --yes "github:niamatmarjan/brad#v0.5.3" setup --agent antigravity
 
 # Verify BRAD local state (not host skill registration):
-npx.cmd --yes "github:niamatmarjan/brad#v0.5.2" doctor --agent antigravity --json
+npx.cmd --yes "github:niamatmarjan/brad#v0.5.3" doctor --agent antigravity --json
 ```
 
 **Alternative to the separate official-install command** for a *new project with no BMAD*: after explicit approval, BRAD v0.5.2 may invoke the official stable installer:
 
 ```powershell
-npx.cmd --yes "github:niamatmarjan/brad#v0.5.2" setup --agent antigravity --with-bmad --bmad-modules bmm,tea --bmad-tools antigravity --non-interactive
+npx.cmd --yes "github:niamatmarjan/brad#v0.5.3" setup --agent antigravity --with-bmad --bmad-modules bmm,tea --bmad-tools antigravity --non-interactive
 ```
 
 Choose **one upstream-install route**, not both. Existing BMAD is preserved and skipped, not silently upgraded. Restart the coding host **in the same project** to refresh skills. A safe native starting point in v6.12 is installed `bmad-help`; an authorized build usually uses installed `bmad-build`.
@@ -49,7 +51,7 @@ Use a **disposable workspace** until the preview passes the acceptance tests for
 npx.cmd skills add bmad-code-org/BMAD-METHOD
 
 # Install BRAD as a separate skill in the same project:
-npx.cmd --yes "github:niamatmarjan/brad#v0.5.2" setup --agent antigravity
+npx.cmd --yes "github:niamatmarjan/brad#v0.5.3" setup --agent antigravity
 ```
 
 Select the `bmad` hub and necessary native module records/skills in the upstream flow. Open the host at the project root and **ask the installed `bmad` skill to run `bmad setup`**. Then inspect `bmad status`, selected initiative, native ticket store and host skill catalog. These are **skill-chat instructions**, not shell commands to run blindly.

@@ -2,10 +2,10 @@
 
 The maintained guide now lives at **[installation.md](getting-started/installation.md)**.
 
-BRAD v0.5.2 installation (Node.js 20+):
+BRAD [v0.5.3](https://github.com/niamatmarjan/brad/releases/tag/v0.5.3) installation (Node.js 20+):
 
 ```bash
-npx --yes "github:niamatmarjan/brad#v0.5.2" setup
+npx --yes "github:niamatmarjan/brad#v0.5.3" setup
 ```
 
 This path is a compatibility link for existing bookmarks, published instructions, and historical Concourse reports. For new references, use the canonical [documentation index](README.md).

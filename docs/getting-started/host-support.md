@@ -2,7 +2,7 @@
 
 BRAD's portable `SKILL.md` implements the Agent Skills instruction format. That **does not guarantee** every host can discover, invoke, delegate or run it. Host loaders, permissions, tooling and subagents differ; verify against the same workspace as the task.
 
-Run BRAD's CLI **from the project where you need it**, with Node.js 20+ and Git. Replace `npx.cmd` with `npx` on macOS/Linux.
+The examples below use the published [BRAD v0.5.3](https://github.com/niamatmarjan/brad/releases/tag/v0.5.3), which corrects read-only Antigravity/Codex native skill inventory. Its portable skill format does **not** certify live native execution on every host. Run BRAD's CLI **from the project where you need it**, with Node.js 20+ and Git. Replace `npx.cmd` with `npx` on macOS/Linux.
 
 | Surface | BRAD `--agent` | Project installation | Actual invocation |
 |---|---|---|---|
@@ -20,13 +20,13 @@ Run BRAD's CLI **from the project where you need it**, with Node.js 20+ and Git.
 
 ```powershell
 # Choose one host matching your actual environment:
-npx.cmd --yes "github:niamatmarjan/brad#v0.5.2" setup --agent claude
-npx.cmd --yes "github:niamatmarjan/brad#v0.5.2" setup --agent codex
-npx.cmd --yes "github:niamatmarjan/brad#v0.5.2" setup --agent antigravity
-npx.cmd --yes "github:niamatmarjan/brad#v0.5.2" setup --agent copilot
+npx.cmd --yes "github:niamatmarjan/brad#v0.5.3" setup --agent claude
+npx.cmd --yes "github:niamatmarjan/brad#v0.5.3" setup --agent codex
+npx.cmd --yes "github:niamatmarjan/brad#v0.5.3" setup --agent antigravity
+npx.cmd --yes "github:niamatmarjan/brad#v0.5.3" setup --agent copilot
 
 # Example local diagnostics — file-level verification only:
-npx.cmd --yes "github:niamatmarjan/brad#v0.5.2" doctor --agent codex --json
+npx.cmd --yes "github:niamatmarjan/brad#v0.5.3" doctor --agent codex --json
 ```
 
 Install [official BMAD stable or preview](choose-bmad-version.md) separately or approve BRAD's official stable opt-in route. Do not install over another project's native runtime, and avoid running four setup commands merely because four hosts are listed here.

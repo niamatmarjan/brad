@@ -2,6 +2,19 @@
 
 All notable changes will be documented here. Versions follow [Semantic Versioning](https://semver.org/); releases before 1.0 are preview.
 
+## [0.5.3] - 2026-10-24
+
+### Fixed
+- Correct the **read-only** `inspect_bmad.py` skill inventory for Google Antigravity's official BMAD v6 native `.agent/skills` directory and project `.codex/skills` installations. The v0.5.2 inspector could mistakenly report no native BMAD skills when `brad doctor` correctly found 39.
+- Add Python regressions for singular/plural native skill roots, duplicated names, TEA module hints, and conservative preview-v7 detection. Version hints remain **not proof** of native host invocation.
+
+### Verification / limitations
+- A Windows Antigravity operator tested both corrected source and the **actual unpacked v0.5.3 candidate npm tarball** against 39 official v6.12.4 BMM/TEA skills in `.agent/skills`; v0.5.2 inspector saw zero. The packaged inspector detected all 39 native definitions plus BRAD, `tea:true`, `v6_likely`, and mandatory version-hint warnings. [Candidate CI 40010815323](https://github.com/niamatmarjan/brad/actions/runs/40010815323) passed **8/8 verification jobs** (Python 28 tests, Windows Node 22/24 54/54 each), and built 0.5.3 ZIP/npm assets. **No v0.5.3 release has yet been published.**
+- Native BMAD **v7 remains preview alpha**. A disposable `6.13.0-next` workspace rendered installed `bmad-build` instructions and completed an **inline** synthetic implementation with **3/3 tests PASS**; a separately invoked reviewer subagent reported PASS. The upstream `bmad-retrospective` YAML parser defect was confirmed at `61e01f8`, and the Windows setup transient rename `WinError 5` was observed. These **upstream issues are not fixed by BRAD**; a complete native v7 ticket/Build/TEA host invocation chain remains unverified.
+- Copilot CLI skill catalog discovery was reported, but native prompt execution **BLOCKED** (no authentication); **Codex NOT_RUN** (binary absent) and **Claude Code v0.5.2 BLOCKED** (not logged in). Antigravity's `render_skill.py` is an actual native instruction-rendering helper, **not proof of a distinct host Skill-tool dispatch**. The external code-review subagent was a real separate context; it is not automatically an official BMAD TEA skill call.
+
+**Release scope:** This patch changes read-only project-local native skill inventory and its tests. It does not certify complete v7-alpha native ticket/TEA execution or every AI host, and it does not publish an npmjs.com registry package. GitHub Release assets are built and checksummed by the release workflow.
+
 ## [0.5.2] - 2026-10-23
 
 ### Added and changed
