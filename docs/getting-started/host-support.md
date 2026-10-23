@@ -2,7 +2,7 @@
 
 BRAD's portable `SKILL.md` implements the Agent Skills instruction format. That **does not guarantee** every host can discover, invoke, delegate or run it. Host loaders, permissions, tooling and subagents differ; verify against the same workspace as the task.
 
-**Candidate-stage note:** the `#v0.5.3` examples below are for the **unpublished release candidate** and will work only after that GitHub tag is created. For immediate use install the existing [v0.5.2 release](https://github.com/niamatmarjan/brad/releases/tag/v0.5.2). The only planned v0.5.3 code change is read-only Antigravity/Codex native skill inventory. Run BRAD's CLI **from the project where you need it**, with Node.js 20+ and Git. Replace `npx.cmd` with `npx` on macOS/Linux.
+The examples below use the published [BRAD v0.5.3](https://github.com/niamatmarjan/brad/releases/tag/v0.5.3), which corrects read-only Antigravity/Codex native skill inventory. Its portable skill format does **not** certify live native execution on every host. Run BRAD's CLI **from the project where you need it**, with Node.js 20+ and Git. Replace `npx.cmd` with `npx` on macOS/Linux.
 
 | Surface | BRAD `--agent` | Project installation | Actual invocation |
 |---|---|---|---|
