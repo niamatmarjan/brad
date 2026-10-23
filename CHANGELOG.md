@@ -2,9 +2,9 @@
 
 All notable changes will be documented here. Versions follow [Semantic Versioning](https://semver.org/); releases before 1.0 are preview.
 
-## [0.5.2] - Unreleased (candidate; not tagged)
+## [0.5.2] - Unreleased (release candidate; version bump isolated in PR)
 
-### Proposed additions and fixes already on `main`
+### Changes proposed for v0.5.2
 - Allow explicitly opt-in, project-local installation of **official** BMAD through `brad setup --with-bmad`, without changing BRAD-only setup defaults.
 - Support unattended stable BMAD installation with explicit `--bmad-modules` and `--bmad-tools`; fail promptly without a TTY when required configuration is missing.
 - Bound upstream installer runtime and clean up child processes; skip existing native runtimes and protect user-managed BMAD installation state.
@@ -17,7 +17,7 @@ All notable changes will be documented here. Versions follow [Semantic Versionin
 - Authenticated Copilot native TEA, BMAD v7 preview workflows and universal host-native Build dispatch remain unverified.
 - Public evaluation history retains historical metadata under the documented [audit decision](https://github.com/niamatmarjan/brad/issues/16); no history rewrite or zero-risk guarantee was made.
 
-**Release preparation only:** this entry and the draft `docs/releases/v0.5.2.md` do not authorize a version bump, tag, merge, publication or production use. Finalize release checks and update the candidate wording only after an explicit release decision.
+**Release-candidate testing only:** VERSION and package.json are set to 0.5.2 **on the isolated candidate branch only**, to exercise versioned packaging before release. This entry and the draft `docs/releases/v0.5.2.md` do not authorize merging that branch, creating a tag, publication, or production use. Finalize the candidate wording only after explicit maintainer release approval.
 
 ## [0.5.1] - 2026-10-20
 
