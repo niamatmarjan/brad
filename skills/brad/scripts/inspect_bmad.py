@@ -11,7 +11,17 @@ import json
 import subprocess
 from pathlib import Path
 
-SKILL_PARENTS = (".agents/skills", ".github/skills", ".claude/skills")
+# Match the project-local native skill roots already inspected by the BRAD CLI.
+# Antigravity's official BMAD installer uses singular .agent/skills; the
+# shared .agents/skills is often BRAD's own host-neutral installation.
+# The inventory is read-only, and these paths do not prove host registration.
+SKILL_PARENTS = (
+    ".agents/skills",
+    ".agent/skills",
+    ".github/skills",
+    ".claude/skills",
+    ".codex/skills",
+)
 SIGNALS_V6 = ("bmad-help", "bmad-sprint-planning", "bmad-create-epics-and-stories")
 SIGNALS_V7 = ("bmad", "bmad-agent-po")
 
