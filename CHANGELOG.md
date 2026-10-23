@@ -2,7 +2,7 @@
 
 All notable changes will be documented here. Versions follow [Semantic Versioning](https://semver.org/); releases before 1.0 are preview.
 
-## [0.5.3] - Unreleased (isolated release candidate; do not publish)
+## [0.5.3] - 2026-10-24
 
 ### Fixed
 - Correct the **read-only** `inspect_bmad.py` skill inventory for Google Antigravity's official BMAD v6 native `.agent/skills` directory and project `.codex/skills` installations. The v0.5.2 inspector could mistakenly report no native BMAD skills when `brad doctor` correctly found 39.
@@ -13,7 +13,7 @@ All notable changes will be documented here. Versions follow [Semantic Versionin
 - Native BMAD **v7 remains preview alpha**. A disposable `6.13.0-next` workspace rendered installed `bmad-build` instructions and completed an **inline** synthetic implementation with **3/3 tests PASS**; a separately invoked reviewer subagent reported PASS. The upstream `bmad-retrospective` YAML parser defect was confirmed at `61e01f8`, and the Windows setup transient rename `WinError 5` was observed. These **upstream issues are not fixed by BRAD**; a complete native v7 ticket/Build/TEA host invocation chain remains unverified.
 - Copilot CLI skill catalog discovery was reported, but native prompt execution **BLOCKED** (no authentication); **Codex NOT_RUN** (binary absent) and **Claude Code v0.5.2 BLOCKED** (not logged in). Antigravity's `render_skill.py` is an actual native instruction-rendering helper, **not proof of a distinct host Skill-tool dispatch**. The external code-review subagent was a real separate context; it is not automatically an official BMAD TEA skill call.
 
-**Release-stage only:** `VERSION=0.5.3` and matching pinned onboarding links are staged **on the isolated release-candidate branch only**. The latest published version is [v0.5.2](https://github.com/niamatmarjan/brad/releases/tag/v0.5.2). The v0.5.3 tag, checksum assets and GitHub Release do **not** exist, and must not be created until explicitly authorized.
+**Release scope:** This patch changes read-only project-local native skill inventory and its tests. It does not certify complete v7-alpha native ticket/TEA execution or every AI host, and it does not publish an npmjs.com registry package. GitHub Release assets are built and checksummed by the release workflow.
 
 ## [0.5.2] - 2026-10-23
 
