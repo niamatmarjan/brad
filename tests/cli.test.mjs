@@ -6,7 +6,7 @@ import { join, delimiter, resolve } from 'node:path';
 import { parsePackMetadata } from './pack-metadata.mjs';
 import { spawnSync, spawn, execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
-import { execute, main, version, packageRoot, terminateProcessTree } from '../cli/core.mjs';
+import { execute, main, version, packageRoot, terminateProcessTree, upstreamInstallerEnvironment, renameWithRetry } from '../cli/core.mjs';
 const fixture = fn => {
   const dir = mkdtempSync(join(tmpdir(), 'brad-cli-test-'));
   const clean = () => rmSync(dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 50 });
@@ -24,6 +24,40 @@ const fixture = fn => {
 };
 
 test('package and release versions match', () => assert.equal(version(), readFileSync(join(packageRoot, 'VERSION'), 'utf8').trim()));
+test('nested official installer does not inherit outer npm exec package selection', () => {
+  const input = { npm_config_package: 'brad-0.5.2.tgz', NPM_CONFIG_PACKAGE: 'also-outer',
+    npm_config_registry: 'https://registry.example.invalid', CUSTOM_VAR: 'preserve' };
+  const result = upstreamInstallerEnvironment(input);
+  assert.equal(Object.keys(result).some(key => key.toLowerCase() === 'npm_config_package'), false);
+  assert.equal(result.npm_config_registry, input.npm_config_registry);
+  assert.equal(result.CUSTOM_VAR, 'preserve');
+  assert.equal(input.npm_config_package, 'brad-0.5.2.tgz', 'must not modify process or caller environment');
+  assert.equal(input.NPM_CONFIG_PACKAGE, 'also-outer', 'case-insensitive package metadata must remain in caller environment');
+  if (process.platform === 'win32') assert.equal(result.NoDefaultCurrentDirectoryInExePath, '1');
+});
+
+test('transient Windows rename errors retry for a bounded time without swallowing failures', () => {
+  const transient = Object.assign(new Error('locked staging directory'), { code: 'EPERM' });
+  let tries = 0;
+  const op = () => { tries++; if (tries < 3) throw transient; return 'moved'; };
+  if (process.platform === 'win32') {
+    assert.equal(renameWithRetry('staged', 'destination', op), 'moved');
+    assert.equal(tries, 3);
+  } else {
+    assert.throws(() => renameWithRetry('staged', 'destination', op), e => e === transient);
+    assert.equal(tries, 1);
+  }
+  const fatal = Object.assign(new Error('permission denied'), { code: 'ENOENT' });
+  tries = 0;
+  assert.throws(() => renameWithRetry('staged', 'destination', () => { tries++; throw fatal; }), e => e === fatal);
+  assert.equal(tries, 1, 'nontransient errors must fail without retrying');
+  if (process.platform === 'win32') {
+    tries = 0;
+    assert.throws(() => renameWithRetry('staged', 'destination', () => { tries++; throw transient; }), e => e === transient);
+    assert.equal(tries, 6, 'must stop after five retries and preserve the original error');
+  }
+});
+
 test('no-flag install targets shared agent skill and can be repeated safely', () => fixture(root => {
   const a = execute(['init', '--dir', root]);
   assert.equal(a.results[0].action, 'installed');
@@ -411,6 +445,7 @@ test('opt-in setup invokes a fake official installer exactly once and reports on
   if (process.platform === 'win32') {
     writeFileSync(script, [
       '@echo off',
+      'if defined npm_config_package (echo leaked npm_config_package 1>&2 & exit /b 89)',
       'echo %* >> "%CD%\\upstream-calls.txt"',
       'if not exist "%CD%\\_bmad" mkdir "%CD%\\_bmad"',
       'echo [core] > "%CD%\\_bmad\\config.toml"',
@@ -420,6 +455,7 @@ test('opt-in setup invokes a fake official installer exactly once and reports on
   } else {
     writeFileSync(script, [
       '#!/bin/sh',
+      'test -z "${npm_config_package:-}" || exit 89',
       'printf "%s\\n" "$*" >> "$PWD/upstream-calls.txt"',
       'mkdir -p "$PWD/_bmad"',
       'printf "%s\\n" "[core]" > "$PWD/_bmad/config.toml"',
@@ -431,6 +467,7 @@ test('opt-in setup invokes a fake official installer exactly once and reports on
   const env = { ...process.env };
   for (const k of Object.keys(env)) if (k.toLowerCase() === 'path') delete env[k];
   env.PATH = bin + delimiter + (process.env.PATH || process.env.Path || '');
+  env.npm_config_package = 'unrelated-brad-candidate.tgz';
   const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad', '--bmad-modules', 'bmm', '--bmad-tools', 'antigravity'];
   const first = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
     { env, cwd: root, encoding: 'utf8', timeout: 20000 });
