@@ -2,7 +2,7 @@
 
 The maintained guide now lives at **[installation.md](getting-started/installation.md)**.
 
-**Unpublished v0.5.3 candidate** installation (Node.js 20+; these tag commands require a later release). For use today, install [v0.5.2](https://github.com/niamatmarjan/brad/releases/tag/v0.5.2):
+BRAD [v0.5.3](https://github.com/niamatmarjan/brad/releases/tag/v0.5.3) installation (Node.js 20+):
 
 ```bash
 npx --yes "github:niamatmarjan/brad#v0.5.3" setup
