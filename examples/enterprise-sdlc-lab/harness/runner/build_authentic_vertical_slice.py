@@ -123,6 +123,36 @@ AUTHENTIC_SESSION_MANIFEST = [
         "role": "Lucas Martin (DevOps)",
         "session_id": "44e8b8da-a613-4574-b902-ef1de59123ca",
     },
+    {
+        "slice_id": "VS-16",
+        "case_id": "R01-02",
+        "role": "Maya Chen (PM)",
+        "session_id": "534c156a-2182-4dec-ab83-01ae6211670a",
+    },
+    {
+        "slice_id": "VS-17",
+        "case_id": "R02-02",
+        "role": "Aisha Rahman (BA)",
+        "session_id": "c1482bde-3a5c-4588-b69f-65e505c77e9e",
+    },
+    {
+        "slice_id": "VS-18",
+        "case_id": "R07-01",
+        "role": "Daniel Reed (PO)",
+        "session_id": "c7f5c7d3-1e44-40f0-93a5-26a2c950dad1",
+    },
+    {
+        "slice_id": "VS-19",
+        "case_id": "R08-02",
+        "role": "Maya Chen (PM)",
+        "session_id": "f65b1e81-ec8f-424d-a1f8-eae5aeeca5fb",
+    },
+    {
+        "slice_id": "VS-20",
+        "case_id": "R10-01",
+        "role": "Priya Shah (BackendDev)",
+        "session_id": "9c4a7617-20d3-48f9-90a7-6768213607a8",
+    },
 ]
 
 

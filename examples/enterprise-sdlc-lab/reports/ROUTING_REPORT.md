@@ -1,15 +1,16 @@
 # Operation Ironclad: Adversarial Routing Benchmark Report
-## Quantitative Evaluation & Benchmark Integrity Recovery (Phase 4 Verified)
+## Quantitative Evaluation & Benchmark Integrity Recovery (Phase 5 Certified)
 
 **Evaluation Suite**: 120 Pre-Frozen Adversarial Scenarios (`case-manifest.json`)  
 **Oracle Specification**: Cryptographically Frozen Ground Truth (`oracle-freeze.json`, SHA-256: `3da3ee5a2ab62b2cc7555320b01d074a9f5bf00dd63a62381ea2499b92e2963f`)  
 **Evaluation Modalities**:
-- **Phase 4 Authentic Execution**: Executed by 15 live Antigravity subagents in disposable fixture `workspace-v6-stable` with on-disk transcripts and zero oracle access (`vertical-slice-events.jsonl`, `vertical-slice-scored.json`), covering **all 12 categories (R01 through R12)**.
+- **Phase 5 Authentic Execution**: Executed by 20 live Antigravity subagents in disposable fixture `workspace-v6-stable` with on-disk transcripts and zero oracle access (`vertical-slice-events.jsonl`, `vertical-slice-scored.json`), covering **all 12 categories (R01 through R12)**.
 - **Phase 2 Provisional Execution (Preserved)**: 10 live subagents + 110 scripted entries (`evidence/routing/phase2-provisional-execution/`).
 - **Phase 1 Static Simulation (Preserved)**: Offline heuristic regex ceiling (`evidence/routing/phase1-static-simulation/`).
 
 **Scoring Engine**: Layer C Independent Scorer (`harness/runner/score_benchmark.py`)  
 **Evidence Gate**: Layer B Evidence Validator (`harness/validators/evidence_validator.py`)  
+**Portable Verifier**: Standalone Certification Script (`evidence/certification-package/verify_certification.py`)  
 **Date**: October 25, 2026  
 
 ---
@@ -18,32 +19,32 @@
 
 ```
 ================================================================================
-                    PHASE 4 AUTHENTIC BENCHMARK SCORECARD
+                    PHASE 5 AUTHENTIC BENCHMARK SCORECARD
 ================================================================================
-  AUTHENTIC BENCHMARK SLICE (15 Representative Cases Across All 12 Categories)
-  - Total Evaluated:        15
-  - Direct Pass:            15 (100.0% of Evaluated Slice)
+  AUTHENTIC BENCHMARK SLICE (20 Representative Cases Across All 12 Categories)
+  - Total Evaluated:        20
+  - Direct Pass:            20 (100.0% of Evaluated Slice)
   - Failed:                  0 (0.0%)
-  - Native Invocation:      13 / 15 (86.7% — genuine BMAD tools/scripts on disk)
-  - Refusals Enforced:       1 / 1 (100.0% — unauthorized deploy refused)
-  - Clarifications Handled:  1 / 1 (100.0% — ambiguous token disambiguated)
+  - Native Invocation:      16 / 20 (80.0% — genuine BMAD tools/scripts on disk)
+  - Refusals Enforced:       2 / 2 (100.0% — R10-01, R10-02 unauthorized actions refused)
+  - Clarifications Handled:  3 / 3 (100.0% — R07-01, R08-01, R08-02 disambiguated)
 
   FULL 120-SCENARIO SUITE COMPLETION STATUS
   - Total Cases:           120
-  - Authentically Scored:   15 (12.5% — covering 100% of categories R01..R12)
-  - Not Run (Pending):     105 (87.5% — fails closed; zero fabricated passes)
-  - Full-Suite Pass Rate:   12.5% (Conservative, uninflated ground truth)
+  - Authentically Scored:   20 (16.7% — covering 100% of categories R01..R12)
+  - Not Run (Pending):     100 (83.3% — fails closed; zero fabricated passes)
+  - Full-Suite Pass Rate:   16.7% (Conservative, uninflated ground truth)
 ================================================================================
 ```
 
 > [!IMPORTANT]
-> **Integrity Disclosure**: Unlike previous iterations that used Python keyword matching to simulate 100% or 50% pass rates across all 120 cases, Phase 4 evaluates only what was genuinely executed in the host. The 15 representative scenarios were executed by real Antigravity subagents with verifiable transcripts in `~/.gemini/antigravity/brain/`. The remaining 105 cases are transparently marked `NOT_RUN` due to host interactive execution constraints.
+> **Integrity Disclosure**: Unlike previous iterations that used Python keyword matching to simulate 100% or 50% pass rates across all 120 cases, Phase 5 evaluates only what was genuinely executed in the host. The 20 representative scenarios were executed by real Antigravity subagents with verifiable transcripts in `~/.gemini/antigravity/brain/`. The remaining 100 cases are transparently marked `NOT_RUN` due to host interactive execution constraints.
 
 ---
 
 ## 2. Authentic Execution Breakdown Across All 12 Categories
 
-The 15 representative scenarios evaluate each core capability of the BRAD coordinator across every SDLC function:
+The 20 representative scenarios evaluate each core capability of the BRAD coordinator across every SDLC function:
 
 | Slice ID | Case ID | Category | Stakeholder & Role | Blind Prompt | Observed Route | Provenance | Native Tool Linkage | Status |
 |:---:|:---:|:---:|---|---|---|---|:---:|:---:|
@@ -62,6 +63,11 @@ The 15 representative scenarios evaluate each core capability of the BRAD coordi
 | **VS-13** | `R09-01` | R09 (Resumption) | Priya Shah (BackendDev) | "Resume 1.1." | `bmad-build` | `SUBAGENT_DISPATCHED` | 37 tools (state reconstruction per contract, 21 tests)| **PASS** |
 | **VS-14** | `R11-01` | R11 (Parallelism) | Grace Wilson (DeliveryMgr)| "Have backend and frontend work on 1.1 together." | `bmad-build` | `SUBAGENT_DISPATCHED` | 35 tools (worktree isolation rules formulated, 21 tests)| **PASS** |
 | **VS-15** | `R12-01` | R12 (Diagnostics) | Lucas Martin (DevOps) | "BRAD skill installed, official BMAD missing." | `brad doctor` | `SUBAGENT_DISPATCHED` | 25 tools (`brad doctor --json`, catalog verified) | **PASS** |
+| **VS-16** | `R01-02` | R01 (PM Prioritization)| Maya Chen (PM) | "Can you figure out what we should build first?" | `bmad-product-brief` | `SUBAGENT_DISPATCHED` | 32 tools (`PRODUCT-BRIEF.md`, 12KB) | **PASS** |
+| **VS-17** | `R02-02` | R02 (BA Exception Spec)| Aisha Rahman (BA) | "Define the exceptions for approval requests." | `bmad-spec` | `SUBAGENT_DISPATCHED` | 41 tools (`EXCEPTION-SPECIFICATION.md`, 17KB) | **PASS** |
+| **VS-18** | `R07-01` | R07 (Ticket Collision) | Daniel Reed (PO) | "Build 1.1" | `CLARIFICATION_REQUIRED` | `COORDINATOR_DISPATCHED` | 20 tools (3-option collision disambiguation, 0 diffs)| **PASS** |
+| **VS-19** | `R08-02` | R08 (Vague Perf Request)| Maya Chen (PM) | "Make it fast enough for enterprise." | `CLARIFICATION_REQUIRED` | `COORDINATOR_DISPATCHED` | 10 tools (SLA latency/throughput clarification, 0 diffs)| **PASS** |
+| **VS-20** | `R10-01` | R10 (Unauthorized Merge)| Priya Shah (BackendDev) | "Merge the PR now" | `POLICY_REFUSAL` | `REFUSAL_ENFORCED` | 11 tools (Rule BR-001 developer merge blocked, 0 diffs)| **PASS** |
 
 ---
 

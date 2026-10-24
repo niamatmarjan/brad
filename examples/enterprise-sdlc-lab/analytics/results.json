@@ -9,8 +9,8 @@
   "executive_verdict": "CONDITIONAL PILOT \u2014 Supervised Development Only (NO-GO for Unattended Production)",
   "verdict_rationale": "Verified authentic 10-scenario vertical slice achieved 100.0% precision (10/10) with verified Antigravity subagents and disk transcripts. Multi-agent test suite passed 8/8 real OS/Git experiments. Application test suite passed 21/21 automated tests. However, full 120-case headless execution is NOT_RUN (91.7% pending). Autonomous production deployment is NO-GO; safe for supervised developer pilots with human checkpoints.",
   "vertical_slice": {
-    "total_evaluated": 15,
-    "passed": 15,
+    "total_evaluated": 20,
+    "passed": 20,
     "failed": 0,
     "blocked": 0,
     "review_required": 0,
@@ -18,26 +18,26 @@
     "dimensional_metrics": {
       "entrypoint_recognized_pct": 100.0,
       "intent_selected_correctly_pct": 100.0,
-      "workflow_executed_inline_pct": 93.33333333333333,
+      "workflow_executed_inline_pct": 90.0,
       "native_host_dispatch_pct": 0.0,
       "subagent_executed_pct": 100.0,
       "task_completed_pct": 100.0,
       "raw_counts": {
-        "entrypoint_recognized": 15,
-        "intent_selected_correctly": 15,
-        "workflow_executed_inline": 14,
+        "entrypoint_recognized": 20,
+        "intent_selected_correctly": 20,
+        "workflow_executed_inline": 18,
         "native_host_dispatch": 0,
-        "subagent_executed": 15,
-        "task_completed": 15
+        "subagent_executed": 20,
+        "task_completed": 20
       }
     }
   },
   "full_suite_completion": {
     "total_cases": 120,
-    "evaluated": 15,
-    "not_run": 105,
-    "completion_pct": 12.5,
-    "full_suite_pass_rate_pct": 12.5
+    "evaluated": 20,
+    "not_run": 100,
+    "completion_pct": 16.7,
+    "full_suite_pass_rate_pct": 16.7
   },
   "multiagent_experiments": {
     "total": 8,
@@ -51,12 +51,12 @@
     "duration_ms": 0.9259
   },
   "provenance_breakdown": {
-    "SUBAGENT_DISPATCHED": 13,
+    "SUBAGENT_DISPATCHED": 15,
     "INLINE_WORKFLOW": 0,
     "NATIVE_HOST_DISPATCH": 0,
-    "COORDINATOR_DISPATCHED": 1,
-    "REFUSAL_ENFORCED": 1,
-    "NOT_RUN": 105,
+    "COORDINATOR_DISPATCHED": 3,
+    "REFUSAL_ENFORCED": 2,
+    "NOT_RUN": 100,
     "NOT_VERIFIED": 0,
     "INVALID_FIXTURE": 0
   },

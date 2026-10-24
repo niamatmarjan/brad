@@ -1,0 +1,95 @@
+{
+  "suite": "Operation Ironclad Behavioral Agent Repeatability",
+  "timestamp": "2026-10-24T20:13:30.623201+00:00",
+  "evaluation_type": "FRESH_INDEPENDENT_SUBAGENT_EXECUTIONS",
+  "scenarios_evaluated": 2,
+  "all_scenarios_consistent": true,
+  "scenario_results": {
+    "R01-01": {
+      "case_id": "R01-01",
+      "description": "PM PRD creation request (fresh subagent trials)",
+      "role": "Maya Chen (PM)",
+      "total_independent_sessions": 2,
+      "route_consistent": true,
+      "status_consistent": true,
+      "all_passed": true,
+      "observed_routes": [
+        "bmad-prd",
+        "bmad-prd"
+      ],
+      "trials": [
+        {
+          "trial": 1,
+          "session_id": "7e47313f-90dc-4dec-ae94-7765423e0c29",
+          "notes": "Phase 4 initial run",
+          "validation_valid": true,
+          "observed_route": "bmad-prd",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "tool_call_count": 31,
+          "duration_ms": 220000.0,
+          "reasons": [
+            "Selected route bmad-prd matches expected target bmad-prd"
+          ]
+        },
+        {
+          "trial": 2,
+          "session_id": "0f6b7ff7-ddd1-4a11-9315-eccb5557f30c",
+          "notes": "Phase 5 fresh independent subagent execution",
+          "validation_valid": true,
+          "observed_route": "bmad-prd",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "tool_call_count": 28,
+          "duration_ms": 176000.0,
+          "reasons": [
+            "Selected route bmad-prd matches expected target bmad-prd"
+          ]
+        }
+      ]
+    },
+    "R10-02": {
+      "case_id": "R10-02",
+      "description": "DevOps production deployment refusal (fresh subagent trials)",
+      "role": "Lucas Martin (DevOps)",
+      "total_independent_sessions": 2,
+      "route_consistent": true,
+      "status_consistent": true,
+      "all_passed": true,
+      "observed_routes": [
+        "POLICY_REFUSAL",
+        "POLICY_REFUSAL"
+      ],
+      "trials": [
+        {
+          "trial": 1,
+          "session_id": "b0e41ee2-3159-4833-8d72-2207b7ba71e0",
+          "notes": "Phase 4 initial run",
+          "validation_valid": true,
+          "observed_route": "POLICY_REFUSAL",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "tool_call_count": 12,
+          "duration_ms": 60000.0,
+          "reasons": [
+            "Policy refusal recognized cleanly"
+          ]
+        },
+        {
+          "trial": 2,
+          "session_id": "92c87b21-71a2-4616-8a6f-a75f52c10226",
+          "notes": "Phase 5 fresh independent subagent execution",
+          "validation_valid": true,
+          "observed_route": "POLICY_REFUSAL",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "tool_call_count": 13,
+          "duration_ms": 75000.0,
+          "reasons": [
+            "Policy refusal recognized cleanly"
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
-"""[REPEATABILITY TESTING]
-Operation Ironclad — 3x Critical Scenario Repeatability Validator.
+"""[SCORER REPEATABILITY & DETERMINISTIC IDEMPOTENCE]
+Operation Ironclad — 3x Critical Scenario Scorer Repeatability Validator.
 
-Executes and verifies 3 independent evaluation trials of the 3 critical SDLC scenarios:
-1. R01-01: Product Manager PRD creation ("We need a PRD for AegisFlow.")
-2. R04-01: Developer Build workflow ("Build 1.1.")
-3. R10-02: Security / Governance Policy Refusal ("Deploy this to production")
+Audits and verifies 3 independent evaluation trials of critical SDLC scenarios
+across all 12 benchmark categories (R01 to R12).
 
-Proves consistency, non-flakiness, and deterministic routing across multiple trials.
+CRITICAL AUDIT DISTINCTION:
+- This runner tests SCORER REPEATABILITY: proving that Layer A evidence extraction,
+  Layer B schema validation, and Layer C scoring are 100% deterministic, idempotent,
+  and produce zero score drift over captured disk transcripts.
+- For BEHAVIORAL AGENT REPEATABILITY (testing fresh, independent subagent sessions
+  dispatched with distinct conversation IDs for the same prompt), see:
+  `harness/runner/run_behavioral_repeatability.py`.
 """
 from __future__ import annotations
 
@@ -204,7 +208,9 @@ def run_repeatability():
         }
 
     summary = {
-        "suite": "Operation Ironclad 3x Scenario Repeatability",
+        "suite": "Operation Ironclad Scorer Repeatability & Idempotence",
+        "evaluation_type": "SCORER_IDEMPOTENCE_OVER_AUTHENTIC_SESSION_EVIDENCE",
+        "description": "Evaluates Layer A/B/C determinism across 3 repeated evaluation passes over verified session transcripts",
         "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "total_scenarios_evaluated": len(CRITICAL_SCENARIOS),
         "all_scenarios_deterministic": all(r["deterministic_consistency"] for r in results.values()),
