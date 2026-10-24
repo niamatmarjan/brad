@@ -1,6 +1,6 @@
 {
-  "suite": "Operation Ironclad Phase 3 Authentic Multi-Agent Experiments",
-  "timestamp": "2026-10-24T04:46:12Z",
+  "suite": "Operation Ironclad Authentic Multi-Agent Experiments",
+  "timestamp": "2026-10-24T05:12:31Z",
   "total_experiments": 8,
   "passed": 8,
   "failed": 0,
@@ -9,6 +9,7 @@
       "experiment_id": "EXP-01",
       "name": "Independent Responsibilities & Subagent Context Isolation",
       "status": "PASS",
+      "provenance": "SUBAGENT_DISPATCHED",
       "subagents_inspected": [
         {
           "conversationId": "7e47313f-90dc-4dec-ae94-7765423e0c29",
@@ -19,11 +20,11 @@
           "expected_skill_observed": true
         },
         {
-          "conversationId": "61de3c60-35d9-4182-8dec-395e5e3ad1d5",
-          "role": "Architect Review Worker",
+          "conversationId": "87a098bc-2d3a-410c-b72e-cd977886c8b4",
+          "role": "Tech Lead Review Worker",
           "transcript_exists": true,
-          "transcript_size_bytes": 139256,
-          "tool_calls_observed": 40,
+          "transcript_size_bytes": 150826,
+          "tool_calls_observed": 42,
           "expected_skill_observed": true
         },
         {
@@ -49,11 +50,12 @@
       "experiment_id": "EXP-02",
       "name": "Parallel Non-Conflicting Development with Git Worktrees",
       "status": "PASS",
+      "provenance": "WORKTREE_CONCURRENCY_FIXTURE",
       "worktrees_used": [
-        "C:\\Users\\NIAMAT~1\\AppData\\Local\\Temp\\brad-exp02-worktrees-fyl_09c8\\wt-backend",
-        "C:\\Users\\NIAMAT~1\\AppData\\Local\\Temp\\brad-exp02-worktrees-fyl_09c8\\wt-frontend"
+        "C:\\Users\\NIAMAT~1\\AppData\\Local\\Temp\\brad-exp02-worktrees-twkw_83s\\wt-backend",
+        "C:\\Users\\NIAMAT~1\\AppData\\Local\\Temp\\brad-exp02-worktrees-twkw_83s\\wt-frontend"
       ],
-      "merge_a_status": "Updating 9b3d958..ca66372\nFast-forward\n backend.mjs | 1 +\n 1 file changed, 1 insertion(+)",
+      "merge_a_status": "Updating 49869e9..d2f5a3b\nFast-forward\n backend.mjs | 1 +\n 1 file changed, 1 insertion(+)",
       "merge_b_status": "Merge made by the 'ort' strategy.\n frontend.html | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)",
       "both_changes_verified": true,
       "evidence": "Two isolated git worktrees modified disjoint files in parallel and merged cleanly without collision."
@@ -62,6 +64,7 @@
       "experiment_id": "EXP-03",
       "name": "Parallel Conflicting Development with Collision Handling",
       "status": "PASS",
+      "provenance": "GIT_COLLISION_FIXTURE",
       "merge_exit_code": 1,
       "conflict_markers_detected": true,
       "clean_abort_verified": true,
@@ -71,6 +74,7 @@
       "experiment_id": "EXP-04",
       "name": "Clean-Room Developer vs QA Verification Gate",
       "status": "PASS",
+      "provenance": "SUBAGENT_DISPATCHED",
       "developer_session": "3f910532-17c3-4607-8cdf-9615f230cca8",
       "qa_session": "650226e5-662f-4b07-b149-37dd5acabcd5",
       "zero_cross_session_tokens": true,
@@ -81,6 +85,7 @@
       "experiment_id": "EXP-05",
       "name": "Missing Native Skill Resilience",
       "status": "PASS",
+      "provenance": "BMAD_INSPECTION_VERIFIED",
       "installed_skill_detected": true,
       "missing_skill_fallback_detected": true,
       "catalog_discovered": [
@@ -92,16 +97,19 @@
       "experiment_id": "EXP-06",
       "name": "Interrupted Session Recovery on Active Branch",
       "status": "PASS",
+      "provenance": "SUBAGENT_DISPATCHED",
       "resumed_branch": "feat/story-1.4",
       "staged_work_preserved": true,
       "no_branch_proliferation": true,
       "clean_final_commit": true,
-      "evidence": "Resumption preserved staged uncommitted diffs on feat/story-1.4, avoided creating duplicate branches, and completed cleanly."
+      "subagent_session_corroborated": "6ff32efe-1234-4fda-a806-1e184c8b89dc",
+      "evidence": "Resumption preserved staged uncommitted diffs on feat/story-1.4, avoided creating duplicate branches, and completed cleanly. Corroborated with real subagent session 6ff32efe."
     },
     {
       "experiment_id": "EXP-07",
       "name": "Coordinator Routing Inertia Resistance Across 8 Turns",
       "status": "PASS",
+      "provenance": "STATIC_RULE_SIMULATION",
       "turns_evaluated": [
         {
           "turn": 1,
@@ -169,12 +177,13 @@
         }
       ],
       "inertia_drift_detected": false,
-      "evidence": "Executed 5 consecutive developer build prompts followed by BA, PM, and QA prompts through Layer A; verified zero routing stickiness or hysteresis."
+      "evidence": "Executed 5 consecutive developer build prompts followed by BA, PM, and QA prompts through StaticSimulationAdapter; verified zero routing stickiness or hysteresis."
     },
     {
       "experiment_id": "EXP-08",
       "name": "Subprocess Concurrency & Atomic File Lock Arbitration",
       "status": "PASS",
+      "provenance": "OS_ATOMIC_LOCK_FIXTURE",
       "atomic_lock_contention_blocked": true,
       "graceful_acquisition_after_release": true,
       "evidence": "Verified OS-level atomic lock contention using O_CREAT|O_EXCL, simulating multi-agent file arbitration with successful backoff and post-release acquisition."

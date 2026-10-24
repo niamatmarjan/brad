@@ -25,7 +25,7 @@ In Phase 3, following the critical audit of Phase 2 (GitHub Issue #39), the benc
 - **Authentic Vertical Slice (10 Representative Cases)**: **10 / 10 PASS (100.0% Evaluated)** executed by genuine Antigravity subagents with on-disk transcripts and verifiable tool calls.
 - **Authentic Multi-Agent Suite (EXP-01 through EXP-08)**: **8 / 8 PASS (100.0%)** testing real Git worktrees, merge collisions, atomic locks, and clean-room subagent separation.
 - **Application Test Suite**: **21 / 21 PASS (100.0%)** verified via live Node TAP runner.
-- **Integrity Defenses Suite**: **13 / 13 PASS (100.0%)** proving fail-closed defenses against forged skills, missing transcripts, duplicate IDs, and destructive side effects.
+- **Integrity Defenses Suite**: **16 / 16 PASS (100.0%)** proving fail-closed defenses against forged skills, missing transcripts, duplicate IDs, prompt mismatches, and destructive side effects.
 
 ### Why Autonomous Headless Production is NO-GO:
 While the 10-case vertical slice succeeded flawlessly in interactive Antigravity subagent sessions, **110 cases in the 120-suite remain classified as `NOT_RUN` (91.7%)** because Antigravity subagents are invoked interactively rather than via an unattended headless batch CLI. In adherence to strict audit integrity rules, **we refuse to manufacture passing scores for unexecuted cases**.
@@ -76,8 +76,9 @@ Adopting organizations must enforce the following four mandatory controls:
 +-------------------------------------------------------------------------------+
 | Lead Enterprise Validation Orchestrator: APPROVED (Supervised Pilot Only)     |
 | Functional QA Lead (Olivia Bennett):     ACCEPTED (Verified Subagent 650226e5)|
-| Lead Security Auditor (Isabel Torres):   ACCEPTED (Verified Subagent a5bee326)|
-| Lead Architect (Marcus Lee):             ACCEPTED (Verified Subagent 61de3c60)|
+| Automation QA Lead (Ravi Perera):        ACCEPTED (Verified Subagent 18362ee7)|
+| Lead Security Auditor (Lucas Martin):    ACCEPTED (Verified Subagent b0e41ee2)|
+| Tech Lead / Architect (Ethan Brooks):    ACCEPTED (Verified Subagent 87a098bc)|
 | Oracle Freeze SHA-256:                   3da3ee5a2ab62b2cc7555320b01d074a9... |
 | Manifest Freeze SHA-256:                 e34c43de37d014a443ebbdcd03371376... |
 +-------------------------------------------------------------------------------+

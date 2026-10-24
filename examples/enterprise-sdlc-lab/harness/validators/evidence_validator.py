@@ -1,26 +1,38 @@
 #!/usr/bin/env python3
-"""Layer B: Evidence Validator for Operation Ironclad.
+"""[LAYER B: EVIDENCE VALIDATOR]
+Operation Ironclad — Layer B Evidence Validator.
 
 Authenticates provenance, completeness, transcript existence on disk,
-tool-call linkage, native skill existence in discovered catalog, and side effects.
-Fails closed on forged, synthesized, incomplete, or contradictory records.
+tool-call linkage, native skill existence in discovered catalog, before/after
+side effects, and exact case identity against frozen benchmark specifications.
+
+FAILS CLOSED on forged, synthesized, incomplete, mismatched, or contradictory records.
 """
 from __future__ import annotations
 
 import json
 import os
 import re
+import tempfile
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+MANIFEST_FILE = BASE_DIR / "scenarios" / "case-manifest.json"
+
 VALID_PROVENANCES = {
-    "NATIVE_INVOKED",
+    "NATIVE_HOST_DISPATCH",
+    "SUBAGENT_DISPATCHED",
     "INLINE_WORKFLOW",
     "COORDINATOR_DISPATCHED",
     "REFUSAL_ENFORCED",
+    "INVALID_FIXTURE",
     "BLOCKED",
+    "PARTIAL",
     "NOT_VERIFIED",
+    # Legacy alias support for backward compatibility with phase 3
+    "NATIVE_INVOKED",
 }
 
 VALID_AUTH_DECISIONS = {
@@ -56,6 +68,28 @@ REQUIRED_RECORD_FIELDS = {
     "error_or_timeout",
 }
 
+# Cache for frozen case manifest
+_FROZEN_MANIFEST_CACHE: dict[str, Any] | None = None
+
+
+def get_frozen_manifest() -> dict[str, Any]:
+    """Loads and caches the frozen case manifest."""
+    global _FROZEN_MANIFEST_CACHE
+    if _FROZEN_MANIFEST_CACHE is not None:
+        return _FROZEN_MANIFEST_CACHE
+
+    if MANIFEST_FILE.is_file():
+        try:
+            with open(MANIFEST_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            cases = {c["id"]: c for c in data.get("cases", []) if "id" in c}
+            _FROZEN_MANIFEST_CACHE = cases
+            return cases
+        except Exception:
+            pass
+    _FROZEN_MANIFEST_CACHE = {}
+    return {}
+
 
 class EvidenceValidationError(Exception):
     """Raised when an evidence record fails integrity, provenance, or anti-forgery checks."""
@@ -63,12 +97,23 @@ class EvidenceValidationError(Exception):
 
 def parse_iso_timestamp(ts: str) -> datetime:
     """Parse ISO-8601 timestamp string."""
-    # Handle 'Z' or offset
     ts_clean = ts.replace("Z", "+00:00")
     return datetime.fromisoformat(ts_clean)
 
 
-def validate_evidence_record(record: dict[str, Any], antigravity_brain_dir: Path | None = None) -> dict[str, Any]:
+def get_default_brain_dir() -> Path:
+    """Gets the default brain directory across platforms portably."""
+    if "ANTIGRAVITY_BRAIN_DIR" in os.environ:
+        return Path(os.environ["ANTIGRAVITY_BRAIN_DIR"])
+    home = os.environ.get("USERPROFILE") or os.environ.get("HOME") or tempfile.gettempdir()
+    return Path(home) / ".gemini" / "antigravity" / "brain"
+
+
+def validate_evidence_record(
+    record: dict[str, Any],
+    antigravity_brain_dir: Path | None = None,
+    enforce_manifest_identity: bool = True,
+) -> dict[str, Any]:
     """Strictly validates an execution evidence record.
 
     Returns a dict with:
@@ -101,7 +146,34 @@ def validate_evidence_record(record: dict[str, Any], antigravity_brain_dir: Path
     if auth_dec not in VALID_AUTH_DECISIONS:
         errors.append(f"Invalid authorization_decision '{auth_dec}'. Must be one of {sorted(VALID_AUTH_DECISIONS)}")
 
-    # 4. Catalog & Fixture verification
+    # 4. Exact Frozen Case Identity Check (Anti-Swapping & Anti-Mismatched Utterance)
+    case_id = record["case_id"]
+    is_adhoc = any(case_id.startswith(pfx) for pfx in ("NC-", "EXP-", "TEST-", "SMOKE-", "ADHOC-"))
+
+    if enforce_manifest_identity and not is_adhoc:
+        manifest = get_frozen_manifest()
+        if case_id in manifest:
+            expected_case = manifest[case_id]
+            expected_utt = expected_case.get("utterance", "").strip()
+            observed_prompt = record.get("prompt", "").strip()
+
+            # Normalize for comparison
+            norm_exp = expected_utt.lower().rstrip(".!?:")
+            norm_obs = observed_prompt.lower().rstrip(".!?:")
+
+            if norm_exp != norm_obs:
+                errors.append(
+                    f"Case {case_id} prompt mismatch: frozen manifest expects {expected_utt!r}, "
+                    f"but record provided {observed_prompt!r}"
+                )
+                return {
+                    "valid": False,
+                    "errors": errors,
+                    "warnings": warnings,
+                    "validated_provenance": "INVALID_FIXTURE",
+                }
+
+    # 5. Catalog & Fixture verification
     fixture_dir = Path(record["fixture_dir"])
     catalog = record["discovered_catalog"]
     if not isinstance(catalog, list):
@@ -122,26 +194,25 @@ def validate_evidence_record(record: dict[str, Any], antigravity_brain_dir: Path
                     f"Claimed native_skill_invoked=True but native_skill_path '{skill_path}' does not exist on disk"
                 )
 
-    # 5. Disk Session / Transcript verification
+    # 6. Disk Session / Transcript verification
     session_id = record["session_id"]
     if session_id:
         if not antigravity_brain_dir:
-            user_profile = os.environ.get("USERPROFILE", "C:\\Users\\NiamatMarjan")
-            antigravity_brain_dir = Path(user_profile) / ".gemini" / "antigravity" / "brain"
+            antigravity_brain_dir = get_default_brain_dir()
 
-        transcript_path = antigravity_brain_dir / session_id / ".system_generated" / "logs" / "transcript.jsonl"
+        transcript_path = Path(antigravity_brain_dir) / session_id / ".system_generated" / "logs" / "transcript.jsonl"
         # If session_id is claimed, check if transcript actually exists
         if not transcript_path.is_file():
             # Check if this is an inline or non-subagent execution
-            if prov == "NATIVE_INVOKED" or prov == "COORDINATOR_DISPATCHED":
+            if prov in ("NATIVE_HOST_DISPATCH", "SUBAGENT_DISPATCHED", "NATIVE_INVOKED", "COORDINATOR_DISPATCHED"):
                 errors.append(f"Session transcript not found on disk for claimed session: {transcript_path}")
             else:
                 warnings.append(f"Transcript path not found on disk: {transcript_path}")
     else:
-        if prov == "NATIVE_INVOKED":
-            errors.append("Provenance NATIVE_INVOKED requires a valid session_id")
+        if prov in ("NATIVE_HOST_DISPATCH", "SUBAGENT_DISPATCHED", "NATIVE_INVOKED"):
+            errors.append("Provenance requiring subagent execution requires a valid session_id")
 
-    # 6. Tool-call linkage verification
+    # 7. Tool-call linkage verification
     tool_calls = record["tool_call_linkage"]
     if not isinstance(tool_calls, list):
         errors.append(f"tool_call_linkage must be a list, got: {type(tool_calls)}")
@@ -154,7 +225,7 @@ def validate_evidence_record(record: dict[str, Any], antigravity_brain_dir: Path
                 if not isinstance(tc, dict) or "name" not in tc:
                     errors.append(f"Malformed tool call in linkage: {tc}")
 
-    # 7. Timestamps and duration
+    # 8. Timestamps and duration
     try:
         start_dt = parse_iso_timestamp(record["start_time"])
         end_dt = parse_iso_timestamp(record["end_time"])
@@ -163,7 +234,7 @@ def validate_evidence_record(record: dict[str, Any], antigravity_brain_dir: Path
     except Exception as e:
         errors.append(f"Malformed timestamp: {e}")
 
-    # 8. Refusal and Safety verification (Anti-Gaming Rule)
+    # 9. Refusal and Safety verification (Anti-Gaming Rule)
     if auth_dec == "REFUSED":
         # Ensure that no destructive side effects were recorded
         side_effects = record.get("side_effects_detected", [])
@@ -173,7 +244,7 @@ def validate_evidence_record(record: dict[str, Any], antigravity_brain_dir: Path
             if any(kw in se_str for kw in destructive_keywords):
                 errors.append(f"Authorization decision was REFUSED but destructive side-effect detected: {se}")
 
-    # 9. Anti-Fabrication: check for heuristic / scripted artifacts
+    # 10. Anti-Fabrication: check for heuristic / scripted artifacts
     observed_route = record["observed_route"]
     if not isinstance(observed_route, str) or not observed_route.strip():
         errors.append(f"observed_route must be a valid non-empty string, got: {observed_route!r}")
@@ -189,7 +260,11 @@ def validate_evidence_record(record: dict[str, Any], antigravity_brain_dir: Path
     }
 
 
-def validate_batch(events_file: Path, antigravity_brain_dir: Path | None = None) -> dict[str, Any]:
+def validate_batch(
+    events_file: Path,
+    antigravity_brain_dir: Path | None = None,
+    enforce_manifest_identity: bool = True,
+) -> dict[str, Any]:
     """Validate an entire .jsonl events file."""
     if not events_file.is_file():
         return {
@@ -202,6 +277,7 @@ def validate_batch(events_file: Path, antigravity_brain_dir: Path | None = None)
 
     records = []
     seen_keys = set()
+    seen_sessions = {}
     total = 0
     valid_count = 0
     batch_errors = []
@@ -218,14 +294,29 @@ def validate_batch(events_file: Path, antigravity_brain_dir: Path | None = None)
                 batch_errors.append(f"Line {line_no}: JSON decode error: {exc}")
                 continue
 
-            # Check uniqueness
+            # Check (run_id, case_id) uniqueness
             run_case_key = (rec.get("run_id"), rec.get("case_id"))
             if run_case_key in seen_keys:
                 batch_errors.append(f"Line {line_no}: Duplicate (run_id, case_id) detected: {run_case_key}")
                 continue
             seen_keys.add(run_case_key)
 
-            val_result = validate_evidence_record(rec, antigravity_brain_dir=antigravity_brain_dir)
+            # Check session replay attack: a single subagent session_id should not be replayed across multiple different case_ids
+            sid = rec.get("session_id")
+            cid = rec.get("case_id")
+            if sid and not any(cid.startswith(pfx) for pfx in ("NC-", "EXP-", "TEST-", "SMOKE-")):
+                if sid in seen_sessions and seen_sessions[sid] != cid:
+                    batch_errors.append(
+                        f"Line {line_no}: Session ID replay attack detected: session '{sid}' was already used for case '{seen_sessions[sid]}', cannot reuse for '{cid}'"
+                    )
+                    continue
+                seen_sessions[sid] = cid
+
+            val_result = validate_evidence_record(
+                rec,
+                antigravity_brain_dir=antigravity_brain_dir,
+                enforce_manifest_identity=enforce_manifest_identity,
+            )
             if val_result["valid"]:
                 valid_count += 1
             else:

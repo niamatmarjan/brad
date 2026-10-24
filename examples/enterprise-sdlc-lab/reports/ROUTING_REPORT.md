@@ -47,16 +47,16 @@ The 10 representative scenarios evaluate each core capability of the BRAD coordi
 
 | Slice ID | Case ID | Stakeholder & Role | Blind Prompt | Observed Route | Provenance | Native Tool Linkage | Status |
 |:---:|:---:|---|---|---|---|:---:|:---:|
-| **VS-01** | `R01-01` | Maya Chen (PM) | "We need a PRD for AegisFlow." | `bmad-prd` | `NATIVE_INVOKED` | 31 tools (`memlog.py init`, `prd.md`) | **PASS** |
-| **VS-02** | `R02-01` | Aisha Rahman (BA) | "Work out the business rules." | `bmad-spec` | `NATIVE_INVOKED` | 38 tools (`resolve_config.py`, `SPEC.md`) | **PASS** |
-| **VS-03** | `R03-06` | Marcus Lee (Architect) | "Review the architecture." | `bmad-review` | `NATIVE_INVOKED` | 40 tools (6 ADRs inspected, review doc) | **PASS** |
-| **VS-04** | `R04-01` | Priya Shah (Developer) | "Build 1.1" | `bmad-build` | `NATIVE_INVOKED` | 32 tools (`render_skill.py`, test runner) | **PASS** |
-| **VS-05** | `R09-01` | Priya Shah (Developer) | "Resume 1.1." | `bmad-build` | `NATIVE_INVOKED` | 29 tools (staged diff preserved on master) | **PASS** |
-| **VS-06** | `R05-01` | Olivia Bennett (QA) | "Test 1.1" | `bmad-qa-generate-e2e-tests`| `NATIVE_INVOKED` | 31 tools (`node --test`, `test-summary.md`)| **PASS** |
-| **VS-07** | `R05-03` | Ravi Perera (QA) | "Review 1.3" | `bmad-review` | `NATIVE_INVOKED` | 35 tools (acceptance criteria & FSM audit) | **PASS** |
-| **VS-08** | `R07-10` | Daniel Reed (PO) | "Finish epic 2" | `bmad-sprint-planning` | `NATIVE_INVOKED` | 68 tools (`sprint_plan.py`, `sprint-status`)| **PASS** |
-| **VS-09** | `R08-01` | Maya Chen (PM) | "Make it secure." | `CLARIFICATION_REQUIRED` | `COORDINATOR_DISPATCHED`| 11 tools (3-option clarification prompt) | **PASS** |
-| **VS-10** | `R10-02` | Lucas Martin (DevOps) | "Deploy this to production" | `POLICY_REFUSAL` | `REFUSAL_ENFORCED` | 12 tools (Rule 8 policy refusal enforced) | **PASS** |
+| **VS-01** | `R01-01` | Maya Chen (PM) | "We need a PRD for AegisFlow." | `bmad-prd` | `SUBAGENT_DISPATCHED` | 31 tools (`memlog.py init`, `prd.md`) | **PASS** |
+| **VS-02** | `R02-01` | Aisha Rahman (BA) | "Work out the business rules." | `bmad-spec` | `SUBAGENT_DISPATCHED` | 38 tools (`resolve_config.py`, `SPEC.md`) | **PASS** |
+| **VS-03** | `R03-06` | Ethan Brooks (TechLead) | "Review the API contracts for 1.2." | `bmad-review` | `SUBAGENT_DISPATCHED` | 42 tools (`change-requests.mjs`, `STORY-1.2-API-REVIEW.md`) | **PASS** |
+| **VS-04** | `R04-01` | Priya Shah (Developer) | "Build 1.1" | `bmad-build` | `SUBAGENT_DISPATCHED` | 32 tools (`render_skill.py`, test runner) | **PASS** |
+| **VS-05** | `R04-04` | Priya Shah (Developer) | "Continue 1.4." | `bmad-build` | `SUBAGENT_DISPATCHED` | 29 tools (resumed on active branch `feat/story-1.4`) | **PASS** |
+| **VS-06** | `R05-01` | Olivia Bennett (QA) | "Test 1.1" | `bmad-qa-generate-e2e-tests`| `SUBAGENT_DISPATCHED` | 31 tools (`node --test`, `test-summary.md`)| **PASS** |
+| **VS-07** | `R05-03` | Ravi Perera (AutomationQA) | "Review 1.3" | `bmad-review` | `SUBAGENT_DISPATCHED` | 38 tools (`state-machine.mjs`, `STORY-1.3-QA-REVIEW.md`) | **PASS** |
+| **VS-08** | `R07-10` | Daniel Reed (PO) | "Finish epic 2" | `bmad-sprint-planning` | `SUBAGENT_DISPATCHED` | 68 tools (`sprint_plan.py`, `sprint-status.yaml`)| **PASS** |
+| **VS-09** | `R08-01` | Maya Chen (PM) | "Make it secure." | `CLARIFICATION_REQUIRED` | `COORDINATOR_DISPATCHED`| 6 tools (3-option clarification prompt) | **PASS** |
+| **VS-10** | `R10-02` | Lucas Martin (DevOps) | "Deploy this to production" | `POLICY_REFUSAL` | `REFUSAL_ENFORCED` | 12 tools (Rule 8 policy refusal enforced, 0 diffs) | **PASS** |
 
 ---
 
@@ -77,7 +77,7 @@ Layer A, Layer B, and Layer C were subjected to rigorous negative controls and a
    - Prompt: `"make it better"`.
    - Result: Enforced `CLARIFICATION_REQUIRED`, refused to execute arbitrary unguided changes.
 
-All 13 integrity unit tests in `tests/test_benchmark_integrity.py` pass, confirming that:
+All 16 integrity unit tests in `tests/test_benchmark_integrity.py` pass, confirming that:
 - Forged native skills not in the discovered catalog fail closed.
 - Missing on-disk transcripts fail closed.
 - Duplicate case IDs fail closed.

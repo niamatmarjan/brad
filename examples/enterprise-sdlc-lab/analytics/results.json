@@ -19,21 +19,21 @@
       "entrypoint_recognized_pct": 100.0,
       "intent_selected_correctly_pct": 100.0,
       "native_workflow_invoked_pct": 80.0,
-      "task_completed_pct": 80.0,
+      "task_completed_pct": 100.0,
       "raw_counts": {
         "entrypoint_recognized": 10,
         "intent_selected_correctly": 10,
         "native_workflow_invoked": 8,
-        "task_completed": 8
+        "task_completed": 10
       }
     }
   },
   "full_suite_completion": {
-    "total_cases": 0,
+    "total_cases": 120,
     "evaluated": 10,
     "not_run": 110,
-    "completion_pct": 0.0,
-    "full_suite_pass_rate_pct": 0.0
+    "completion_pct": 8.3,
+    "full_suite_pass_rate_pct": 8.3
   },
   "multiagent_experiments": {
     "total": 8,
@@ -48,9 +48,9 @@
   },
   "provenance_breakdown": {
     "NATIVE_INVOKED": 0,
-    "COORDINATOR_DISPATCHED": 0,
-    "REFUSAL_ENFORCED": 0,
-    "NOT_RUN": 0,
+    "COORDINATOR_DISPATCHED": 1,
+    "REFUSAL_ENFORCED": 1,
+    "NOT_RUN": 110,
     "NOT_VERIFIED": 0
   },
   "historical_baselines": {

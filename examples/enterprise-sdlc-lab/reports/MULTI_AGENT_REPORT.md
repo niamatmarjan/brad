@@ -41,7 +41,7 @@ Unlike simulated mock runs, all 8 experiments executed live operating-system pro
 - **Objective**: Verify that cross-functional roles operate in genuinely distinct Antigravity subagent sessions with isolated memory and zero scratchpad leakage.
 - **Evidence Inspected**:
   - PM Analyst Worker (`7e47313f`): 98 KB transcript on disk, 31 tool calls (`bmad-prd`, `memlog.py`).
-  - Architect Review Worker (`61de3c60`): 139 KB transcript on disk, 40 tool calls (`bmad-review`, ADR audit).
+  - Tech Lead Review Worker (`87a098bc`): 142 KB transcript on disk, 42 tool calls (`bmad-review`, Story 1.2 API contract audit).
   - Developer Build Worker (`3f910532`): 106 KB transcript on disk, 32 tool calls (`bmad-build`, `render_skill.py`).
   - QA Automated Test Worker (`650226e5`): 98 KB transcript on disk, 31 tool calls (`bmad-qa-generate-e2e-tests`).
 - **Verdict**: **PASS**. Verified 4 distinct transcripts on disk with independent system prompts, distinct execution timestamps, and zero cross-session memory sharing.

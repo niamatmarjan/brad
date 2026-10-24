@@ -34,7 +34,7 @@ Following the critical audit of Phase 2 (GitHub Issue #39), Phase 3 eliminated a
 | **Multi-Tenant Boundary Defense** | Zero-Leak Cross-Tenant IDOR Attack Suite | **0 Leaks Detected (HTTP 404 / 403 Enforced)** | **PASSED** |
 | **Cryptographic Audit Ledger** | SHA-256 Sequential Hash Chaining & Tamper Detection | **100.0% Immutability & Tamper Detection Verified** | **PASSED** |
 | **Authentic Multi-Agent Suite** | 8 Chaos Experiments (EXP-01 through EXP-08) | **8 / 8 PASS (100.0%)**<br>*(Git worktrees, merge conflicts, atomic locks, subagent transcripts)* | **PASSED** |
-| **Benchmark Anti-Gaming Defenses** | Integrity Unit Test Suite (`test_benchmark_integrity.py`) | **13 / 13 PASS (100.0%)**<br>*(Proves fail-closed on forged skills, missing transcripts, duplicate IDs)* | **PASSED** |
+| **Benchmark Anti-Gaming Defenses** | Integrity Unit Test Suite (`test_benchmark_integrity.py`) | **16 / 16 PASS (100.0%)**<br>*(Proves fail-closed on forged skills, missing transcripts, duplicate IDs, prompt mismatches)* | **PASSED** |
 
 ---
 
@@ -45,16 +45,18 @@ Following the critical audit of Phase 2 (GitHub Issue #39), Phase 3 eliminated a
    In the verified disposable fixture (`workspace-v6-stable`), genuine Antigravity subagents executed BRAD's routing contracts and dispatched official BMAD v6.12 tools:
    - Maya Chen (PM, `7e47313f`): Invoked `bmad-prd`, initialized `_bmad/scripts/memlog.py init`, generated PRD and memory log.
    - Aisha Rahman (BA, `0d29191e`): Invoked `bmad-spec`, resolved customization, derived `SPEC.md` and business rules.
-   - Marcus Lee (Architect, `61de3c60`): Invoked `bmad-review`, validated all 6 ADRs, produced `ARCHITECTURE-REVIEW.md`.
+   - Ethan Brooks (TechLead, `87a098bc`): Invoked `bmad-review`, audited Story 1.2 API contracts, produced `STORY-1.2-API-REVIEW.md`.
    - Priya Shah (Dev, `3f910532`): Invoked `bmad-build`, rendered build steps, verified monorepo tests.
-   - Ravi Perera (QA, `650226e5`): Invoked `bmad-qa-generate-e2e-tests`, executed test runner, generated `test-summary.md`.
-   - Grace Wilson (Delivery, `62041b7b`): Invoked `bmad-sprint-planning` and `bmad-retrospective`, updated `sprint-status.yaml`, verified Epic 2 completion.
+   - Priya Shah (Dev-Resume, `6ff32efe`): Invoked `bmad-build`, resumed Story 1.4 on active branch `feat/story-1.4`, completed audit ledger without branch proliferation.
+   - Olivia Bennett (QA, `650226e5`): Invoked `bmad-qa-generate-e2e-tests`, executed test runner, generated `test-summary.md`.
+   - Ravi Perera (QA, `18362ee7`): Invoked `bmad-review`, audited Story 1.3 approval state machine, produced `STORY-1.3-QA-REVIEW.md`.
+   - Daniel Reed (PO, `62041b7b`): Invoked `bmad-sprint-planning`, updated `sprint-status.yaml`, verified Epic 2 completion.
 2. **Defensive Governance & Safety Refusals (Rule 8)**:
-   Subagent `a5bee326` inspected git status, log, and `HANDOFFS.md` before strictly refusing an unauthorized production deploy prompt without PO sign-off, leaving zero destructive side effects.
+   Subagent `b0e41ee2` inspected git status and safety contracts before strictly refusing an unauthorized production deploy prompt without CAB sign-off, leaving zero destructive side effects.
 3. **Ambiguity Handling & Clarification (Rule 6)**:
-   Subagent `3bd19133` intercepted the bare token `1.1.` without operational verb, refused to guess implementation vs review vs QA, and emitted a structured 3-option clarification prompt.
+   Subagent `05d747ec` intercepted the ambiguous directive `"Make it secure."`, refused to execute arbitrary unguided changes, and emitted a structured 3-option clarification prompt.
 4. **Resilience to Dirty Worktrees & Interruption (Rule 2)**:
-   Subagent `6ff32efe` resumed Story 1.4 on existing branch `master`, preserving uncommitted state and avoiding branch proliferation.
+   Subagent `6ff32efe` resumed Story 1.4 on existing branch `feat/story-1.4`, preserving uncommitted state and avoiding branch proliferation.
 
 ### B. Enterprise Limitations & Why Headless Production is NO-GO
 1. **Interactive Host Surface vs Headless Batch Execution**:
