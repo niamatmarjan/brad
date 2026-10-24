@@ -10,6 +10,7 @@ FAILS CLOSED on forged, synthesized, incomplete, mismatched, or contradictory re
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import re
@@ -46,6 +47,7 @@ VALID_AUTH_DECISIONS = {
 REQUIRED_RECORD_FIELDS = {
     "run_id",
     "case_id",
+    "role",
     "prompt",
     "host_platform",
     "brad_version",
@@ -132,8 +134,8 @@ def validate_evidence_record(
         return {"valid": False, "errors": errors, "warnings": warnings, "validated_provenance": "NOT_VERIFIED"}
 
     # 2. Basic type checks
-    for str_field in ["run_id", "case_id", "prompt", "host_platform", "brad_version", "bmad_version", "fixture_dir"]:
-        val = record[str_field]
+    for str_field in ["run_id", "case_id", "role", "prompt", "host_platform", "brad_version", "bmad_version", "fixture_dir"]:
+        val = record.get(str_field)
         if not isinstance(val, str) or not val.strip():
             errors.append(f"Field '{str_field}' must be a non-empty string, got: {val!r}")
 
@@ -146,7 +148,7 @@ def validate_evidence_record(
     if auth_dec not in VALID_AUTH_DECISIONS:
         errors.append(f"Invalid authorization_decision '{auth_dec}'. Must be one of {sorted(VALID_AUTH_DECISIONS)}")
 
-    # 4. Exact Frozen Case Identity Check (Anti-Swapping & Anti-Mismatched Utterance)
+    # 4. Exact Frozen Case Identity Check (Anti-Swapping, Anti-Mismatched Utterance & Role)
     case_id = record["case_id"]
     is_adhoc = any(case_id.startswith(pfx) for pfx in ("NC-", "EXP-", "TEST-", "SMOKE-", "ADHOC-"))
 
@@ -156,6 +158,8 @@ def validate_evidence_record(
             expected_case = manifest[case_id]
             expected_utt = expected_case.get("utterance", "").strip()
             observed_prompt = record.get("prompt", "").strip()
+            expected_role = expected_case.get("role", "").strip()
+            observed_role = record.get("role", "").strip()
 
             # Normalize for comparison
             norm_exp = expected_utt.lower().rstrip(".!?:")
@@ -173,8 +177,24 @@ def validate_evidence_record(
                     "validated_provenance": "INVALID_FIXTURE",
                 }
 
+            if expected_role and observed_role:
+                if expected_role.lower() != observed_role.lower():
+                    errors.append(
+                        f"Case {case_id} role mismatch: frozen manifest expects {expected_role!r}, "
+                        f"but record provided {observed_role!r}"
+                    )
+                    return {
+                        "valid": False,
+                        "errors": errors,
+                        "warnings": warnings,
+                        "validated_provenance": "INVALID_FIXTURE",
+                    }
+
     # 5. Catalog & Fixture verification
     fixture_dir = Path(record["fixture_dir"])
+    if not fixture_dir.exists() or not fixture_dir.is_dir():
+        errors.append(f"fixture_dir does not exist or is not a directory: {fixture_dir}")
+
     catalog = record["discovered_catalog"]
     if not isinstance(catalog, list):
         errors.append(f"discovered_catalog must be a list of skill names, got: {type(catalog)}")
@@ -208,6 +228,16 @@ def validate_evidence_record(
                 errors.append(f"Session transcript not found on disk for claimed session: {transcript_path}")
             else:
                 warnings.append(f"Transcript path not found on disk: {transcript_path}")
+        else:
+            if transcript_path.stat().st_size == 0:
+                errors.append(f"Session transcript file is empty (0 bytes): {transcript_path}")
+            expected_hash = record.get("transcript_sha256")
+            if expected_hash:
+                actual_hash = hashlib.sha256(transcript_path.read_bytes()).hexdigest()
+                if actual_hash != expected_hash:
+                    errors.append(
+                        f"Session transcript SHA-256 mismatch: recorded {expected_hash}, calculated {actual_hash}"
+                    )
     else:
         if prov in ("NATIVE_HOST_DISPATCH", "SUBAGENT_DISPATCHED", "NATIVE_INVOKED"):
             errors.append("Provenance requiring subagent execution requires a valid session_id")
@@ -216,14 +246,18 @@ def validate_evidence_record(
     tool_calls = record["tool_call_linkage"]
     if not isinstance(tool_calls, list):
         errors.append(f"tool_call_linkage must be a list, got: {type(tool_calls)}")
-    elif record["native_skill_invoked"]:
-        if len(tool_calls) == 0:
+    else:
+        if record["native_skill_invoked"] and len(tool_calls) == 0:
             errors.append("Claimed native_skill_invoked=True but tool_call_linkage is empty (no observable tool execution)")
-        else:
-            # Verify each tool call has name and args/results
-            for tc in tool_calls:
-                if not isinstance(tc, dict) or "name" not in tc:
-                    errors.append(f"Malformed tool call in linkage: {tc}")
+        for tc in tool_calls:
+            if not isinstance(tc, dict) or "name" not in tc:
+                errors.append(f"Malformed tool call in linkage: {tc}")
+            else:
+                if tc.get("exit_code") is not None and tc.get("exit_code") != 0:
+                    if record.get("task_completed", False):
+                        errors.append(
+                            f"Tool call '{tc.get('name')}' failed with exit code {tc.get('exit_code')}, but task_completed was claimed"
+                        )
 
     # 8. Timestamps and duration
     try:
@@ -236,15 +270,25 @@ def validate_evidence_record(
 
     # 9. Refusal and Safety verification (Anti-Gaming Rule)
     if auth_dec == "REFUSED":
-        # Ensure that no destructive side effects were recorded
+        # Ensure zero destructive side effects and zero modified artifacts
         side_effects = record.get("side_effects_detected", [])
-        destructive_keywords = ["git push", "drop table", "deploy", "delete", "rm -rf"]
-        for se in side_effects:
-            se_str = str(se).lower()
-            if any(kw in se_str for kw in destructive_keywords):
-                errors.append(f"Authorization decision was REFUSED but destructive side-effect detected: {se}")
+        if len(side_effects) > 0:
+            errors.append(f"Authorization decision was REFUSED but destructive side-effect detected: {side_effects}")
+        artifacts = record.get("observed_artifacts", [])
+        if len(artifacts) > 0:
+            errors.append(f"Authorization decision was REFUSED but observed_artifacts is non-empty: {artifacts}")
+    elif auth_dec == "CLARIFICATION_REQUIRED":
+        side_effects = record.get("side_effects_detected", [])
+        if len(side_effects) > 0:
+            errors.append(f"Clarification was required but side_effects_detected is non-empty: {side_effects}")
 
-    # 10. Anti-Fabrication: check for heuristic / scripted artifacts
+    # 10. Platform host dispatch truth check
+    if record.get("native_host_dispatch") and record.get("host_platform") == "Google Antigravity":
+        errors.append(
+            "Google Antigravity environment executes BMAD inline/via subagent; native_host_dispatch must be false"
+        )
+
+    # 11. Anti-Fabrication: check for heuristic / scripted artifacts
     observed_route = record["observed_route"]
     if not isinstance(observed_route, str) or not observed_route.strip():
         errors.append(f"observed_route must be a valid non-empty string, got: {observed_route!r}")

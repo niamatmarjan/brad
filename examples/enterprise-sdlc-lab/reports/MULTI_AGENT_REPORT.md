@@ -49,8 +49,9 @@ Unlike simulated mock runs, all 8 experiments executed live operating-system pro
 ### EXP-02: Parallel Non-Conflicting Development with Git Worktrees
 - **Objective**: Prove that two concurrent workers can develop in parallel without Git lock contention or race conditions.
 - **Implementation**: Created two isolated Git worktrees (`wt-backend` on branch `feat/backend-api` and `wt-frontend` on branch `feat/frontend-ui`) using `git worktree add`.
-- **Execution**: Worker A modified `backend.mjs` while Worker B simultaneously modified `frontend.html`. Both committed independently and merged into `main`.
-- **Verdict**: **PASS**. Real 3-way Git merge succeeded cleanly without conflicts (`returncode == 0`), and both changes were verified present in the merged commit.
+- **Execution**: Worker A modified `backend.mjs` while Worker B concurrently modified `frontend.html` in parallel threads. Both recorded high-resolution start/end timestamps.
+- **Observed Behavior**: Verified temporal overlap mathematically (`max(start) < min(end)`), proving genuine concurrent execution. Real 3-way Git merge succeeded cleanly without conflicts (`returncode == 0`), and both changes were verified present in the merged commit.
+- **Verdict**: **PASS**. Proven concurrent worktree execution with clean merge.
 
 ### EXP-03: Parallel Conflicting Development with Collision Handling
 - **Objective**: Verify that simultaneous edits to the same lines in shared files are detected atomically by Git, produce standard conflict markers, and can be aborted cleanly without data corruption.
@@ -72,19 +73,19 @@ Unlike simulated mock runs, all 8 experiments executed live operating-system pro
 
 ### EXP-06: Interrupted Session Recovery on Active Branch
 - **Objective**: Verify BRAD's contract rule: "Resume existing work rather than creating another branch" when an implementation task is interrupted with uncommitted staged changes.
-- **Execution**: Staged partial changes on branch `feat/story-1.4`. Simulated process termination. On resumption, coordinator inspected `git branch --show-current` and `git status`, detected existing active branch, preserved staged diffs, and completed the commit without creating duplicate branch `feat/story-1.4-2`.
-- **Verdict**: **PASS**. Zero branch proliferation and zero lost work.
+- **Execution**: Spawned a worker process that staged partial changes on branch `feat/story-1.4`. Abruptly terminated / killed the process mid-execution. Verified repository integrity with `git fsck --full` (returncode 0). On resumption, coordinator detected active branch `feat/story-1.4`, verified staged diffs survived, and completed the commit without creating duplicate branch `feat/story-1.4-2`. Corroborated with real subagent session `6ff32efe`.
+- **Verdict**: **PASS**. Repository intact, zero lost work, and zero branch proliferation.
 
 ### EXP-07: Coordinator Routing Inertia Resistance Across 8 Turns
-- **Objective**: Test whether consecutive prompts to a single agent type (e.g. 5 developer prompts) cause routing stickiness or hysteresis on subsequent turns.
-- **Execution**: Presented an 8-turn sequence to Layer A: 5 consecutive `Build` prompts, followed immediately by `Work out the business rules` (BA), `We need a PRD for AegisFlow` (PM), and `Test 1.1` (QA).
-- **Observed Behavior**: Coordinator routed all 8 turns accurately according to prompt semantics without any inertia or drift from prior developer turns.
-- **Verdict**: **PASS**. Zero routing inertia.
+- **Objective**: Test whether consecutive prompts to a single agent type (e.g. 5 developer prompts) cause routing stickiness or hysteresis on subsequent turns in a persistent conversation.
+- **Execution**: Executed an 8-turn sequence inside persistent Antigravity subagent session `59401486-5ba6-42dc-8209-f8b30add9a49`: 5 consecutive developer `Build` prompts, followed by `Work out the business rules` (BA), `We need a PRD for AegisFlow` (PM), and `Test 1.1` (QA).
+- **Observed Behavior**: Coordinator routed all 8 turns accurately according to prompt semantics (Turns 1-5: `bmad-build`, Turn 6: `bmad-agent-analyst`, Turn 7: `bmad-prd`, Turn 8: `bmad-qa-generate-e2e-tests`). Accurately differentiated 'Test 1.1' from 'Build 1.1'.
+- **Verdict**: **PASS (100% Inertia Resistance, 0% Hysteresis)**. Full evaluation report saved to `evidence/subagents/phase3-authentic-experiments/exp07-inertia-report.json`.
 
 ### EXP-08: Subprocess Concurrency & Atomic File Lock Arbitration
-- **Objective**: Test true operating-system level concurrency and atomic lock arbitration with retry and backoff.
-- **Execution**: Worker 1 acquired an atomic lockfile via `os.O_CREAT | os.O_EXCL`. Worker 2 attempted simultaneous acquisition and received `FileExistsError`. Worker 1 released lock via `unlink()`. Worker 2 retried and successfully acquired the lock.
-- **Verdict**: **PASS**. Atomic arbitration verified without data corruption or deadlocks.
+- **Objective**: Test true operating-system level concurrency and atomic lock arbitration with retry and backoff across competing processes.
+- **Execution**: Two concurrent OS subprocesses contended for `deployment.lock` via `os.O_CREAT | os.O_EXCL`. Process 1 acquired the lock and held it. Process 2 caught `FileExistsError`, backed off with retry loop, and acquired the lock cleanly upon Process 1 release.
+- **Verdict**: **PASS**. Atomic multi-process arbitration verified without deadlocks or race conditions.
 
 ---
 

@@ -18,12 +18,16 @@
     "dimensional_metrics": {
       "entrypoint_recognized_pct": 100.0,
       "intent_selected_correctly_pct": 100.0,
-      "native_workflow_invoked_pct": 80.0,
+      "workflow_executed_inline_pct": 90.0,
+      "native_host_dispatch_pct": 0.0,
+      "subagent_executed_pct": 100.0,
       "task_completed_pct": 100.0,
       "raw_counts": {
         "entrypoint_recognized": 10,
         "intent_selected_correctly": 10,
-        "native_workflow_invoked": 8,
+        "workflow_executed_inline": 9,
+        "native_host_dispatch": 0,
+        "subagent_executed": 10,
         "task_completed": 10
       }
     }
@@ -47,11 +51,14 @@
     "duration_ms": 0.9259
   },
   "provenance_breakdown": {
-    "NATIVE_INVOKED": 0,
+    "SUBAGENT_DISPATCHED": 8,
+    "INLINE_WORKFLOW": 0,
+    "NATIVE_HOST_DISPATCH": 0,
     "COORDINATOR_DISPATCHED": 1,
     "REFUSAL_ENFORCED": 1,
     "NOT_RUN": 110,
-    "NOT_VERIFIED": 0
+    "NOT_VERIFIED": 0,
+    "INVALID_FIXTURE": 0
   },
   "historical_baselines": {
     "phase1_static_simulation": "120/120 (100% heuristic simulation \u2014 superseded)",

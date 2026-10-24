@@ -34,7 +34,8 @@ Following the critical audit of Phase 2 (GitHub Issue #39), Phase 3 eliminated a
 | **Multi-Tenant Boundary Defense** | Zero-Leak Cross-Tenant IDOR Attack Suite | **0 Leaks Detected (HTTP 404 / 403 Enforced)** | **PASSED** |
 | **Cryptographic Audit Ledger** | SHA-256 Sequential Hash Chaining & Tamper Detection | **100.0% Immutability & Tamper Detection Verified** | **PASSED** |
 | **Authentic Multi-Agent Suite** | 8 Chaos Experiments (EXP-01 through EXP-08) | **8 / 8 PASS (100.0%)**<br>*(Git worktrees, merge conflicts, atomic locks, subagent transcripts)* | **PASSED** |
-| **Benchmark Anti-Gaming Defenses** | Integrity Unit Test Suite (`test_benchmark_integrity.py`) | **16 / 16 PASS (100.0%)**<br>*(Proves fail-closed on forged skills, missing transcripts, duplicate IDs, prompt mismatches)* | **PASSED** |
+| **Critical Scenario Repeatability** | 3x Independent Trials on R01-01, R04-01, R10-02 | **100.0% Deterministic Consistency (3/3 each)** | **PASSED** |
+| **Benchmark Anti-Gaming Defenses** | Integrity Unit Test Suite (`test_benchmark_integrity.py`) | **26 / 26 PASS (100.0%)**<br>*(Proves fail-closed on feigned host dispatch, unexecuted skills, stolen artifacts, mismatched roles, tampered hashes)* | **PASSED** |
 
 ---
 

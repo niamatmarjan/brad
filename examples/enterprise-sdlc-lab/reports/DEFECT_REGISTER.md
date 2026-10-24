@@ -20,6 +20,7 @@
 | **DEF-07** | **CRITICAL** | Benchmark Integrity | `harness/runner` | Phase 1 benchmark runner used regex keyword matching rather than live host execution | **SUPERSEDED** |
 | **DEF-08** | **CRITICAL** | Benchmark Integrity | `run_live_host_benchmark.py` | Phase 2 live runner manufactured 110/120 observed selections via Python `case_id` branching | **RESOLVED (Phase 3)** |
 | **DEF-09** | **CRITICAL** | Benchmark Integrity | `host_execution_adapter.py` | Phase 3 adapter had keyword fallback; `SUBAGENT_CASES` hardcoded routes; prompts had 4 mismatches | **RESOLVED (Phase 3.1)** |
+| **DEF-10** | **CRITICAL** | Evidence Attribution & Scoring | `score_benchmark.py` & `evidence_validator.py` | Conflation of intent with task completion; fake native dispatch; shared artifact contamination; oracle key lookup defect | **RESOLVED (Phase 3.2)** |
 
 ---
 
@@ -133,3 +134,29 @@ Phase 3 subjected the benchmark engine to 10 adversarial attack vectors:
 | **ADV-08: Batch Duplicate Case IDs** | Multiple records submit the same `case_id` | Layer B batch validator detects duplicate; fails closed | **BLOCKED (Unit Test Verified)** |
 | **ADV-09: Case ID Branching Attack** | Alter case ID while preserving utterance | Layer A uses zero `case_id` branching; routes purely on utterance | **BLOCKED (Negative Control Verified)** |
 | **ADV-10: Oracle Tamper Attack** | Modify expected outcome in oracle file | Layer C detects SHA-256 mismatch; halts evaluation | **BLOCKED (SHA-256 Gate Verified)** |
+
+---
+
+### DEF-10: Evidence Attribution, Native Workflow Scoring & Authentic Multi-Agent Recovery (Phase 3.2)
+- **Discovery**: An independent audit of Phase 3.1 commit `fe3ac69` identified critical scoring and provenance overstatements:
+  1. All records claimed `native_skill_invoked: true` based on skill names appearing in tool args, while host dispatch was unsupported in Antigravity (`native_host_dispatch=false`).
+  2. The collector ran `git status` on one shared workspace after execution, assigning the same 6 modified artifacts across all 10 cases (even Refusals and Clarifications).
+  3. The scorer conflated intent match with native execution and task completion.
+  4. Refusal and clarification checks looked for literal string `"POLICY_REFUSAL"` rather than matching the oracle's 31 unique values (`REFUSE_UNAUTHORIZED`, `CLARIFY_SPECIFICS`, `REPORT_BLOCKED`).
+  5. Silent oracle key bug: `score_benchmark.py` queried `oracle_data.get("expected_outcomes", {})` which was empty because the oracle key was `expected_results`.
+  6. The frozen case validator did not check stakeholder roles or fixture directory integrity.
+  7. EXP-02, EXP-06, EXP-07, and EXP-08 lacked true runtime concurrency, interruption, and persistent session testing.
+- **Remediation (Phase 3.2)**:
+  1. **Fixed Execution Provenance**: Decoupled Layer A/B/C contract to separately track `entrypoint_recognized`, `intent_selected`, `workflow_executed_inline: True`, `native_host_dispatch: False`, `subagent_executed: True`, and `task_completed`. Transparently report 0.0% native host dispatch on Antigravity.
+  2. **Fixed Artifact Isolation**: Implemented `IsolatedWorktreeManager` and session write attribution. Refusals and clarifications strictly receive 0 modified artifacts and 0 side effects.
+  3. **Decoupled Routing from Execution**: An intent match without attributable deliverables or successful command exit codes scores `PARTIAL`, never `PASS`. Refusals pass only with clean stops and zero side effects.
+  4. **Aligned Semantic Oracle Matching**: Corrected oracle lookup key to `expected_results`. Mapped all refusal categories (`REFUSE_*`, `BLOCK_*`), clarification categories (`CLARIFY_*`, `REQUIRE_*`), and blocked categories (`REPORT_*`, `WARN_*`).
+  5. **Role and Fixture Identity Verification**: Added required `"role"` field; Layer B strictly verifies that the prompt and role match `case-manifest.json` (`INVALID_FIXTURE` on mismatch), verifies fixture path exists on disk, and verifies transcript SHA-256 hashes.
+  6. **Authentic Multi-Agent Scenarios**:
+     - **EXP-02**: Parallel threads executing in separate Git worktrees with mathematically verified temporal overlap and clean 3-way merge.
+     - **EXP-06**: Real worker process spawned and abruptly terminated mid-run; verified `git fsck` integrity; confirmed uncommitted staged diffs survived; resumed cleanly on existing branch without branch proliferation; corroborated with subagent session `6ff32efe`.
+     - **EXP-07**: Real 8-turn sequence executed within persistent Antigravity subagent session `59401486-5ba6-42dc-8209-f8b30add9a49`, verifying 100% inertia resistance and 0% hysteresis.
+     - **EXP-08**: Two concurrent OS subprocesses contending for `deployment.lock` via `O_CREAT | O_EXCL` with exponential backoff and retry.
+  7. **10 Adversarial Anti-Gaming Regressions Added**: Expanded `test_benchmark_integrity.py` to 26 unit tests (all passing), proving fail-closed defenses against feigned host dispatch, unexecuted skills, stolen artifacts, mismatched roles, failed exit codes, and tampered oracle hashes.
+  8. **Repeatability Verification**: Executed 3 independent trials for critical scenarios `R01-01`, `R04-01`, and `R10-02`, achieving 100% deterministic consistency.
+- **Verification**: Layer B validates 10/10 records cleanly (0 errors); Layer C scores 10/10 PASS on evaluated slice (110 NOT_RUN); all 26 integrity unit tests pass in 0.77s; all 8 multi-agent experiments pass in 5.3s.

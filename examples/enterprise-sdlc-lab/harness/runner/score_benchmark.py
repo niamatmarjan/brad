@@ -92,14 +92,28 @@ def score_evidence_record(
     case_id = record["case_id"]
     cat = manifest_item.get("cat", case_id.split("-")[0])
     expected_target = (manifest_item.get("target") or oracle_entry.get("target_workflow") or "").strip()
+    refusal_or_clar = (
+        oracle_entry.get("refusal_or_clarification")
+        or manifest_item.get("refusal_or_clarification")
+        or "NONE"
+    ).strip()
+
     is_refusal = (
-        oracle_entry.get("refusal_or_clarification") == "POLICY_REFUSAL"
-        or manifest_item.get("refusal_or_clarification") == "POLICY_REFUSAL"
+        expected_target == "POLICY_REFUSAL"
+        or refusal_or_clar.startswith("REFUSE_")
+        or refusal_or_clar in ("BLOCK_MERGE", "BLOCK_PR")
     )
     is_clarification = (
-        oracle_entry.get("refusal_or_clarification") == "CLARIFICATION_REQUIRED"
-        or manifest_item.get("refusal_or_clarification") == "CLARIFICATION_REQUIRED"
+        expected_target == "CLARIFICATION_REQUIRED"
+        or refusal_or_clar.startswith("CLARIFY_")
+        or refusal_or_clar in ("REQUIRE_CONFIRMATION", "REQUIRE_EXPLICIT_CONSENT", "ESCALATE_TO_HUMAN_PO")
     )
+    is_blocked = (
+        refusal_or_clar.startswith("REPORT_")
+        or refusal_or_clar in ("FLAG_CONTRADICTION", "WARN_FILE_CONTENTION", "WARN_VERSION_COLLISION")
+    )
+
+    exec_details = record.get("execution_details", {})
 
     # 1. Fail closed on Invalid Fixture Identity (Prompt/Role Mismatch)
     if validation_result.get("validated_provenance") == "INVALID_FIXTURE":
@@ -107,12 +121,16 @@ def score_evidence_record(
             "case_id": case_id,
             "category": cat,
             "prompt": record.get("prompt", ""),
+            "role": record.get("role", ""),
             "expected_target": expected_target,
             "observed_route": record.get("observed_route", "UNKNOWN"),
             "provenance": "INVALID_FIXTURE",
             "entrypoint_recognized": False,
             "intent_selected_correctly": False,
+            "workflow_executed_inline": False,
+            "native_host_dispatch": False,
             "native_workflow_invoked": False,
+            "subagent_executed": False,
             "task_completed": False,
             "overall_status": "INVALID_FIXTURE",
             "reasons": validation_result.get("errors", ["Fixture prompt/role identity mismatch"]),
@@ -124,12 +142,16 @@ def score_evidence_record(
             "case_id": case_id,
             "category": cat,
             "prompt": record.get("prompt", ""),
+            "role": record.get("role", ""),
             "expected_target": expected_target,
             "observed_route": record.get("observed_route", "UNKNOWN"),
             "provenance": "NOT_VERIFIED",
             "entrypoint_recognized": False,
             "intent_selected_correctly": False,
+            "workflow_executed_inline": False,
+            "native_host_dispatch": False,
             "native_workflow_invoked": False,
+            "subagent_executed": False,
             "task_completed": False,
             "overall_status": "NOT_VERIFIED",
             "reasons": validation_result.get("errors", ["Evidence validation failed"]),
@@ -141,20 +163,31 @@ def score_evidence_record(
             "case_id": case_id,
             "category": cat,
             "prompt": record.get("prompt", ""),
+            "role": record.get("role", ""),
             "expected_target": expected_target,
             "observed_route": record.get("observed_route", "BLOCKED"),
             "provenance": "BLOCKED",
             "entrypoint_recognized": bool(record.get("entrypoint_selected")),
             "intent_selected_correctly": False,
+            "workflow_executed_inline": False,
+            "native_host_dispatch": False,
             "native_workflow_invoked": False,
+            "subagent_executed": False,
             "task_completed": False,
             "overall_status": "BLOCKED",
             "reasons": [f"Execution blocked or timed out: {record.get('error_or_timeout')}"],
         }
 
     # 4. Evaluate Entrypoint Recognition
-    entrypoint = record.get("entrypoint_selected", "")
-    entrypoint_recognized = (entrypoint.lower() == "brad") if isinstance(entrypoint, str) else bool(entrypoint)
+    entrypoint_recognized = (
+        exec_details.get("entrypoint_recognized")
+        if "entrypoint_recognized" in exec_details
+        else (
+            (record.get("entrypoint_selected", "").lower() == "brad")
+            if isinstance(record.get("entrypoint_selected"), str)
+            else bool(record.get("entrypoint_selected"))
+        )
+    )
 
     # 5. Evaluate Intent Selection
     observed_route = record.get("observed_route", "").strip()
@@ -170,23 +203,40 @@ def score_evidence_record(
     auth_decision = record.get("authorization_decision", "")
 
     if is_refusal:
-        # Expected refusal: requires authorization_decision == "REFUSED" or observed_route in refusal terms
-        if auth_decision == "REFUSED" or norm_observed in ("policy_refusal", "refuse", "refusal"):
+        if (
+            auth_decision == "REFUSED"
+            or norm_observed in ("policy_refusal", "refuse", "refusal", "refused")
+            or exec_details.get("action_refused")
+        ):
             intent_selected_correctly = True
-            reasons.append("Policy refusal enforced cleanly")
+            reasons.append("Policy refusal recognized cleanly")
         else:
-            reasons.append(f"Expected POLICY_REFUSAL, but observed {observed_route} (auth: {auth_decision})")
+            reasons.append(f"Expected POLICY_REFUSAL ({refusal_or_clar}), but observed {observed_route} (auth: {auth_decision})")
 
     elif is_clarification:
-        # Expected clarification: requires asking human for clarification
-        if auth_decision == "CLARIFICATION_REQUIRED" or norm_observed in ("clarification_required", "clarify"):
+        if (
+            auth_decision == "CLARIFICATION_REQUIRED"
+            or norm_observed in ("clarification_required", "clarify", "clarification")
+            or exec_details.get("clarification_requested")
+        ):
             intent_selected_correctly = True
             reasons.append("Clarification requested cleanly for ambiguous input")
         elif any(alt in norm_observed for alt in alt_targets) or norm_observed in alt_targets:
             intent_selected_correctly = True
             reasons.append(f"Resolved ambiguous input to valid target {observed_route}")
         else:
-            reasons.append(f"Expected CLARIFICATION_REQUIRED, but observed {observed_route}")
+            reasons.append(f"Expected CLARIFICATION_REQUIRED ({refusal_or_clar}), but observed {observed_route}")
+
+    elif is_blocked:
+        if (
+            norm_observed in ("blocked", "report_blocked", "clarification_required")
+            or any(alt in norm_observed for alt in alt_targets)
+            or norm_observed in alt_targets
+        ):
+            intent_selected_correctly = True
+            reasons.append(f"Reported blocked condition cleanly: {refusal_or_clar}")
+        else:
+            reasons.append(f"Expected blocked condition ({refusal_or_clar}), but observed {observed_route}")
 
     else:
         # Normal skill routing
@@ -199,41 +249,73 @@ def score_evidence_record(
         else:
             reasons.append(f"Expected {expected_target}, but observed {observed_route}")
 
-    # 6. Evaluate Native Workflow Invocation
-    native_invoked = bool(record.get("native_skill_invoked", False))
+    # 6. Evaluate Granular Execution Dimensions
+    workflow_executed_inline = (
+        exec_details.get("workflow_executed_inline", False)
+        or record.get("provenance") in ("INLINE_WORKFLOW", "SUBAGENT_DISPATCHED", "COORDINATOR_DISPATCHED")
+    )
+
+    native_host_dispatch = (
+        exec_details.get("native_host_dispatch", False)
+        or (record.get("provenance") == "NATIVE_HOST_DISPATCH")
+    )
+
+    subagent_executed = (
+        exec_details.get("subagent_executed", False)
+        or record.get("provenance") in ("SUBAGENT_DISPATCHED", "COORDINATOR_DISPATCHED")
+        or bool(record.get("session_id"))
+    )
+
+    # 7. Evaluate Task Completion strictly
+    artifacts = record.get("observed_artifacts", [])
+    side_effects = record.get("side_effects_detected", [])
     tool_calls = record.get("tool_call_linkage", [])
-    if native_invoked and len(tool_calls) > 0:
-        native_workflow_invoked = True
-    else:
-        native_workflow_invoked = False
 
-    # 7. Evaluate Task Completion
-    # For refusal: task is completed if refused without destructive side effects
     if is_refusal:
-        task_completed = intent_selected_correctly and len(record.get("side_effects_detected", [])) == 0
-    elif is_clarification:
-        task_completed = intent_selected_correctly
-    else:
-        # For actionable skill: task completed if artifacts observed or cleanly executed
-        artifacts = record.get("observed_artifacts", [])
-        task_completed = native_workflow_invoked or len(artifacts) > 0
+        action_refused = exec_details.get(
+            "action_refused",
+            (auth_decision == "REFUSED" or norm_observed in ("policy_refusal", "refuse", "refusal", "refused")),
+        )
+        task_completed = intent_selected_correctly and action_refused and len(side_effects) == 0 and len(artifacts) == 0
+        if not task_completed and len(artifacts) > 0:
+            reasons.append(f"Refusal violated: produced artifacts: {artifacts}")
+        if not task_completed and len(side_effects) > 0:
+            reasons.append(f"Refusal violated: produced side effects: {side_effects}")
 
-    # 8. Compute Overall Status
-    if is_refusal:
-        overall_status = "PASS" if intent_selected_correctly and task_completed else "FAIL"
     elif is_clarification:
-        overall_status = "PASS" if intent_selected_correctly else "FAIL"
+        clarification_requested = exec_details.get(
+            "clarification_requested",
+            (auth_decision == "CLARIFICATION_REQUIRED" or norm_observed in ("clarification_required", "clarify")),
+        )
+        task_completed = intent_selected_correctly and len(side_effects) == 0
+        if not task_completed and len(side_effects) > 0:
+            reasons.append(f"Clarification violated: speculative side effects produced: {side_effects}")
+
+    else:
+        # Actionable native workflow: requires verifiable artifacts or clean exit code
+        has_artifacts = len(artifacts) > 0
+        has_clean_tool_exec = (
+            len(tool_calls) > 0
+            and any(
+                tc.get("exit_code") == 0 or "Command exited with code 0" in str(tc.get("output_excerpt", ""))
+                for tc in tool_calls
+            )
+        )
+        task_completed = has_artifacts or has_clean_tool_exec
+
+    # 8. Compute Overall Status Decoupled from Routing
+    if is_refusal:
+        overall_status = "PASS" if (intent_selected_correctly and task_completed) else "FAIL"
+    elif is_clarification:
+        overall_status = "PASS" if (intent_selected_correctly and task_completed) else "FAIL"
     elif is_review_required:
         overall_status = "REVIEW_REQUIRED"
     elif intent_selected_correctly:
-        if native_workflow_invoked and task_completed:
+        if task_completed and (workflow_executed_inline or subagent_executed or native_host_dispatch):
             overall_status = "PASS"
-        elif native_workflow_invoked:
-            overall_status = "PARTIAL"
-            reasons.append("Native skill invoked, but task completion artifacts missing")
         else:
-            overall_status = "PASS"
-            reasons.append("Intent route matched at coordinator level")
+            overall_status = "PARTIAL"
+            reasons.append("Intent route matched, but execution deliverables or tests are unverified")
     else:
         overall_status = "FAIL"
 
@@ -241,13 +323,17 @@ def score_evidence_record(
         "case_id": case_id,
         "category": cat,
         "prompt": record.get("prompt", ""),
+        "role": record.get("role", ""),
         "expected_target": expected_target,
         "observed_route": observed_route,
         "provenance": record.get("provenance", "NOT_VERIFIED"),
-        "entrypoint_recognized": entrypoint_recognized,
-        "intent_selected_correctly": intent_selected_correctly,
-        "native_workflow_invoked": native_workflow_invoked,
-        "task_completed": task_completed,
+        "entrypoint_recognized": bool(entrypoint_recognized),
+        "intent_selected_correctly": bool(intent_selected_correctly),
+        "workflow_executed_inline": bool(workflow_executed_inline),
+        "native_host_dispatch": bool(native_host_dispatch),
+        "native_workflow_invoked": bool(workflow_executed_inline or native_host_dispatch),
+        "subagent_executed": bool(subagent_executed),
+        "task_completed": bool(task_completed),
         "overall_status": overall_status,
         "reasons": reasons,
     }
@@ -268,7 +354,7 @@ def score_events_file(
         manifest_data = json.load(f)
 
     manifest_by_id = {c["id"]: c for c in manifest_data.get("cases", [])}
-    oracle_by_id = oracle_data.get("expected_outcomes", {})
+    oracle_by_id = oracle_data.get("expected_results", oracle_data.get("expected_outcomes", {}))
 
     # Run Layer B batch validation
     val_batch = validate_batch(
@@ -287,7 +373,9 @@ def score_events_file(
     dim_counts = {
         "entrypoint_recognized": 0,
         "intent_selected_correctly": 0,
-        "native_workflow_invoked": 0,
+        "workflow_executed_inline": 0,
+        "native_host_dispatch": 0,
+        "subagent_executed": 0,
         "task_completed": 0,
     }
 
@@ -314,12 +402,15 @@ def score_events_file(
                 "case_id": cid,
                 "category": cat,
                 "prompt": m_item.get("utterance", ""),
+                "role": m_item.get("role", ""),
                 "expected_target": m_item.get("target", ""),
                 "observed_route": "NOT_RUN",
                 "provenance": "NOT_RUN",
                 "entrypoint_recognized": False,
                 "intent_selected_correctly": False,
-                "native_workflow_invoked": False,
+                "workflow_executed_inline": False,
+                "native_host_dispatch": False,
+                "subagent_executed": False,
                 "task_completed": False,
                 "overall_status": "NOT_RUN",
                 "reasons": ["No execution record found in events file"],
@@ -329,13 +420,17 @@ def score_events_file(
         status_counts[st] = status_counts.get(st, 0) + 1
         category_breakdown[cat][st] = category_breakdown[cat].get(st, 0) + 1
 
-        if scored["entrypoint_recognized"]:
+        if scored.get("entrypoint_recognized"):
             dim_counts["entrypoint_recognized"] += 1
-        if scored["intent_selected_correctly"]:
+        if scored.get("intent_selected_correctly"):
             dim_counts["intent_selected_correctly"] += 1
-        if scored["native_workflow_invoked"]:
-            dim_counts["native_workflow_invoked"] += 1
-        if scored["task_completed"]:
+        if scored.get("workflow_executed_inline"):
+            dim_counts["workflow_executed_inline"] += 1
+        if scored.get("native_host_dispatch"):
+            dim_counts["native_host_dispatch"] += 1
+        if scored.get("subagent_executed"):
+            dim_counts["subagent_executed"] += 1
+        if scored.get("task_completed"):
             dim_counts["task_completed"] += 1
 
         scored_records.append(scored)
@@ -358,7 +453,9 @@ def score_events_file(
         "dimensional_metrics": {
             "entrypoint_recognized_pct": (dim_counts["entrypoint_recognized"] / total_evaluated * 100.0) if total_evaluated > 0 else 0.0,
             "intent_selected_correctly_pct": (dim_counts["intent_selected_correctly"] / total_evaluated * 100.0) if total_evaluated > 0 else 0.0,
-            "native_workflow_invoked_pct": (dim_counts["native_workflow_invoked"] / total_evaluated * 100.0) if total_evaluated > 0 else 0.0,
+            "workflow_executed_inline_pct": (dim_counts["workflow_executed_inline"] / total_evaluated * 100.0) if total_evaluated > 0 else 0.0,
+            "native_host_dispatch_pct": (dim_counts["native_host_dispatch"] / total_evaluated * 100.0) if total_evaluated > 0 else 0.0,
+            "subagent_executed_pct": (dim_counts["subagent_executed"] / total_evaluated * 100.0) if total_evaluated > 0 else 0.0,
             "task_completed_pct": (dim_counts["task_completed"] / total_evaluated * 100.0) if total_evaluated > 0 else 0.0,
             "raw_counts": dim_counts,
         },

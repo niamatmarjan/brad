@@ -181,11 +181,14 @@ def generate() -> None:
         },
         "application_quality": app_tests,
         "provenance_breakdown": {
-            "NATIVE_INVOKED": sum(1 for c in cases if c.get("provenance") == "NATIVE_INVOKED"),
+            "SUBAGENT_DISPATCHED": sum(1 for c in cases if c.get("provenance") == "SUBAGENT_DISPATCHED"),
+            "INLINE_WORKFLOW": sum(1 for c in cases if c.get("provenance") == "INLINE_WORKFLOW"),
+            "NATIVE_HOST_DISPATCH": sum(1 for c in cases if c.get("provenance") == "NATIVE_HOST_DISPATCH"),
             "COORDINATOR_DISPATCHED": sum(1 for c in cases if c.get("provenance") == "COORDINATOR_DISPATCHED"),
             "REFUSAL_ENFORCED": sum(1 for c in cases if c.get("provenance") == "REFUSAL_ENFORCED"),
             "NOT_RUN": sum(1 for c in cases if c.get("provenance") == "NOT_RUN"),
             "NOT_VERIFIED": sum(1 for c in cases if c.get("provenance") == "NOT_VERIFIED"),
+            "INVALID_FIXTURE": sum(1 for c in cases if c.get("provenance") == "INVALID_FIXTURE"),
         },
         "historical_baselines": {
             "phase1_static_simulation": "120/120 (100% heuristic simulation — superseded)",

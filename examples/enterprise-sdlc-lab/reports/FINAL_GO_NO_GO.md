@@ -23,9 +23,10 @@ BRAD v0.5.3 demonstrates proven architectural integrity, rigorous safety guardra
 
 In Phase 3, following the critical audit of Phase 2 (GitHub Issue #39), the benchmark suite was completely purged of heuristic shortcuts. The newly verified results confirm:
 - **Authentic Vertical Slice (10 Representative Cases)**: **10 / 10 PASS (100.0% Evaluated)** executed by genuine Antigravity subagents with on-disk transcripts and verifiable tool calls.
-- **Authentic Multi-Agent Suite (EXP-01 through EXP-08)**: **8 / 8 PASS (100.0%)** testing real Git worktrees, merge collisions, atomic locks, and clean-room subagent separation.
+- **Critical Scenario Repeatability (3x Trials)**: **100.0% Deterministic (3/3 on R01-01, R04-01, R10-02)** proving non-flaky stability.
+- **Authentic Multi-Agent Suite (EXP-01 through EXP-08)**: **8 / 8 PASS (100.0%)** testing verified temporal concurrency, mid-run process interruption recovery, 8-turn persistent session inertia resistance (`59401486`), and atomic OS lock contention.
 - **Application Test Suite**: **21 / 21 PASS (100.0%)** verified via live Node TAP runner.
-- **Integrity Defenses Suite**: **16 / 16 PASS (100.0%)** proving fail-closed defenses against forged skills, missing transcripts, duplicate IDs, prompt mismatches, and destructive side effects.
+- **Integrity Defenses Suite**: **26 / 26 PASS (100.0%)** including 10 adversarial anti-gaming regressions proving fail-closed defenses against feigned host dispatch, unexecuted skills, stolen artifacts, mismatched roles, and tampered oracle hashes.
 
 ### Why Autonomous Headless Production is NO-GO:
 While the 10-case vertical slice succeeded flawlessly in interactive Antigravity subagent sessions, **110 cases in the 120-suite remain classified as `NOT_RUN` (91.7%)** because Antigravity subagents are invoked interactively rather than via an unattended headless batch CLI. In adherence to strict audit integrity rules, **we refuse to manufacture passing scores for unexecuted cases**.

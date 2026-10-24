@@ -1,6 +1,6 @@
 {
   "suite": "Operation Ironclad Authentic Multi-Agent Experiments",
-  "timestamp": "2026-10-24T05:12:31Z",
+  "timestamp": "2026-10-24T17:35:51Z",
   "total_experiments": 8,
   "passed": 8,
   "failed": 0,
@@ -51,14 +51,16 @@
       "name": "Parallel Non-Conflicting Development with Git Worktrees",
       "status": "PASS",
       "provenance": "WORKTREE_CONCURRENCY_FIXTURE",
+      "concurrent_overlap_verified": true,
+      "overlap_duration_ms": 880.17,
       "worktrees_used": [
-        "C:\\Users\\NIAMAT~1\\AppData\\Local\\Temp\\brad-exp02-worktrees-twkw_83s\\wt-backend",
-        "C:\\Users\\NIAMAT~1\\AppData\\Local\\Temp\\brad-exp02-worktrees-twkw_83s\\wt-frontend"
+        "C:\\Users\\NIAMAT~1\\AppData\\Local\\Temp\\brad-exp02-worktrees-a3jmrqx0\\wt-backend",
+        "C:\\Users\\NIAMAT~1\\AppData\\Local\\Temp\\brad-exp02-worktrees-a3jmrqx0\\wt-frontend"
       ],
-      "merge_a_status": "Updating 49869e9..d2f5a3b\nFast-forward\n backend.mjs | 1 +\n 1 file changed, 1 insertion(+)",
+      "merge_a_status": "Updating e5dd83b..c0cfe45\nFast-forward\n backend.mjs | 1 +\n 1 file changed, 1 insertion(+)",
       "merge_b_status": "Merge made by the 'ort' strategy.\n frontend.html | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)",
       "both_changes_verified": true,
-      "evidence": "Two isolated git worktrees modified disjoint files in parallel and merged cleanly without collision."
+      "evidence": "Two isolated git worktrees modified disjoint files with 880.17ms verified temporal overlap and merged cleanly without collision."
     },
     {
       "experiment_id": "EXP-03",
@@ -98,95 +100,95 @@
       "name": "Interrupted Session Recovery on Active Branch",
       "status": "PASS",
       "provenance": "SUBAGENT_DISPATCHED",
+      "process_termination_verified": true,
+      "git_fsck_intact": true,
       "resumed_branch": "feat/story-1.4",
       "staged_work_preserved": true,
       "no_branch_proliferation": true,
       "clean_final_commit": true,
       "subagent_session_corroborated": "6ff32efe-1234-4fda-a806-1e184c8b89dc",
-      "evidence": "Resumption preserved staged uncommitted diffs on feat/story-1.4, avoided creating duplicate branches, and completed cleanly. Corroborated with real subagent session 6ff32efe."
+      "evidence": "Worker process abruptly terminated mid-run; git fsck proved tree intact; uncommitted staged diffs survived; coordinator resumed on feat/story-1.4 without creating duplicate branches. Corroborated with real subagent session 6ff32efe."
     },
     {
       "experiment_id": "EXP-07",
       "name": "Coordinator Routing Inertia Resistance Across 8 Turns",
       "status": "PASS",
-      "provenance": "STATIC_RULE_SIMULATION",
-      "turns_evaluated": [
+      "provenance": "SUBAGENT_DISPATCHED",
+      "subagent_session_id": "59401486-5ba6-42dc-8209-f8b30add9a49",
+      "transcript_exists_on_disk": true,
+      "transcript_size_bytes": 224603,
+      "total_turns_evaluated": 8,
+      "inertia_resistance_rate": "100%",
+      "hysteresis_detected": false,
+      "turns_summary": [
         {
           "turn": 1,
-          "role": "Developer",
           "prompt": "Build 1.1",
-          "expected_route": "bmad-build",
-          "observed_route": "bmad-build",
-          "matched": true
+          "expected_role": "Developer (Senior Software Engineer / Amelia)",
+          "chosen_route": "bmad-build",
+          "hysteresis": false
         },
         {
           "turn": 2,
-          "role": "Developer",
           "prompt": "Build 1.2",
-          "expected_route": "bmad-build",
-          "observed_route": "bmad-build",
-          "matched": true
+          "expected_role": "Developer (Senior Software Engineer / Amelia)",
+          "chosen_route": "bmad-build",
+          "hysteresis": false
         },
         {
           "turn": 3,
-          "role": "Developer",
           "prompt": "Build 1.3",
-          "expected_route": "bmad-build",
-          "observed_route": "bmad-build",
-          "matched": true
+          "expected_role": "Developer (Senior Software Engineer / Amelia)",
+          "chosen_route": "bmad-build",
+          "hysteresis": false
         },
         {
           "turn": 4,
-          "role": "Developer",
           "prompt": "Build 2.1",
-          "expected_route": "bmad-build",
-          "observed_route": "bmad-build",
-          "matched": true
+          "expected_role": "Developer (Senior Software Engineer / Amelia)",
+          "chosen_route": "bmad-build",
+          "hysteresis": false
         },
         {
           "turn": 5,
-          "role": "Developer",
           "prompt": "Build 2.2",
-          "expected_route": "bmad-build",
-          "observed_route": "bmad-build",
-          "matched": true
+          "expected_role": "Developer (Senior Software Engineer / Amelia)",
+          "chosen_route": "bmad-build",
+          "hysteresis": false
         },
         {
           "turn": 6,
-          "role": "BA",
           "prompt": "Work out the business rules.",
-          "expected_route": "bmad-spec",
-          "observed_route": "bmad-spec",
-          "matched": true
+          "expected_role": "Business Analyst (Mary / Aisha Rahman)",
+          "chosen_route": "bmad-agent-analyst",
+          "hysteresis": false
         },
         {
           "turn": 7,
-          "role": "PM",
           "prompt": "We need a PRD for AegisFlow.",
-          "expected_route": "bmad-prd",
-          "observed_route": "bmad-prd",
-          "matched": true
+          "expected_role": "Product Manager (John / Maya Chen)",
+          "chosen_route": "bmad-prd",
+          "hysteresis": false
         },
         {
           "turn": 8,
-          "role": "QA",
           "prompt": "Test 1.1",
-          "expected_route": "bmad-qa-generate-e2e-tests",
-          "observed_route": "bmad-qa-generate-e2e-tests",
-          "matched": true
+          "expected_role": "Quality Assurance / Test Architect (Murat / Ravi Perera)",
+          "chosen_route": "bmad-qa-generate-e2e-tests",
+          "hysteresis": false
         }
       ],
-      "inertia_drift_detected": false,
-      "evidence": "Executed 5 consecutive developer build prompts followed by BA, PM, and QA prompts through StaticSimulationAdapter; verified zero routing stickiness or hysteresis."
+      "evidence": "Executed 8 sequential turns within persistent Antigravity subagent session 59401486; verified 100% inertia resistance with 0% hysteresis when pivoting from developer build to BA, PM, and QA."
     },
     {
       "experiment_id": "EXP-08",
       "name": "Subprocess Concurrency & Atomic File Lock Arbitration",
       "status": "PASS",
       "provenance": "OS_ATOMIC_LOCK_FIXTURE",
-      "atomic_lock_contention_blocked": true,
-      "graceful_acquisition_after_release": true,
-      "evidence": "Verified OS-level atomic lock contention using O_CREAT|O_EXCL, simulating multi-agent file arbitration with successful backoff and post-release acquisition."
+      "worker_1_exit_code": 0,
+      "worker_2_exit_code": 0,
+      "contention_and_backoff_verified": true,
+      "evidence": "Two concurrent OS subprocesses contended for deployment.lock using O_CREAT|O_EXCL; Worker 2 safely backed off on collision and acquired the lock following Worker 1 release."
     }
   ]
 }
