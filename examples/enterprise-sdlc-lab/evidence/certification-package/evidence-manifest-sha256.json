@@ -1,0 +1,29 @@
+{
+  "package_name": "BRAD Operation Ironclad Certification Package",
+  "files": {
+    "behavioral-repeatability-report.json": "1524e94a8d72f4d429b4d2b84bc4601736a713b0337bb7583b3cb5aaf6c9435f",
+    "repeatability-report.json": "9f10302b46c406a7d2c1bbcb9cab6b4cd03c28c543c0150cf3952d96bd8d985c",
+    "verify_certification.py": "f1d7faee7d0de6e1cdc120d2a5c658240a85ce626cd4451335b6a3680d3a068f",
+    "vertical-slice-scored.json": "d6ce6a7dde75e27877fd3bdea71334821c459c0927fce235e90b03d467a4e93b",
+    "sanitized-transcripts\\R01-01_7e47313f_sanitized.jsonl": "1fe8cda9ece3b6b7f5c7e9704454e2460307e9ae2d27de4d2a7885e71f5613ff",
+    "sanitized-transcripts\\R01-02_534c156a_sanitized.jsonl": "e0135e6ead31c8c6f2c913dcc6794e5292f351ee2f023498ef42f20815a2c71f",
+    "sanitized-transcripts\\R02-01_0d29191e_sanitized.jsonl": "027ce129168a739f68710effe7d0fe9f086ae7bd5ba1d37a1795ea24d30e91e6",
+    "sanitized-transcripts\\R02-02_c1482bde_sanitized.jsonl": "a0652f43d0554146318ef01f974e29aefc666156206107811492a99f22cf8f9d",
+    "sanitized-transcripts\\R03-01_2b910f1d_sanitized.jsonl": "d13b287f70aa86f6828b990bc7e7d473af039a766caeb8eecb91cedef6270d6a",
+    "sanitized-transcripts\\R03-06_87a098bc_sanitized.jsonl": "544e0424c905fa07f2f5b22eba97957fab310d66d6642fa19098b8682a6a0bd9",
+    "sanitized-transcripts\\R04-01_3f910532_sanitized.jsonl": "8e9aa78d6a4103c796b3145914d865b03475dd86b6bba28a70b53e1450ad54c3",
+    "sanitized-transcripts\\R04-04_6ff32efe_sanitized.jsonl": "488402dd1a29cd170f5eacd81ad38d33441b59ffff6e30d21a6a99932b2c3fe3",
+    "sanitized-transcripts\\R05-01_650226e5_sanitized.jsonl": "f985cac41300df160e7842ffd43581fbd6bec6bf7423fbf1fc5f0a2f14872d55",
+    "sanitized-transcripts\\R05-03_18362ee7_sanitized.jsonl": "813e403368b03be332f779606862f0e240da63eaf00b9b166727edd8c533c7c4",
+    "sanitized-transcripts\\R06-01_4bff92de_sanitized.jsonl": "be5f7bb5c51fd137a93525d2fb952276ab8f20fcd2f6a724e8f383c7ad84c0d0",
+    "sanitized-transcripts\\R07-01_c7f5c7d3_sanitized.jsonl": "6659547fbb9dea42c4ae7841b7920d2a9efb76890b4c47af8ef3c9aaacfa91cd",
+    "sanitized-transcripts\\R07-10_62041b7b_sanitized.jsonl": "0e8155c99cec1a32c773c1a34b0ab81b6dc4139913a1144a789eb38e9a25ec67",
+    "sanitized-transcripts\\R08-01_05d747ec_sanitized.jsonl": "d51e2d2e41317c740bb4870a6cf3f17325d9681bd6578c7850e585206765e963",
+    "sanitized-transcripts\\R08-02_f65b1e81_sanitized.jsonl": "5a087b5da35db3ef8570601939755a145a4078dce0448ebd82f0d1fdd486f3bc",
+    "sanitized-transcripts\\R09-01_1c72f323_sanitized.jsonl": "70b1c508d9a02cee6c1a5e1195e7501d47e7eb179c5e5679b706b50c7119dd27",
+    "sanitized-transcripts\\R10-01_9c4a7617_sanitized.jsonl": "207d1db705006b97259a34fd658f1ba2df2319d053ab6cb9f2504f17d7a84485",
+    "sanitized-transcripts\\R10-02_b0e41ee2_sanitized.jsonl": "d8866c5db2c821fd9241a2cb2aa5dd6f679f90832a4a991aa8e3856ebc6102be",
+    "sanitized-transcripts\\R11-01_f6b8c9c6_sanitized.jsonl": "06db968d8377a66edcf197512fedce9d2cd31e0d2566c0c39e06e29b86a3b884",
+    "sanitized-transcripts\\R12-01_44e8b8da_sanitized.jsonl": "84478222f15f15deaaad709724c816ba2e5d98fec8fa7af7788b931a1d442d4c"
+  }
+}

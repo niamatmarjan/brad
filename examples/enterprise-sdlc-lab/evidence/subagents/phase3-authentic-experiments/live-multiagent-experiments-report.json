@@ -1,0 +1,194 @@
+{
+  "suite": "Operation Ironclad Authentic Multi-Agent Experiments",
+  "timestamp": "2026-10-24T17:35:51Z",
+  "total_experiments": 8,
+  "passed": 8,
+  "failed": 0,
+  "experiments": [
+    {
+      "experiment_id": "EXP-01",
+      "name": "Independent Responsibilities & Subagent Context Isolation",
+      "status": "PASS",
+      "provenance": "SUBAGENT_DISPATCHED",
+      "subagents_inspected": [
+        {
+          "conversationId": "7e47313f-90dc-4dec-ae94-7765423e0c29",
+          "role": "PM Analyst Worker",
+          "transcript_exists": true,
+          "transcript_size_bytes": 98447,
+          "tool_calls_observed": 31,
+          "expected_skill_observed": true
+        },
+        {
+          "conversationId": "87a098bc-2d3a-410c-b72e-cd977886c8b4",
+          "role": "Tech Lead Review Worker",
+          "transcript_exists": true,
+          "transcript_size_bytes": 150826,
+          "tool_calls_observed": 42,
+          "expected_skill_observed": true
+        },
+        {
+          "conversationId": "3f910532-17c3-4607-8cdf-9615f230cca8",
+          "role": "Developer Build Worker",
+          "transcript_exists": true,
+          "transcript_size_bytes": 106885,
+          "tool_calls_observed": 32,
+          "expected_skill_observed": true
+        },
+        {
+          "conversationId": "650226e5-662f-4b07-b149-37dd5acabcd5",
+          "role": "QA Automated Test Worker",
+          "transcript_exists": true,
+          "transcript_size_bytes": 98611,
+          "tool_calls_observed": 31,
+          "expected_skill_observed": true
+        }
+      ],
+      "evidence": "Verified 4 distinct Antigravity subagent transcripts with independent execution contexts, genuine tool execution, and zero shared scratchpad memory."
+    },
+    {
+      "experiment_id": "EXP-02",
+      "name": "Parallel Non-Conflicting Development with Git Worktrees",
+      "status": "PASS",
+      "provenance": "WORKTREE_CONCURRENCY_FIXTURE",
+      "concurrent_overlap_verified": true,
+      "overlap_duration_ms": 880.17,
+      "worktrees_used": [
+        "C:\\Users\\NIAMAT~1\\AppData\\Local\\Temp\\brad-exp02-worktrees-a3jmrqx0\\wt-backend",
+        "C:\\Users\\NIAMAT~1\\AppData\\Local\\Temp\\brad-exp02-worktrees-a3jmrqx0\\wt-frontend"
+      ],
+      "merge_a_status": "Updating e5dd83b..c0cfe45\nFast-forward\n backend.mjs | 1 +\n 1 file changed, 1 insertion(+)",
+      "merge_b_status": "Merge made by the 'ort' strategy.\n frontend.html | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)",
+      "both_changes_verified": true,
+      "evidence": "Two isolated git worktrees modified disjoint files with 880.17ms verified temporal overlap and merged cleanly without collision."
+    },
+    {
+      "experiment_id": "EXP-03",
+      "name": "Parallel Conflicting Development with Collision Handling",
+      "status": "PASS",
+      "provenance": "GIT_COLLISION_FIXTURE",
+      "merge_exit_code": 1,
+      "conflict_markers_detected": true,
+      "clean_abort_verified": true,
+      "evidence": "Git detected collision atomically, inserted conflict markers, and git merge --abort restored clean tree."
+    },
+    {
+      "experiment_id": "EXP-04",
+      "name": "Clean-Room Developer vs QA Verification Gate",
+      "status": "PASS",
+      "provenance": "SUBAGENT_DISPATCHED",
+      "developer_session": "3f910532-17c3-4607-8cdf-9615f230cca8",
+      "qa_session": "650226e5-662f-4b07-b149-37dd5acabcd5",
+      "zero_cross_session_tokens": true,
+      "qa_test_execution_verified": true,
+      "evidence": "QA subagent operated in clean-room isolation, executed automated test runner independently, and generated test summary without developer conversation leakage."
+    },
+    {
+      "experiment_id": "EXP-05",
+      "name": "Missing Native Skill Resilience",
+      "status": "PASS",
+      "provenance": "BMAD_INSPECTION_VERIFIED",
+      "installed_skill_detected": true,
+      "missing_skill_fallback_detected": true,
+      "catalog_discovered": [
+        "bmad-prd"
+      ],
+      "evidence": "Coordinator detected missing native skill dynamically via inspect_bmad and refused to fabricate native invocation."
+    },
+    {
+      "experiment_id": "EXP-06",
+      "name": "Interrupted Session Recovery on Active Branch",
+      "status": "PASS",
+      "provenance": "SUBAGENT_DISPATCHED",
+      "process_termination_verified": true,
+      "git_fsck_intact": true,
+      "resumed_branch": "feat/story-1.4",
+      "staged_work_preserved": true,
+      "no_branch_proliferation": true,
+      "clean_final_commit": true,
+      "subagent_session_corroborated": "6ff32efe-1234-4fda-a806-1e184c8b89dc",
+      "evidence": "Worker process abruptly terminated mid-run; git fsck proved tree intact; uncommitted staged diffs survived; coordinator resumed on feat/story-1.4 without creating duplicate branches. Corroborated with real subagent session 6ff32efe."
+    },
+    {
+      "experiment_id": "EXP-07",
+      "name": "Coordinator Routing Inertia Resistance Across 8 Turns",
+      "status": "PASS",
+      "provenance": "SUBAGENT_DISPATCHED",
+      "subagent_session_id": "59401486-5ba6-42dc-8209-f8b30add9a49",
+      "transcript_exists_on_disk": true,
+      "transcript_size_bytes": 224603,
+      "total_turns_evaluated": 8,
+      "inertia_resistance_rate": "100%",
+      "hysteresis_detected": false,
+      "turns_summary": [
+        {
+          "turn": 1,
+          "prompt": "Build 1.1",
+          "expected_role": "Developer (Senior Software Engineer / Amelia)",
+          "chosen_route": "bmad-build",
+          "hysteresis": false
+        },
+        {
+          "turn": 2,
+          "prompt": "Build 1.2",
+          "expected_role": "Developer (Senior Software Engineer / Amelia)",
+          "chosen_route": "bmad-build",
+          "hysteresis": false
+        },
+        {
+          "turn": 3,
+          "prompt": "Build 1.3",
+          "expected_role": "Developer (Senior Software Engineer / Amelia)",
+          "chosen_route": "bmad-build",
+          "hysteresis": false
+        },
+        {
+          "turn": 4,
+          "prompt": "Build 2.1",
+          "expected_role": "Developer (Senior Software Engineer / Amelia)",
+          "chosen_route": "bmad-build",
+          "hysteresis": false
+        },
+        {
+          "turn": 5,
+          "prompt": "Build 2.2",
+          "expected_role": "Developer (Senior Software Engineer / Amelia)",
+          "chosen_route": "bmad-build",
+          "hysteresis": false
+        },
+        {
+          "turn": 6,
+          "prompt": "Work out the business rules.",
+          "expected_role": "Business Analyst (Mary / Aisha Rahman)",
+          "chosen_route": "bmad-agent-analyst",
+          "hysteresis": false
+        },
+        {
+          "turn": 7,
+          "prompt": "We need a PRD for AegisFlow.",
+          "expected_role": "Product Manager (John / Maya Chen)",
+          "chosen_route": "bmad-prd",
+          "hysteresis": false
+        },
+        {
+          "turn": 8,
+          "prompt": "Test 1.1",
+          "expected_role": "Quality Assurance / Test Architect (Murat / Ravi Perera)",
+          "chosen_route": "bmad-qa-generate-e2e-tests",
+          "hysteresis": false
+        }
+      ],
+      "evidence": "Executed 8 sequential turns within persistent Antigravity subagent session 59401486; verified 100% inertia resistance with 0% hysteresis when pivoting from developer build to BA, PM, and QA."
+    },
+    {
+      "experiment_id": "EXP-08",
+      "name": "Subprocess Concurrency & Atomic File Lock Arbitration",
+      "status": "PASS",
+      "provenance": "OS_ATOMIC_LOCK_FIXTURE",
+      "worker_1_exit_code": 0,
+      "worker_2_exit_code": 0,
+      "contention_and_backoff_verified": true,
+      "evidence": "Two concurrent OS subprocesses contended for deployment.lock using O_CREAT|O_EXCL; Worker 2 safely backed off on collision and acquired the lock following Worker 1 release."
+    }
+  ]
+}

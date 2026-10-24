@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AegisFlow Enterprise — Operational Change Management</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Accessible Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <header role="banner" class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <span class="brand-logo" aria-hidden="true">🛡️</span>
+        <h1>AegisFlow Enterprise</h1>
+      </div>
+      <nav aria-label="Tenant and User Configuration" class="header-controls">
+        <label for="tenant-select">Tenant:</label>
+        <select id="tenant-select" aria-label="Select Active Tenant">
+          <option value="tenant-acme-global">Acme Corp Global</option>
+          <option value="tenant-starlight-logistics">Starlight Logistics</option>
+          <option value="tenant-apex-finance">Apex Finance</option>
+        </select>
+
+        <label for="user-role-select">Role:</label>
+        <select id="user-role-select" aria-label="Select User Role">
+          <option value="EMPLOYEE">Requester (Employee)</option>
+          <option value="MANAGER">Operational Manager</option>
+          <option value="APPROVER">Director / Approver</option>
+          <option value="AUDITOR">Compliance Auditor</option>
+          <option value="ADMIN">System Administrator</option>
+        </select>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content" role="main" class="main-container">
+    <!-- Live Announcements for Screen Readers -->
+    <div id="live-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+    <section aria-labelledby="controls-heading" class="dashboard-controls">
+      <h2 id="controls-heading" class="sr-only">Dashboard Controls & Filtering</h2>
+      
+      <div class="control-row">
+        <button id="btn-new-cr" class="btn btn-primary" aria-haspopup="dialog">+ New Change Request</button>
+
+        <div class="filter-group" role="search">
+          <label for="filter-status">Status:</label>
+          <select id="filter-status">
+            <option value="">All Statuses</option>
+            <option value="DRAFT">Draft</option>
+            <option value="PENDING_APPROVAL">Pending Approval</option>
+            <option value="APPROVED">Approved</option>
+            <option value="REJECTED">Rejected</option>
+            <option value="ESCALATED">Escalated</option>
+          </select>
+
+          <label for="filter-category">Category:</label>
+          <select id="filter-category">
+            <option value="">All Categories</option>
+            <option value="INFRASTRUCTURE">Infrastructure</option>
+            <option value="FINANCE">Finance</option>
+            <option value="SECURITY">Security</option>
+            <option value="APPLICATION">Application</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Operational Queue Table -->
+    <section aria-labelledby="queue-heading" class="queue-section">
+      <h2 id="queue-heading">Operational Review Queue</h2>
+      
+      <div class="table-responsive">
+        <table class="data-table" aria-describedby="queue-heading">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Title</th>
+              <th scope="col">Category</th>
+              <th scope="col">Risk Level</th>
+              <th scope="col">Status</th>
+              <th scope="col">SLA Deadline</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="queue-table-body">
+            <!-- Populated dynamically -->
+            <tr>
+              <td colspan="7" class="loading-state">Loading operational queue...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Compliance Audit Ledger Section -->
+    <section aria-labelledby="audit-heading" class="audit-section">
+      <div class="section-header">
+        <h2 id="audit-heading">Cryptographic Audit Ledger</h2>
+        <div class="audit-actions">
+          <button id="btn-verify-chain" class="btn btn-secondary">Verify Chain Integrity</button>
+          <button id="btn-export-audit" class="btn btn-outline">Export Audit Trail (CSV)</button>
+        </div>
+      </div>
+      <div id="chain-status-banner" class="status-banner" role="status" aria-live="polite">
+        Chain integrity unverified. Click "Verify Chain Integrity" to validate cryptographic hashes.
+      </div>
+    </section>
+  </main>
+
+  <footer role="contentinfo" class="app-footer">
+    <p>AegisFlow Enterprise v1.0.0 — Validated via BRAD Operation Ironclad</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
