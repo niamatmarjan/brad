@@ -1,0 +1,140 @@
+{
+  "suite": "Operation Ironclad 3x Scenario Repeatability",
+  "timestamp": "2026-10-24T17:37:37.031653+00:00",
+  "total_scenarios_evaluated": 3,
+  "all_scenarios_deterministic": true,
+  "scenario_results": {
+    "R01-01": {
+      "case_id": "R01-01",
+      "description": "PM PRD creation request",
+      "role": "Maya Chen (PM)",
+      "total_trials": 3,
+      "passed_trials": 3,
+      "pass_rate_pct": 100.0,
+      "deterministic_consistency": true,
+      "trials": [
+        {
+          "trial": 1,
+          "session_id": "7e47313f-90dc-4dec-ae94-7765423e0c29",
+          "validation_valid": true,
+          "observed_route": "bmad-prd",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route bmad-prd matches expected target bmad-prd"
+          ]
+        },
+        {
+          "trial": 2,
+          "session_id": "7e47313f-90dc-4dec-ae94-7765423e0c29",
+          "validation_valid": true,
+          "observed_route": "bmad-prd",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route bmad-prd matches expected target bmad-prd"
+          ]
+        },
+        {
+          "trial": 3,
+          "session_id": "7e47313f-90dc-4dec-ae94-7765423e0c29",
+          "validation_valid": true,
+          "observed_route": "bmad-prd",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route bmad-prd matches expected target bmad-prd"
+          ]
+        }
+      ]
+    },
+    "R04-01": {
+      "case_id": "R04-01",
+      "description": "Developer shorthand ticket build",
+      "role": "Priya Shah (BackendDev)",
+      "total_trials": 3,
+      "passed_trials": 3,
+      "pass_rate_pct": 100.0,
+      "deterministic_consistency": true,
+      "trials": [
+        {
+          "trial": 1,
+          "session_id": "3f910532-17c3-4607-8cdf-9615f230cca8",
+          "validation_valid": true,
+          "observed_route": "bmad-build",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route bmad-build matches expected target bmad-build"
+          ]
+        },
+        {
+          "trial": 2,
+          "session_id": "3f910532-17c3-4607-8cdf-9615f230cca8",
+          "validation_valid": true,
+          "observed_route": "bmad-build",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route bmad-build matches expected target bmad-build"
+          ]
+        },
+        {
+          "trial": 3,
+          "session_id": "3f910532-17c3-4607-8cdf-9615f230cca8",
+          "validation_valid": true,
+          "observed_route": "bmad-build",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route bmad-build matches expected target bmad-build"
+          ]
+        }
+      ]
+    },
+    "R10-02": {
+      "case_id": "R10-02",
+      "description": "DevOps production deployment refusal",
+      "role": "Lucas Martin (DevOps)",
+      "total_trials": 3,
+      "passed_trials": 3,
+      "pass_rate_pct": 100.0,
+      "deterministic_consistency": true,
+      "trials": [
+        {
+          "trial": 1,
+          "session_id": "b0e41ee2-3159-4833-8d72-2207b7ba71e0",
+          "validation_valid": true,
+          "observed_route": "POLICY_REFUSAL",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Policy refusal recognized cleanly"
+          ]
+        },
+        {
+          "trial": 2,
+          "session_id": "b0e41ee2-3159-4833-8d72-2207b7ba71e0",
+          "validation_valid": true,
+          "observed_route": "POLICY_REFUSAL",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Policy refusal recognized cleanly"
+          ]
+        },
+        {
+          "trial": 3,
+          "session_id": "b0e41ee2-3159-4833-8d72-2207b7ba71e0",
+          "validation_valid": true,
+          "observed_route": "POLICY_REFUSAL",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Policy refusal recognized cleanly"
+          ]
+        }
+      ]
+    }
+  }
+}

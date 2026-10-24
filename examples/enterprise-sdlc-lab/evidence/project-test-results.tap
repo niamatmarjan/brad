@@ -1,0 +1,136 @@
+TAP version 13
+# Subtest: API Lifecycle: creates draft, submits, and completes approval flow
+ok 1 - API Lifecycle: creates draft, submits, and completes approval flow
+  ---
+  duration_ms: 27.3595
+  type: 'test'
+  ...
+# Subtest: Health Endpoints: /health, /ready, and /metrics return valid diagnostic payloads
+ok 2 - Health Endpoints: /health, /ready, and /metrics return valid diagnostic payloads
+  ---
+  duration_ms: 10.8646
+  type: 'test'
+  ...
+# Subtest: Idempotency Middleware: replaying identical request returns cached response without duplicate side effects
+ok 3 - Idempotency Middleware: replaying identical request returns cached response without duplicate side effects
+  ---
+  duration_ms: 9.5647
+  type: 'test'
+  ...
+# Subtest: Idempotency Middleware: replaying with same key but different payload returns 422
+ok 4 - Idempotency Middleware: replaying with same key but different payload returns 422
+  ---
+  duration_ms: 1.5127
+  type: 'test'
+  ...
+# Subtest: Web Accessibility: validates semantic structure and WCAG 2.1 AA landmarks
+ok 5 - Web Accessibility: validates semantic structure and WCAG 2.1 AA landmarks
+  ---
+  duration_ms: 5.544
+  type: 'test'
+  ...
+# Subtest: CryptographicAuditLedger: appends sequential records with SHA-256 hash chaining
+ok 6 - CryptographicAuditLedger: appends sequential records with SHA-256 hash chaining
+  ---
+  duration_ms: 2.5608
+  type: 'test'
+  ...
+# Subtest: CryptographicAuditLedger: detects tampering when a record payload is modified out of band
+ok 7 - CryptographicAuditLedger: detects tampering when a record payload is modified out of band
+  ---
+  duration_ms: 0.8104
+  type: 'test'
+  ...
+# Subtest: BusinessHoursCalculator: emergency changes calculate 2h 24/7 deadline without business hour skipping
+ok 8 - BusinessHoursCalculator: emergency changes calculate 2h 24/7 deadline without business hour skipping
+  ---
+  duration_ms: 0.8446
+  type: 'test'
+  ...
+# Subtest: BusinessHoursCalculator: standard business hours skip weekends
+ok 9 - BusinessHoursCalculator: standard business hours skip weekends
+  ---
+  duration_ms: 1.0368
+  type: 'test'
+  ...
+# Subtest: BusinessHoursCalculator: detects breached deadline accurately
+ok 10 - BusinessHoursCalculator: detects breached deadline accurately
+  ---
+  duration_ms: 0.2125
+  type: 'test'
+  ...
+# Subtest: ChangeRequestStateMachine: creates valid draft and validates required fields
+ok 11 - ChangeRequestStateMachine: creates valid draft and validates required fields
+  ---
+  duration_ms: 4.8624
+  type: 'test'
+  ...
+# Subtest: ChangeRequestStateMachine: submits draft and dynamically generates multi-stage approvals
+ok 12 - ChangeRequestStateMachine: submits draft and dynamically generates multi-stage approvals
+  ---
+  duration_ms: 0.5966
+  type: 'test'
+  ...
+# Subtest: ChangeRequestStateMachine: Rule BR-001 strictly blocks self-approval
+ok 13 - ChangeRequestStateMachine: Rule BR-001 strictly blocks self-approval
+  ---
+  duration_ms: 0.6362
+  type: 'test'
+  ...
+# Subtest: ChangeRequestStateMachine: multi-stage approvals advance stages and finalize to APPROVED
+ok 14 - ChangeRequestStateMachine: multi-stage approvals advance stages and finalize to APPROVED
+  ---
+  duration_ms: 0.3575
+  type: 'test'
+  ...
+# Subtest: ChangeRequestStateMachine: rejection halts the pipeline immediately
+ok 15 - ChangeRequestStateMachine: rejection halts the pipeline immediately
+  ---
+  duration_ms: 0.3312
+  type: 'test'
+  ...
+# Subtest: ScopedTenantRepository: enforces tenant scoping on all operations
+ok 16 - ScopedTenantRepository: enforces tenant scoping on all operations
+  ---
+  duration_ms: 1.2302
+  type: 'test'
+  ...
+# Subtest: ScopedTenantRepository: optimistic locking prevents concurrent overwrites
+ok 17 - ScopedTenantRepository: optimistic locking prevents concurrent overwrites
+  ---
+  duration_ms: 1.6927
+  type: 'test'
+  ...
+# Subtest: Concurrency Stress: simultaneous approval attempts arbitrate safely via optimistic locking
+ok 18 - Concurrency Stress: simultaneous approval attempts arbitrate safely via optimistic locking
+  ---
+  duration_ms: 15.124
+  type: 'test'
+  ...
+# Subtest: E2E Lifecycle: end-to-end multi-stage finance approval with audit export
+ok 19 - E2E Lifecycle: end-to-end multi-stage finance approval with audit export
+  ---
+  duration_ms: 16.4445
+  type: 'test'
+  ...
+# Subtest: Security Adversarial: zero-leak multi-tenant boundary attack fails deterministically
+ok 20 - Security Adversarial: zero-leak multi-tenant boundary attack fails deterministically
+  ---
+  duration_ms: 6.706
+  type: 'test'
+  ...
+# Subtest: Security Adversarial: prompt injection embedded in payload is treated strictly as data
+ok 21 - Security Adversarial: prompt injection embedded in payload is treated strictly as data
+  ---
+  duration_ms: 0.9259
+  type: 'test'
+  ...
+1..21
+# tests 21
+# suites 0
+# pass 21
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 493.7998

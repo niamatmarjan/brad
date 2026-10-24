@@ -100,10 +100,30 @@ jobs:
           node cli/brad.mjs doctor --agent antigravity --dir $project --json
           if ($LASTEXITCODE -ne 0) { throw 'BRAD doctor failed' }
 
+  enterprise-sdlc-lab:
+    name: Enterprise SDLC Lab & Benchmark Integrity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+      - name: Benchmark Integrity Tests
+        run: |
+          cd examples/enterprise-sdlc-lab
+          python -m unittest discover -s tests -v
+      - name: AegisFlow Monorepo Application Tests (21/21)
+        run: |
+          cd examples/enterprise-sdlc-lab/project
+          node --test packages/*/test/*.test.mjs apps/*/test/*.test.mjs tests/*.test.mjs
+
   release:
     name: Publish versioned GitHub Release
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [quality, test, node-cli, windows-cli]
+    needs: [quality, test, node-cli, windows-cli, enterprise-sdlc-lab]
     runs-on: ubuntu-latest
     permissions:
       contents: write

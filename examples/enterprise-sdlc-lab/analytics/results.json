@@ -1,0 +1,68 @@
+{
+  "benchmark_suite": "BRAD Enterprise SDLC Benchmark (Operation Ironclad Phase 3)",
+  "eval_type": "LAYER_C_INDEPENDENT_EVALUATION",
+  "baseline_version": "BRAD v0.5.3 (commit 6501ca2)",
+  "oracle_sha256": "3da3ee5a2ab62b2cc7555320b01d074a9f5bf00dd63a62381ea2499b92e2963f",
+  "manifest_sha256": "e34c43de37d014a443ebbdcd03371376cb3b48734ecaace9f1906c31d65f360a",
+  "host_platform": "Google Antigravity (Windows x64)",
+  "native_bmad_primary": "BMAD Method v6.12 (BMM + TEA modules)",
+  "executive_verdict": "CONDITIONAL PILOT \u2014 Supervised Development Only (NO-GO for Unattended Production)",
+  "verdict_rationale": "Verified authentic 10-scenario vertical slice achieved 100.0% precision (10/10) with verified Antigravity subagents and disk transcripts. Multi-agent test suite passed 8/8 real OS/Git experiments. Application test suite passed 21/21 automated tests. However, full 120-case headless execution is NOT_RUN (91.7% pending). Autonomous production deployment is NO-GO; safe for supervised developer pilots with human checkpoints.",
+  "vertical_slice": {
+    "total_evaluated": 10,
+    "passed": 10,
+    "failed": 0,
+    "blocked": 0,
+    "review_required": 0,
+    "pass_rate_pct": 100.0,
+    "dimensional_metrics": {
+      "entrypoint_recognized_pct": 100.0,
+      "intent_selected_correctly_pct": 100.0,
+      "workflow_executed_inline_pct": 90.0,
+      "native_host_dispatch_pct": 0.0,
+      "subagent_executed_pct": 100.0,
+      "task_completed_pct": 100.0,
+      "raw_counts": {
+        "entrypoint_recognized": 10,
+        "intent_selected_correctly": 10,
+        "workflow_executed_inline": 9,
+        "native_host_dispatch": 0,
+        "subagent_executed": 10,
+        "task_completed": 10
+      }
+    }
+  },
+  "full_suite_completion": {
+    "total_cases": 120,
+    "evaluated": 10,
+    "not_run": 110,
+    "completion_pct": 8.3,
+    "full_suite_pass_rate_pct": 8.3
+  },
+  "multiagent_experiments": {
+    "total": 8,
+    "passed": 8,
+    "failed": 0
+  },
+  "application_quality": {
+    "total_passed": 21,
+    "total_failed": 0,
+    "pass_rate_pct": 100.0,
+    "duration_ms": 0.9259
+  },
+  "provenance_breakdown": {
+    "SUBAGENT_DISPATCHED": 8,
+    "INLINE_WORKFLOW": 0,
+    "NATIVE_HOST_DISPATCH": 0,
+    "COORDINATOR_DISPATCHED": 1,
+    "REFUSAL_ENFORCED": 1,
+    "NOT_RUN": 110,
+    "NOT_VERIFIED": 0,
+    "INVALID_FIXTURE": 0
+  },
+  "historical_baselines": {
+    "phase1_static_simulation": "120/120 (100% heuristic simulation \u2014 superseded)",
+    "phase2_provisional_execution": "10 live subagents + 110 scripted \u2014 superseded",
+    "phase3_authentic_execution": "10 authentic Antigravity subagents with disk transcripts + Layer B validator + Layer C independent scorer"
+  }
+}

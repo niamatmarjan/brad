@@ -1,0 +1,26 @@
+{
+  "name": "@aegisflow/enterprise",
+  "version": "1.0.0",
+  "description": "AegisFlow Enterprise - Multi-tenant change-request and approval platform",
+  "type": "module",
+  "scripts": {
+    "test": "node --test packages/*/test/*.test.mjs apps/*/test/*.test.mjs tests/*.test.mjs",
+    "test:core": "node --test packages/core/test/*.test.mjs",
+    "test:storage": "node --test packages/storage/test/*.test.mjs",
+    "test:api": "node --test apps/api/test/*.test.mjs",
+    "test:security": "node --test tests/security-adversarial.test.mjs",
+    "test:concurrency": "node --test tests/concurrency-stress.test.mjs",
+    "start": "node apps/api/src/server.mjs"
+  },
+  "keywords": [
+    "enterprise",
+    "sdlc",
+    "multi-tenant",
+    "approvals",
+    "audit-ledger",
+    "bmad",
+    "brad"
+  ],
+  "author": "AegisFlow Engineering Team",
+  "license": "Apache-2.0"
+}
