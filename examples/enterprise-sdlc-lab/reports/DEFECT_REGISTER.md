@@ -21,6 +21,7 @@
 | **DEF-08** | **CRITICAL** | Benchmark Integrity | `run_live_host_benchmark.py` | Phase 2 live runner manufactured 110/120 observed selections via Python `case_id` branching | **RESOLVED (Phase 3)** |
 | **DEF-09** | **CRITICAL** | Benchmark Integrity | `host_execution_adapter.py` | Phase 3 adapter had keyword fallback; `SUBAGENT_CASES` hardcoded routes; prompts had 4 mismatches | **RESOLVED (Phase 3.1)** |
 | **DEF-10** | **CRITICAL** | Evidence Attribution & Scoring | `score_benchmark.py` & `evidence_validator.py` | Conflation of intent with task completion; fake native dispatch; shared artifact contamination; oracle key lookup defect | **RESOLVED (Phase 3.2)** |
+| **DEF-11** | **HIGH** | Benchmark Coverage & Platform Routing | `host_execution_adapter.py` & Suite Coverage | Category gaps (R03, R06, R09, R11, R12 uncovered); `brad doctor` routing missing in adapter; post-flight preflight overwriting main route | **RESOLVED (Phase 4)** |
 
 ---
 
@@ -160,3 +161,23 @@ Phase 3 subjected the benchmark engine to 10 adversarial attack vectors:
   7. **10 Adversarial Anti-Gaming Regressions Added**: Expanded `test_benchmark_integrity.py` to 26 unit tests (all passing), proving fail-closed defenses against feigned host dispatch, unexecuted skills, stolen artifacts, mismatched roles, failed exit codes, and tampered oracle hashes.
   8. **Repeatability Verification**: Executed 3 independent trials for critical scenarios `R01-01`, `R04-01`, and `R10-02`, achieving 100% deterministic consistency.
 - **Verification**: Layer B validates 10/10 records cleanly (0 errors); Layer C scores 10/10 PASS on evaluated slice (110 NOT_RUN); all 26 integrity unit tests pass in 0.77s; all 8 multi-agent experiments pass in 5.3s.
+
+### DEF-11: Full Enterprise SDLC Category Coverage & Platform Routing (Phase 4)
+- **Discovery**: An audit of Phase 3.2 identified that while 10 scenarios passed with authentic evidence, 5 key enterprise categories (R03 Architecture Design, R06 PO/PM Handoffs, R09 Session Resumption, R11 Concurrency & Worktree Parallelism, and R12 Platform Diagnostics) lacked authentic execution records. Furthermore, `host_execution_adapter.py` did not recognize `brad doctor` or `brad delivery preflight`, and post-flight preflight calls could inadvertently overwrite the primary workflow route.
+- **Remediation (Phase 4)**:
+  1. **Expanded Authentic Subagent Execution**: Executed 5 live Antigravity subagents covering the remaining categories:
+     - `R03-01` (Architect Marcus Lee, `2b910f1d`) -> `bmad-architecture` (synthesized Architecture Spine, validated with `lint_spine.py`, 0 findings).
+     - `R06-01` (PO Daniel Reed, `4bff92de`) -> `bmad-sprint-planning` (evaluated implementation readiness gate, marked story `ready-for-dev`, synchronized tracking via `sprint_plan.py`).
+     - `R09-01` (BackendDev Priya Shah, `1c72f323`) -> `bmad-build` (resumed Story 1.1 per BRAD resumption contract without starting over, 21/21 tests pass).
+     - `R11-01` (DeliveryMgr Grace Wilson, `f6b8c9c6`) -> `bmad-build` (recognized parallel multi-worker requirement, rendered `bmad-build`, formulated Git worktree isolation rules).
+     - `R12-01` (DevOps Lucas Martin, `44e8b8da`) -> `brad doctor` (executed `brad doctor --json`, verified 39 native BMAD skills in `.agent/skills`, outputted recovery guidance).
+  2. **Patched Host Execution Adapter**:
+     - Added native recognition for `brad doctor` and `brad delivery preflight`.
+     - Preserved primary workflow routes: post-flight diagnostics (`delivery_preflight.py`) do not overwrite an already-selected native workflow (`bmad-build`).
+  3. **Added 5 Additional Adversarial Regressions**:
+     - Expanded `test_benchmark_integrity.py` from 26 to 31 unit tests (all passing), proving fail-closed defenses against clarification side-effects, empty transcript files, transcript SHA-256 hash mismatches, duplicate batch run/case IDs, and empty build-lane claims.
+  4. **Comprehensive 12-Category Repeatability**:
+     - Expanded 3x repeatability trials from 3 scenarios to 12 scenarios covering ALL 12 categories (R01 through R12, 36 total trials), achieving 100.0% deterministic consistency.
+  5. **Host Capability Analysis**:
+     - Authored authoritative `HOST_CAPABILITY_MATRIX.md` evaluating Antigravity, Claude Code, Codex, Cursor, and Copilot across 7 execution dimensions.
+- **Verification**: Layer B validates 15/15 records cleanly (0 errors); Layer C scores 15/15 PASS (100.0% of evaluated slice covering all 12 categories, 105 NOT_RUN); 31/31 unit tests pass in 1.0s; 36/36 repeatability trials pass in 2.0s; all 8 multi-agent chaos experiments pass.

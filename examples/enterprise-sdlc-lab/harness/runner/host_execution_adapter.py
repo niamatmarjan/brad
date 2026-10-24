@@ -235,6 +235,18 @@ class HostExecutionAdapter:
                             observed_route = sk
                             intent_selected = True
 
+                    # Detect BRAD platform CLI commands (doctor, delivery preflight)
+                    if "brad doctor" in args_norm or "doctor.py" in args_norm or "brad.mjs doctor" in args_norm or "cli/brad.mjs doctor" in args_norm:
+                        if not native_skill_loaded:
+                            observed_route = "brad doctor"
+                            intent_selected = True
+                            workflow_executed_inline = True
+                    elif "delivery_preflight.py" in args_norm or "delivery preflight" in args_norm:
+                        if not native_skill_loaded:
+                            observed_route = "brad delivery preflight"
+                            intent_selected = True
+                            workflow_executed_inline = True
+
                     # Track file writes explicitly attributable to this session
                     if t_name in ("write_file", "edit_file"):
                         w_path = t_args.get("Path") or ""
@@ -367,8 +379,15 @@ class HostExecutionAdapter:
         elif observed_route == "bmad-build":
             task_completed = len(observed_artifacts) > 0 or len(tool_calls) >= 10
             workflow_executed_inline = True
-        elif observed_route in ("bmad-prd", "bmad-spec", "bmad-sprint-planning"):
+        elif observed_route in ("bmad-prd", "bmad-spec", "bmad-sprint-planning", "bmad-architecture"):
             task_completed = len(observed_artifacts) > 0 or len(tool_calls) >= 10
+            workflow_executed_inline = True
+        elif observed_route in ("brad doctor", "brad delivery preflight"):
+            task_completed = any(
+                "doctor" in json.dumps(tc.get("args", {})).lower()
+                or "preflight" in json.dumps(tc.get("args", {})).lower()
+                for tc in tool_calls
+            )
             workflow_executed_inline = True
         else:
             task_completed = len(observed_artifacts) > 0

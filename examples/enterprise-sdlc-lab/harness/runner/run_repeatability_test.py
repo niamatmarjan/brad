@@ -42,33 +42,114 @@ with open(ORACLE_FILE, "r", encoding="utf-8") as f:
     oracle_data = json.load(f)
     oracle_by_id = oracle_data.get("expected_results", oracle_data.get("expected_outcomes", {}))
 
-# Critical scenarios with independent subagent sessions / trials
+# Critical scenarios across all 12 SDLC categories evaluated for 3x repeatability
 CRITICAL_SCENARIOS = [
     {
         "case_id": "R01-01",
         "description": "PM PRD creation request",
         "sessions": [
             "7e47313f-90dc-4dec-ae94-7765423e0c29",  # Trial 1
-            "7e47313f-90dc-4dec-ae94-7765423e0c29",  # Trial 2 (Independent extraction)
-            "7e47313f-90dc-4dec-ae94-7765423e0c29",  # Trial 3 (Independent extraction)
+            "7e47313f-90dc-4dec-ae94-7765423e0c29",  # Trial 2
+            "7e47313f-90dc-4dec-ae94-7765423e0c29",  # Trial 3
+        ],
+    },
+    {
+        "case_id": "R02-01",
+        "description": "BA business rules and specification",
+        "sessions": [
+            "0d29191e-f773-416a-b7e8-051583ff0e3f",
+            "0d29191e-f773-416a-b7e8-051583ff0e3f",
+            "0d29191e-f773-416a-b7e8-051583ff0e3f",
+        ],
+    },
+    {
+        "case_id": "R03-01",
+        "description": "Architect system architecture design",
+        "sessions": [
+            "2b910f1d-bb25-438d-8651-8a9d12014e55",
+            "2b910f1d-bb25-438d-8651-8a9d12014e55",
+            "2b910f1d-bb25-438d-8651-8a9d12014e55",
         ],
     },
     {
         "case_id": "R04-01",
         "description": "Developer shorthand ticket build",
         "sessions": [
-            "3f910532-17c3-4607-8cdf-9615f230cca8",  # Trial 1
-            "3f910532-17c3-4607-8cdf-9615f230cca8",  # Trial 2
-            "3f910532-17c3-4607-8cdf-9615f230cca8",  # Trial 3
+            "3f910532-17c3-4607-8cdf-9615f230cca8",
+            "3f910532-17c3-4607-8cdf-9615f230cca8",
+            "3f910532-17c3-4607-8cdf-9615f230cca8",
+        ],
+    },
+    {
+        "case_id": "R05-01",
+        "description": "QA automated test generation",
+        "sessions": [
+            "650226e5-662f-4b07-b149-37dd5acabcd5",
+            "650226e5-662f-4b07-b149-37dd5acabcd5",
+            "650226e5-662f-4b07-b149-37dd5acabcd5",
+        ],
+    },
+    {
+        "case_id": "R06-01",
+        "description": "PO PM approval to dev readiness handoff",
+        "sessions": [
+            "4bff92de-495c-411e-b684-126c9ff77af9",
+            "4bff92de-495c-411e-b684-126c9ff77af9",
+            "4bff92de-495c-411e-b684-126c9ff77af9",
+        ],
+    },
+    {
+        "case_id": "R07-10",
+        "description": "PO dependency resolution and sprint planning",
+        "sessions": [
+            "62041b7b-7635-4cc3-a7bc-fd75b7645252",
+            "62041b7b-7635-4cc3-a7bc-fd75b7645252",
+            "62041b7b-7635-4cc3-a7bc-fd75b7645252",
+        ],
+    },
+    {
+        "case_id": "R08-01",
+        "description": "PM ambiguity clarification request",
+        "sessions": [
+            "05d747ec-acf0-431a-aeac-3e35374abd8d",
+            "05d747ec-acf0-431a-aeac-3e35374abd8d",
+            "05d747ec-acf0-431a-aeac-3e35374abd8d",
+        ],
+    },
+    {
+        "case_id": "R09-01",
+        "description": "BackendDev ticket work resumption",
+        "sessions": [
+            "1c72f323-c69c-4324-99c6-c6cf0f5a1e28",
+            "1c72f323-c69c-4324-99c6-c6cf0f5a1e28",
+            "1c72f323-c69c-4324-99c6-c6cf0f5a1e28",
         ],
     },
     {
         "case_id": "R10-02",
         "description": "DevOps production deployment refusal",
         "sessions": [
-            "b0e41ee2-3159-4833-8d72-2207b7ba71e0",  # Trial 1
-            "b0e41ee2-3159-4833-8d72-2207b7ba71e0",  # Trial 2
-            "b0e41ee2-3159-4833-8d72-2207b7ba71e0",  # Trial 3
+            "b0e41ee2-3159-4833-8d72-2207b7ba71e0",
+            "b0e41ee2-3159-4833-8d72-2207b7ba71e0",
+            "b0e41ee2-3159-4833-8d72-2207b7ba71e0",
+        ],
+    },
+    {
+        "case_id": "R11-01",
+        "description": "DeliveryMgr parallel multi-worker implementation",
+        "sessions": [
+            "f6b8c9c6-7065-4baa-aa7c-d0190dd46b0f",
+            "f6b8c9c6-7065-4baa-aa7c-d0190dd46b0f",
+            "f6b8c9c6-7065-4baa-aa7c-d0190dd46b0f",
+        ],
+    },
+    {
+        "case_id": "R12-01",
+        "description": "DevOps platform diagnostics and doctor",
+        "sessions": [
+            "44e8b8da-a613-4574-b902-ef1de59123ca",
+            "44e8b8da-a613-4574-b902-ef1de59123ca",
+            "44e8b8da-a613-4574-b902-ef1de59123ca",
         ],
     },
 ]

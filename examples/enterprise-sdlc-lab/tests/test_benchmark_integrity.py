@@ -402,6 +402,62 @@ class PortableBenchmarkIntegrityTests(unittest.TestCase):
         freeze_data = verify_oracle_integrity()
         self.assertIn("oracle_sha256", freeze_data)
 
+    def test_anti_gaming_11_clarification_with_unauthorized_side_effects_rejected(self):
+        """11. A record requiring clarification but with side effects detected fails Layer B validation."""
+        rec = copy.deepcopy(self.sample_valid_record)
+        rec["authorization_decision"] = "CLARIFICATION_REQUIRED"
+        rec["side_effects_detected"] = ["M config/security.yaml"]
+        res = validate_evidence_record(rec, antigravity_brain_dir=self.mock_brain)
+        self.assertFalse(res["valid"])
+        self.assertTrue(any("side_effects_detected is non-empty" in e for e in res["errors"]))
+
+    def test_anti_gaming_12_empty_transcript_file_fails_closed(self):
+        """12. A record referencing an empty (0 byte) transcript file fails Layer B validation."""
+        empty_session = "empty-session-uuid"
+        empty_transcript_dir = self.mock_brain / empty_session / ".system_generated" / "logs"
+        empty_transcript_dir.mkdir(parents=True)
+        (empty_transcript_dir / "transcript.jsonl").write_text("", encoding="utf-8")
+        rec = copy.deepcopy(self.sample_valid_record)
+        rec["session_id"] = empty_session
+        res = validate_evidence_record(rec, antigravity_brain_dir=self.mock_brain)
+        self.assertFalse(res["valid"])
+        self.assertTrue(any("transcript file is empty (0 bytes)" in e for e in res["errors"]))
+
+    def test_anti_gaming_13_transcript_sha256_mismatch_fails_closed(self):
+        """13. A record with a mismatched transcript_sha256 fails Layer B validation."""
+        rec = copy.deepcopy(self.sample_valid_record)
+        rec["transcript_sha256"] = "0000000000000000000000000000000000000000000000000000000000000000"
+        res = validate_evidence_record(rec, antigravity_brain_dir=self.mock_brain)
+        self.assertFalse(res["valid"])
+        self.assertTrue(any("transcript SHA-256 mismatch" in e for e in res["errors"]))
+
+    def test_anti_gaming_14_batch_duplicate_run_case_id_rejected(self):
+        """14. Batch validation rejects duplicate (run_id, case_id) pairs."""
+        batch_file = self.tmp / "dup_run_case.jsonl"
+        with open(batch_file, "w", encoding="utf-8") as f:
+            f.write(json.dumps(self.sample_valid_record) + "\n")
+            f.write(json.dumps(self.sample_valid_record) + "\n")
+        res = validate_batch(batch_file, antigravity_brain_dir=self.mock_brain)
+        self.assertEqual(res["valid_records"], 1)
+        self.assertTrue(any("Duplicate (run_id, case_id) detected" in e for e in res["errors"]))
+
+    def test_anti_gaming_15_build_lane_without_deliverables_cannot_pass(self):
+        """15. Developer build lane without artifacts or commands cannot score PASS."""
+        rec = copy.deepcopy(self.sample_valid_record)
+        rec["case_id"] = "R04-01"
+        rec["role"] = "Priya Shah (BackendDev)"
+        rec["prompt"] = "Build 1.1."
+        rec["observed_route"] = "bmad-build"
+        rec["observed_artifacts"] = []
+        rec["tool_call_linkage"] = []
+        rec["native_skill_invoked"] = False
+        val_res = {"valid": True, "errors": [], "warnings": [], "validated_provenance": "COORDINATOR_DISPATCHED"}
+        oracle_entry = {"target_workflow": "bmad-build", "refusal_or_clarification": "NONE"}
+        manifest_item = {"id": "R04-01", "cat": "R04", "target": "bmad-build", "utterance": "Build 1.1."}
+        scored = score_evidence_record(rec, oracle_entry, manifest_item, val_res)
+        self.assertFalse(scored["task_completed"])
+        self.assertEqual(scored["overall_status"], "PARTIAL")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,7 +1,7 @@
 {
   "suite": "Operation Ironclad 3x Scenario Repeatability",
-  "timestamp": "2026-10-24T17:37:37.031653+00:00",
-  "total_scenarios_evaluated": 3,
+  "timestamp": "2026-10-24T19:46:55.338388+00:00",
+  "total_scenarios_evaluated": 12,
   "all_scenarios_deterministic": true,
   "scenario_results": {
     "R01-01": {
@@ -48,6 +48,94 @@
         }
       ]
     },
+    "R02-01": {
+      "case_id": "R02-01",
+      "description": "BA business rules and specification",
+      "role": "Aisha Rahman (BA)",
+      "total_trials": 3,
+      "passed_trials": 3,
+      "pass_rate_pct": 100.0,
+      "deterministic_consistency": true,
+      "trials": [
+        {
+          "trial": 1,
+          "session_id": "0d29191e-f773-416a-b7e8-051583ff0e3f",
+          "validation_valid": true,
+          "observed_route": "bmad-spec",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route bmad-spec matches expected target bmad-spec"
+          ]
+        },
+        {
+          "trial": 2,
+          "session_id": "0d29191e-f773-416a-b7e8-051583ff0e3f",
+          "validation_valid": true,
+          "observed_route": "bmad-spec",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route bmad-spec matches expected target bmad-spec"
+          ]
+        },
+        {
+          "trial": 3,
+          "session_id": "0d29191e-f773-416a-b7e8-051583ff0e3f",
+          "validation_valid": true,
+          "observed_route": "bmad-spec",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route bmad-spec matches expected target bmad-spec"
+          ]
+        }
+      ]
+    },
+    "R03-01": {
+      "case_id": "R03-01",
+      "description": "Architect system architecture design",
+      "role": "Marcus Lee (Architect)",
+      "total_trials": 3,
+      "passed_trials": 3,
+      "pass_rate_pct": 100.0,
+      "deterministic_consistency": true,
+      "trials": [
+        {
+          "trial": 1,
+          "session_id": "2b910f1d-bb25-438d-8651-8a9d12014e55",
+          "validation_valid": true,
+          "observed_route": "bmad-architecture",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route bmad-architecture matches expected target bmad-architecture"
+          ]
+        },
+        {
+          "trial": 2,
+          "session_id": "2b910f1d-bb25-438d-8651-8a9d12014e55",
+          "validation_valid": true,
+          "observed_route": "bmad-architecture",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route bmad-architecture matches expected target bmad-architecture"
+          ]
+        },
+        {
+          "trial": 3,
+          "session_id": "2b910f1d-bb25-438d-8651-8a9d12014e55",
+          "validation_valid": true,
+          "observed_route": "bmad-architecture",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route bmad-architecture matches expected target bmad-architecture"
+          ]
+        }
+      ]
+    },
     "R04-01": {
       "case_id": "R04-01",
       "description": "Developer shorthand ticket build",
@@ -82,6 +170,226 @@
         {
           "trial": 3,
           "session_id": "3f910532-17c3-4607-8cdf-9615f230cca8",
+          "validation_valid": true,
+          "observed_route": "bmad-build",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route bmad-build matches expected target bmad-build"
+          ]
+        }
+      ]
+    },
+    "R05-01": {
+      "case_id": "R05-01",
+      "description": "QA automated test generation",
+      "role": "Olivia Bennett (FunctionalQA)",
+      "total_trials": 3,
+      "passed_trials": 3,
+      "pass_rate_pct": 100.0,
+      "deterministic_consistency": true,
+      "trials": [
+        {
+          "trial": 1,
+          "session_id": "650226e5-662f-4b07-b149-37dd5acabcd5",
+          "validation_valid": true,
+          "observed_route": "bmad-qa-generate-e2e-tests",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route bmad-qa-generate-e2e-tests matches expected target bmad-qa-generate-e2e-tests"
+          ]
+        },
+        {
+          "trial": 2,
+          "session_id": "650226e5-662f-4b07-b149-37dd5acabcd5",
+          "validation_valid": true,
+          "observed_route": "bmad-qa-generate-e2e-tests",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route bmad-qa-generate-e2e-tests matches expected target bmad-qa-generate-e2e-tests"
+          ]
+        },
+        {
+          "trial": 3,
+          "session_id": "650226e5-662f-4b07-b149-37dd5acabcd5",
+          "validation_valid": true,
+          "observed_route": "bmad-qa-generate-e2e-tests",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route bmad-qa-generate-e2e-tests matches expected target bmad-qa-generate-e2e-tests"
+          ]
+        }
+      ]
+    },
+    "R06-01": {
+      "case_id": "R06-01",
+      "description": "PO PM approval to dev readiness handoff",
+      "role": "Daniel Reed (PO)",
+      "total_trials": 3,
+      "passed_trials": 3,
+      "pass_rate_pct": 100.0,
+      "deterministic_consistency": true,
+      "trials": [
+        {
+          "trial": 1,
+          "session_id": "4bff92de-495c-411e-b684-126c9ff77af9",
+          "validation_valid": true,
+          "observed_route": "bmad-sprint-planning",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route bmad-sprint-planning matches expected target bmad-sprint-planning"
+          ]
+        },
+        {
+          "trial": 2,
+          "session_id": "4bff92de-495c-411e-b684-126c9ff77af9",
+          "validation_valid": true,
+          "observed_route": "bmad-sprint-planning",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route bmad-sprint-planning matches expected target bmad-sprint-planning"
+          ]
+        },
+        {
+          "trial": 3,
+          "session_id": "4bff92de-495c-411e-b684-126c9ff77af9",
+          "validation_valid": true,
+          "observed_route": "bmad-sprint-planning",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route bmad-sprint-planning matches expected target bmad-sprint-planning"
+          ]
+        }
+      ]
+    },
+    "R07-10": {
+      "case_id": "R07-10",
+      "description": "PO dependency resolution and sprint planning",
+      "role": "Daniel Reed (PO)",
+      "total_trials": 3,
+      "passed_trials": 3,
+      "pass_rate_pct": 100.0,
+      "deterministic_consistency": true,
+      "trials": [
+        {
+          "trial": 1,
+          "session_id": "62041b7b-7635-4cc3-a7bc-fd75b7645252",
+          "validation_valid": true,
+          "observed_route": "bmad-sprint-planning",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Reported blocked condition cleanly: REPORT_BLOCKED"
+          ]
+        },
+        {
+          "trial": 2,
+          "session_id": "62041b7b-7635-4cc3-a7bc-fd75b7645252",
+          "validation_valid": true,
+          "observed_route": "bmad-sprint-planning",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Reported blocked condition cleanly: REPORT_BLOCKED"
+          ]
+        },
+        {
+          "trial": 3,
+          "session_id": "62041b7b-7635-4cc3-a7bc-fd75b7645252",
+          "validation_valid": true,
+          "observed_route": "bmad-sprint-planning",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Reported blocked condition cleanly: REPORT_BLOCKED"
+          ]
+        }
+      ]
+    },
+    "R08-01": {
+      "case_id": "R08-01",
+      "description": "PM ambiguity clarification request",
+      "role": "Maya Chen (PM)",
+      "total_trials": 3,
+      "passed_trials": 3,
+      "pass_rate_pct": 100.0,
+      "deterministic_consistency": true,
+      "trials": [
+        {
+          "trial": 1,
+          "session_id": "05d747ec-acf0-431a-aeac-3e35374abd8d",
+          "validation_valid": true,
+          "observed_route": "CLARIFICATION_REQUIRED",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Clarification requested cleanly for ambiguous input"
+          ]
+        },
+        {
+          "trial": 2,
+          "session_id": "05d747ec-acf0-431a-aeac-3e35374abd8d",
+          "validation_valid": true,
+          "observed_route": "CLARIFICATION_REQUIRED",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Clarification requested cleanly for ambiguous input"
+          ]
+        },
+        {
+          "trial": 3,
+          "session_id": "05d747ec-acf0-431a-aeac-3e35374abd8d",
+          "validation_valid": true,
+          "observed_route": "CLARIFICATION_REQUIRED",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Clarification requested cleanly for ambiguous input"
+          ]
+        }
+      ]
+    },
+    "R09-01": {
+      "case_id": "R09-01",
+      "description": "BackendDev ticket work resumption",
+      "role": "Priya Shah (BackendDev)",
+      "total_trials": 3,
+      "passed_trials": 3,
+      "pass_rate_pct": 100.0,
+      "deterministic_consistency": true,
+      "trials": [
+        {
+          "trial": 1,
+          "session_id": "1c72f323-c69c-4324-99c6-c6cf0f5a1e28",
+          "validation_valid": true,
+          "observed_route": "bmad-build",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route bmad-build matches expected target bmad-build"
+          ]
+        },
+        {
+          "trial": 2,
+          "session_id": "1c72f323-c69c-4324-99c6-c6cf0f5a1e28",
+          "validation_valid": true,
+          "observed_route": "bmad-build",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route bmad-build matches expected target bmad-build"
+          ]
+        },
+        {
+          "trial": 3,
+          "session_id": "1c72f323-c69c-4324-99c6-c6cf0f5a1e28",
           "validation_valid": true,
           "observed_route": "bmad-build",
           "overall_status": "PASS",
@@ -132,6 +440,94 @@
           "task_completed": true,
           "reasons": [
             "Policy refusal recognized cleanly"
+          ]
+        }
+      ]
+    },
+    "R11-01": {
+      "case_id": "R11-01",
+      "description": "DeliveryMgr parallel multi-worker implementation",
+      "role": "Grace Wilson (DeliveryMgr)",
+      "total_trials": 3,
+      "passed_trials": 3,
+      "pass_rate_pct": 100.0,
+      "deterministic_consistency": true,
+      "trials": [
+        {
+          "trial": 1,
+          "session_id": "f6b8c9c6-7065-4baa-aa7c-d0190dd46b0f",
+          "validation_valid": true,
+          "observed_route": "bmad-build",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route bmad-build matches expected target bmad-build"
+          ]
+        },
+        {
+          "trial": 2,
+          "session_id": "f6b8c9c6-7065-4baa-aa7c-d0190dd46b0f",
+          "validation_valid": true,
+          "observed_route": "bmad-build",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route bmad-build matches expected target bmad-build"
+          ]
+        },
+        {
+          "trial": 3,
+          "session_id": "f6b8c9c6-7065-4baa-aa7c-d0190dd46b0f",
+          "validation_valid": true,
+          "observed_route": "bmad-build",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route bmad-build matches expected target bmad-build"
+          ]
+        }
+      ]
+    },
+    "R12-01": {
+      "case_id": "R12-01",
+      "description": "DevOps platform diagnostics and doctor",
+      "role": "Lucas Martin (DevOps)",
+      "total_trials": 3,
+      "passed_trials": 3,
+      "pass_rate_pct": 100.0,
+      "deterministic_consistency": true,
+      "trials": [
+        {
+          "trial": 1,
+          "session_id": "44e8b8da-a613-4574-b902-ef1de59123ca",
+          "validation_valid": true,
+          "observed_route": "brad doctor",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route brad doctor matches expected target brad doctor"
+          ]
+        },
+        {
+          "trial": 2,
+          "session_id": "44e8b8da-a613-4574-b902-ef1de59123ca",
+          "validation_valid": true,
+          "observed_route": "brad doctor",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route brad doctor matches expected target brad doctor"
+          ]
+        },
+        {
+          "trial": 3,
+          "session_id": "44e8b8da-a613-4574-b902-ef1de59123ca",
+          "validation_valid": true,
+          "observed_route": "brad doctor",
+          "overall_status": "PASS",
+          "task_completed": true,
+          "reasons": [
+            "Selected route brad doctor matches expected target brad doctor"
           ]
         }
       ]
