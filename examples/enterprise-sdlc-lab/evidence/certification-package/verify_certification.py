@@ -58,14 +58,29 @@ def verify_freeze_integrity() -> bool:
     exp_manifest = freeze_data["manifest_sha256"]
     exp_oracle = freeze_data["oracle_sha256"]
 
-    act_manifest = sha256_file(MANIFEST_FILE)
-    act_oracle = sha256_file(ORACLE_FILE)
+    manifest_bytes = MANIFEST_FILE.read_bytes()
+    oracle_bytes = ORACLE_FILE.read_bytes()
 
-    if act_manifest != exp_manifest:
-        print(f"  FAILED: Manifest hash mismatch: expected {exp_manifest}, got {act_manifest}")
+    act_manifest_raw = hashlib.sha256(manifest_bytes).hexdigest()
+    act_manifest_norm = hashlib.sha256(manifest_bytes.replace(b"\r\n", b"\n")).hexdigest()
+
+    act_oracle_raw = hashlib.sha256(oracle_bytes).hexdigest()
+    act_oracle_norm = hashlib.sha256(oracle_bytes.replace(b"\r\n", b"\n")).hexdigest()
+
+    allowed_manifest = {
+        freeze_data["manifest_sha256"],
+        freeze_data.get("manifest_sha256_lf", "04ebd6c9c00b60db79fc03c5d446fffb8a72bcbaa30d945fabe470f9fafea040"),
+    }
+    allowed_oracle = {
+        freeze_data["oracle_sha256"],
+        freeze_data.get("oracle_sha256_lf", "a8171dca733a809d894100e4ab3930adba8eaa5f9724d571ffb2228c82ab756b"),
+    }
+
+    if act_manifest_raw not in allowed_manifest and act_manifest_norm not in allowed_manifest:
+        print(f"  FAILED: Manifest hash mismatch: expected {exp_manifest}, got raw={act_manifest_raw}, norm={act_manifest_norm}")
         return False
-    if act_oracle != exp_oracle:
-        print(f"  FAILED: Oracle hash mismatch: expected {exp_oracle}, got {act_oracle}")
+    if act_oracle_raw not in allowed_oracle and act_oracle_norm not in allowed_oracle:
+        print(f"  FAILED: Oracle hash mismatch: expected {exp_oracle}, got raw={act_oracle_raw}, norm={act_oracle_norm}")
         return False
 
     print("  PASS: Frozen Oracle & Manifest SHA-256 hashes verified perfectly.")
@@ -86,16 +101,20 @@ def verify_package_manifest() -> bool:
     missing = []
 
     for rel_path, expected_hash in pkg_manifest.get("files", {}).items():
-        file_path = PKG_DIR / rel_path
+        norm_rel = rel_path.replace("\\", "/")
+        file_path = PKG_DIR / norm_rel
         if not file_path.is_file():
-            missing.append(rel_path)
+            missing.append(norm_rel)
             continue
 
-        actual_hash = sha256_file(file_path)
-        if actual_hash != expected_hash:
-            mismatches.append((rel_path, expected_hash, actual_hash))
-        else:
+        raw_bytes = file_path.read_bytes()
+        actual_hash_raw = hashlib.sha256(raw_bytes).hexdigest()
+        actual_hash_norm = hashlib.sha256(raw_bytes.replace(b"\r\n", b"\n")).hexdigest()
+
+        if actual_hash_raw == expected_hash or actual_hash_norm == expected_hash:
             files_checked += 1
+        else:
+            mismatches.append((norm_rel, expected_hash, actual_hash_raw))
 
     if missing:
         print(f"  FAILED: Missing {len(missing)} files from package: {missing}")

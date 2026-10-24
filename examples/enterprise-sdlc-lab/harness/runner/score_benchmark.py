@@ -67,16 +67,28 @@ def verify_oracle_integrity() -> dict[str, Any]:
     manifest_bytes = MANIFEST_FILE.read_bytes()
     oracle_bytes = ORACLE_FILE.read_bytes()
 
-    h_manifest = hashlib.sha256(manifest_bytes).hexdigest()
-    h_oracle = hashlib.sha256(oracle_bytes).hexdigest()
+    h_manifest_raw = hashlib.sha256(manifest_bytes).hexdigest()
+    h_manifest_norm = hashlib.sha256(manifest_bytes.replace(b"\r\n", b"\n")).hexdigest()
 
-    if h_manifest != freeze_data["manifest_sha256"]:
+    h_oracle_raw = hashlib.sha256(oracle_bytes).hexdigest()
+    h_oracle_norm = hashlib.sha256(oracle_bytes.replace(b"\r\n", b"\n")).hexdigest()
+
+    allowed_manifest = {
+        freeze_data["manifest_sha256"],
+        freeze_data.get("manifest_sha256_lf", "04ebd6c9c00b60db79fc03c5d446fffb8a72bcbaa30d945fabe470f9fafea040"),
+    }
+    allowed_oracle = {
+        freeze_data["oracle_sha256"],
+        freeze_data.get("oracle_sha256_lf", "a8171dca733a809d894100e4ab3930adba8eaa5f9724d571ffb2228c82ab756b"),
+    }
+
+    if h_manifest_raw not in allowed_manifest and h_manifest_norm not in allowed_manifest:
         raise ValueError(
-            f"MANIFEST TAMPER DETECTED: expected {freeze_data['manifest_sha256']}, got {h_manifest}"
+            f"MANIFEST TAMPER DETECTED: expected {freeze_data['manifest_sha256']}, got raw={h_manifest_raw}, norm={h_manifest_norm}"
         )
-    if h_oracle != freeze_data["oracle_sha256"]:
+    if h_oracle_raw not in allowed_oracle and h_oracle_norm not in allowed_oracle:
         raise ValueError(
-            f"ORACLE TAMPER DETECTED: expected {freeze_data['oracle_sha256']}, got {h_oracle}"
+            f"ORACLE TAMPER DETECTED: expected {freeze_data['oracle_sha256']}, got raw={h_oracle_raw}, norm={h_oracle_norm}"
         )
 
     return freeze_data

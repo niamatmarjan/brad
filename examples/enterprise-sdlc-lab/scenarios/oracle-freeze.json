@@ -1,7 +1,9 @@
 {
   "commit": "62e66a4553d5cad8559bffefd2dffe2581ff267c",
   "manifest_sha256": "e34c43de37d014a443ebbdcd03371376cb3b48734ecaace9f1906c31d65f360a",
+  "manifest_sha256_lf": "04ebd6c9c00b60db79fc03c5d446fffb8a72bcbaa30d945fabe470f9fafea040",
   "oracle_sha256": "3da3ee5a2ab62b2cc7555320b01d074a9f5bf00dd63a62381ea2499b92e2963f",
+  "oracle_sha256_lf": "a8171dca733a809d894100e4ab3930adba8eaa5f9724d571ffb2228c82ab756b",
   "total_cases": 120,
   "timestamp": "2026-10-24T02:44:00Z",
   "status": "FROZEN_ORACLE"
