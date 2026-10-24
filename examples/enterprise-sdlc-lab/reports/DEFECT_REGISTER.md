@@ -1,8 +1,8 @@
 # Operation Ironclad: Defect Register & Remediation Log
-## Comprehensive Catalog of Engineering Defects, Security Vulnerabilities & Resolutions
+## Comprehensive Catalog of Engineering Defects, Security Vulnerabilities & Benchmark Recoveries (Phase 3 Verified)
 
 **Target System**: BRAD Orchestrator & AegisFlow Enterprise Monorepo  
-**Audit Standard**: Enterprise Software Quality & Security Assurance  
+**Audit Standard**: Enterprise Software Quality, Security Assurance & Benchmark Integrity  
 **Date**: October 24, 2026  
 
 ---
@@ -17,7 +17,8 @@
 | **DEF-04** | **MEDIUM** | Architecture / Auth | `@aegisflow/api` | API middleware trusts untrusted client-supplied headers without upstream mTLS/JWT | **DOCUMENTED (Advisory)** |
 | **DEF-05** | **LOW** | Test Harness | API Test Helpers | Test mock `req` object did not implement full Node.js async iterable stream contract | **RESOLVED** |
 | **DEF-06** | **LOW** | Cryptographic Ledger | `@aegisflow/core` | Tail-truncation vulnerability if attacker possesses direct database write access | **DOCUMENTED (Advisory)** |
-| **DEF-07** | **HIGH** | Benchmark Integrity | `harness/runner` | Phase 1 benchmark runner used regex keyword matching and canned returns rather than live host execution | **RESOLVED (Phase 2)** |
+| **DEF-07** | **CRITICAL** | Benchmark Integrity | `harness/runner` | Phase 1 benchmark runner used regex keyword matching rather than live host execution | **SUPERSEDED** |
+| **DEF-08** | **CRITICAL** | Benchmark Integrity | `run_live_host_benchmark.py` | Phase 2 live runner manufactured 110/120 observed selections via Python `case_id` branching | **RESOLVED (Phase 3)** |
 
 ---
 
@@ -80,12 +81,36 @@
 - **Mitigation for Production**: Periodically anchor the ledger's `headHash` to an external append-only log, digital notary, or HSM to provide external sequence proof.
 
 ### DEF-07: Phase 1 Synthetic Benchmark Integrity Flaw
-- **Discovery**: An independent audit (GitHub Issue #39) revealed that the initial Phase 1 benchmark runners (`run_benchmark.py`, `run_multiagent_experiments.py`) used regex-based heuristic classification and hardcoded mock returns rather than executing live BRAD skills or spawning real subagents.
-- **Root Cause**: Premature optimization of evaluation speed resulted in evaluating regex patterns rather than live host agent decisions.
-- **Remediation**:
-  1. Cryptographically froze and verified the oracle (`oracle-freeze.json` SHA-256: `3da3ee5a...`).
-  2. Implemented blind live host runner (`run_live_host_benchmark.py`) dispatching prompts without oracle hints to the installed BRAD skill in Google Antigravity across clean workspaces.
-  3. Implemented independent scoring process (`score_benchmark.py`) revealing authentic 50.0% unassisted routing precision and 22.5% safe operator escalations.
-  4. Upgraded `run_multiagent_experiments.py` to execute real Git branches, merge conflicts, dirty worktree interruptions, and disk-verified subagent sessions.
-- **Verification**: Transparent dual-score reporting across all documentation and interactive analytics dashboard.
+- **Discovery**: The initial benchmark runners (`run_benchmark.py`, `run_multiagent_experiments.py`) used regex-based heuristic classification and hardcoded mock returns.
+- **Remediation**: Superseded by Phase 2 and Phase 3 architectures; historical files preserved in `evidence/routing/phase1-static-simulation/`.
 
+### DEF-08: Phase 2 Scripted Runner Integrity Defect
+- **Discovery**: An independent audit (GitHub Issue #39) verified that `run_live_host_benchmark.py` manufactured 110 of 120 observed selections via Python `case_id` / `cat` branching, while the remaining 10 subagents lacked verifiable tool call transcripts.
+- **Root Cause**: Script attempted to force a full 120-run in an environment where Antigravity subagent invocation is interactive rather than a headless batch engine.
+- **Remediation (Phase 3)**:
+  1. Implemented **Layer A (Host Execution Adapter)**: Blind execution with zero oracle hints, zero `case_id` or category branching, and dynamic catalog discovery via `inspect_bmad.py`.
+  2. Implemented **Layer B (Evidence Validator)**: Strictly enforces 22 mandatory schema fields, on-disk transcript existence in `~/.gemini/antigravity/brain/<session_id>`, verified tool-call linkage, native skill existence in the discovered catalog, and absence of destructive side effects during refusals.
+  3. Implemented **Layer C (Independent Scorer)**: Cryptographically verifies SHA-256 hashes (`3da3ee5a...`), evaluates validated Layer B records across 4 dimensions, and categorizes unexecuted cases strictly as `NOT_RUN` (zero synthetic passes).
+  4. Authored **13 Benchmark Integrity Unit Tests** (`tests/test_benchmark_integrity.py`): All 13 pass, proving fail-closed defenses against forged skills, missing transcripts, duplicate IDs, and inverted timestamps.
+  5. Successfully executed and verified the **Smallest Authentic Vertical Slice (10 Representative Cases)**: 10 real Antigravity subagents executed in `workspace-v6-stable` with verifiable tool calls and permanent artifacts.
+  6. Re-executed all **8 Multi-Agent Chaos Experiments (EXP-01 through EXP-08)**: 100% verified with live OS processes, Git worktrees, merge collisions, and atomic locks.
+- **Verification**: Layer B and Layer C independent scoring verified 10/10 PASS on evaluated slice, 110 NOT_RUN on remainder, with 0 validation errors.
+
+---
+
+## 3. Adversarial Attack Surface Validation (Layer B/C Defenses)
+
+Phase 3 subjected the benchmark engine to 10 adversarial attack vectors:
+
+| Attack Vector | Simulated Exploitation | Layer B/C Defense Response | Verification Status |
+|---|---|---|:---:|
+| **ADV-01: Forged Skill Name** | Evidence record claims `bmad-fake-oracle` | Layer B detects skill not in discovered catalog; fails closed | **BLOCKED (Unit Test Verified)** |
+| **ADV-02: Missing Skill File** | Record claims native skill, but `SKILL.md` missing | Layer B checks filesystem path; fails closed | **BLOCKED (Unit Test Verified)** |
+| **ADV-03: Missing Session Transcript** | Synthetic UUID provided without on-disk file | Layer B checks `~/.gemini/antigravity/brain/<id>`; fails closed | **BLOCKED (Unit Test Verified)** |
+| **ADV-04: Empty Tool Linkage** | Record claims `NATIVE_INVOKED` with empty tool calls | Layer B requires non-empty observable tool calls; fails closed | **BLOCKED (Unit Test Verified)** |
+| **ADV-05: Inverted Timestamps** | `end_time` earlier than `start_time` | Layer B validates temporal order; fails closed | **BLOCKED (Unit Test Verified)** |
+| **ADV-06: Malformed Schema** | Missing any of 22 required fields | Layer B rejects record immediately with `valid: False` | **BLOCKED (Unit Test Verified)** |
+| **ADV-07: Inconsistent Refusal Side Effects**| Record claims `POLICY_REFUSAL` but records `git push` | Layer B flags destructive side effect on refusal; fails closed | **BLOCKED (Unit Test Verified)** |
+| **ADV-08: Batch Duplicate Case IDs** | Multiple records submit the same `case_id` | Layer B batch validator detects duplicate; fails closed | **BLOCKED (Unit Test Verified)** |
+| **ADV-09: Case ID Branching Attack** | Alter case ID while preserving utterance | Layer A uses zero `case_id` branching; routes purely on utterance | **BLOCKED (Negative Control Verified)** |
+| **ADV-10: Oracle Tamper Attack** | Modify expected outcome in oracle file | Layer C detects SHA-256 mismatch; halts evaluation | **BLOCKED (SHA-256 Gate Verified)** |

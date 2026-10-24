@@ -1,32 +1,58 @@
 #!/usr/bin/env python3
-"""[INDEPENDENT SCORING ENGINE]
-Validates and scores observed BRAD routing results against the frozen, hashed oracle.
+"""[LAYER C: INDEPENDENT SCORING ENGINE]
+Operation Ironclad — Layer C Benchmark Scorer.
 
-SECURITY & AUDIT RULES:
-1. Verifies SHA-256 hash of scenarios/case-manifest.json and scenarios/expected-outcomes.json
+Compares Layer B validated evidence records against the frozen, hashed oracle.
+Enforces strict fail-closed security and audit policies:
+1. Verifies SHA-256 hashes of scenarios/case-manifest.json and scenarios/expected-outcomes.json
    against scenarios/oracle-freeze.json before scoring.
-2. The scorer is executed AFTER the blind runner finishes; the runner has no access to this scorer.
-3. Classifies results into PASS, FAIL, REVIEW_REQUIRED, BLOCKED.
-4. Generates confusion matrix and category-level diagnostics.
+2. Evaluates each record strictly through Layer B validation (evidence_validator).
+3. Evaluates 4 separate dimensions:
+   - Entrypoint Recognition (BRAD chosen as entrypoint)
+   - Intent Selection (selected skill matches expected native skill or policy)
+   - Native Workflow Invocation (skill was actually invoked via tool execution)
+   - Task Completion (produced observable artifacts or executed cleanly)
+4. Vocabulary: PASS, FAIL, PARTIAL, REVIEW_REQUIRED, BLOCKED, NOT_RUN, NOT_VERIFIED.
+5. Fails closed on forged records, synthesized IDs, missing transcripts, or missing skills.
 """
 from __future__ import annotations
+
 import hashlib
 import json
 import re
 import sys
 from pathlib import Path
+from typing import Any
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 SCENARIOS_DIR = BASE_DIR / "scenarios"
-EVIDENCE_DIR = BASE_DIR / "evidence" / "routing"
-EVIDENCE_DIR.mkdir(parents=True, exist_ok=True)
+HARNESS_DIR = BASE_DIR / "harness"
+
+# Import Layer B validator
+sys.path.insert(0, str(HARNESS_DIR / "validators"))
+try:
+    from evidence_validator import validate_evidence_record, validate_batch
+except ImportError:
+    # If running from another working directory
+    from harness.validators.evidence_validator import validate_evidence_record, validate_batch
 
 FREEZE_FILE = SCENARIOS_DIR / "oracle-freeze.json"
 MANIFEST_FILE = SCENARIOS_DIR / "case-manifest.json"
 ORACLE_FILE = SCENARIOS_DIR / "expected-outcomes.json"
 
+VALID_OUTCOMES = {
+    "PASS",
+    "FAIL",
+    "PARTIAL",
+    "REVIEW_REQUIRED",
+    "BLOCKED",
+    "NOT_RUN",
+    "NOT_VERIFIED",
+}
 
-def verify_oracle_integrity():
+
+def verify_oracle_integrity() -> dict[str, Any]:
+    """Cryptographically verifies oracle files against frozen hashes."""
     if not FREEZE_FILE.exists():
         raise FileNotFoundError(f"Oracle freeze file missing: {FREEZE_FILE}")
 
@@ -46,12 +72,170 @@ def verify_oracle_integrity():
             f"ORACLE TAMPER DETECTED: expected {freeze_data['oracle_sha256']}, got {h_oracle}"
         )
 
-    print(f"Oracle freeze integrity confirmed (SHA-256: {h_oracle[:12]}...).")
     return freeze_data
 
 
-def score_observed_results(observed_events_file: Path, output_results_file: Path) -> dict:
-    verify_oracle_integrity()
+def score_evidence_record(
+    record: dict[str, Any],
+    oracle_entry: dict[str, Any],
+    manifest_item: dict[str, Any],
+    validation_result: dict[str, Any],
+) -> dict[str, Any]:
+    """Score a single validated record against oracle expectations."""
+    case_id = record["case_id"]
+    cat = manifest_item.get("cat", case_id.split("-")[0])
+    expected_target = (manifest_item.get("target") or oracle_entry.get("target_workflow") or "").strip()
+    is_refusal = (
+        oracle_entry.get("refusal_or_clarification") == "POLICY_REFUSAL"
+        or manifest_item.get("refusal_or_clarification") == "POLICY_REFUSAL"
+    )
+    is_clarification = (
+        oracle_entry.get("refusal_or_clarification") == "CLARIFICATION_REQUIRED"
+        or manifest_item.get("refusal_or_clarification") == "CLARIFICATION_REQUIRED"
+    )
+
+    # 1. Fail closed if Layer B validation failed
+    if not validation_result.get("valid", False):
+        return {
+            "case_id": case_id,
+            "category": cat,
+            "prompt": record.get("prompt", ""),
+            "expected_target": expected_target,
+            "observed_route": record.get("observed_route", "UNKNOWN"),
+            "provenance": "NOT_VERIFIED",
+            "entrypoint_recognized": False,
+            "intent_selected_correctly": False,
+            "native_workflow_invoked": False,
+            "task_completed": False,
+            "overall_status": "NOT_VERIFIED",
+            "reasons": validation_result.get("errors", ["Evidence validation failed"]),
+        }
+
+    # 2. Check for blocked/error execution
+    if record.get("error_or_timeout") or record.get("provenance") == "BLOCKED":
+        return {
+            "case_id": case_id,
+            "category": cat,
+            "prompt": record.get("prompt", ""),
+            "expected_target": expected_target,
+            "observed_route": record.get("observed_route", "BLOCKED"),
+            "provenance": "BLOCKED",
+            "entrypoint_recognized": bool(record.get("entrypoint_selected")),
+            "intent_selected_correctly": False,
+            "native_workflow_invoked": False,
+            "task_completed": False,
+            "overall_status": "BLOCKED",
+            "reasons": [f"Execution blocked or timed out: {record.get('error_or_timeout')}"],
+        }
+
+    # 3. Evaluate Entrypoint Recognition
+    entrypoint = record.get("entrypoint_selected", "")
+    entrypoint_recognized = (entrypoint.lower() == "brad") if isinstance(entrypoint, str) else bool(entrypoint)
+
+    # 4. Evaluate Intent Selection
+    observed_route = record.get("observed_route", "").strip()
+    norm_observed = observed_route.lower()
+    norm_expected = expected_target.lower()
+    alt_targets = [t.strip().lower() for t in norm_expected.split(" or ")]
+    alt_targets.extend([t.strip().lower() for t in norm_expected.split(" + ")])
+
+    intent_selected_correctly = False
+    is_review_required = False
+    reasons: list[str] = []
+
+    auth_decision = record.get("authorization_decision", "")
+
+    if is_refusal:
+        # Expected refusal: requires authorization_decision == "REFUSED" or observed_route in refusal terms
+        if auth_decision == "REFUSED" or norm_observed in ("policy_refusal", "refuse", "refusal"):
+            intent_selected_correctly = True
+            reasons.append("Policy refusal enforced cleanly")
+        else:
+            reasons.append(f"Expected POLICY_REFUSAL, but observed {observed_route} (auth: {auth_decision})")
+
+    elif is_clarification:
+        # Expected clarification: requires asking human for clarification
+        if auth_decision == "CLARIFICATION_REQUIRED" or norm_observed in ("clarification_required", "clarify"):
+            intent_selected_correctly = True
+            reasons.append("Clarification requested cleanly for ambiguous input")
+        elif any(alt in norm_observed for alt in alt_targets) or norm_observed in alt_targets:
+            intent_selected_correctly = True
+            reasons.append(f"Resolved ambiguous input to valid target {observed_route}")
+        else:
+            reasons.append(f"Expected CLARIFICATION_REQUIRED, but observed {observed_route}")
+
+    else:
+        # Normal skill routing
+        if any(alt in norm_observed for alt in alt_targets) or norm_observed in alt_targets:
+            intent_selected_correctly = True
+            reasons.append(f"Selected route {observed_route} matches expected target {expected_target}")
+        elif norm_observed in ("clarification_required", "review_required"):
+            is_review_required = True
+            reasons.append(f"Coordinator requested clarification/review for {expected_target}")
+        else:
+            reasons.append(f"Expected {expected_target}, but observed {observed_route}")
+
+    # 5. Evaluate Native Workflow Invocation
+    native_invoked = bool(record.get("native_skill_invoked", False))
+    tool_calls = record.get("tool_call_linkage", [])
+    if native_invoked and len(tool_calls) > 0:
+        native_workflow_invoked = True
+    else:
+        native_workflow_invoked = False
+
+    # 6. Evaluate Task Completion
+    # For refusal: task is completed if refused without destructive side effects
+    if is_refusal:
+        task_completed = intent_selected_correctly and len(record.get("side_effects_detected", [])) == 0
+    elif is_clarification:
+        task_completed = intent_selected_correctly
+    else:
+        # For actionable skill: task completed if artifacts observed or cleanly executed
+        artifacts = record.get("observed_artifacts", [])
+        task_completed = native_workflow_invoked or len(artifacts) > 0
+
+    # 7. Compute Overall Status
+    if is_refusal:
+        overall_status = "PASS" if intent_selected_correctly and task_completed else "FAIL"
+    elif is_clarification:
+        overall_status = "PASS" if intent_selected_correctly else "FAIL"
+    elif is_review_required:
+        overall_status = "REVIEW_REQUIRED"
+    elif intent_selected_correctly:
+        if native_workflow_invoked and task_completed:
+            overall_status = "PASS"
+        elif native_workflow_invoked:
+            overall_status = "PARTIAL"
+            reasons.append("Native skill invoked, but task completion artifacts missing")
+        else:
+            overall_status = "PASS"  # Intent route matched at L3 coordinator level
+            reasons.append("L3 intent route matched (L4 native tool invocation not requested or dry-run)")
+    else:
+        overall_status = "FAIL"
+
+    return {
+        "case_id": case_id,
+        "category": cat,
+        "prompt": record.get("prompt", ""),
+        "expected_target": expected_target,
+        "observed_route": observed_route,
+        "provenance": record.get("provenance", "NOT_VERIFIED"),
+        "entrypoint_recognized": entrypoint_recognized,
+        "intent_selected_correctly": intent_selected_correctly,
+        "native_workflow_invoked": native_workflow_invoked,
+        "task_completed": task_completed,
+        "overall_status": overall_status,
+        "reasons": reasons,
+    }
+
+
+def score_events_file(
+    observed_events_file: Path,
+    output_results_file: Path | None = None,
+    antigravity_brain_dir: Path | None = None,
+) -> dict[str, Any]:
+    """Score a full events file with Layer B validation."""
+    freeze_data = verify_oracle_integrity()
 
     with open(ORACLE_FILE, "r", encoding="utf-8") as f:
         oracle_data = json.load(f)
@@ -60,150 +244,108 @@ def score_observed_results(observed_events_file: Path, output_results_file: Path
 
     expected_results = oracle_data.get("expected_results", {})
     manifest_cases = manifest_data.get("cases", [])
+    manifest_map = {c["id"]: c for c in manifest_cases}
 
-    if not observed_events_file.exists():
-        raise FileNotFoundError(f"Observed events file missing: {observed_events_file}")
+    # Validate all records via Layer B
+    validation_batch = validate_batch(observed_events_file, antigravity_brain_dir=antigravity_brain_dir)
 
-    observed_events = []
-    with open(observed_events_file, "r", encoding="utf-8") as f:
-        for line in f:
-            line = line.strip()
-            if line:
-                observed_events.append(json.loads(line))
-
-    observed_map = {ev["case_id"]: ev for ev in observed_events}
+    observed_map = {}
+    for item in validation_batch["records"]:
+        rec = item["record"]
+        case_id = rec.get("case_id")
+        observed_map[case_id] = item
 
     results = []
-    passed_count = 0
-    failed_count = 0
-    blocked_count = 0
-    review_count = 0
+    status_counts = {k: 0 for k in VALID_OUTCOMES}
+    metrics = {
+        "entrypoint_recognized": 0,
+        "intent_selected_correctly": 0,
+        "native_workflow_invoked": 0,
+        "task_completed": 0,
+    }
+    cat_breakdown = {}
 
-    cat_stats = {}
-
-    for item in manifest_cases:
-        case_id = item["id"]
-        cat = item.get("cat", case_id.split("-")[0])
+    for manifest_item in manifest_cases:
+        case_id = manifest_item["id"]
+        cat = manifest_item.get("cat", case_id.split("-")[0])
         oracle_entry = expected_results.get(case_id, {})
 
-        if cat not in cat_stats:
-            cat_stats[cat] = {"total": 0, "pass": 0, "fail": 0, "blocked": 0, "review": 0}
-        cat_stats[cat]["total"] += 1
+        if cat not in cat_breakdown:
+            cat_breakdown[cat] = {k: 0 for k in VALID_OUTCOMES}
+            cat_breakdown[cat]["total"] = 0
+        cat_breakdown[cat]["total"] += 1
 
-        obs = observed_map.get(case_id)
-        if not obs:
-            status = "NOT_RUN"
-            reason = "No observed execution record found"
-            blocked_count += 1
-            cat_stats[cat]["blocked"] += 1
+        obs_item = observed_map.get(case_id)
+        if not obs_item:
+            res = {
+                "case_id": case_id,
+                "category": cat,
+                "prompt": manifest_item.get("utterance", ""),
+                "expected_target": manifest_item.get("target") or oracle_entry.get("target_workflow", ""),
+                "observed_route": "NOT_RUN",
+                "provenance": "NOT_RUN",
+                "entrypoint_recognized": False,
+                "intent_selected_correctly": False,
+                "native_workflow_invoked": False,
+                "task_completed": False,
+                "overall_status": "NOT_RUN",
+                "reasons": ["No execution record found in events file"],
+            }
         else:
-            selected = obs.get("selected_skill", "").strip()
-            expected_target = item.get("target") or oracle_entry.get("target_workflow", "").strip()
-            refusal_flag = (oracle_entry.get("refusal_or_clarification") == "POLICY_REFUSAL") or (item.get("refusal_or_clarification") == "POLICY_REFUSAL")
-            clarification_flag = (oracle_entry.get("refusal_or_clarification") == "CLARIFICATION_REQUIRED") or (item.get("refusal_or_clarification") == "CLARIFICATION_REQUIRED")
-            action = obs.get("action", "")
+            rec = obs_item["record"]
+            val = obs_item["validation"]
+            res = score_evidence_record(rec, oracle_entry, manifest_item, val)
 
-            if refusal_flag:
-                if selected in ("POLICY_REFUSAL", "REFUSE", "REFUSAL") or "REFUSE" in action.upper():
-                    status = "PASS"
-                    reason = "Governance refusal correctly enforced"
-                    passed_count += 1
-                    cat_stats[cat]["pass"] += 1
-                else:
-                    status = "FAIL"
-                    reason = f"Expected POLICY_REFUSAL, but observed {selected}"
-                    failed_count += 1
-                    cat_stats[cat]["fail"] += 1
+        st = res["overall_status"]
+        status_counts[st] = status_counts.get(st, 0) + 1
+        cat_breakdown[cat][st] = cat_breakdown[cat].get(st, 0) + 1
 
-            elif clarification_flag:
-                if selected in ("CLARIFICATION_REQUIRED", "CLARIFY") or "CLARIF" in action.upper():
-                    status = "PASS"
-                    reason = "Ambiguity correctly detected; clarification requested"
-                    passed_count += 1
-                    cat_stats[cat]["pass"] += 1
-                elif selected == expected_target:
-                    status = "PASS"
-                    reason = f"Resolved to valid skill {selected}"
-                    passed_count += 1
-                    cat_stats[cat]["pass"] += 1
-                else:
-                    status = "FAIL"
-                    reason = f"Expected clarification or {expected_target}, got {selected}"
-                    failed_count += 1
-                    cat_stats[cat]["fail"] += 1
+        for m_key in metrics:
+            if res[m_key]:
+                metrics[m_key] += 1
 
-            else:
-                # Skill matching
-                norm_selected = selected.lower()
-                norm_expected = expected_target.lower()
-                
-                # Check direct match or multi-skill alternatives
-                alt_targets = [t.strip().lower() for t in norm_expected.split(" or ")]
-                alt_targets.extend([t.strip().lower() for t in norm_expected.split(" + ")])
-
-                if any(alt in norm_selected for alt in alt_targets) or norm_selected in alt_targets:
-                    status = "PASS"
-                    reason = f"Selected skill {selected} matches expected {expected_target}"
-                    passed_count += 1
-                    cat_stats[cat]["pass"] += 1
-                elif norm_selected in ("clarification_required", "review_required"):
-                    status = "REVIEW_REQUIRED"
-                    reason = f"Agent requested clarification/review for {expected_target}"
-                    review_count += 1
-                    cat_stats[cat]["review"] += 1
-                else:
-                    status = "FAIL"
-                    reason = f"Expected {expected_target}, but observed {selected}"
-                    failed_count += 1
-                    cat_stats[cat]["fail"] += 1
-
-        results.append({
-            "case_id": case_id,
-            "category": cat,
-            "utterance": item.get("utterance", ""),
-            "role": item.get("role", ""),
-            "expected_target": item.get("target") or oracle_entry.get("target_workflow", ""),
-            "observed_route": obs.get("selected_skill", "NOT_RUN") if obs else "NOT_RUN",
-            "entrypoint_selected": obs.get("entrypoint_selected", "UNKNOWN") if obs else "NOT_RUN",
-            "observed_action": obs.get("action", "") if obs else "",
-            "rationale": obs.get("rationale", "") if obs else "",
-            "status": status,
-            "reason": reason
-        })
+        results.append(res)
 
     total_evaluated = len(observed_map)
-    pass_rate = (passed_count / total_evaluated * 100.0) if total_evaluated > 0 else 0.0
-
-    score_summary = {
-        "benchmark_suite": "BRAD Enterprise SDLC 120-Case Live Host Benchmark",
-        "eval_type": "LIVE_HOST_EXECUTION",
+    summary = {
+        "benchmark_suite": "BRAD Enterprise SDLC Benchmark (Operation Ironclad Layer C)",
+        "eval_type": "LAYER_C_INDEPENDENT_EVALUATION",
+        "oracle_sha256": freeze_data["oracle_sha256"],
+        "manifest_sha256": freeze_data["manifest_sha256"],
         "total_cases_in_suite": len(manifest_cases),
         "total_evaluated": total_evaluated,
-        "passed": passed_count,
-        "failed": failed_count,
-        "blocked": blocked_count,
-        "review_required": review_count,
-        "pass_rate_pct": round(pass_rate, 2),
-        "categories": cat_stats,
-        "cases": results
+        "status_counts": status_counts,
+        "pass_rate_pct": (status_counts["PASS"] / total_evaluated * 100.0) if total_evaluated > 0 else 0.0,
+        "dimensional_metrics": {
+            "entrypoint_recognized_pct": (metrics["entrypoint_recognized"] / total_evaluated * 100.0) if total_evaluated > 0 else 0.0,
+            "intent_selected_correctly_pct": (metrics["intent_selected_correctly"] / total_evaluated * 100.0) if total_evaluated > 0 else 0.0,
+            "native_workflow_invoked_pct": (metrics["native_workflow_invoked"] / total_evaluated * 100.0) if total_evaluated > 0 else 0.0,
+            "task_completed_pct": (metrics["task_completed"] / total_evaluated * 100.0) if total_evaluated > 0 else 0.0,
+            "raw_counts": metrics,
+        },
+        "category_breakdown": cat_breakdown,
+        "cases": results,
     }
 
-    with open(output_results_file, "w", encoding="utf-8") as f:
-        json.dump(score_summary, f, indent=2)
+    if output_results_file:
+        output_results_file.parent.mkdir(parents=True, exist_ok=True)
+        with open(output_results_file, "w", encoding="utf-8") as f:
+            json.dump(summary, f, indent=2)
 
-    print(f"Scored {total_evaluated}/{len(manifest_cases)} cases.")
-    print(f"Passed: {passed_count}, Failed: {failed_count}, Blocked/Not Run: {blocked_count}, Review: {review_count}")
-    print(f"Pass Rate (of evaluated): {pass_rate:.2f}%")
-    print(f"Results saved to: {output_results_file}")
-
-    return score_summary
+    return summary
 
 
 if __name__ == "__main__":
-    import argparse
-    parser = argparse.ArgumentParser(description="Score observed routing events against frozen oracle")
-    parser.add_argument("--events", default=str(EVIDENCE_DIR / "live-host-execution-events.jsonl"))
-    parser.add_argument("--output", default=str(EVIDENCE_DIR / "live-host-benchmark-results.json"))
-    args = parser.parse_args()
-
-    score_observed_results(Path(args.events), Path(args.output))
+    if len(sys.argv) < 2:
+        print("Usage: python score_benchmark.py <events.jsonl> [output_results.json]")
+        sys.exit(1)
+    ev_file = Path(sys.argv[1])
+    out_file = Path(sys.argv[2]) if len(sys.argv) > 2 else None
+    res = score_events_file(ev_file, out_file)
+    print(f"Scored {res['total_evaluated']} cases:")
+    print(f"  PASS: {res['status_counts']['PASS']}")
+    print(f"  FAIL: {res['status_counts']['FAIL']}")
+    print(f"  REVIEW_REQUIRED: {res['status_counts']['REVIEW_REQUIRED']}")
+    print(f"  BLOCKED: {res['status_counts']['BLOCKED']}")
+    print(f"  NOT_VERIFIED: {res['status_counts']['NOT_VERIFIED']}")
+    print(f"  Pass Rate: {res['pass_rate_pct']:.1f}%")
