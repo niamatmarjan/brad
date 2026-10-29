@@ -1,511 +1,234 @@
-/**
- * BRAD Multi-Agent Handoff & Continuation Protocol
- *
- * Implements structured task state transitions between Developer, QA, and Reviewer roles,
- * durable session resumption, branch/PR detection, defect tracking, and conflict safeguards.
- */
-
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
+/** Optional BRAD handoff checkpoints. Native BMAD owns tickets and approval evidence. */
+import { readFileSync, writeFileSync, lstatSync, mkdirSync, renameSync, unlinkSync, openSync, closeSync, fsyncSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 
-export const TASK_STAGES = Object.freeze({
-  INITIALIZED: 'INITIALIZED',
-  IN_DEVELOPMENT: 'IN_DEVELOPMENT',
-  QA_PENDING: 'QA_PENDING',
-  QA_DEFECT_IDENTIFIED: 'QA_DEFECT_IDENTIFIED',
-  REVIEW_PENDING: 'REVIEW_PENDING',
-  REVIEW_REMEDIATION_REQUIRED: 'REVIEW_REMEDIATION_REQUIRED',
-  ACCEPTED: 'ACCEPTED',
-  REJECTED: 'REJECTED',
-  INTERRUPTED: 'INTERRUPTED'
-});
+export const TASK_STAGES = Object.freeze(Object.fromEntries([
+  'INITIALIZED', 'IN_DEVELOPMENT', 'QA_PENDING', 'QA_DEFECT_IDENTIFIED', 'REVIEW_PENDING',
+  'REVIEW_REMEDIATION_REQUIRED', 'ACCEPTED', 'REJECTED', 'INTERRUPTED'
+].map(name => [name, name])));
+export const ROLES = Object.freeze(Object.fromEntries(['DEVELOPER', 'QA', 'REVIEWER', 'OPERATOR'].map(name => [name, name])));
+export const EXECUTION_MODES = Object.freeze(Object.fromEntries([
+  'HOST_NATIVE_SKILL_INVOKED', 'INLINE_WORKFLOW_INLINE', 'SPECIALIST_DISPATCHED', 'HELPER_SCRIPTS_ONLY', 'NOT_VERIFIED'
+].map(name => [name, name])));
 
-export const ROLES = Object.freeze({
-  DEVELOPER: 'DEVELOPER',
-  QA: 'QA',
-  REVIEWER: 'REVIEWER',
-  OPERATOR: 'OPERATOR'
-});
+const owners = { INITIALIZED: 'DEVELOPER', IN_DEVELOPMENT: 'DEVELOPER', QA_PENDING: 'QA',
+  QA_DEFECT_IDENTIFIED: 'DEVELOPER', REVIEW_PENDING: 'REVIEWER',
+  REVIEW_REMEDIATION_REQUIRED: 'DEVELOPER', ACCEPTED: 'OPERATOR', REJECTED: 'OPERATOR' };
+const now = () => new Date().toISOString();
+const sha256 = content => createHash('sha256').update(content).digest('hex');
+const terminal = state => ['ACCEPTED', 'REJECTED'].includes(state.stage);
 
-export const EXECUTION_MODES = Object.freeze({
-  HOST_NATIVE_SKILL_INVOKED: 'HOST_NATIVE_SKILL_INVOKED',
-  INLINE_WORKFLOW_INLINE: 'INLINE_WORKFLOW_INLINE',
-  SPECIALIST_DISPATCHED: 'SPECIALIST_DISPATCHED',
-  HELPER_SCRIPTS_ONLY: 'HELPER_SCRIPTS_ONLY'
-});
-
-function sha256(content) {
-  return createHash('sha256').update(content).digest('hex');
+function validId(id) {
+  if (typeof id !== 'string' || !/^[a-z0-9][a-z0-9._-]{0,159}$/i.test(id) || id.endsWith('.') ||
+    /^(?:con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)/i.test(id)) throw new Error('Invalid taskId: use a portable filename with letters, digits, dots, underscores or hyphens');
+  return id;
+}
+function validPath(path) {
+  if (typeof path !== 'string' || !path || /^(?:[a-z]:|[\\/])/i.test(path) ||
+    path.includes('\0') || path.split(/[\\/]/).some(part => !part || part === '..' || part === '.')) throw new Error('Invalid deliverable path: expected a relative project file');
+  return path.replace(/\\/g, '/');
+}
+function validate(state) {
+  if (!state || typeof state !== 'object') throw new Error('Invalid task state');
+  validId(state.taskId);
+  if (!Object.values(TASK_STAGES).includes(state.stage) || !Object.values(ROLES).includes(state.currentRole) ||
+    (state.stage !== 'INTERRUPTED' && owners[state.stage] !== state.currentRole)) throw new Error('Invalid task state stage or role');
+  if (!Object.values(EXECUTION_MODES).includes(state.executionMode)) throw new Error('Invalid execution mode');
+  for (const key of ['title', 'intent', 'branch', 'baseBranch']) {
+    if (typeof state[key] !== 'string' || !state[key]) throw new Error(`Invalid task state ${key}`);
+  }
+  if (state.interruptedStage != null && (!Object.hasOwn(owners, state.interruptedStage) ||
+    owners[state.interruptedStage] !== state.currentRole)) throw new Error('Invalid interrupted stage or role');
+  if (!Number.isSafeInteger(state.revision ?? 0) || (state.revision ?? 0) < 0) throw new Error('Invalid state revision');
+  for (const key of ['deliverables', 'blockers', 'defects', 'reviewDecisions', 'history']) {
+    if (!Array.isArray(state[key])) throw new Error(`Invalid task state: ${key} must be an array`);
+  }
+  if (!state.blockers.every(b => typeof b === 'string') || !state.history.every(h => h && typeof h.action === 'string')) throw new Error('Invalid task state blockers or history');
+  for (const d of state.deliverables) {
+    validPath(d?.path);
+    if (d.sha256 !== 'UNKNOWN' && !/^[a-f0-9]{64}$/i.test(d.sha256 ?? '')) throw new Error('Invalid deliverable digest');
+  }
+  if (!state.defects.every(d => d && typeof d.defectId === 'string' && ['OPEN', 'RESOLVED'].includes(d.status)) ||
+    new Set(state.defects.map(d => d.defectId)).size !== state.defects.length) throw new Error('Invalid or duplicate defect');
+  if (!state.reviewDecisions.every(r => r && ['APPROVED', 'REMEDIATION_REQUIRED'].includes(r.status))) throw new Error('Invalid review decision');
+  return state;
+}
+function requireStage(state, role, stages, operation) {
+  validate(state);
+  if (state.currentRole !== role) throw new Error(`Cannot ${operation}: current role is ${state.currentRole}, expected ${role}`);
+  if (!stages.includes(state.stage)) throw new Error(`Cannot ${operation} at stage ${state.stage}`);
+}
+function record(state, changes, role, action, note, detail = {}) {
+  return { ...state, ...changes, history: [...state.history,
+    { timestamp: now(), role, action, stage: changes.stage ?? state.stage, note, ...detail }] };
+}
+function fileRecords(files) {
+  if (!Array.isArray(files) || !files.length) throw new Error('Developer submission must include at least one deliverable file');
+  const records = files.map(f => {
+    const path = validPath(f?.path);
+    const digest = f.content !== undefined ? sha256(f.content) : f.sha256;
+    if (typeof digest !== 'string' || !/^[a-f0-9]{64}$/i.test(digest)) throw new Error('Deliverable requires content or a SHA-256 digest');
+    return { path, sha256: digest.toLowerCase(), description: f.description || 'Source file deliverable' };
+  });
+  if (new Set(records.map(f => f.path)).size !== records.length) throw new Error('Duplicate deliverable path');
+  return records;
+}
+function requireClear(state) {
+  const open = state.defects.filter(d => d.status === 'OPEN');
+  if (open.length) throw new Error(`QA cannot accept deliverable while open defects exist: ${open.map(d => d.defectId).join(', ')}`);
+  if (state.blockers.length) throw new Error('Cannot accept deliverable with unresolved blockers');
+  if (!state.deliverables.length) throw new Error('Cannot accept an empty deliverable');
+  if (state.deliverables.some(d => d.sha256 === 'UNKNOWN')) throw new Error('Cannot accept an unverified deliverable digest; resubmit its bytes');
 }
 
-/**
- * Initialize a new structured task state.
- */
 export function createTaskState(options = {}) {
-  const taskId = (options.taskId || '').trim();
-  if (!taskId) throw new Error('taskId is required to create task state');
-
-  const intent = options.intent || 'BUILD_WORK_UNIT';
-  const executionMode = options.executionMode || EXECUTION_MODES.INLINE_WORKFLOW_INLINE;
-
-  return {
-    taskId,
-    title: options.title || `Task ${taskId}`,
-    intent,
-    currentRole: ROLES.DEVELOPER,
-    stage: TASK_STAGES.INITIALIZED,
-    executionMode,
-    branch: options.branch || `feat/${taskId.toLowerCase().replace(/[^a-z0-9._-]+/g, '-')}`,
-    baseBranch: options.baseBranch || 'main',
-    deliverables: [],
-    blockers: [],
-    defects: [],
-    reviewDecisions: [],
-    history: [
-      {
-        timestamp: new Date().toISOString(),
-        role: ROLES.OPERATOR,
-        action: 'TASK_INITIALIZED',
-        stage: TASK_STAGES.INITIALIZED,
-        note: `Task ${taskId} initialized under intent ${intent}`
-      }
-    ]
-  };
+  const taskId = validId(typeof options.taskId === 'string' ? options.taskId.trim() : options.taskId);
+  return validate({ taskId, title: options.title || `Task ${taskId}`, intent: options.intent || 'BUILD_WORK_UNIT',
+    currentRole: 'DEVELOPER', stage: 'INITIALIZED', executionMode: options.executionMode || 'NOT_VERIFIED',
+    branch: options.branch || `feat/${taskId.toLowerCase()}`, baseBranch: options.baseBranch || 'main',
+    revision: 0, deliverables: [], blockers: [], defects: [], reviewDecisions: [],
+    history: [{ timestamp: now(), role: 'OPERATOR', action: 'TASK_INITIALIZED', stage: 'INITIALIZED', note: `Task ${taskId} initialized` }] });
 }
 
-/**
- * Developer submits deliverable files for QA inspection.
- */
-export function developerSubmitDeliverable(taskState, payload = {}) {
-  if (!taskState || !taskState.taskId) throw new Error('Invalid task state');
-  if (taskState.currentRole !== ROLES.DEVELOPER) {
-    throw new Error(`Cannot submit deliverable: current role is ${taskState.currentRole}, expected DEVELOPER`);
-  }
-
-  const files = payload.files || [];
-  if (!Array.isArray(files) || files.length === 0) {
-    throw new Error('Developer submission must include at least one deliverable file');
-  }
-
-  const deliverables = files.map(f => ({
-    path: f.path,
-    sha256: f.content ? sha256(f.content) : (f.sha256 || 'UNKNOWN'),
-    description: f.description || 'Source file deliverable'
-  }));
-
-  const updated = {
-    ...taskState,
-    deliverables,
-    commitSha: payload.commitSha || taskState.commitSha || null,
-    currentRole: ROLES.QA,
-    stage: TASK_STAGES.QA_PENDING,
-    history: [
-      ...taskState.history,
-      {
-        timestamp: new Date().toISOString(),
-        role: ROLES.DEVELOPER,
-        action: 'DELIVERABLE_SUBMITTED',
-        stage: TASK_STAGES.QA_PENDING,
-        note: payload.notes || `Submitted ${files.length} deliverable file(s) for QA verification`,
-        deliverablesSummary: deliverables.map(d => d.path)
-      }
-    ]
-  };
-
-  return updated;
+export function developerSubmitDeliverable(state, payload = {}) {
+  requireStage(state, 'DEVELOPER', ['INITIALIZED', 'IN_DEVELOPMENT', 'QA_DEFECT_IDENTIFIED', 'REVIEW_REMEDIATION_REQUIRED'], 'submit deliverable');
+  const deliverables = fileRecords(payload.files);
+  return record(state, { deliverables, commitSha: payload.commitSha || state.commitSha || null,
+    currentRole: 'QA', stage: 'QA_PENDING' }, 'DEVELOPER', 'DELIVERABLE_SUBMITTED',
+  payload.notes || `Submitted ${deliverables.length} deliverable file(s)`, { deliverablesSummary: deliverables.map(d => d.path) });
 }
 
-/**
- * QA Agent inspects deliverable and records defect(s), returning task to Developer.
- */
-export function qaIdentifyDefect(taskState, payload = {}) {
-  if (!taskState || !taskState.taskId) throw new Error('Invalid task state');
-  if (taskState.currentRole !== ROLES.QA) {
-    throw new Error(`Cannot record defect: current role is ${taskState.currentRole}, expected QA`);
-  }
-
-  const defectId = payload.defectId || `DEFECT-${taskState.taskId}-${taskState.defects.length + 1}`;
+export function qaIdentifyDefect(state, payload = {}) {
+  requireStage(state, 'QA', ['QA_PENDING'], 'record defect');
+  const defectId = payload.defectId || `DEFECT-${state.taskId}-${state.defects.length + 1}`;
+  if (typeof defectId !== 'string' || state.defects.some(d => d.defectId === defectId)) throw new Error('Invalid or duplicate defectId');
   const description = payload.description || 'QA acceptance check failure';
-  const failingChecks = payload.failingChecks || [];
-
-  const defect = {
-    defectId,
-    reportedBy: ROLES.QA,
-    severity: payload.severity || 'HIGH',
-    description,
-    failingChecks,
-    reportedAt: new Date().toISOString(),
-    status: 'OPEN'
-  };
-
-  const blocker = `Defect ${defectId}: ${description}`;
-
-  return {
-    ...taskState,
-    defects: [...taskState.defects, defect],
-    blockers: [...taskState.blockers, blocker],
-    currentRole: ROLES.DEVELOPER,
-    stage: TASK_STAGES.QA_DEFECT_IDENTIFIED,
-    history: [
-      ...taskState.history,
-      {
-        timestamp: new Date().toISOString(),
-        role: ROLES.QA,
-        action: 'DEFECT_IDENTIFIED',
-        stage: TASK_STAGES.QA_DEFECT_IDENTIFIED,
-        defectId,
-        note: `QA identified defect ${defectId}: ${description}`
-      }
-    ]
-  };
+  const defect = { defectId, reportedBy: 'QA', severity: payload.severity || 'HIGH', description,
+    failingChecks: payload.failingChecks || [], reportedAt: now(), status: 'OPEN' };
+  return record(state, { defects: [...state.defects, defect], blockers: [...state.blockers, `Defect ${defectId}: ${description}`],
+    currentRole: 'DEVELOPER', stage: 'QA_DEFECT_IDENTIFIED' }, 'QA', 'DEFECT_IDENTIFIED', description, { defectId });
 }
 
-/**
- * QA Agent verifies deliverable passes all acceptance criteria, handing off to Reviewer.
- */
-export function qaAcceptDeliverable(taskState, payload = {}) {
-  if (!taskState || !taskState.taskId) throw new Error('Invalid task state');
-  if (taskState.currentRole !== ROLES.QA) {
-    throw new Error(`Cannot accept deliverable: current role is ${taskState.currentRole}, expected QA`);
-  }
-
-  const openDefects = taskState.defects.filter(d => d.status === 'OPEN');
-  if (openDefects.length > 0) {
-    throw new Error(`QA cannot accept deliverable while open defects exist: ${openDefects.map(d => d.defectId).join(', ')}`);
-  }
-
-  return {
-    ...taskState,
-    currentRole: ROLES.REVIEWER,
-    stage: TASK_STAGES.REVIEW_PENDING,
-    history: [
-      ...taskState.history,
-      {
-        timestamp: new Date().toISOString(),
-        role: ROLES.QA,
-        action: 'QA_VERIFIED_PASS',
-        stage: TASK_STAGES.REVIEW_PENDING,
-        note: payload.notes || 'All QA acceptance criteria verified; submitted for peer review'
-      }
-    ]
-  };
+export function qaAcceptDeliverable(state, payload = {}) {
+  requireStage(state, 'QA', ['QA_PENDING'], 'accept deliverable');
+  requireClear(state);
+  return record(state, { currentRole: 'REVIEWER', stage: 'REVIEW_PENDING' }, 'QA', 'QA_VERIFIED_PASS',
+    payload.notes || 'QA acceptance reported; submitted for peer review');
 }
 
-/**
- * Reviewer conducts read-only code review and issues decision (Approved or Remediation Required).
- */
-export function reviewerAssess(taskState, payload = {}) {
-  if (!taskState || !taskState.taskId) throw new Error('Invalid task state');
-  if (taskState.currentRole !== ROLES.REVIEWER) {
-    throw new Error(`Cannot assess review: current role is ${taskState.currentRole}, expected REVIEWER`);
-  }
-
-  const status = payload.status; // 'APPROVED' or 'REMEDIATION_REQUIRED'
-  if (!['APPROVED', 'REMEDIATION_REQUIRED'].includes(status)) {
-    throw new Error('Review decision status must be APPROVED or REMEDIATION_REQUIRED');
-  }
-
-  const decisionId = `REV-${taskState.taskId}-${taskState.reviewDecisions.length + 1}`;
-  const decision = {
-    decisionId,
-    reviewer: ROLES.REVIEWER,
-    status,
-    comments: payload.comments || (status === 'APPROVED' ? 'Changes approved' : 'Remediation requested'),
-    timestamp: new Date().toISOString()
-  };
-
-  if (status === 'REMEDIATION_REQUIRED') {
-    const blocker = `Reviewer Remediation (${decisionId}): ${decision.comments}`;
-    return {
-      ...taskState,
-      reviewDecisions: [...taskState.reviewDecisions, decision],
-      blockers: [...taskState.blockers, blocker],
-      currentRole: ROLES.DEVELOPER,
-      stage: TASK_STAGES.REVIEW_REMEDIATION_REQUIRED,
-      history: [
-        ...taskState.history,
-        {
-          timestamp: new Date().toISOString(),
-          role: ROLES.REVIEWER,
-          action: 'REVIEW_REMEDIATION_REQUIRED',
-          stage: TASK_STAGES.REVIEW_REMEDIATION_REQUIRED,
-          decisionId,
-          note: decision.comments
-        }
-      ]
-    };
-  }
-
-  // Approved
-  return {
-    ...taskState,
-    reviewDecisions: [...taskState.reviewDecisions, decision],
-    currentRole: ROLES.OPERATOR,
-    stage: TASK_STAGES.ACCEPTED,
-    history: [
-      ...taskState.history,
-      {
-        timestamp: new Date().toISOString(),
-        role: ROLES.REVIEWER,
-        action: 'REVIEW_APPROVED',
-        stage: TASK_STAGES.ACCEPTED,
-        decisionId,
-        note: decision.comments
-      }
-    ]
-  };
+export function reviewerAssess(state, payload = {}) {
+  requireStage(state, 'REVIEWER', ['REVIEW_PENDING'], 'assess review');
+  const { status } = payload;
+  if (!['APPROVED', 'REMEDIATION_REQUIRED'].includes(status)) throw new Error('Review decision status must be APPROVED or REMEDIATION_REQUIRED');
+  if (status === 'APPROVED') requireClear(state);
+  const decisionId = `REV-${state.taskId}-${state.reviewDecisions.length + 1}`;
+  const decision = { decisionId, reviewer: 'REVIEWER', status, comments: payload.comments || status, timestamp: now() };
+  const approved = status === 'APPROVED';
+  return record(state, { reviewDecisions: [...state.reviewDecisions, decision],
+    blockers: approved ? state.blockers : [...state.blockers, `Reviewer Remediation (${decisionId}): ${decision.comments}`],
+    currentRole: approved ? 'OPERATOR' : 'DEVELOPER', stage: approved ? 'ACCEPTED' : 'REVIEW_REMEDIATION_REQUIRED' },
+  'REVIEWER', approved ? 'REVIEW_APPROVED' : 'REVIEW_REMEDIATION_REQUIRED', decision.comments, { decisionId });
 }
 
-/**
- * Developer applies correction resolving defect(s) and remediation items.
- */
-export function developerApplyCorrection(taskState, payload = {}) {
-  if (!taskState || !taskState.taskId) throw new Error('Invalid task state');
-  if (taskState.currentRole !== ROLES.DEVELOPER) {
-    throw new Error(`Cannot apply correction: current role is ${taskState.currentRole}, expected DEVELOPER`);
+export function developerApplyCorrection(state, payload = {}) {
+  requireStage(state, 'DEVELOPER', ['QA_DEFECT_IDENTIFIED', 'REVIEW_REMEDIATION_REQUIRED'], 'apply correction');
+  if (payload.resolvedDefectIds !== undefined && !Array.isArray(payload.resolvedDefectIds)) throw new Error('resolvedDefectIds must be an array');
+  const resolved = new Set(payload.resolvedDefectIds || []);
+  for (const id of resolved) if (!state.defects.some(d => d.defectId === id && d.status === 'OPEN')) throw new Error(`Unknown or closed defect: ${id}`);
+  const defects = state.defects.map(d => resolved.has(d.defectId) ? { ...d, status: 'RESOLVED', resolvedAt: now() } : d);
+  const blockers = state.blockers.filter(b => ![...resolved].some(id => b.startsWith(`Defect ${id}: `)) &&
+    !(payload.clearReviewBlockers && b.startsWith('Reviewer Remediation (')));
+  const deliverables = new Map(state.deliverables.map(d => [d.path, d]));
+  if (payload.files !== undefined) for (const file of fileRecords(payload.files)) deliverables.set(file.path, file);
+  return record(state, { deliverables: [...deliverables.values()], defects, blockers,
+    commitSha: payload.commitSha || state.commitSha || null, currentRole: 'QA', stage: 'QA_PENDING' },
+  'DEVELOPER', 'CORRECTION_APPLIED', payload.explanation || `Applied correction for ${resolved.size} defect(s)`, { resolvedDefectIds: [...resolved] });
+}
+
+export function interruptTask(state, reason = 'Host session paused or interrupted') {
+  validate(state);
+  if (terminal(state)) throw new Error('Cannot interrupt a terminal task');
+  return record(state, { stage: 'INTERRUPTED', interruptedAt: now(), interruptionReason: reason,
+    interruptedStage: state.interruptedStage || state.stage }, 'OPERATOR', 'TASK_INTERRUPTED', reason);
+}
+
+export function resumeTask(state) {
+  validate(state);
+  if (state.stage !== 'INTERRUPTED') throw new Error('Only an interrupted task can resume');
+  // Older checkpoints recorded the original stage in history, not in a field.
+  const stage = state.interruptedStage || [...state.history].reverse().find(h => h.stage && h.stage !== 'INTERRUPTED')?.stage;
+  if (!Object.hasOwn(owners, stage) || ['ACCEPTED', 'REJECTED'].includes(stage)) throw new Error('Cannot recover interrupted stage; inspect native state');
+  return record(state, { stage, currentRole: owners[stage], interruptedStage: null, resumedAt: now() }, 'OPERATOR', 'TASK_RESUMED', `Resumed ${state.taskId} at ${stage}`);
+}
+
+function stat(path) {
+  try { return lstatSync(path); } catch (error) { if (error.code === 'ENOENT') return null; throw error; }
+}
+function statePath(taskId, projectRoot) {
+  validId(taskId);
+  let path = resolve(projectRoot || '.');
+  for (const part of ['.brad', 'state', `${taskId.toLowerCase()}.json`]) {
+    path = join(path, part);
+    if (stat(path)?.isSymbolicLink()) throw new Error(`Refusing symlinked state path: ${path}`);
   }
-
-  const resolvedIds = new Set(payload.resolvedDefectIds || []);
-  const updatedDefects = taskState.defects.map(d => {
-    if (resolvedIds.has(d.defectId)) {
-      return { ...d, status: 'RESOLVED', resolvedAt: new Date().toISOString() };
-    }
-    return d;
-  });
-
-  const remainingOpen = updatedDefects.filter(d => d.status === 'OPEN').map(d => d.defectId);
-  const remainingBlockers = taskState.blockers.filter(b => {
-    for (const id of resolvedIds) {
-      if (b.includes(id)) return false;
-    }
-    if (payload.clearReviewBlockers && b.includes('Reviewer Remediation')) return false;
-    return true;
-  });
-
-  // Updated deliverables if provided
-  let deliverables = taskState.deliverables;
-  if (payload.files && Array.isArray(payload.files)) {
-    deliverables = payload.files.map(f => ({
-      path: f.path,
-      sha256: f.content ? sha256(f.content) : (f.sha256 || 'UNKNOWN'),
-      description: f.description || 'Corrected deliverable'
-    }));
-  }
-
-  return {
-    ...taskState,
-    deliverables,
-    defects: updatedDefects,
-    blockers: remainingBlockers,
-    commitSha: payload.commitSha || taskState.commitSha || null,
-    currentRole: ROLES.QA,
-    stage: TASK_STAGES.QA_PENDING,
-    history: [
-      ...taskState.history,
-      {
-        timestamp: new Date().toISOString(),
-        role: ROLES.DEVELOPER,
-        action: 'CORRECTION_APPLIED',
-        stage: TASK_STAGES.QA_PENDING,
-        resolvedDefectIds: Array.from(resolvedIds),
-        note: payload.explanation || `Applied correction resolving ${resolvedIds.size} defect(s)`
-      }
-    ]
-  };
+  return path;
 }
 
-/**
- * Mark a task state as interrupted by host limits, session termination, or pause.
- */
-export function interruptTask(taskState, reason = 'Host session paused or interrupted') {
-  if (!taskState || !taskState.taskId) throw new Error('Invalid task state');
-  return {
-    ...taskState,
-    stage: TASK_STAGES.INTERRUPTED,
-    interruptedAt: new Date().toISOString(),
-    interruptionReason: reason,
-    history: [
-      ...taskState.history,
-      {
-        timestamp: new Date().toISOString(),
-        role: ROLES.OPERATOR,
-        action: 'TASK_INTERRUPTED',
-        stage: TASK_STAGES.INTERRUPTED,
-        note: reason
-      }
-    ]
-  };
-}
-
-/**
- * Resume an interrupted task state.
- */
-export function resumeTask(taskState) {
-  if (!taskState || !taskState.taskId) throw new Error('Invalid task state');
-  
-  // Reconstruct target stage based on current state and open defects
-  let targetStage = TASK_STAGES.IN_DEVELOPMENT;
-  let targetRole = ROLES.DEVELOPER;
-
-  if (taskState.defects.some(d => d.status === 'OPEN')) {
-    targetStage = TASK_STAGES.QA_DEFECT_IDENTIFIED;
-    targetRole = ROLES.DEVELOPER;
-  } else if (taskState.deliverables.length > 0 && taskState.reviewDecisions.length === 0) {
-    targetStage = TASK_STAGES.QA_PENDING;
-    targetRole = ROLES.QA;
-  } else if (taskState.reviewDecisions.some(r => r.status === 'REMEDIATION_REQUIRED')) {
-    targetStage = TASK_STAGES.REVIEW_REMEDIATION_REQUIRED;
-    targetRole = ROLES.DEVELOPER;
-  } else if (taskState.deliverables.length > 0) {
-    targetStage = TASK_STAGES.REVIEW_PENDING;
-    targetRole = ROLES.REVIEWER;
-  }
-
-  return {
-    ...taskState,
-    stage: targetStage,
-    currentRole: targetRole,
-    resumedAt: new Date().toISOString(),
-    history: [
-      ...taskState.history,
-      {
-        timestamp: new Date().toISOString(),
-        role: ROLES.OPERATOR,
-        action: 'TASK_RESUMED',
-        stage: targetStage,
-        note: `Resumed task ${taskState.taskId} at stage ${targetStage} for role ${targetRole}`
-      }
-    ]
-  };
-}
-
-/**
- * State storage directory inside project root.
- */
-function getStateDir(projectRoot) {
-  return join(resolve(projectRoot || '.'), '.brad', 'state');
-}
-
-/**
- * Persist task state to disk.
- */
-export function saveTaskState(taskState, projectRoot) {
-  if (!taskState || !taskState.taskId) throw new Error('Cannot save invalid task state');
-  const dir = getStateDir(projectRoot);
-  if (!existsSync(dir)) {
-    mkdirSync(dir, { recursive: true });
-  }
-  const safeFilename = `${taskState.taskId.toLowerCase().replace(/[^a-z0-9._-]+/g, '-')}.json`;
-  const filePath = join(dir, safeFilename);
-  writeFileSync(filePath, JSON.stringify(taskState, null, 2) + '\n', 'utf8');
-  return filePath;
-}
-
-/**
- * Load task state from disk if it exists.
- */
 export function loadTaskState(taskId, projectRoot) {
-  if (!taskId) return null;
-  const dir = getStateDir(projectRoot);
-  const safeFilename = `${taskId.toLowerCase().replace(/[^a-z0-9._-]+/g, '-')}.json`;
-  const filePath = join(dir, safeFilename);
-  if (!existsSync(filePath)) return null;
+  const path = statePath(taskId, projectRoot);
+  let raw;
+  try { raw = readFileSync(path, 'utf8'); } catch (error) { if (error.code === 'ENOENT') return null; throw error; }
+  let state;
+  try { state = validate(JSON.parse(raw)); } catch (error) { throw new Error(`Invalid saved task state: ${error.message}`); }
+  if (state.taskId !== taskId) throw new Error('Task identity mismatch in saved state');
+  return state;
+}
+
+export function saveTaskState(state, projectRoot) {
+  validate(state);
+  const path = statePath(state.taskId, projectRoot);
+  mkdirSync(join(resolve(projectRoot || '.'), '.brad', 'state'), { recursive: true });
+  const lock = `${path}.lock`;
+  const fd = openSync(lock, 'wx', 0o600);
+  const temporary = `${path}.${randomUUID()}.tmp`;
   try {
-    const raw = readFileSync(filePath, 'utf8');
-    return JSON.parse(raw);
-  } catch {
-    return null;
+    const previous = loadTaskState(state.taskId, projectRoot);
+    if ((previous?.revision ?? 0) !== (state.revision ?? 0)) throw new Error('Stale state revision: reload the changed checkpoint before saving');
+    const revision = (state.revision ?? 0) + 1;
+    const staged = openSync(temporary, 'wx', 0o600);
+    try { writeFileSync(staged, JSON.stringify({ ...state, revision }, null, 2) + '\n'); fsyncSync(staged); }
+    finally { closeSync(staged); }
+    renameSync(temporary, path);
+    // Saving advances this snapshot's revision, so subsequent copies carry its lease.
+    state.revision = revision;
+    return path;
+  } finally {
+    closeSync(fd);
+    if (stat(temporary)) unlinkSync(temporary);
+    unlinkSync(lock);
   }
 }
 
-/**
- * Detect ongoing or existing work in the repository for a given task ID.
- */
 export function detectExistingWork(taskId, projectRoot, options = {}) {
-  const root = resolve(projectRoot || '.');
-  const existingState = loadTaskState(taskId, root);
-
-  const existingBranches = options.branches || [];
-  const expectedCandidates = [
-    `feat/${taskId.toLowerCase().replace(/[^a-z0-9._-]+/g, '-')}`,
-    `feat/${taskId.toLowerCase().replace(/[^a-z0-9-]+/g, '-')}`
-  ];
-  const matchedBranch = existingBranches.find(b =>
-    expectedCandidates.some(cand => b === cand || b.endsWith(`/${cand}`))
-  );
-  const branchExists = Boolean(matchedBranch);
-
-  if (existingState) {
-    if (existingState.stage === TASK_STAGES.INTERRUPTED) {
-      return {
-        status: 'INTERRUPTED_FOUND',
-        taskId,
-        branch: existingState.branch,
-        stage: existingState.stage,
-        taskState: existingState,
-        action: 'RESUME_RECOMMENDED'
-      };
-    }
-
-    if (existingState.stage === TASK_STAGES.ACCEPTED) {
-      return {
-        status: 'ALREADY_COMPLETED',
-        taskId,
-        branch: existingState.branch,
-        stage: existingState.stage,
-        taskState: existingState,
-        action: 'DO_NOT_REGENERATE'
-      };
-    }
-
-    return {
-      status: 'ACTIVE_FOUND',
-      taskId,
-      branch: existingState.branch,
-      stage: existingState.stage,
-      taskState: existingState,
-      action: 'CONTINUE_ACTIVE'
-    };
+  const state = loadTaskState(taskId, projectRoot);
+  if (state) {
+    const status = state.stage === 'INTERRUPTED' ? 'INTERRUPTED_FOUND' : terminal(state) ? 'ALREADY_COMPLETED' : 'ACTIVE_FOUND';
+    return { status, taskId, branch: state.branch, stage: state.stage, taskState: state,
+      action: status === 'INTERRUPTED_FOUND' ? 'RESUME_RECOMMENDED' : status === 'ALREADY_COMPLETED' ? 'DO_NOT_REGENERATE' : 'CONTINUE_ACTIVE' };
   }
-
-  if (branchExists) {
-    return {
-      status: 'BRANCH_EXISTS_NO_STATE',
-      taskId,
-      branch: matchedBranch,
-      action: 'INSPECT_BRANCH'
-    };
-  }
-
-  return {
-    status: 'NO_PREVIOUS_WORK',
-    taskId,
-    action: 'START_FRESH'
-  };
+  const candidates = [`feat/${taskId.toLowerCase()}`, `feat/${taskId.toLowerCase().replace(/[^a-z0-9-]+/g, '-')}`];
+  const branch = (options.branches || []).find(b => candidates.some(candidate => b === candidate || b.endsWith(`/${candidate}`)));
+  return branch ? { status: 'BRANCH_EXISTS_NO_STATE', taskId, branch, action: 'INSPECT_BRANCH' } :
+    { status: 'NO_PREVIOUS_WORK', taskId, action: 'START_FRESH' };
 }
 
-/**
- * Guard against duplicate execution requests on an already completed or in-progress task.
- */
+/** Advisory inspection only; saving a checkpoint does not lock workflow execution. */
 export function guardDuplicateRequest(taskId, projectRoot, options = {}) {
   const detection = detectExistingWork(taskId, projectRoot, options);
-  if (detection.status === 'ALREADY_COMPLETED') {
-    return {
-      canProceed: false,
-      reason: `Task ${taskId} is already marked ACCEPTED in .brad/state. Refusing duplicate execution without explicit --force.`,
-      detection
-    };
-  }
-  if (detection.status === 'ACTIVE_FOUND' && !options.allowActiveContinuation) {
-    return {
-      canProceed: false,
-      reason: `Task ${taskId} currently active in stage ${detection.stage}. Use resume or specify continuation.`,
-      detection
-    };
-  }
-  return {
-    canProceed: true,
-    detection
-  };
+  const completed = detection.status === 'ALREADY_COMPLETED';
+  const existing = detection.status !== 'NO_PREVIOUS_WORK';
+  return { canProceed: !completed && (!existing || options.allowActiveContinuation === true), detection,
+    ...(completed ? { reason: `Task ${taskId} already marked ${detection.stage}; inspect native completion evidence before repeating.` } :
+      existing && !options.allowActiveContinuation ? { reason: 'Existing work requires explicit continuation and branch inspection.' } : {}) };
 }

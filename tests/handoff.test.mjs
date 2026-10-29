@@ -86,7 +86,7 @@ test('Multi-Agent Handoff: Full Developer -> QA Defect -> Dev Correction -> Revi
 
   // 4b. QA cannot accept deliverable while open defect exists
   assert.throws(
-    () => qaAcceptDeliverable({ ...state2, currentRole: ROLES.QA }),
+    () => qaAcceptDeliverable({ ...state2, stage: TASK_STAGES.QA_PENDING, currentRole: ROLES.QA }),
     /QA cannot accept deliverable while open defects exist/
   );
 
@@ -223,6 +223,7 @@ test('Continuation Safeguards: Duplicate Execution Guard and Fresh Detection', (
   // Case B: Completed task in state
   const completed = createTaskState({ taskId: 'STORY-3.1' });
   completed.stage = TASK_STAGES.ACCEPTED;
+  completed.currentRole = ROLES.OPERATOR;
   saveTaskState(completed, root);
 
   const guardCompleted = guardDuplicateRequest('STORY-3.1', root);

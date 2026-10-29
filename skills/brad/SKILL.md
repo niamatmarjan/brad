@@ -91,6 +91,8 @@ before invoking. These references are guides, never proof of installed behavior.
   `generate acceptance tests`, `audit test quality`, `investigate architecture`, `assess release readiness`):
   dynamically classify intent and route to the matching installed BMAD skill; see natural-task-routing.
   If capability is missing, report `SPECIALIST_UNAVAILABLE` rather than substituting Build or Help.
+  The optional terminal `brad route` command provides bounded, deterministic suggestions only;
+  it does not resolve native tickets, invoke skills, enforce host permissions, or prove completion.
 - `/brad setup` (agent skill, not terminal CLI `brad setup`): inspect host/BMAD/Git; if BMAD is absent, offer a one-step official installer only after version choice and user approval (`brad setup --with-bmad [--bmad-channel stable|preview]`). For preview finish native `bmad setup` in the coding host. Never upgrade an existing native setup automatically. Ask once about default
   PR publication, default base branch and approval style if not already set,
   then (with consent) create/update `.brad/policy.yaml` without touching

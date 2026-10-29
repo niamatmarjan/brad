@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { resolveRoute, INTENTS } from '../src/router.mjs';
 
-// Standard BMAD v6.12 installed skill inventory
+// Synthetic inventory, based on the inspected v6.12 workflow contracts.
 const standardSkills = [
   'bmad-prd',
   'bmad-create-epics-and-stories',
@@ -14,6 +14,9 @@ const standardSkills = [
   'bmad-code-review',
   'bmad-testarch-atdd',
   'bmad-testarch-test-design',
+  'bmad-testarch-test-review',
+  'bmad-qa-generate-e2e-tests',
+  'bmad-testarch-nfr',
   'bmad-testarch-automate',
   'bmad-architecture',
   'bmad-retrospective',
@@ -122,7 +125,7 @@ test('Dynamic Router - Intent 6: Generate acceptance or E2E tests', () => {
   for (const text of utterances) {
     const res = resolveRoute({ utterance: text, installedSkills: standardSkills });
     assert.equal(res.intent, INTENTS.ACCEPTANCE_TEST_GENERATION, `Utterance "${text}" must resolve to ACCEPTANCE_TEST_GENERATION`);
-    assert.equal(res.selected_route, 'bmad-testarch-atdd');
+    assert.equal(res.selected_route, /e2e/i.test(text) ? 'bmad-qa-generate-e2e-tests' : 'bmad-testarch-atdd');
     assert.equal(res.is_authorized, true);
   }
 });
@@ -138,7 +141,7 @@ test('Dynamic Router - Intent 7: Audit test quality', () => {
   for (const text of utterances) {
     const res = resolveRoute({ utterance: text, installedSkills: standardSkills });
     assert.equal(res.intent, INTENTS.TEST_QUALITY_AUDIT, `Utterance "${text}" must resolve to TEST_QUALITY_AUDIT`);
-    assert.equal(res.selected_route, 'bmad-testarch-test-design');
+    assert.equal(res.selected_route, 'bmad-testarch-test-review');
     assert.equal(res.is_authorized, true);
   }
 });
@@ -169,7 +172,8 @@ test('Dynamic Router - Intent 9: Determine release readiness', () => {
   for (const text of utterances) {
     const res = resolveRoute({ utterance: text, installedSkills: standardSkills });
     assert.equal(res.intent, INTENTS.RELEASE_READINESS_AUDIT, `Utterance "${text}" must resolve to RELEASE_READINESS_AUDIT`);
-    assert.equal(res.selected_route, 'bmad-retrospective');
+    assert.equal(res.selected_route, 'bmad-testarch-nfr');
+    assert.equal(res.release_verdict, 'UNVERIFIED');
     assert.equal(res.requires_mutations, false, 'Release readiness check must not deploy code');
   }
 });
