@@ -1,5 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { mkdtempSync, rmSync, mkdirSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { resolveRoute, INTENTS } from '../src/router.mjs';
 
 // Standard BMAD v6.12 installed skill inventory
@@ -226,14 +229,22 @@ test('Dynamic Router - Missing specialist module reports SPECIALIST_UNAVAILABLE 
 });
 
 test('Dynamic Router - Real Project Root Discovery: Discovers skills on-disk from fixture and routes', () => {
-  const fixtureRoot = '../brad-e2e-lab/validation/gate-03/fixtures/live-smoke-service';
-  const res = resolveRoute({
-    utterance: 'Create a PRD for live metrics streaming',
-    projectRoot: fixtureRoot
-  });
+  const dir = mkdtempSync(join(tmpdir(), 'brad-router-test-'));
+  try {
+    const native = join(dir, '.agents', 'skills', 'bmad-prd');
+    mkdirSync(native, { recursive: true });
+    writeFileSync(join(native, 'SKILL.md'), '---\nname: bmad-prd\n---\n');
 
-  assert.equal(res.intent, INTENTS.PRD_SPECIFICATION);
-  assert.equal(res.selected_route, 'bmad-prd');
-  assert.equal(res.is_authorized, true);
-  assert.equal(res.action, 'DELEGATE_WORKFLOW');
+    const res = resolveRoute({
+      utterance: 'Create a PRD for live metrics streaming',
+      projectRoot: dir
+    });
+
+    assert.equal(res.intent, INTENTS.PRD_SPECIFICATION);
+    assert.equal(res.selected_route, 'bmad-prd');
+    assert.equal(res.is_authorized, true);
+    assert.equal(res.action, 'DELEGATE_WORKFLOW');
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
