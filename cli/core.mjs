@@ -4,6 +4,7 @@ import { homedir } from 'node:os';
 import { createHash, randomUUID } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { execFileSync, spawnSync, spawn } from 'node:child_process';
+import { resolveRoute, formatRouteExplanation } from '../src/router.mjs';
 
 export const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const skillRoot = join(packageRoot, 'skills', 'brad');
@@ -83,7 +84,8 @@ function parse(args) {
     command: 'init', agent: 'auto', dir: process.cwd(), global: false, force: false,
     dryRun: false, json: false, yes: false, help: false, withBmad: false,
     bmadChannel: 'stable', bmadChannelSpecified: false,
-    bmadModules: null, bmadTools: null, bmadTimeout: 180000, nonInteractive: false
+    bmadModules: null, bmadTools: null, bmadTimeout: 180000, nonInteractive: false,
+    utterance: ''
   };
   const rest = [...args];
   if (rest[0] && !rest[0].startsWith('-')) o.command = rest.shift();
@@ -110,6 +112,15 @@ function parse(args) {
     else if (token === '--agent') o.agent = rest.shift() || '';
     else if (token.startsWith('--dir=')) o.dir = token.substring(6);
     else if (token === '--dir') o.dir = rest.shift() || '';
+    else if (token.startsWith('--utterance=')) o.utterance = token.substring(12);
+    else if (token === '--utterance') o.utterance = rest.shift() || '';
+    else if (!token.startsWith('-')) {
+      if (o.command === 'route') {
+        o.utterance = o.utterance ? `${o.utterance} ${token}` : token;
+      } else {
+        throw new Error(`Unknown argument: ${token}`);
+      }
+    }
     else throw new Error(`Unknown option: ${token}`);
   }
   if (o.global && o.dir !== process.cwd()) throw new Error('--global cannot be combined with --dir');
@@ -148,7 +159,8 @@ function parse(args) {
   }
   if (o.withBmad && o.json && !o.dryRun) throw new Error('Interactive BMAD setup cannot use --json; use --dry-run --json to preview the plan.');
   if (!o.dir) throw new Error('--dir needs a path');
-  if (!['init', 'setup', 'prompt', 'update', 'doctor', 'uninstall', 'version', 'help'].includes(o.command)) throw new Error(`Unknown command: ${o.command}`);
+  if (!['init', 'setup', 'prompt', 'update', 'doctor', 'uninstall', 'version', 'help', 'route'].includes(o.command)) throw new Error(`Unknown command: ${o.command}`);
+  if (o.command === 'route' && !o.utterance.trim()) throw new Error('Route command requires a task description or utterance.');
   o.dir = resolve(o.dir);
   return o;
 }
@@ -156,6 +168,7 @@ function parse(args) {
 const help = `BRAD — BMAD Routing & Agent Delegation
 
 Usage:
+  brad route "<task description>" [--dir PATH] [--json]
   brad setup [--agent auto|portable|claude|codex|copilot|antigravity|all] [--dir PATH]
   brad setup --with-bmad [--bmad-channel stable|preview] [--bmad-modules <list>] [--bmad-tools <list>] [--non-interactive] [--bmad-timeout <ms>] [--agent HOST] [--dir PATH]
   brad prompt [--agent ...] [--dir PATH]   # copy instructions to your AI
@@ -587,6 +600,19 @@ export function execute(argv, overrides = {}) {
   if (options.help || options.command === 'help') return { help };
   if (options.command === 'version') return { version: version() };
   if (!isDir(options.dir) && !options.global) throw new Error(`Project directory does not exist: ${options.dir}`);
+  if (options.command === 'route') {
+    const route = resolveRoute({
+      utterance: options.utterance,
+      projectRoot: options.dir
+    });
+    return {
+      command: 'route',
+      version: version(),
+      root: options.dir,
+      utterance: options.utterance,
+      route
+    };
+  }
   const plans = pathsFor(options);
   if (options.command === 'doctor' || options.command === 'prompt') {
     if (options.command === 'prompt') return { command: 'prompt', version: version(), prompt: aiPrompt(options) };
@@ -815,6 +841,7 @@ export async function main(argv) {
     if (json) process.stdout.write(JSON.stringify({ ok: true, ...result }, null, 2) + '\n');
     else if (result.help) process.stdout.write(result.help);
     else if (result.command === 'prompt') process.stdout.write(result.prompt + '\n');
+    else if (result.command === 'route') process.stdout.write(formatRouteExplanation(result.route) + '\n');
     else if (result.command === undefined) process.stdout.write(`BRAD ${result.version}\n`);
     else {
       process.stdout.write(`BRAD v${result.version} — ${result.command}\n`);

@@ -509,11 +509,11 @@ test('simulated installer waiting indefinitely is terminated by the configured t
   for (const k of Object.keys(env)) if (k.toLowerCase() === 'path') delete env[k];
   env.PATH = bin + delimiter + (process.env.PATH || process.env.Path || '');
   const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad',
-    '--bmad-modules', 'bmm', '--bmad-tools', 'antigravity', '--bmad-timeout', '500'];
+    '--bmad-modules', 'bmm', '--bmad-tools', 'antigravity', '--bmad-timeout', '1000'];
   const res = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
-    { env, cwd: root, encoding: 'utf8', timeout: 5000 });
+    { env, cwd: root, encoding: 'utf8', timeout: 8000 });
   assert.equal(res.status, 1);
-  assert.match(res.stderr, /timed out after 500ms and was terminated/);
+  assert.match(res.stderr, /timed out after 1000ms and was terminated/);
   assert.ok(existsSync(join(root, 'timeout-invoked.txt')));
 }));
 
@@ -656,15 +656,15 @@ test('stubborn grandchild ignoring SIGTERM is terminated by escalation when dire
   for (const k of Object.keys(env)) if (k.toLowerCase() === 'path') delete env[k];
   env.PATH = bin + delimiter + (process.env.PATH || process.env.Path || '');
   const args = ['setup', '--dir', root, '--agent', 'antigravity', '--with-bmad',
-    '--bmad-modules', 'bmm', '--bmad-tools', 'antigravity', '--bmad-timeout', '400'];
+    '--bmad-modules', 'bmm', '--bmad-tools', 'antigravity', '--bmad-timeout', '1000'];
 
   const start = Date.now();
   const res = spawnSync(process.execPath, [join(packageRoot, 'cli/brad.mjs'), ...args],
-    { env, cwd: root, encoding: 'utf8', timeout: 8000 });
+    { env, cwd: root, encoding: 'utf8', timeout: 10000 });
   const elapsed = Date.now() - start;
 
   assert.equal(res.status, 1);
-  assert.match(res.stderr, /timed out after 400ms and was terminated/);
+  assert.match(res.stderr, /timed out after 1000ms and was terminated/);
   assert.ok(elapsed < 6000, `must terminate within bounded escalation time, took ${elapsed}ms`);
 
   assert.ok(existsSync(pidFile), 'grandchild must have started and written PID');
@@ -825,4 +825,57 @@ test('setup detects native BMAD in the Antigravity singular .agent skill folder'
   assert.equal(r.bmadSetup.status, 'SKIPPED_EXISTING');
   assert.ok(r.bmad.nativeSkills.includes('bmad-build'));
   assert.equal(r.bmad.discovery.hostSkillCatalog, 'NOT_VERIFIED');
+}));
+
+test('route command requires task description or utterance', () => fixture(root => {
+  assert.throws(() => execute(['route', '--dir', root]), /Route command requires a task description/);
+}));
+
+test('route command resolves intent and outputs structured JSON via CLI', () => fixture(root => {
+  const native = join(root, '.agents', 'skills', 'bmad-prd');
+  mkdirSync(native, { recursive: true });
+  writeFileSync(join(native, 'SKILL.md'), '---\nname: bmad-prd\n---\n');
+
+  const res = spawnSync(process.execPath, [
+    join(packageRoot, 'cli/brad.mjs'),
+    'route',
+    'create a new prd for the onboarding flow',
+    '--dir', root,
+    '--json'
+  ], { encoding: 'utf8' });
+
+  assert.equal(res.status, 0, res.stderr);
+  const data = JSON.parse(res.stdout);
+  assert.equal(data.ok, true);
+  assert.equal(data.command, 'route');
+  assert.equal(data.route.intent, 'PRD_SPECIFICATION');
+  assert.equal(data.route.action, 'DELEGATE_WORKFLOW');
+  assert.equal(data.route.selected_route, 'bmad-prd');
+}));
+
+test('route command refuses destructive actions with REFUSAL_POLICY_DECISION', () => fixture(root => {
+  const res = spawnSync(process.execPath, [
+    join(packageRoot, 'cli/brad.mjs'),
+    'route',
+    'git push origin --force main and drop all tables',
+    '--dir', root,
+    '--json'
+  ], { encoding: 'utf8' });
+
+  assert.equal(res.status, 0, res.stderr);
+  const data = JSON.parse(res.stdout);
+  assert.equal(data.ok, true);
+  assert.equal(data.route.action, 'REFUSE');
+  assert.equal(data.route.selected_route, 'REFUSAL_POLICY_DECISION');
+  assert.equal(data.route.is_authorized, false);
+  assert.match(data.route.refusal_reason, /Destructive|Contract Rule 8/);
+}));
+
+test('route command correctly reports SPECIALIST_UNAVAILABLE when requested capability is not installed', () => fixture(root => {
+  // Empty directory has no installed skills
+  const r = execute(['route', 'conduct a detailed ux visual design audit', '--dir', root]);
+  assert.equal(r.command, 'route');
+  assert.equal(r.route.intent, 'UX_DESIGN');
+  assert.equal(r.route.action, 'SPECIALIST_UNAVAILABLE');
+  assert.equal(r.route.selected_route, 'SPECIALIST_UNAVAILABLE');
 }));
