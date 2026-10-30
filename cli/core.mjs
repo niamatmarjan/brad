@@ -3,8 +3,9 @@ import { join, dirname, relative, resolve, sep, isAbsolute } from 'node:path';
 import { homedir } from 'node:os';
 import { createHash, randomUUID } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { execFileSync, spawnSync, spawn } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
 import { resolveRoute, formatRouteExplanation } from '../src/router.mjs';
+import { inspectProject } from '../src/discovery.mjs';
 
 export const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const skillRoot = join(packageRoot, 'skills', 'brad');
@@ -350,19 +351,13 @@ function uninstall(plan, options) {
 // Report observed facts, not assumptions that an installed BMAD agent has actually run.
 function bmadCheck(root) {
   const paths = ['_bmad', '_bmad-output', '.bmad'].filter(p => existsSync(join(root, p)));
-  const configured = ['_bmad/config.toml', '_bmad/config.yaml', '_bmad/core/config.yaml'].some(p => isFile(join(root, p)));
-  const roots = ['.agents/skills', '.agent/skills', '.claude/skills', '.codex/skills', '.github/skills'];
-  const installedSkillNames = new Set();
-  for (const skillDir of roots) {
-    const path = join(root, skillDir);
-    if (!isDir(path)) continue;
-    for (const entry of readdirSync(path, { withFileTypes: true })) {
-      if (entry.isDirectory() && (entry.name.startsWith('bmad-') || entry.name === 'bmad') && isFile(join(path, entry.name, 'SKILL.md'))) installedSkillNames.add(entry.name);
-    }
-  }
+  const inventory = inspectProject(root);
+  const { configured } = inventory;
+  const installedSkillNames = new Set(inventory.nativeSkills);
   const hasRuntime = isDir(join(root, '_bmad'));
   const detected = hasRuntime || installedSkillNames.size > 0;
-  const warnings = [];
+  const warnings = [...inventory.warnings];
+  if (inventory.conflicts.length) warnings.push(`Conflicting native skill definitions: ${inventory.conflicts.join(', ')}`);
   if (!detected) warnings.push('Official BMAD Method not detected; ask your agent to offer an official BMAD setup.');
   else if (!configured) warnings.push('BMAD-like files/skills present, but shared runtime configuration was not verified.');
   if (!installedSkillNames.size) warnings.push('No native bmad-* SKILL.md discovered in common project locations; check the coding host skill catalog.');
@@ -391,8 +386,7 @@ function bmadCheck(root) {
     requiresApproval: false,
     guidance: 'Project-local BMAD files are present. Check this session\'s actual host skill catalog and restart the session if it was loaded before installation.'
   };
-  const v6 = existsSync(join(root, '_bmad-output/implementation-artifacts/sprint-status.yaml'));
-  const v7 = existsSync(join(root, '_bmad-output/tickets.toml')) || existsSync(join(root, '_bmad/tickets.toml'));
+  const { v6, v7 } = inventory.stateHints;
   if (v6 && v7) warnings.push('Both v6 and v7 state hints exist; ask user which native state system owns this task before writing.');
   return { detected, configured, runtime: hasRuntime, paths, nativeSkills: [...installedSkillNames].sort(),
     discovery: {
@@ -403,7 +397,7 @@ function bmadCheck(root) {
       note: 'External caches and files on disk are not proof the active host registered or invoked skills. Verify in the host.'
     },
     recovery,
-    stateHints: { v6, v7, mixed: v6 && v7 }, warnings,
+    stateHints: inventory.stateHints, version_hint_not_proof: inventory.version_hint_not_proof, warnings,
     note: detected ? 'BMAD installation hints found. Native routing and subagent execution must still be checked in the coding host.' : 'BMAD Method not detected. Install it separately using the official npx bmad-method install or v7 skills setup.' };
 }
 function binaryPresence(command) {
@@ -603,7 +597,8 @@ export function execute(argv, overrides = {}) {
   if (options.command === 'route') {
     const route = resolveRoute({
       utterance: options.utterance,
-      projectRoot: options.dir
+      projectRoot: options.dir,
+      dryRun: options.dryRun
     });
     return {
       command: 'route',

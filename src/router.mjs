@@ -1,519 +1,151 @@
-/**
- * BRAD Dynamic Semantic Router
- *
- * Classifies stakeholder utterances, validates permissions, inspects installed
- * BMAD capabilities and workspace state, and delegates to native workflows
- * without hard-coding case IDs or preselecting routes.
- */
+/** Bounded, deterministic route suggestions. Does not invoke skills or grant consent. */
+import { inspectProject } from './discovery.mjs';
 
-import { readdirSync, existsSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+export const INTENTS = Object.freeze(Object.fromEntries([
+  'PRD_SPECIFICATION', 'EPIC_STORY_PLANNING', 'BUILD_WORK_UNIT', 'CONTINUE_WORK_UNIT',
+  'CODE_REVIEW_READONLY', 'ACCEPTANCE_TEST_GENERATION', 'TEST_QUALITY_AUDIT',
+  'TEST_DESIGN', 'ARCHITECTURE_INVESTIGATION', 'RELEASE_READINESS_AUDIT',
+  'UX_DESIGN', 'EXPLICIT_WORKFLOW', 'UNAUTHORIZED_DESTRUCTIVE_REQUEST',
+  'AMBIGUOUS_REQUEST', 'UNKNOWN_INTENT'
+].map(name => [name, name])));
 
-export const INTENTS = Object.freeze({
-  PRD_SPECIFICATION: 'PRD_SPECIFICATION',
-  EPIC_STORY_PLANNING: 'EPIC_STORY_PLANNING',
-  BUILD_WORK_UNIT: 'BUILD_WORK_UNIT',
-  CONTINUE_WORK_UNIT: 'CONTINUE_WORK_UNIT',
-  CODE_REVIEW_READONLY: 'CODE_REVIEW_READONLY',
-  ACCEPTANCE_TEST_GENERATION: 'ACCEPTANCE_TEST_GENERATION',
-  TEST_QUALITY_AUDIT: 'TEST_QUALITY_AUDIT',
-  ARCHITECTURE_INVESTIGATION: 'ARCHITECTURE_INVESTIGATION',
-  RELEASE_READINESS_AUDIT: 'RELEASE_READINESS_AUDIT',
-  UX_DESIGN: 'UX_DESIGN',
-  UNAUTHORIZED_DESTRUCTIVE_REQUEST: 'UNAUTHORIZED_DESTRUCTIVE_REQUEST',
-  AMBIGUOUS_REQUEST: 'AMBIGUOUS_REQUEST',
-  UNKNOWN_INTENT: 'UNKNOWN_INTENT'
-});
-
-const SKILL_DIRS = [
-  '.agents/skills',
-  '.agent/skills',
-  '.github/skills',
-  '.claude/skills',
-  '.codex/skills'
-];
-
-/**
- * Discover installed BMAD skill names from well-known host directories.
- */
 export function discoverInstalledSkills(projectRoot) {
-  const root = resolve(projectRoot || '.');
-  const skills = new Set();
-  for (const rel of SKILL_DIRS) {
-    const dir = join(root, rel);
-    if (existsSync(dir)) {
-      try {
-        const entries = readdirSync(dir, { withFileTypes: true });
-        for (const entry of entries) {
-          if (entry.isDirectory() && existsSync(join(dir, entry.name, 'SKILL.md'))) {
-            skills.add(entry.name);
-          }
-        }
-      } catch {
-        // Ignore unreadable dirs
-      }
-    }
-  }
-  return Array.from(skills).sort();
+  return inspectProject(projectRoot).nativeSkills;
 }
 
-/**
- * Evaluate safety and destructive command constraints under BRAD Contract Rule 8.
- */
-function checkUnauthorizedDestructive(text) {
-  const lower = text.toLowerCase();
-  
-  // Destructive git / branch / db operations
-  if (
-    /delete\s+(all\s+)?branches/i.test(lower) ||
-    /force\s+push/i.test(lower) ||
-    /push\s+.*(--force|-f)/i.test(lower) ||
-    /drop\s+.*(database|table)/i.test(lower) ||
-    /rm\s+-rf/i.test(lower) ||
-    /bypass\s+ci/i.test(lower) ||
-    /auto-merge\s+(to\s+)?(prod|main)\s+without\s+review/i.test(lower) ||
-    /skip\s+(ci|checks|protection)/i.test(lower) ||
-    /disable\s+(branch\s+)?protection/i.test(lower) ||
-    /truncate\s+.*table/i.test(lower) ||
-    /git\s+reset\s+--hard/i.test(lower)
-  ) {
-    return {
-      isUnauthorized: true,
-      reason: 'BRAD Contract Rule 8: Destructive operations, force pushing, production branch deletion, or bypassing CI/review are strictly prohibited.'
-    };
-  }
-
-  return { isUnauthorized: false };
+// A conservative preflight filter, not a security boundary for an executing host.
+const destructivePatterns = [
+  /\bforce[ -]?push(?:ing)?\b/i, /\bpush\b.*(?:--force|\s-f\b)/i,
+  /\bdelete\s+(?:all\s+)?branches\b/i, /\bdrop\b.*(?:database|tables?)\b/i,
+  /\brm\s+-rf\b/i, /\bbypass\s+ci\b/i, /\bskip\s+(?:ci|checks|protection)\b/i,
+  /\bdisable\s+(?:branch\s+)?protection\b/i, /\btruncate\b.*table\b/i,
+  /\bgit\s+reset\s+--hard\b/i, /\bauto-merge\b/i
+];
+function destructiveRequest(text) {
+  return text.split(/(?:[.;\n]|\b(?:and then|then|and)\b)/i).some(clause => {
+    if (!destructivePatterns.some(pattern => pattern.test(clause))) return false;
+    return !/^\s*(?:explain|discuss|describe|review|audit|why\b|what\b|how\b|do not\b|don't\b|never\b|avoid\b)/i.test(clause);
+  });
 }
 
-/**
- * Check if the utterance is too vague or underspecified to act upon.
- */
-function checkAmbiguous(text) {
-  const trimmed = text.trim();
-  const lower = trimmed.toLowerCase();
-
-  // Very short non-command words or vague references
-  const vaguePatterns = [
-    /^do\s+that\s+thing(\s+with\s+the\s+system)?$/i,
-    /^update\s+it$/i,
-    /^fix\s+it$/i,
-    /^run\s+the\s+next\s+one$/i,
-    /^fix\s+something$/i,
-    /^do\s+something$/i,
-    /^test$/i,
-    /^build$/i
-  ];
-
-  for (const pattern of vaguePatterns) {
-    if (pattern.test(trimmed)) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-/**
- * Resolve a natural language utterance to a BMAD skill, execution mode, and policy.
- */
 export function resolveRoute(options = {}) {
+  if (options.utterance != null && typeof options.utterance !== 'string') throw new TypeError('utterance must be a string');
   const utterance = (options.utterance || '').trim();
-  const projectRoot = options.projectRoot || '.';
-  const installed = new Set(options.installedSkills || discoverInstalledSkills(projectRoot));
+  const text = utterance.replace(/^\/brad\s*/i, '');
+  const inventory = options.installedSkills === undefined ? inspectProject(options.projectRoot) : null;
+  if (options.installedSkills !== undefined && (!Array.isArray(options.installedSkills) ||
+    !options.installedSkills.every(name => typeof name === 'string'))) throw new TypeError('installedSkills must be an array of names');
+  const installed = new Set(options.installedSkills ?? inventory.nativeSkills);
+  const inspection = /^(?:please\s+)?(?:review|audit|inspect|investigate|explain|assess|evaluate|critique)\b/i.test(text);
+  const planOnly = options.dryRun || /^(?:please\s+)?plan\b|--plan\b|\bdry[ -]run\b|\bplan[ -]only\b/i.test(text);
+  const readOnly = planOnly || inspection || /\bread[ -]only\b|\b(?:review|audit)\s+only\b|\b(?:without|no)\s+(?:any\s+)?(?:changes|mutations)|\bwithout\s+changing\b|\b(?:do not|don't)\s+(?:change|modify|write)\b/i.test(text);
+  const noCode = /\bno\s+code\b|\bwithout\s+(?:changing|writing)\s+(?:any\s+)?code\b/i.test(text);
+  const base = { utterance, is_authorized: true, requires_mutations: false, mutation_scope: 'NONE',
+    execution: 'NOT_RUN', authorization: 'REQUIRES_HOST_CHECK',
+    ...(inventory ? { version_hint_not_proof: inventory.version_hint_not_proof, discovery_warnings: inventory.warnings } : {}) };
+  const clarify = prompt => ({ ...base, intent: INTENTS.AMBIGUOUS_REQUEST, category: 'CLARIFICATION_REQUIRED',
+    action: 'CLARIFY', selected_route: 'CLARIFICATION_REQUIRED', clarification_prompt: prompt });
+  if (!utterance) return clarify('Specify a ticket ID, task, or desired outcome.');
+  if (destructiveRequest(text)) return { ...base, intent: INTENTS.UNAUTHORIZED_DESTRUCTIVE_REQUEST,
+    category: 'POLICY_REFUSAL', action: 'REFUSE', selected_route: 'REFUSAL_POLICY_DECISION', is_authorized: false,
+    refusal_reason: 'BRAD Contract Rule 8: Destructive operations require separate authorization and host policy checks.' };
 
-  if (!utterance) {
-    return {
-      utterance: '',
-      intent: INTENTS.AMBIGUOUS_REQUEST,
-      category: 'CLARIFICATION_REQUIRED',
-      action: 'CLARIFY',
-      selected_route: 'CLARIFICATION_REQUIRED',
-      is_authorized: true,
-      requires_mutations: false,
-      clarification_prompt: 'No request provided. Please specify a ticket ID, task, or desired outcome.'
-    };
+  function suggest(intent, category, candidates, scope = 'NONE', extra = {}) {
+    const selected = candidates.find(name => installed.has(name));
+    if (!selected) return { ...base, intent, category, ...extra, action: 'SPECIALIST_UNAVAILABLE',
+      selected_route: 'SPECIALIST_UNAVAILABLE', missing_skill: candidates[0],
+      explanation: `No installed workflow for this objective. Required: ${candidates.join(' or ')}.` };
+    if (inventory?.conflicts.includes(selected) || inventory?.warnings.length) return clarify(`Inspect the conflicting or unreadable installation of ${selected} before selecting a workflow.`);
+    const effectiveScope = readOnly ? 'NONE' : noCode && scope === 'CODE_AND_DOCUMENTS' ? 'NONE' : scope;
+    if (effectiveScope !== 'NONE' && inventory?.stateHints.mixed) return clarify('Both v6 and v7 hints exist. Resolve the native runtime owning this task before writes.');
+    return { ...base, intent, category, ...extra, action: 'DELEGATE_WORKFLOW', selected_route: selected,
+      requires_mutations: effectiveScope !== 'NONE', mutation_scope: effectiveScope,
+      explanation: `Suggested installed workflow ${selected}. The host must inspect its instructions, resolve the target and enforce consent before invocation.` };
   }
 
-  // 1. Safety Check (Contract Rule 8)
-  const safety = checkUnauthorizedDestructive(utterance);
-  if (safety.isUnauthorized) {
-    return {
-      utterance,
-      intent: INTENTS.UNAUTHORIZED_DESTRUCTIVE_REQUEST,
-      category: 'POLICY_REFUSAL',
-      action: 'REFUSE',
-      selected_route: 'REFUSAL_POLICY_DECISION',
-      is_authorized: false,
-      requires_mutations: false,
-      refusal_reason: safety.reason
-    };
+  const explicit = [...text.matchAll(/(?:^\/|\b(?:use|invoke|run|via)\s+)(bmad(?:-[a-z0-9-]+)?)\b/gi)].map(m => m[1].toLowerCase());
+  if (new Set(explicit).size > 1) return clarify('Choose one explicit workflow or describe the order and stopping point.');
+  if (explicit.length) {
+    // Explicit workflows have contracts beyond this preflight classifier.
+    const result = suggest(INTENTS.EXPLICIT_WORKFLOW, 'GENERAL', [explicit[0]], 'NONE', { workflow_contract_required: true });
+    return result.action === 'DELEGATE_WORKFLOW' ? { ...result, action: 'INSPECT_WORKFLOW' } : result;
+  }
+  if (/^(?:do\s+that\s+thing(?:\s+with\s+the\s+system)?|update\s+it|fix\s+it|run\s+the\s+next\s+one|fix\s+something|do\s+something|test|build)[.!]?$/i.test(text)) {
+    return clarify('Specify the target ticket, story, or desired workflow.');
+  }
+  if (/\b(?:explain|discuss|describe)\b/i.test(text) && /\b(?:force[ -]?push(?:ing)?|rm\s+-rf|drop\b.*(?:database|table)|git\s+reset)\b/i.test(text)) {
+    return { ...base, intent: INTENTS.UNKNOWN_INTENT, category: 'GENERAL', action: 'READ_ONLY_DISCUSSION', selected_route: 'NONE' };
   }
 
-  // 2. Ambiguity Check (Contract Rule 6)
-  if (checkAmbiguous(utterance)) {
-    return {
-      utterance,
-      intent: INTENTS.AMBIGUOUS_REQUEST,
-      category: 'CLARIFICATION_REQUIRED',
-      action: 'CLARIFY',
-      selected_route: 'CLARIFICATION_REQUIRED',
-      is_authorized: true,
-      requires_mutations: false,
-      clarification_prompt: 'Request is ambiguous. Please specify the target ticket ID, story, or specific BMAD workflow needed.'
-    };
+  const review = /\b(?:review|audit|critique|evaluate|assess|inspect)\b/i.test(text);
+  const target = text.match(/\b(?:story|task|ticket)\s+([a-z0-9]+(?:[.-][a-z0-9]+)+)\b/i)?.[1] ??
+    text.match(/^(?:--plan\s+)?(\d+(?:[.-]\d+)+)\b/)?.[1];
+  const nativeTarget = { target_candidate: target ?? null, target_resolution: 'REQUIRES_NATIVE_RESOLUTION' };
+  const build = () => suggest(INTENTS.BUILD_WORK_UNIT, 'EXECUTION', ['bmad-build'], 'CODE_AND_DOCUMENTS', { ...nativeTarget, is_resume: false });
+  if (/^(?:please\s+)?(?:review|audit)\s+(?:pr\s*#?\d+|pull\s+request|story\s+\d)/i.test(text)) {
+    return suggest(INTENTS.CODE_REVIEW_READONLY, 'QUALITY', ['bmad-code-review'], 'NONE', nativeTarget);
   }
-
-  const lower = utterance.toLowerCase();
-
-  // 3. Resumption Intent (Contract Rule 1 & 9)
-  if (
-    /continue\s+(interrupted\s+)?(story|task|work)/i.test(lower) ||
-    /resume\s+(work\s+on\s+)?(story|task)?/i.test(lower) ||
-    /^\/brad\s+resume/i.test(lower) ||
-    /pick\s+up\s+where\s+we\s+left\s+off/i.test(lower)
-  ) {
-    const route = installed.has('bmad-build') ? 'bmad-build' : 'bmad-help';
-    return {
-      utterance,
-      intent: INTENTS.CONTINUE_WORK_UNIT,
-      category: 'EXECUTION',
-      action: 'RESUME_WORKFLOW',
-      selected_route: route,
-      is_resume: true,
-      is_authorized: true,
-      requires_mutations: true,
-      explanation: 'Detected interrupted task resumption. Inspecting git branch and session state before continuing.'
-    };
+  if (target && /^(?:please\s+)?(?:build|implement|develop|code\s+up)\b/i.test(text)) return build();
+  if (/\b(?:resume|continue\s+(?:interrupted\s+)?(?:story|task|work|where)|pick\s+up\s+where)\b/i.test(text)) {
+    if (inspection) return clarify('Inspect the existing native continuation plan without running Build.');
+    return suggest(INTENTS.CONTINUE_WORK_UNIT, 'EXECUTION', ['bmad-build'], 'CODE_AND_DOCUMENTS', { ...nativeTarget, is_resume: true });
   }
-
-  // 4. Code Review Intent (Read-Only)
-  if (
-    /review\s+(pull\s+request|pr\s*#?\d+|this\s+code|changes)/i.test(lower) ||
-    /code\s+review/i.test(lower) ||
-    /audit\s+pr/i.test(lower)
-  ) {
-    const route = installed.has('bmad-code-review') ? 'bmad-code-review' :
-                  installed.has('bmad-review') ? 'bmad-review' : null;
-    if (!route) {
-      return {
-        utterance,
-        intent: INTENTS.CODE_REVIEW_READONLY,
-        category: 'QUALITY',
-        action: 'SPECIALIST_UNAVAILABLE',
-        selected_route: 'SPECIALIST_UNAVAILABLE',
-        missing_skill: 'bmad-code-review',
-        is_authorized: true,
-        requires_mutations: false,
-        explanation: 'Code review requested, but neither bmad-code-review nor bmad-review is installed.'
-      };
-    }
-    return {
-      utterance,
-      intent: INTENTS.CODE_REVIEW_READONLY,
-      category: 'QUALITY',
-      action: 'DELEGATE_WORKFLOW',
-      selected_route: route,
-      is_authorized: true,
-      requires_mutations: false,
-      expected_artifacts: ['_bmad-output/reviews/pr-review.md'],
-      explanation: 'Read-only code review requested under Contract Rule 1 (zero mutations without permission).'
-    };
+  if (/\b(?:prd|product\s+requirements(?:\s+document)?|requirements\s+doc)\b/i.test(text)) {
+    if (/\bapprov(?:e|al)\b/i.test(text)) return clarify('PRD approval belongs to the authorized human owner. Specify validation or refinement if that is the intended task.');
+    const validate = review || /\bvalidat(?:e|ion)\b/i.test(text);
+    const edit = /\b(?:edit|refine|improve|update|extend|amend)\b/i.test(text);
+    return suggest(INTENTS.PRD_SPECIFICATION, 'PLANNING', validate ? ['bmad-prd', 'bmad-validate-prd'] :
+      edit ? ['bmad-prd', 'bmad-edit-prd'] : ['bmad-prd', 'bmad-create-prd'], validate ? 'NONE' : 'DOCUMENTS_ONLY',
+    { operation: validate ? 'VALIDATE' : edit ? 'REFINE' : 'CREATE' });
   }
-
-  // 5. PRD Intent
-  if (
-    /\bprd\b/i.test(lower) ||
-    /product\s+requirements(\s+document)?/i.test(lower) ||
-    /requirements\s+doc/i.test(lower)
-  ) {
-    const isValidation = /validate\s+.*prd/i.test(lower) || /critique\s+.*prd/i.test(lower);
-    const route = installed.has('bmad-prd') ? 'bmad-prd' :
-                  installed.has('bmad-create-prd') ? 'bmad-create-prd' : null;
-    if (!route) {
-      return {
-        utterance,
-        intent: INTENTS.PRD_SPECIFICATION,
-        category: 'PLANNING',
-        action: 'SPECIALIST_UNAVAILABLE',
-        selected_route: 'SPECIALIST_UNAVAILABLE',
-        missing_skill: 'bmad-prd',
-        is_authorized: true,
-        requires_mutations: !isValidation,
-        explanation: 'PRD workflow requested, but bmad-prd is not installed.'
-      };
-    }
-    return {
-      utterance,
-      intent: INTENTS.PRD_SPECIFICATION,
-      category: 'PLANNING',
-      action: 'DELEGATE_WORKFLOW',
-      selected_route: route,
-      is_authorized: true,
-      requires_mutations: !isValidation,
-      expected_artifacts: ['_bmad-output/planning-artifacts/prd.md'],
-      explanation: `Matched PRD specification intent to installed skill ${route}.`
-    };
+  if ((review && /\b(?:tests?|coverage|assertion)\b/i.test(text)) || /\btest\s+quality\b/i.test(text)) {
+    return suggest(INTENTS.TEST_QUALITY_AUDIT, 'QUALITY', ['bmad-testarch-test-review']);
   }
-
-  // 6. Acceptance / E2E Test Generation Intent
-  if (
-    /acceptance\s+tests?/i.test(lower) ||
-    /e2e\s+tests?/i.test(lower) ||
-    /end-to-end\s+tests?/i.test(lower) ||
-    /playwright\s+.*tests?/i.test(lower) ||
-    /\batdd\b/i.test(lower)
-  ) {
-    const route = installed.has('bmad-testarch-atdd') ? 'bmad-testarch-atdd' :
-                  installed.has('bmad-testarch-automate') ? 'bmad-testarch-automate' :
-                  installed.has('bmad-tea') ? 'bmad-tea' : null;
-    if (!route) {
-      return {
-        utterance,
-        intent: INTENTS.ACCEPTANCE_TEST_GENERATION,
-        category: 'TESTING',
-        action: 'SPECIALIST_UNAVAILABLE',
-        selected_route: 'SPECIALIST_UNAVAILABLE',
-        missing_skill: 'bmad-testarch-atdd',
-        is_authorized: true,
-        requires_mutations: true,
-        explanation: 'Acceptance/E2E test authoring requested, but no installed testarch/TEA skills found.'
-      };
-    }
-    return {
-      utterance,
-      intent: INTENTS.ACCEPTANCE_TEST_GENERATION,
-      category: 'TESTING',
-      action: 'DELEGATE_WORKFLOW',
-      selected_route: route,
-      is_authorized: true,
-      requires_mutations: true,
-      explanation: `Matched acceptance test generation to installed skill ${route}.`
-    };
+  if (/\b(?:test[ -]design|plan\s+(?:the\s+)?(?:tests?|qa)|risk\s+matrix)\b/i.test(text)) {
+    return suggest(INTENTS.TEST_DESIGN, 'TESTING', ['bmad-testarch-test-design'], 'DOCUMENTS_ONLY');
   }
-
-  // 7. Test Quality Audit Intent
-  if (
-    /audit\s+test/i.test(lower) ||
-    /test\s+(quality|coverage)\s+(audit|review)/i.test(lower) ||
-    /test\s+quality/i.test(lower) ||
-    /review\s+.*coverage/i.test(lower) ||
-    /critique\s+.*test/i.test(lower)
-  ) {
-    const route = installed.has('bmad-testarch-test-design') ? 'bmad-testarch-test-design' :
-                  installed.has('bmad-testarch-trace') ? 'bmad-testarch-trace' :
-                  installed.has('bmad-tea') ? 'bmad-tea' : null;
-    if (!route) {
-      return {
-        utterance,
-        intent: INTENTS.TEST_QUALITY_AUDIT,
-        category: 'QUALITY',
-        action: 'SPECIALIST_UNAVAILABLE',
-        selected_route: 'SPECIALIST_UNAVAILABLE',
-        missing_skill: 'bmad-testarch-test-design',
-        is_authorized: true,
-        requires_mutations: false,
-        explanation: 'Test quality audit requested, but bmad-testarch-test-design is not installed.'
-      };
-    }
-    return {
-      utterance,
-      intent: INTENTS.TEST_QUALITY_AUDIT,
-      category: 'QUALITY',
-      action: 'DELEGATE_WORKFLOW',
-      selected_route: route,
-      is_authorized: true,
-      requires_mutations: false,
-      expected_artifacts: ['_bmad-output/qa/test-review-audit.md'],
-      explanation: `Matched test quality audit to installed skill ${route}.`
-    };
+  if (/\b(?:acceptance\s+tests?|atdd)\b/i.test(text)) {
+    return suggest(INTENTS.ACCEPTANCE_TEST_GENERATION, 'TESTING', ['bmad-testarch-atdd'], 'TESTS_ONLY');
   }
-
-  // 8. Architecture Intent
-  if (
-    /architect(ure|ural)?/i.test(lower) ||
-    /system\s+design/i.test(lower) ||
-    /scaling\s+(concerns?|investigation)/i.test(lower) ||
-    /trade-offs?\s+between/i.test(lower)
-  ) {
-    const route = installed.has('bmad-architecture') ? 'bmad-architecture' :
-                  installed.has('bmad-agent-architect') ? 'bmad-agent-architect' : null;
-    if (!route) {
-      return {
-        utterance,
-        intent: INTENTS.ARCHITECTURE_INVESTIGATION,
-        category: 'ARCHITECTURE',
-        action: 'SPECIALIST_UNAVAILABLE',
-        selected_route: 'SPECIALIST_UNAVAILABLE',
-        missing_skill: 'bmad-architecture',
-        is_authorized: true,
-        requires_mutations: false,
-        explanation: 'Architecture investigation requested, but bmad-architecture is not installed.'
-      };
-    }
-    return {
-      utterance,
-      intent: INTENTS.ARCHITECTURE_INVESTIGATION,
-      category: 'ARCHITECTURE',
-      action: 'DELEGATE_WORKFLOW',
-      selected_route: route,
-      is_authorized: true,
-      requires_mutations: true,
-      expected_artifacts: ['_bmad-output/planning-artifacts/architecture.md'],
-      explanation: `Matched architecture investigation to installed skill ${route}.`
-    };
+  if (/\b(?:e2e|end-to-end|playwright)\b/i.test(text) && /\btests?\b/i.test(text)) {
+    return suggest(INTENTS.ACCEPTANCE_TEST_GENERATION, 'TESTING', ['bmad-qa-generate-e2e-tests', 'bmad-testarch-automate'], 'TESTS_ONLY');
   }
-
-  // 9. Release Readiness Intent
-  if (
-    /release\s+readiness/i.test(lower) ||
-    /release\s+candidate/i.test(lower) ||
-    /release\s+gate/i.test(lower) ||
-    /ready\s+for\s+(release|deployment)/i.test(lower) ||
-    /retrospective/i.test(lower)
-  ) {
-    const route = installed.has('bmad-retrospective') ? 'bmad-retrospective' :
-                  installed.has('bmad-review') ? 'bmad-review' : null;
-    if (!route) {
-      return {
-        utterance,
-        intent: INTENTS.RELEASE_READINESS_AUDIT,
-        category: 'RELEASE',
-        action: 'SPECIALIST_UNAVAILABLE',
-        selected_route: 'SPECIALIST_UNAVAILABLE',
-        missing_skill: 'bmad-retrospective',
-        is_authorized: true,
-        requires_mutations: false,
-        explanation: 'Release readiness audit requested, but bmad-retrospective is not installed.'
-      };
-    }
-    return {
-      utterance,
-      intent: INTENTS.RELEASE_READINESS_AUDIT,
-      category: 'RELEASE',
-      action: 'DELEGATE_WORKFLOW',
-      selected_route: route,
-      is_authorized: true,
-      requires_mutations: false,
-      expected_artifacts: ['_bmad-output/release/readiness-report.md'],
-      explanation: `Matched release readiness audit to installed skill ${route}.`
-    };
+  if (/\b(?:expand|improve|automate)\b.*\b(?:coverage|tests?)\b|\bautomated\s+coverage\b/i.test(text)) {
+    return suggest(INTENTS.ACCEPTANCE_TEST_GENERATION, 'TESTING', ['bmad-testarch-automate'], 'TESTS_ONLY');
   }
-
-  // 10. Epic & Story Planning Intent
-  if (
-    /epic/i.test(lower) ||
-    /break\s+down\s+story/i.test(lower) ||
-    /refine\s+story/i.test(lower) ||
-    /create\s+epics?\s+and\s+stories/i.test(lower) ||
-    /backlog\s+refinement/i.test(lower)
-  ) {
-    const route = installed.has('bmad-create-epics-and-stories') ? 'bmad-create-epics-and-stories' :
-                  installed.has('bmad-ticket') ? 'bmad-ticket' : null;
-    if (!route) {
-      return {
-        utterance,
-        intent: INTENTS.EPIC_STORY_PLANNING,
-        category: 'PLANNING',
-        action: 'SPECIALIST_UNAVAILABLE',
-        selected_route: 'SPECIALIST_UNAVAILABLE',
-        missing_skill: 'bmad-create-epics-and-stories',
-        is_authorized: true,
-        requires_mutations: true,
-        explanation: 'Epic and story planning requested, but bmad-create-epics-and-stories is not installed.'
-      };
-    }
-    return {
-      utterance,
-      intent: INTENTS.EPIC_STORY_PLANNING,
-      category: 'PLANNING',
-      action: 'DELEGATE_WORKFLOW',
-      selected_route: route,
-      is_authorized: true,
-      requires_mutations: true,
-      expected_artifacts: ['_bmad-output/planning-artifacts/epics.md'],
-      explanation: `Matched epic/story planning intent to installed skill ${route}.`
-    };
+  if (review && /\b(?:pr\s*#?\d+|pull\s+request|code|changes|story\s+\d|diff|branch)\b/i.test(text)) {
+    return suggest(INTENTS.CODE_REVIEW_READONLY, 'QUALITY', ['bmad-code-review'], 'NONE', nativeTarget);
   }
-
-  // 11. UX Design Intent
-  if (/\bux\b/i.test(lower) || /user\s+experience/i.test(lower) || /ui\s+flow/i.test(lower)) {
-    const route = installed.has('bmad-ux') ? 'bmad-ux' : null;
-    if (!route) {
-      return {
-        utterance,
-        intent: INTENTS.UX_DESIGN,
-        category: 'DESIGN',
-        action: 'SPECIALIST_UNAVAILABLE',
-        selected_route: 'SPECIALIST_UNAVAILABLE',
-        missing_skill: 'bmad-ux',
-        is_authorized: true,
-        requires_mutations: false,
-        explanation: 'UX design requested, but bmad-ux is not installed.'
-      };
-    }
-    return {
-      utterance,
-      intent: INTENTS.UX_DESIGN,
-      category: 'DESIGN',
-      action: 'DELEGATE_WORKFLOW',
-      selected_route: route,
-      is_authorized: true,
-      requires_mutations: true,
-      explanation: 'Matched UX design intent to installed skill bmad-ux.'
-    };
+  if (/^(?:please\s+)?(?:refine|break\s+down|create)\s+(?:epics?|stories|story|backlog)\b/i.test(text)) {
+    return suggest(INTENTS.EPIC_STORY_PLANNING, 'PLANNING', ['bmad-create-epics-and-stories', 'bmad-ticket'], 'DOCUMENTS_ONLY', nativeTarget);
   }
-
-  // 12. Build Work Unit Intent (Ticket Lane / Story Implementation)
-  if (
-    /build\s+(story|task)?\s*[\d.-]+/i.test(lower) ||
-    /implement\s+(story|task)?\s*[\d.-]+/i.test(lower) ||
-    /code\s+up\s+story/i.test(lower) ||
-    /^\/brad\s+[\d.-]+/i.test(lower) ||
-    /develop\s+feature/i.test(lower) ||
-    /\bstory\s+\d+[\d.-]*/i.test(lower)
-  ) {
-    const route = installed.has('bmad-build') ? 'bmad-build' :
-                  installed.has('bmad-build-auto') ? 'bmad-build-auto' : 'bmad-help';
-    return {
-      utterance,
-      intent: INTENTS.BUILD_WORK_UNIT,
-      category: 'EXECUTION',
-      action: 'DELEGATE_WORKFLOW',
-      selected_route: route,
-      is_resume: false,
-      is_authorized: true,
-      requires_mutations: true,
-      explanation: `Matched build work unit implementation intent to installed skill ${route}.`
-    };
+  if (/\barchitect(?:ure|ural)?\b|\bsystem\s+design\b|\bscaling\s+(?:concerns?|investigation)\b|\btrade-offs?\s+between\b/i.test(text)) {
+    const investigation = review || /\b(?:investigate|explain)\b/i.test(text);
+    return suggest(INTENTS.ARCHITECTURE_INVESTIGATION, 'ARCHITECTURE', ['bmad-architecture', 'bmad-agent-architect'], investigation ? 'NONE' : 'DOCUMENTS_ONLY');
   }
-
-  // Fallback: Default to bmad-help status discovery
-  return {
-    utterance,
-    intent: INTENTS.UNKNOWN_INTENT,
-    category: 'GENERAL',
-    action: 'DELEGATE_WORKFLOW',
-    selected_route: installed.has('bmad-help') ? 'bmad-help' : 'NONE',
-    is_authorized: true,
-    requires_mutations: false,
-    explanation: 'Unrecognized intent. Routing to native bmad-help for status and capability overview.'
-  };
+  if (/\brelease\b.*\b(?:readiness|ready|candidate|gate)\b|\bready\s+for\s+(?:release|deployment)\b/i.test(text)) {
+    return suggest(INTENTS.RELEASE_READINESS_AUDIT, 'RELEASE', ['bmad-testarch-nfr'], 'NONE',
+      { assessment_scope: 'NFR_ONLY', release_verdict: 'UNVERIFIED' });
+  }
+  if (/\bretrospective\b/i.test(text)) return suggest(INTENTS.EXPLICIT_WORKFLOW, 'QUALITY', ['bmad-retrospective'], 'DOCUMENTS_ONLY');
+  if (/\b(?:epics?|backlog\s+refinement)\b|\b(?:break\s+down|refine)\s+(?:story\s+)?\d/i.test(text)) {
+    return suggest(INTENTS.EPIC_STORY_PLANNING, 'PLANNING', ['bmad-create-epics-and-stories', 'bmad-ticket'], review ? 'NONE' : 'DOCUMENTS_ONLY', nativeTarget);
+  }
+  if (/\bux\b|\buser\s+experience\b|\bui\s+flow\b/i.test(text)) {
+    return suggest(INTENTS.UX_DESIGN, 'DESIGN', ['bmad-ux'], review ? 'NONE' : 'DOCUMENTS_ONLY');
+  }
+  if (/\btest\s+(?:story|task|ticket)\b/i.test(text)) return clarify('Inspect the native story and existing tests. Specify running tests, test design, test review, or generating tests.');
+  if (/\b(?:status|show|explain)\b/i.test(text)) return suggest(INTENTS.UNKNOWN_INTENT, 'GENERAL', ['bmad-help', 'bmad']);
+  if (/\b(?:build|implement|develop|code\s+up)\b/i.test(text) || /^\d+(?:[.-]\d+)+\b/.test(text) || /^--plan\s+\d/.test(text)) {
+    return build();
+  }
+  return clarify('This bounded preflight cannot resolve the request. Use the host to inspect project context and the installed native workflow.');
 }
 
-/**
- * Format route result for human-readable CLI or log output.
- */
 export function formatRouteExplanation(result) {
-  const lines = [
-    `Utterance: "${result.utterance}"`,
-    `Intent: ${result.intent}`,
-    `Action: ${result.action}`,
-    `Selected Route: ${result.selected_route}`
-  ];
-  if (result.refusal_reason) lines.push(`Refusal: ${result.refusal_reason}`);
-  if (result.clarification_prompt) lines.push(`Clarification: ${result.clarification_prompt}`);
-  if (result.missing_skill) lines.push(`Missing Skill: ${result.missing_skill}`);
-  if (result.explanation) lines.push(`Rationale: ${result.explanation}`);
+  const lines = [`Utterance: "${result.utterance}"`, `Intent: ${result.intent}`,
+    `Action: ${result.action}`, `Selected Route: ${result.selected_route}`, 'Execution: NOT_RUN (suggestion only)'];
+  for (const [field, label] of [['refusal_reason', 'Refusal'], ['clarification_prompt', 'Clarification'],
+    ['missing_skill', 'Missing Skill'], ['explanation', 'Rationale']]) if (result[field]) lines.push(`${label}: ${result[field]}`);
   return lines.join('\n');
 }

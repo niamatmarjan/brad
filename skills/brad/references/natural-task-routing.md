@@ -1,84 +1,103 @@
-# Natural Task Routing & BMAD Workflow Delegation
+# Natural tasks and bounded route inspection
 
-This guide explains how BRAD dynamically resolves natural stakeholder requests to installed BMAD v6.12 workflows without preselecting routes, requiring hardcoded case IDs, or asking stakeholders to understand BMAD agent internals.
+The AI host interprets the user's intent using project context and the actual
+installed BMAD instructions. `brad route` is a deterministic, read-only preflight:
+it matches bounded phrases and suggests an installed workflow. It does not run
+BMAD, resolve a native ticket, grant permission, or prove task completion.
+It is not a general semantic router or a security boundary.
 
----
+## Choose the requested outcome
 
-## 1. Core Principle
+| Outcome | Candidate native owner, if installed |
+|---|---|
+| Create PRD | `bmad-prd`, or creation-only `bmad-create-prd` |
+| Refine PRD | `bmad-prd`, or `bmad-edit-prd` |
+| Validate existing PRD | `bmad-prd` validation mode, or `bmad-validate-prd` |
+| Approve PRD | Authorized human owner; validation is not approval |
+| Refine epic/story | Native epic/story planning or `bmad-ticket`; no implementation |
+| Build or resume work | `bmad-build`; no Help substitution |
+| Explicit unattended Build | Inspect `bmad-build-auto` prerequisites and host permissions |
+| Review PR/code | `bmad-code-review`, read-only constraints passed explicitly |
+| Review test quality | `bmad-testarch-test-review` |
+| Design test strategy | `bmad-testarch-test-design` |
+| Acceptance tests before implementation | `bmad-testarch-atdd` |
+| Generate E2E tests | `bmad-qa-generate-e2e-tests`, or compatible `bmad-testarch-automate` |
+| Expand automated coverage | `bmad-testarch-automate` |
+| Investigate architecture | Installed architecture workflow, findings only |
+| Assess release readiness | Collect exact-commit evidence; NFR review is one input |
+| Retrospective | `bmad-retrospective`, for the requested completed epic |
 
-A stakeholder should be able to invoke BRAD with an ordinary task in natural language, and have BRAD:
-1. **Classify Intent:** Detect the underlying requirement (planning, build, review, testing, architecture, release audit).
-2. **Discover Installed Capabilities:** Inspect project-local `.agents/skills`, `.agent/skills`, and host directories for genuine native BMAD skills.
-3. **Check Safety & Policy:** Enforce Contract Rule 8 (refuse destructive operations, force push, and CI bypass with zero mutations).
-4. **Delegate or Clarify:** Select the smallest installed workflow matching the intent. If ambiguous, ask a material question. If the specialist is not installed, report `SPECIALIST_UNAVAILABLE` rather than guessing or substituting an unrelated build workflow.
-5. **Truthful Evidence Classification:** Report whether execution was host-native, inline, or helper-script-only.
+Read the installed contract before invocation. Explicit workflow selection beats
+incidental words. Test review must not become test generation because the prompt
+mentions E2E. A story ID must not turn review, QA, or status into implementation.
+An ambiguous "Test story 1.1" requires native context before choosing a QA action.
+Missing specialists return `SPECIALIST_UNAVAILABLE`; never invent agents.
 
----
+## Preflight result contract
 
-## 2. Canonical Intent Taxonomy
-
-| Intent | Natural Triggers | Target BMAD Skill | Mutates Code? |
-|---|---|---|---|
-| `PRD_SPECIFICATION` | "Create a PRD for notifications", "Write product requirements", "Improve the PRD" | `bmad-prd` (fallback: `bmad-create-prd`) | No (planning docs only) |
-| `EPIC_STORY_PLANNING` | "Refine epic 2", "Break down story 1.2 into tasks", "Create epics and stories" | `bmad-create-epics-and-stories` (fallback: `bmad-ticket`) | No (planning docs only) |
-| `BUILD_WORK_UNIT` | "Build story 1.1", "Implement ticket 1.2", "Code up story 2" | `bmad-build` (or `bmad-build-auto`) | Yes |
-| `CONTINUE_WORK_UNIT` | "Continue interrupted story", "Resume work", "/brad resume" | `bmad-build` (resumption mode) | Yes |
-| `CODE_REVIEW_READONLY` | "Review PR #12 without changing code", "Code review changes" | `bmad-code-review` (fallback: `bmad-review`) | Strictly No (Read-Only) |
-| `ACCEPTANCE_TEST_GENERATION` | "Generate acceptance tests", "Write Playwright E2E tests", "ATDD" | `bmad-testarch-atdd` (fallback: `bmad-testarch-automate`, `bmad-tea`) | Yes (tests only) |
-| `TEST_QUALITY_AUDIT` | "Audit test quality", "Review test coverage", "Critique tests" | `bmad-testarch-test-design` (fallback: `bmad-testarch-trace`, `bmad-tea`) | No (audit report only) |
-| `ARCHITECTURE_INVESTIGATION`| "Investigate scaling architecture", "System design trade-offs" | `bmad-architecture` (fallback: `bmad-agent-architect`) | No (architecture doc only) |
-| `RELEASE_READINESS_AUDIT` | "Determine release readiness", "Audit release candidate", "Retrospective" | `bmad-retrospective` (fallback: `bmad-review`) | No (verdict/report only) |
-| `UX_DESIGN` | "Conduct UX design audit", "UI user flow" | `bmad-ux` (if installed) | No |
-| `UNAUTHORIZED_DESTRUCTIVE` | "Force push to main", "Drop tables", "Delete prod branches", "Bypass CI" | Refusal Policy (`REFUSAL_POLICY_DECISION`) | Strictly Refused (0 mutations) |
-| `AMBIGUOUS_REQUEST` | "Do that thing", "Update it", "Fix something" | Clarification Prompt (`CLARIFICATION_REQUIRED`) | No |
-
----
-
-## 3. Specialist Availability & Fallback Rules
-
-- **Strict Capability Boundary:** If a stakeholder asks for a UX audit or QA test architecture and `bmad-ux` or `bmad-testarch-*` is **not installed** in the workspace, BRAD **must return `SPECIALIST_UNAVAILABLE`**.
-- **No Hallucinated Fallbacks:** BRAD must **never** route a missing specialist request to `bmad-build`, `bmad-help`, or an arbitrary backlog implementation.
-- **Ambiguous Request Handling:** When an utterance lacks actionable target information, ask **one** specific question instead of executing arbitrary code or picking an unexpected backlog story.
-
----
-
-## 4. Execution Posture & Evidence Reporting
-
-When executing or reporting a delegated workflow, agents must truthfully state the execution mode:
-
-1. `HOST_NATIVE_SKILL_INVOKED`: The workflow was dispatched through host-native skill or tool mechanisms.
-2. `INLINE_WORKFLOW_INLINE`: The workflow instructions were loaded and executed in the same conversational context. Disclose that independent review or verification authority does not apply.
-3. `SPECIALIST_DISPATCHED`: The workflow was delegated to an isolated subagent with independent memory/context.
-4. `HELPER_SCRIPTS_ONLY`: Only read-only diagnostics or preflight scripts were run.
-
-Unavailable external provenance must be honestly classified as `REVIEW_REQUIRED`, and blind evaluation boundaries without a genuine withheld oracle must be classified as `BLOCKED`.
-
----
-
-## 5. Programmatic Router Interface
-
-The routing engine is available both as an ESM module and as a CLI diagnostic subcommand:
-
-### CLI Usage:
 ```bash
-# Evaluate route for a natural task
-brad route "create a new PRD for user billing" --dir .
-
-# Structured JSON for automation
-brad route "build story 1.1" --dir . --json
+brad route "review PR #40, don't change anything" --dir . --json
+brad route "build story 1.1" --dir . --dry-run --json
 ```
 
-### Module API:
-```javascript
-import { resolveRoute, formatRouteExplanation } from '@niamatmarjan/brad/router';
+The ESM API remains `resolveRoute({ utterance, projectRoot, installedSkills?, dryRun? })`
+from `@niamatmarjan/brad/router`. An explicit `installedSkills` array supplies a
+caller-owned inventory for inspection/testing; it does not attest to installation.
+Normal CLI inspection reads project-local skill files. Conflicting copies require
+inspection; identical copies are allowed. v6/v7 indicators are hints, not version
+certification. Mixed hints stop proposed writes until the host resolves ownership.
+User/global skill caches and the host catalog are outside this CLI inventory.
 
-const route = resolveRoute({
-  utterance: 'review pull request without changing code',
-  projectRoot: process.cwd()
-});
+- `selected_route` is a suggestion. Legacy `action: DELEGATE_WORKFLOW` does
+  not mean dispatch occurred. `execution: NOT_RUN` always describes this preflight.
+- `is_authorized: true` means the bounded refusal filter did not reject the
+  request. `authorization: REQUIRES_HOST_CHECK` means actual consent is unverified.
+  Harmless discussion of destructive commands is allowed. The executing host
+  must enforce real permissions even if the phrase filter misses a paraphrase.
+- `requires_mutations` describes the suggested work, never writes performed by
+  the CLI. `mutation_scope` distinguishes `NONE`, `DOCUMENTS_ONLY`, `TESTS_ONLY`,
+  and `CODE_AND_DOCUMENTS`. Plan-only and read-only constraints force `NONE`.
+  Explicit workflow choices return `INSPECT_WORKFLOW`: their native mutation
+  contract must be inspected before any work, even when the preflight reports none.
+- `target_candidate` is unverified. `target_resolution: REQUIRES_NATIVE_RESOLUTION`
+  means the host must resolve the exact story/ticket in native BMAD state, including
+  duplicate IDs, initiative, dependencies, completed work, branch and PR identity.
+  Do not infer that `1.1`, `1-1`, or an issue number mean the same item.
+- `assessment_scope: NFR_ONLY` and `release_verdict: UNVERIFIED` do not certify a
+  release. Use [quality and release](quality-and-release.md) for evidence gathering.
 
-console.log(route.intent);         // 'CODE_REVIEW_READONLY'
-console.log(route.selected_route); // 'bmad-code-review'
-console.log(route.is_authorized);  // true
-console.log(route.requires_mutations); // false
-```
+Unrecognized or conflicting requests require clarification in the host. Do not
+extend phrase matching into a second workflow engine or a ticket-state parser.
+
+## Optional handoff checkpoints
+
+`@niamatmarjan/brad/handoff` keeps its exported functions for callers already using
+them. The CLI and primary skill do not require this checkpoint store. Native BMAD
+remains authoritative for backlog, lifecycle, writer ownership and approvals.
+Role/stage records and execution-mode strings are caller declarations, not proof
+of an actual skill invocation, separate reviewer, user approval, Git branch or PR.
+New states default to `NOT_VERIFIED`; legacy execution-mode labels remain accepted.
+`ACCEPTED` is a reported local handoff decision, not verified native completion.
+
+Checkpoints validate roles/stages, preserve the exact suspended gate, and reject
+malformed state. Corrections merge changed file records with the existing manifest;
+each record requires content (including empty content) or a SHA-256 digest. These
+digests describe the supplied bytes, not independently read disk or Git content.
+
+Save with `saveTaskState(state, root)`. It returns the path and advances
+`state.revision` only after replacing the file. Load fresh state before a later
+save; stale revisions fail instead of overwriting newer work. File replacement
+uses a flushed temporary file and an exclusive per-task write lock. This protects
+checkpoint writes across local processes, not two hosts executing the same task.
+It is not a distributed lock or a promise of power-loss durability on every disk.
+
+A writer killed during a save can leave `<task>.json.lock` and a temporary file.
+Stop and inspect the writer PID/process and the saved/native state before manually
+removing that lock and abandoned temporary file. Never steal a live lock or turn
+an unreadable checkpoint into permission to start fresh. Safe legacy IDs keep
+their filenames; unsafe IDs and case-colliding identities fail explicitly.
+
+`guardDuplicateRequest` is advisory. Existing branches and interrupted work require
+explicit continuation. It does not claim an execution lease or query GitHub.
+Callers must supply observed branch information and verify actual Git/PR identity
+with the host's native tools. Keep human checkpoints and native BMAD gates intact.
