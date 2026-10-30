@@ -3,7 +3,9 @@ import { join, dirname, relative, resolve, sep, isAbsolute } from 'node:path';
 import { homedir } from 'node:os';
 import { createHash, randomUUID } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { execFileSync, spawnSync, spawn } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
+import { resolveRoute, formatRouteExplanation } from '../src/router.mjs';
+import { inspectProject } from '../src/discovery.mjs';
 
 export const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const skillRoot = join(packageRoot, 'skills', 'brad');
@@ -83,7 +85,8 @@ function parse(args) {
     command: 'init', agent: 'auto', dir: process.cwd(), global: false, force: false,
     dryRun: false, json: false, yes: false, help: false, withBmad: false,
     bmadChannel: 'stable', bmadChannelSpecified: false,
-    bmadModules: null, bmadTools: null, bmadTimeout: 180000, nonInteractive: false
+    bmadModules: null, bmadTools: null, bmadTimeout: 180000, nonInteractive: false,
+    utterance: ''
   };
   const rest = [...args];
   if (rest[0] && !rest[0].startsWith('-')) o.command = rest.shift();
@@ -110,6 +113,15 @@ function parse(args) {
     else if (token === '--agent') o.agent = rest.shift() || '';
     else if (token.startsWith('--dir=')) o.dir = token.substring(6);
     else if (token === '--dir') o.dir = rest.shift() || '';
+    else if (token.startsWith('--utterance=')) o.utterance = token.substring(12);
+    else if (token === '--utterance') o.utterance = rest.shift() || '';
+    else if (!token.startsWith('-')) {
+      if (o.command === 'route') {
+        o.utterance = o.utterance ? `${o.utterance} ${token}` : token;
+      } else {
+        throw new Error(`Unknown argument: ${token}`);
+      }
+    }
     else throw new Error(`Unknown option: ${token}`);
   }
   if (o.global && o.dir !== process.cwd()) throw new Error('--global cannot be combined with --dir');
@@ -148,7 +160,8 @@ function parse(args) {
   }
   if (o.withBmad && o.json && !o.dryRun) throw new Error('Interactive BMAD setup cannot use --json; use --dry-run --json to preview the plan.');
   if (!o.dir) throw new Error('--dir needs a path');
-  if (!['init', 'setup', 'prompt', 'update', 'doctor', 'uninstall', 'version', 'help'].includes(o.command)) throw new Error(`Unknown command: ${o.command}`);
+  if (!['init', 'setup', 'prompt', 'update', 'doctor', 'uninstall', 'version', 'help', 'route'].includes(o.command)) throw new Error(`Unknown command: ${o.command}`);
+  if (o.command === 'route' && !o.utterance.trim()) throw new Error('Route command requires a task description or utterance.');
   o.dir = resolve(o.dir);
   return o;
 }
@@ -156,6 +169,7 @@ function parse(args) {
 const help = `BRAD — BMAD Routing & Agent Delegation
 
 Usage:
+  brad route "<task description>" [--dir PATH] [--json]
   brad setup [--agent auto|portable|claude|codex|copilot|antigravity|all] [--dir PATH]
   brad setup --with-bmad [--bmad-channel stable|preview] [--bmad-modules <list>] [--bmad-tools <list>] [--non-interactive] [--bmad-timeout <ms>] [--agent HOST] [--dir PATH]
   brad prompt [--agent ...] [--dir PATH]   # copy instructions to your AI
@@ -337,19 +351,13 @@ function uninstall(plan, options) {
 // Report observed facts, not assumptions that an installed BMAD agent has actually run.
 function bmadCheck(root) {
   const paths = ['_bmad', '_bmad-output', '.bmad'].filter(p => existsSync(join(root, p)));
-  const configured = ['_bmad/config.toml', '_bmad/config.yaml', '_bmad/core/config.yaml'].some(p => isFile(join(root, p)));
-  const roots = ['.agents/skills', '.agent/skills', '.claude/skills', '.codex/skills', '.github/skills'];
-  const installedSkillNames = new Set();
-  for (const skillDir of roots) {
-    const path = join(root, skillDir);
-    if (!isDir(path)) continue;
-    for (const entry of readdirSync(path, { withFileTypes: true })) {
-      if (entry.isDirectory() && (entry.name.startsWith('bmad-') || entry.name === 'bmad') && isFile(join(path, entry.name, 'SKILL.md'))) installedSkillNames.add(entry.name);
-    }
-  }
+  const inventory = inspectProject(root);
+  const { configured } = inventory;
+  const installedSkillNames = new Set(inventory.nativeSkills);
   const hasRuntime = isDir(join(root, '_bmad'));
   const detected = hasRuntime || installedSkillNames.size > 0;
-  const warnings = [];
+  const warnings = [...inventory.warnings];
+  if (inventory.conflicts.length) warnings.push(`Conflicting native skill definitions: ${inventory.conflicts.join(', ')}`);
   if (!detected) warnings.push('Official BMAD Method not detected; ask your agent to offer an official BMAD setup.');
   else if (!configured) warnings.push('BMAD-like files/skills present, but shared runtime configuration was not verified.');
   if (!installedSkillNames.size) warnings.push('No native bmad-* SKILL.md discovered in common project locations; check the coding host skill catalog.');
@@ -378,8 +386,7 @@ function bmadCheck(root) {
     requiresApproval: false,
     guidance: 'Project-local BMAD files are present. Check this session\'s actual host skill catalog and restart the session if it was loaded before installation.'
   };
-  const v6 = existsSync(join(root, '_bmad-output/implementation-artifacts/sprint-status.yaml'));
-  const v7 = existsSync(join(root, '_bmad-output/tickets.toml')) || existsSync(join(root, '_bmad/tickets.toml'));
+  const { v6, v7 } = inventory.stateHints;
   if (v6 && v7) warnings.push('Both v6 and v7 state hints exist; ask user which native state system owns this task before writing.');
   return { detected, configured, runtime: hasRuntime, paths, nativeSkills: [...installedSkillNames].sort(),
     discovery: {
@@ -390,7 +397,7 @@ function bmadCheck(root) {
       note: 'External caches and files on disk are not proof the active host registered or invoked skills. Verify in the host.'
     },
     recovery,
-    stateHints: { v6, v7, mixed: v6 && v7 }, warnings,
+    stateHints: inventory.stateHints, version_hint_not_proof: inventory.version_hint_not_proof, warnings,
     note: detected ? 'BMAD installation hints found. Native routing and subagent execution must still be checked in the coding host.' : 'BMAD Method not detected. Install it separately using the official npx bmad-method install or v7 skills setup.' };
 }
 function binaryPresence(command) {
@@ -587,6 +594,20 @@ export function execute(argv, overrides = {}) {
   if (options.help || options.command === 'help') return { help };
   if (options.command === 'version') return { version: version() };
   if (!isDir(options.dir) && !options.global) throw new Error(`Project directory does not exist: ${options.dir}`);
+  if (options.command === 'route') {
+    const route = resolveRoute({
+      utterance: options.utterance,
+      projectRoot: options.dir,
+      dryRun: options.dryRun
+    });
+    return {
+      command: 'route',
+      version: version(),
+      root: options.dir,
+      utterance: options.utterance,
+      route
+    };
+  }
   const plans = pathsFor(options);
   if (options.command === 'doctor' || options.command === 'prompt') {
     if (options.command === 'prompt') return { command: 'prompt', version: version(), prompt: aiPrompt(options) };
@@ -815,6 +836,7 @@ export async function main(argv) {
     if (json) process.stdout.write(JSON.stringify({ ok: true, ...result }, null, 2) + '\n');
     else if (result.help) process.stdout.write(result.help);
     else if (result.command === 'prompt') process.stdout.write(result.prompt + '\n');
+    else if (result.command === 'route') process.stdout.write(formatRouteExplanation(result.route) + '\n');
     else if (result.command === undefined) process.stdout.write(`BRAD ${result.version}\n`);
     else {
       process.stdout.write(`BRAD v${result.version} — ${result.command}\n`);

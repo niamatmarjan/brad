@@ -6,8 +6,14 @@
   "bin": {
     "brad": "cli/brad.mjs"
   },
+  "exports": {
+    ".": "./src/index.mjs",
+    "./router": "./src/router.mjs",
+    "./handoff": "./src/handoff.mjs"
+  },
   "files": [
     "cli/",
+    "src/",
     "skills/brad/SKILL.md",
     "skills/brad/references/*.md",
     "skills/brad/evals/*.md",

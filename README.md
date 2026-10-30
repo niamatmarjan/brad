@@ -91,6 +91,11 @@ BRAD's default delivery lane is **resolve â†’ choose installed native workflow â
 
 BRAD distinguishes five levels: **L1** installed skill contract; **L2** exact target resolution; **L3** selected installed skill; **L4** actual execution mode (host-native, inline, independent subagent, helper-only or unverified); **L5** observed outputs, real PR and CI. Do not turn a static check, `doctor` result or a QA score into a claim of host-native invocation.
 
+The Gate 04 development branch also exposes `brad route "<task>" --json` and optional
+ESM routing/handoff helpers. The CLI gives bounded, deterministic suggestions;
+it does not execute BMAD or resolve a native ticket. See the
+[preflight and checkpoint contract](skills/brad/references/natural-task-routing.md).
+
 ## Repository guide
 
 | Location | Purpose |

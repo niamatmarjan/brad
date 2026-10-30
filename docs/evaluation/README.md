@@ -1,5 +1,7 @@
 # Evaluation and evidence
 
+- [Gate 04 Ponytail baseline audit](2026-10-29-ponytail-audit.md)
+- [Gate 04 improvements, verification and remaining host gaps](2026-10-29-ponytail-verification.md)
 - [Validation scope, limitations and method](validation.md)
 - [Historical validation findings](validation-report-review.md)
 - [Demo publication and privacy rules](demo-publication.md)

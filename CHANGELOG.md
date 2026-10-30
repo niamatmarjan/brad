@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — Gate 04 improvement branch
+
+- Preserve read-only intent and explicit workflow choices in deterministic route inspection.
+- Distinguish test review, design, ATDD, E2E generation and PRD validation/refinement.
+- Keep missing Build unavailable and release readiness separate from retrospective.
+- Share CLI skill discovery, expose conflicting copies and recognize official BMM config.
+- Validate handoff gates and saved state; preserve interrupted stages, deliverable manifests
+  and empty-file digests; reject stale saves and unsafe checkpoint paths.
+- Clarify suggested routing, caller-declared handoffs and unverified host execution.
+
 All notable changes will be documented here. Versions follow [Semantic Versioning](https://semver.org/); releases before 1.0 are preview.
 
 ## [0.5.3] - 2026-10-24

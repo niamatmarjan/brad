@@ -17,10 +17,10 @@ The wrapper owns intent classification, prerequisite discovery, delegation,
 optional GitHub delivery, evidence collection, resumption and user questions.
 No invented agent personas, manual copy of BMAD workflows, or parallel backlog.
 
-Read only the reference needed for this intent: [version routing](references/version-routing.md),
-[one-ticket delivery](references/ticket-to-pr.md), [planning/epics](references/epics-and-stories.md),
-[QA/release](references/quality-and-release.md), [decisions](references/clarification-and-risk.md),
-[host delegation](references/hosts-and-handoffs.md), and
+Read only the reference needed for this intent: [natural task routing](references/natural-task-routing.md),
+[version routing](references/version-routing.md), [one-ticket delivery](references/ticket-to-pr.md),
+[planning/epics](references/epics-and-stories.md), [QA/release](references/quality-and-release.md),
+[decisions](references/clarification-and-risk.md), [host delegation](references/hosts-and-handoffs.md), and
 [routing evidence](references/routing-verification.md) when validating specialists. Read exact installed target SKILL.md
 before invoking. These references are guides, never proof of installed behavior.
 
@@ -85,8 +85,14 @@ before invoking. These references are guides, never proof of installed behavior.
 
 ## Recognize input — do not over-parse
 
-- `/brad 1.1`, `/brad story 1-1`, `do task 1.1`: **ticket lane**;
+- `/brad 1.1`, `/brad story 1-1`, `do task 1.1`, `build story 1.1`: **ticket lane**;
   resolve exact ID (not issue number by assumption); see ticket-to-PR.
+- Natural stakeholder requests (`create a prd`, `refine epic 2`, `review PR without code changes`,
+  `generate acceptance tests`, `audit test quality`, `investigate architecture`, `assess release readiness`):
+  dynamically classify intent and route to the matching installed BMAD skill; see natural-task-routing.
+  If capability is missing, report `SPECIALIST_UNAVAILABLE` rather than substituting Build or Help.
+  The optional terminal `brad route` command provides bounded, deterministic suggestions only;
+  it does not resolve native tickets, invoke skills, enforce host permissions, or prove completion.
 - `/brad setup` (agent skill, not terminal CLI `brad setup`): inspect host/BMAD/Git; if BMAD is absent, offer a one-step official installer only after version choice and user approval (`brad setup --with-bmad [--bmad-channel stable|preview]`). For preview finish native `bmad setup` in the coding host. Never upgrade an existing native setup automatically. Ask once about default
   PR publication, default base branch and approval style if not already set,
   then (with consent) create/update `.brad/policy.yaml` without touching

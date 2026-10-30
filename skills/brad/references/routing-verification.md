@@ -1,6 +1,7 @@
 # Routing correctness and evidence boundaries
 
-BRAD is an AI wrapper, not a deterministic dispatcher. A label-based evaluator
+BRAD's skill is an AI wrapper; its optional CLI preflight is deterministic and
+does not dispatch workflows. A label-based evaluator
 cannot prove that the native workflow executed. Before invoking a specialist,
 read the **actual installed** native `SKILL.md` and its prerequisite/input contract.
 
